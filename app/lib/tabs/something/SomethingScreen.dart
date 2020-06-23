@@ -8,7 +8,6 @@ class SomethingScreen extends StatefulWidget {
 class _SomethingScreenState extends State<SomethingScreen> {
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    throw UnimplementedError();
+    return Center(child: Text('Noe fancy kommer her'));
   }
 }

@@ -8,7 +8,6 @@ class PartnerScreen extends StatefulWidget {
 class _PartnerScreenState extends State<PartnerScreen> {
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    throw UnimplementedError();
+    return Center(child: Text('Partnere kommer her'));
   }
 }

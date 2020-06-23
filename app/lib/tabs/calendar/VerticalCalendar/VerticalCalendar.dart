@@ -13,6 +13,6 @@ class _VerticalCalendarState extends State<VerticalCalendar> {
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Center(child: Text('Vertikal kalender kommer her'));
   }
 }

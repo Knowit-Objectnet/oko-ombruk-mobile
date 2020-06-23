@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 class DateButton extends StatefulWidget {
-  DateButton({Key key, @required this.index}) : super(key: key);
+  DateButton({Key key, @required this.dateTime}) : super(key: key);
 
-  final int index;
+  final DateTime dateTime;
 
   @override
   _DateButtonState createState() => _DateButtonState();
@@ -22,27 +22,22 @@ class _DateButtonState extends State<DateButton> {
 
   @override
   Widget build(BuildContext context) {
-    var date = DateTime.now().add(Duration(days: widget.index));
-    var day = date.day;
-    // var month = date.month;
-    var weekday = weekdays[date.weekday];
-    return (Padding(
-        padding: EdgeInsets.symmetric(horizontal: 16.0),
-        child: GestureDetector(
-          onTap: () => _datePressed(),
-          child: Column(
-            children: <Widget>[
-              Text('$weekday', style: TextStyle(fontSize: 12.0)),
-              Text(
-                '$day',
-                style: TextStyle(fontSize: 20.0),
-              )
-            ],
-          ),
-        )));
+    var weekday = weekdays[widget.dateTime.weekday];
+    return GestureDetector(
+      onTap: () => _datePressed(),
+      child: Column(
+        children: <Widget>[
+          Text('$weekday', style: TextStyle(fontSize: 12.0)),
+          Text(
+            '${widget.dateTime.day}',
+            style: TextStyle(fontSize: 20.0),
+          )
+        ],
+      ),
+    );
   }
 
   void _datePressed() {
-    print(widget.index);
+    print(widget.dateTime);
   }
 }

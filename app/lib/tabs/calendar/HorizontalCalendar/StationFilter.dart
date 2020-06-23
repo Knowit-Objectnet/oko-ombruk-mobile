@@ -17,7 +17,7 @@ class _StationFilterState extends State<StationFilter> {
     print(widget.stations);
     setState(() {
       stationValues = Map<String, bool>.fromIterable(widget.stations,
-          key: (item) => item, value: (item) => false);
+          key: (item) => item, value: (item) => true);
     });
     print(stationValues == null);
     super.initState();
