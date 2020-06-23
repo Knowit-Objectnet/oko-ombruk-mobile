@@ -31,7 +31,7 @@ class _HorizontalCalendarState extends State<HorizontalCalendar> {
 
   @override
   Widget build(BuildContext context) {
-    return (Column(
+    return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
         DayScroller(
@@ -43,9 +43,9 @@ class _HorizontalCalendarState extends State<HorizontalCalendar> {
           selectedDay: _selectedDay,
         ),
         DateText(dateTime: _selectedDay),
-        Expanded(child: WeekCalendar()),
+        Expanded(child: WeekCalendar(dateTime: _selectedDay)),
         StationFilter(stations: stations)
       ],
-    ));
+    );
   }
 }

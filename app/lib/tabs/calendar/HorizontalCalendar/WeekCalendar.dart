@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_week_view/flutter_week_view.dart';
 
 class WeekCalendar extends StatefulWidget {
+  WeekCalendar({Key key, @required this.dateTime}) : super(key: key);
+
+  final DateTime dateTime;
+
   @override
   _WeekCalendarState createState() => _WeekCalendarState();
 }
@@ -18,12 +22,9 @@ class _WeekCalendarState extends State<WeekCalendar> {
 
   @override
   Widget build(BuildContext context) {
-    return WeekView(
-      dates: [
-        dateNow.subtract(Duration(days: 1)),
-        dateNow,
-        dateNow.add(Duration(days: 1))
-      ],
+    return DayView(
+      date: widget.dateTime,
+      userZoomable: false,
       events: [
         FlutterWeekViewEvent(
           title: 'An event 1',
