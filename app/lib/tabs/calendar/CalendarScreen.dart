@@ -8,13 +8,24 @@ class CalendarScreen extends StatefulWidget {
 }
 
 class _CalendarScreenState extends State<CalendarScreen> {
+  // Remove
+  final List<String> stations = [
+    'Haraldrud',
+    'Smestad',
+    'Grønmo',
+    'Some',
+    'Stasjon 4'
+  ];
+
   @override
   Widget build(BuildContext context) {
     return (Scaffold(
-        body: Column(children: <Widget>[
-      DayScroller(),
-      Center(child: Text('Calendar')),
-      StationFilter()
-    ])));
+        body: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+          DayScroller(),
+          Center(child: Text('Calendar')),
+          StationFilter(stations: stations)
+        ])));
   }
 }

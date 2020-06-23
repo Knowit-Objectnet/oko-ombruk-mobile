@@ -27,7 +27,7 @@ class _LoginScreenState extends State<LoginScreen> {
         children: <Widget>[
           Padding(
               padding: EdgeInsets.all(16.0),
-              child: Text('REIN', style: TextStyle(fontSize: 28))),
+              child: Text('REIR', style: TextStyle(fontSize: 28))),
           Padding(
               padding: EdgeInsets.symmetric(horizontal: 24.0, vertical: 8),
               child: TextField(

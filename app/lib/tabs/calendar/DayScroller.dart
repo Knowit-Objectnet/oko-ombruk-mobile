@@ -11,7 +11,7 @@ class _DayScrollerState extends State<DayScroller> {
   Widget build(BuildContext context) {
     return (Container(
         padding: EdgeInsets.symmetric(vertical: 12.0),
-        height: 100,
+        height: 70,
         child: ListView.builder(
             scrollDirection: Axis.horizontal,
             itemBuilder: (_, index) => DateButton(index: index))));
