@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ombruk/globals.dart' as globals;
 
 class DateButton extends StatefulWidget {
   DateButton(
@@ -17,19 +18,9 @@ class DateButton extends StatefulWidget {
 }
 
 class _DateButtonState extends State<DateButton> {
-  final Map<int, String> weekdays = {
-    1: 'Man',
-    2: 'Tir',
-    3: 'Ons',
-    4: 'Tors',
-    5: 'Fre',
-    6: 'Lør',
-    7: 'Søn'
-  };
-
   @override
   Widget build(BuildContext context) {
-    String weekday = weekdays[widget.dateTime.weekday];
+    String weekday = globals.weekdaysShort[widget.dateTime.weekday];
     return Expanded(
         // TODO: The GestureDetector doesn't fill the entire parent, only the child, so the onTap may be working so so
         child: GestureDetector(

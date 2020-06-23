@@ -2,6 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:ombruk/tabs/calendar/HorizontalCalendar/DateButton.dart';
 
 class DayScroller extends StatefulWidget {
+  DayScroller({Key key, @required this.selectedDay, @required this.selectDay})
+      : super(key: key);
+
+  final DateTime selectedDay;
+  final Function(DateTime) selectDay;
+
   @override
   _DayScrollerState createState() => _DayScrollerState();
 }
@@ -9,13 +15,6 @@ class DayScroller extends StatefulWidget {
 class _DayScrollerState extends State<DayScroller> {
   final controller = PageController(initialPage: 0);
   DateTime now = DateTime.now();
-  DateTime _selectedDay;
-
-  @override
-  void initState() {
-    _selectedDay = now;
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,16 +43,11 @@ class _DayScrollerState extends State<DayScroller> {
       DateTime date = now.add(Duration(days: weekIndex * 7 + i));
       weekdays.add(DateButton(
           dateTime: date,
-          selectDay: (DateTime dateTime) {
-            print(dateTime);
-            setState(() {
-              _selectedDay = dateTime;
-            });
-          },
+          selectDay: (DateTime dateTime) => widget.selectDay(dateTime),
           // No good compare
-          isSelected: date.day == _selectedDay.day &&
-              date.month == _selectedDay.month &&
-              date.year == _selectedDay.year));
+          isSelected: date.day == widget.selectedDay.day &&
+              date.month == widget.selectedDay.month &&
+              date.year == widget.selectedDay.year));
     }
     return weekdays;
   }
