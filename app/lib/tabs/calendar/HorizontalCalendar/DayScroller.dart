@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ombruk/tabs/calendar/DateButton.dart';
+import 'package:ombruk/tabs/calendar/HorizontalCalendar/DateButton.dart';
 
 class DayScroller extends StatefulWidget {
   @override

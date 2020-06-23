@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ombruk/tabs/calendar/DayScroller.dart';
-import 'package:ombruk/tabs/calendar/StationFilter.dart';
+import 'package:ombruk/tabs/calendar/HorizontalCalendar/HorizontalCalendar.dart';
 
 class CalendarScreen extends StatefulWidget {
   @override
@@ -8,24 +7,30 @@ class CalendarScreen extends StatefulWidget {
 }
 
 class _CalendarScreenState extends State<CalendarScreen> {
-  // Remove
-  final List<String> stations = [
-    'Haraldrud',
-    'Smestad',
-    'Grønmo',
-    'Some',
-    'Stasjon 4'
-  ];
+  bool _showHorizontalCalendar = true;
 
   @override
   Widget build(BuildContext context) {
     return (Scaffold(
         body: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            // mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
-          DayScroller(),
-          Center(child: Text('Calendar')),
-          StationFilter(stations: stations)
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget>[
+              IconButton(
+                icon: Icon(Icons.list),
+                onPressed: () => setState(() {
+                  _showHorizontalCalendar = !_showHorizontalCalendar;
+                }),
+              ),
+              IconButton(
+                icon: Icon(Icons.add),
+                onPressed: null,
+              )
+            ],
+          ),
+          Expanded(child: HorizontalCalendar())
         ])));
   }
 }
