@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ombruk/tabs/calendar/ExtraHentingDialog.dart';
 import 'package:ombruk/tabs/calendar/HorizontalCalendar/HorizontalCalendar.dart';
 import 'package:ombruk/tabs/calendar/VerticalCalendar/VerticalCalendar.dart';
 
@@ -27,7 +28,9 @@ class _CalendarScreenState extends State<CalendarScreen> {
               ),
               IconButton(
                 icon: Icon(Icons.add),
-                onPressed: null,
+                onPressed: () => showDialog(
+                    context: context,
+                    builder: (BuildContext context) => ExtraHentingDialog()),
               )
             ],
           ),
