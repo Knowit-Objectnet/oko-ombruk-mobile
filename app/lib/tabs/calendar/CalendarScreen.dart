@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ombruk/tabs/calendar/HorizontalCalendar/HorizontalCalendar.dart';
+import 'package:ombruk/tabs/calendar/VerticalCalendar/VerticalCalendar.dart';
 
 class CalendarScreen extends StatefulWidget {
   @override
@@ -30,7 +31,10 @@ class _CalendarScreenState extends State<CalendarScreen> {
               )
             ],
           ),
-          Expanded(child: HorizontalCalendar())
+          Expanded(
+              child: _showHorizontalCalendar
+                  ? HorizontalCalendar()
+                  : VerticalCalendar())
         ])));
   }
 }

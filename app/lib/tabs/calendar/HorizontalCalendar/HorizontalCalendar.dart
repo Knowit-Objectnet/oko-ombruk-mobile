@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ombruk/tabs/calendar/HorizontalCalendar/DayScroller.dart';
 import 'package:ombruk/tabs/calendar/HorizontalCalendar/StationFilter.dart';
+import 'package:ombruk/tabs/calendar/HorizontalCalendar/WeekCalendar.dart';
 
 class HorizontalCalendar extends StatefulWidget {
   @override
@@ -26,7 +27,11 @@ class _HorizontalCalendarState extends State<HorizontalCalendar> {
   Widget build(BuildContext context) {
     return (Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: <Widget>[DayScroller(), StationFilter(stations: stations)],
+      children: <Widget>[
+        DayScroller(),
+        Expanded(child: WeekCalendar()),
+        StationFilter(stations: stations)
+      ],
     ));
   }
 }
