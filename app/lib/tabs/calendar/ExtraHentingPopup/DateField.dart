@@ -16,7 +16,7 @@ class DateField extends StatelessWidget {
         children: <Widget>[
           
           Icon(Icons.calendar_today),
-          Text(globals.months[date.month] + ' ' + date.day.toString() + ', '+ date.year.toString())
+          Text(' ' + globals.months[date.month] + ' ' + date.day.toString() + ', '+ date.year.toString())
         ]
 
     ));
