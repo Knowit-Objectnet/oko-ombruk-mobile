@@ -7,6 +7,17 @@ class TimeField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(time.hour.toString() + ':' + time.minute.toString());
+    return Padding(
+      padding: EdgeInsets.all(16.0),
+      
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          
+          Icon(Icons.access_time),
+          Text(time.hour.toString() + ':' + time.hour.toString())
+        ]
+
+    ));
   }
 }
