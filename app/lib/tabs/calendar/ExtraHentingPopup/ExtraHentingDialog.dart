@@ -12,12 +12,14 @@ class _ExtraHentingDialogState extends State<ExtraHentingDialog> {
   final whatController = TextEditingController();
   DateTime _selectedDate;
   TimeOfDay _selectedTime;
+  TimeOfDay _selectedDur;
 
   @override
   void initState() {
     setState(() {
       _selectedDate = DateTime.now();
       _selectedTime = TimeOfDay.now();
+      _selectedDur = TimeOfDay.now();
     });
     super.initState();
   }
@@ -51,18 +53,28 @@ class _ExtraHentingDialogState extends State<ExtraHentingDialog> {
                 color: Colors.black,
                 thickness: 1,
               )),
-          GestureDetector(
-            child: DateField(
-              date: _selectedDate,
+          Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+            GestureDetector(
+              child: DateField(
+                date: _selectedDate,
+              ),
+              onTap: () => _selectDate(context),
             ),
-            onTap: () => _selectDate(context),
-          ),
-          GestureDetector(
-            child: TimeField(
-              time: _selectedTime,
+            Icon(Icons.access_time),
+            GestureDetector(
+              child: TimeField(
+                time: _selectedTime,
+              ),
+              onTap: () => _selectTime(context),
             ),
-            onTap: () => _selectTime(context),
-          ),
+            Text(" - "),
+            GestureDetector(
+              child: TimeField(
+                time: _selectedDur,
+              ),
+              onTap: () => _selectDur(context),
+            )
+          ]),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
@@ -126,10 +138,33 @@ class _ExtraHentingDialogState extends State<ExtraHentingDialog> {
     final TimeOfDay picked = await showTimePicker(
       initialTime: TimeOfDay.now(),
       context: context,
+      builder: (BuildContext context, Widget child) {
+        return MediaQuery(
+          data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
+          child: child,
+        );
+      },
     );
     if (picked != null && picked != _selectedTime)
       setState(() {
         _selectedTime = picked;
+      });
+  }
+
+  Future<Null> _selectDur(BuildContext context) async {
+    final TimeOfDay pickedDur = await showTimePicker(
+      initialTime: TimeOfDay.now(),
+      context: context,
+      builder: (BuildContext context, Widget child) {
+        return MediaQuery(
+          data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
+          child: child,
+        );
+      },
+    );
+    if (pickedDur != null && pickedDur != _selectedDur)
+      setState(() {
+        _selectedDur = pickedDur;
       });
   }
 
