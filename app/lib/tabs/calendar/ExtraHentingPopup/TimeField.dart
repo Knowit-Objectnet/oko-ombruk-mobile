@@ -11,11 +11,11 @@ class TimeField extends StatelessWidget {
       padding: EdgeInsets.all(16.0),
       
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           
           Icon(Icons.access_time),
-          Text(time.hour.toString() + ':' + time.hour.toString())
+          Text(time.hour.toString() + ':' + time.minute.toString())
         ]
 
     ));

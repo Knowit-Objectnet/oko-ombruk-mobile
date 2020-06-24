@@ -51,18 +51,27 @@ class _ExtraHentingDialogState extends State<ExtraHentingDialog> {
                 color: Colors.black,
                 thickness: 1,
               )),
-          GestureDetector(
-            child: DateField(
-              date: _selectedDate,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              GestureDetector(
+              child: DateField(
+                date: _selectedDate,
+              ),
+              onTap: () => _selectDate(context),
             ),
-            onTap: () => _selectDate(context),
-          ),
-          GestureDetector(
-            child: TimeField(
-              time: _selectedTime,
+            GestureDetector(
+              child: TimeField(
+                time: _selectedTime,
+              ),
+              onTap: () => _selectTime(context),
             ),
-            onTap: () => _selectTime(context),
-          ),
+            GestureDetector(
+              child: TimeField(
+                time: _selectedTime,
+              ),
+              onTap: () => _selectTime(context),
+            )]),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
