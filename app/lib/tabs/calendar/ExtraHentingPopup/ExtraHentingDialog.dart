@@ -53,10 +53,8 @@ class _ExtraHentingDialogState extends State<ExtraHentingDialog> {
                 color: Colors.black,
                 thickness: 1,
               )),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              GestureDetector(
+          Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+            GestureDetector(
               child: DateField(
                 date: _selectedDate,
               ),
@@ -69,13 +67,14 @@ class _ExtraHentingDialogState extends State<ExtraHentingDialog> {
               ),
               onTap: () => _selectTime(context),
             ),
-            Text (" - "),
+            Text(" - "),
             GestureDetector(
               child: TimeField(
                 time: _selectedDur,
               ),
               onTap: () => _selectDur(context),
-            )]),
+            )
+          ]),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
@@ -152,7 +151,7 @@ class _ExtraHentingDialogState extends State<ExtraHentingDialog> {
       });
   }
 
-    Future<Null> _selectDur(BuildContext context) async {
+  Future<Null> _selectDur(BuildContext context) async {
     final TimeOfDay pickedDur = await showTimePicker(
       initialTime: TimeOfDay.now(),
       context: context,

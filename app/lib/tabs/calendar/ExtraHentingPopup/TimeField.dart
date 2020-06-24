@@ -7,8 +7,9 @@ class TimeField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-
-    return Text(" "+time.hour.toString().padLeft(2, "0")+ ':' + time.minute.toString().padLeft(2, "0"));
+    return Text(" " +
+        time.hour.toString().padLeft(2, "0") +
+        ':' +
+        time.minute.toString().padLeft(2, "0"));
   }
 }
