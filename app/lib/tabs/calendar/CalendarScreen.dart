@@ -18,6 +18,11 @@ List<CalendarEvent> events = [
       ".......",
       DateTime.now().add(Duration(hours: 2)),
       DateTime.now().add(Duration(hours: 6))),
+  CalendarEvent(
+      "Ny dag",
+      "Beskrivelse av opplegget",
+      DateTime.now().add(Duration(days: 1)),
+      DateTime.now().add(Duration(days: 1, hours: 1))),
 ];
 
 class CalendarScreen extends StatefulWidget {
@@ -38,7 +43,9 @@ class _CalendarScreenState extends State<CalendarScreen> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
               IconButton(
-                icon: Icon(Icons.list),
+                icon: _showHorizontalCalendar
+                    ? Icon(Icons.list)
+                    : Icon(Icons.calendar_today),
                 onPressed: () => setState(() {
                   _showHorizontalCalendar = !_showHorizontalCalendar;
                 }),
@@ -54,7 +61,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
           Expanded(
               child: _showHorizontalCalendar
                   ? HorizontalCalendar(events: events)
-                  : VerticalCalendar())
+                  : VerticalCalendar(events: events))
         ])));
   }
 }
