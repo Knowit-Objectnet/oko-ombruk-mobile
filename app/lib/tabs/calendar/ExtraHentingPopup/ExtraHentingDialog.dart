@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ombruk/tabs/calendar/ExtraHentingPopup/DateField.dart';
 import 'package:ombruk/tabs/calendar/ExtraHentingPopup/TimeField.dart';
-import 'package:ombruk/tabs/calendar/ExtraHentingPopup/DurationField.dart';
 
 class ExtraHentingDialog extends StatefulWidget {
   @override
@@ -63,6 +62,7 @@ class _ExtraHentingDialogState extends State<ExtraHentingDialog> {
               ),
               onTap: () => _selectDate(context),
             ),
+            Icon(Icons.access_time),
             GestureDetector(
               child: TimeField(
                 time: _selectedTime,
@@ -71,8 +71,8 @@ class _ExtraHentingDialogState extends State<ExtraHentingDialog> {
             ),
             Text (" - "),
             GestureDetector(
-              child: DurationField(
-                dur: _selectedDur,
+              child: TimeField(
+                time: _selectedDur,
               ),
               onTap: () => _selectDur(context),
             )]),
@@ -139,6 +139,12 @@ class _ExtraHentingDialogState extends State<ExtraHentingDialog> {
     final TimeOfDay picked = await showTimePicker(
       initialTime: TimeOfDay.now(),
       context: context,
+      builder: (BuildContext context, Widget child) {
+        return MediaQuery(
+          data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
+          child: child,
+        );
+      },
     );
     if (picked != null && picked != _selectedTime)
       setState(() {
@@ -150,6 +156,12 @@ class _ExtraHentingDialogState extends State<ExtraHentingDialog> {
     final TimeOfDay pickedDur = await showTimePicker(
       initialTime: TimeOfDay.now(),
       context: context,
+      builder: (BuildContext context, Widget child) {
+        return MediaQuery(
+          data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
+          child: child,
+        );
+      },
     );
     if (pickedDur != null && pickedDur != _selectedDur)
       setState(() {
