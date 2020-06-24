@@ -9,7 +9,7 @@ List<CalendarEvent> events = [
   CalendarEvent(
       "Fretex",
       "beskrivelse",
-      DateTime.now().subtract(Duration(hours: 2)),
+      DateTime.now().subtract(Duration(hours: 5)),
       DateTime.now().subtract(Duration(hours: 1))),
   CalendarEvent("frigo", "noe", DateTime.now().add(Duration(hours: 1)),
       DateTime.now().add(Duration(hours: 3))),

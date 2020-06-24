@@ -28,18 +28,15 @@ class _VerticalCalendarState extends State<VerticalCalendar> {
         DateTime sortDate = DateTime.utc(date.year, date.month, date.day);
         return sortDate;
       },
-      groupSeparatorBuilder: (DateTime groupByValue) =>
-          Center(child: _dateText(groupByValue)),
-      itemBuilder: (_, dynamic event) => Container(
+      groupSeparatorBuilder: (DateTime groupByValue) => Padding(
+          padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+          child: _dateText(groupByValue)),
+      itemBuilder: (_, CalendarEvent event) => Container(
           color: Colors.grey[200],
           child: ExpansionTile(
             title: Row(
               children: <Widget>[
-                Text(event.start.hour.toString() +
-                    ':' +
-                    event.start.minute.toString() +
-                    '-' +
-                    event.end.hour.toString()),
+                _timeText(event.start, event.end),
                 VerticalDivider(thickness: 100, color: Colors.black),
                 Text(event.title)
               ],
@@ -60,6 +57,16 @@ class _VerticalCalendarState extends State<VerticalCalendar> {
             ],
           )),
     );
+  }
+
+  Widget _timeText(DateTime start, DateTime end) {
+    return Text(start.hour.toString().padLeft(2, '0') +
+        ':' +
+        start.minute.toString().padLeft(2, '0') +
+        '-' +
+        end.hour.toString().padLeft(2, '0') +
+        ':' +
+        end.minute.toString().padLeft(2, '0'));
   }
 
   Widget _dateText(DateTime dateTime) {
