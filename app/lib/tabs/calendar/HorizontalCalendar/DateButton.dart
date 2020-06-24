@@ -24,10 +24,10 @@ class _DateButtonState extends State<DateButton> {
     return Expanded(
         // TODO: The GestureDetector doesn't fill the entire parent, only the child, so the onTap may be working so so
         child: GestureDetector(
-            onTap: () => _datePressed(), child: _getNumberWidget(weekday)));
+            onTap: () => _datePressed(), child: _numberWidget(weekday)));
   }
 
-  Widget _getNumberWidget(String weekday) {
+  Widget _numberWidget(String weekday) {
     if (widget.isSelected) {
       return Column(
         children: <Widget>[

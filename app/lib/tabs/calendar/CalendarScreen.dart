@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ombruk/tabs/calendar/ExtraHentingDialog.dart';
+import 'package:ombruk/tabs/calendar/ExtraHentingPopup/ExtraHentingDialog.dart';
 import 'package:ombruk/tabs/calendar/HorizontalCalendar/HorizontalCalendar.dart';
 import 'package:ombruk/tabs/calendar/VerticalCalendar/VerticalCalendar.dart';
 
