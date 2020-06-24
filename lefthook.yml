@@ -4,9 +4,12 @@ pre-push:
     tests:
       root: 'app/'
       run: flutter test
-    linter:
+    analyzer:
       root: 'app/'
       run: flutter analyze
+    linter:
+      root: 'app/'
+      run: flutter format .
 
 pre-commit:
   commands:
