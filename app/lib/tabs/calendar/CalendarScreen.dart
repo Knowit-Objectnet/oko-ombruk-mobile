@@ -1,7 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:ombruk/models/CalendarEvent.dart';
 import 'package:ombruk/tabs/calendar/ExtraHentingPopup/ExtraHentingDialog.dart';
 import 'package:ombruk/tabs/calendar/HorizontalCalendar/HorizontalCalendar.dart';
 import 'package:ombruk/tabs/calendar/VerticalCalendar/VerticalCalendar.dart';
+
+// To be removed
+List<CalendarEvent> events = [
+  CalendarEvent(
+      "Fretex",
+      "beskrivelse",
+      DateTime.now().subtract(Duration(hours: 5)),
+      DateTime.now().subtract(Duration(hours: 1))),
+  CalendarEvent("frigo", "noe", DateTime.now().add(Duration(hours: 1)),
+      DateTime.now().add(Duration(hours: 3))),
+  CalendarEvent(
+      "Oslo kollega",
+      ".......",
+      DateTime.now().add(Duration(hours: 2)),
+      DateTime.now().add(Duration(hours: 6))),
+  CalendarEvent(
+      "Ny dag",
+      "Beskrivelse av opplegget",
+      DateTime.now().add(Duration(days: 1)),
+      DateTime.now().add(Duration(days: 1, hours: 1))),
+];
 
 class CalendarScreen extends StatefulWidget {
   @override
@@ -21,7 +43,9 @@ class _CalendarScreenState extends State<CalendarScreen> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
               IconButton(
-                icon: Icon(Icons.list),
+                icon: _showHorizontalCalendar
+                    ? Icon(Icons.list)
+                    : Icon(Icons.calendar_today),
                 onPressed: () => setState(() {
                   _showHorizontalCalendar = !_showHorizontalCalendar;
                 }),
@@ -36,8 +60,8 @@ class _CalendarScreenState extends State<CalendarScreen> {
           ),
           Expanded(
               child: _showHorizontalCalendar
-                  ? HorizontalCalendar()
-                  : VerticalCalendar())
+                  ? HorizontalCalendar(events: events)
+                  : VerticalCalendar(events: events))
         ])));
   }
 }
