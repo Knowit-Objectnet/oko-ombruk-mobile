@@ -49,3 +49,6 @@ pre-commit:
       root: 'app/'
       glob: '*.dart'
       run: flutter format {staged_files} && git add {staged_files}
+    tests:
+      root: 'app/'
+      run: flutter test
