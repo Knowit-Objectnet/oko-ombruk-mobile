@@ -162,7 +162,11 @@ class _ExtraHentingDialogState extends State<ExtraHentingDialog> {
         );
       },
     );
-    if (pickedDur != null && pickedDur != _selectedDur)
+    if (pickedDur != null &&
+        pickedDur != _selectedDur &&
+        (pickedDur.hour > _selectedTime.hour ||
+            (pickedDur.hour == _selectedTime.hour &&
+                pickedDur.minute >= _selectedTime.minute)))
       setState(() {
         _selectedDur = pickedDur;
       });
@@ -173,6 +177,32 @@ class _ExtraHentingDialogState extends State<ExtraHentingDialog> {
   }
 
   void _submitDialog() {
-    print("Submit");
+    if ((_selectedDur.hour < _selectedTime.hour ||
+        (_selectedDur.hour == _selectedTime.hour &&
+            _selectedDur.minute <= _selectedTime.minute))) {
+      Widget okButton = FlatButton(
+        child: Text("OK"),
+        onPressed: () {
+          Navigator.pop(context);
+        },
+      );
+
+      AlertDialog alert = AlertDialog(
+        title: Text("Tidspunktene stemmer ikke overens"),
+        content: Text("Starttidspunkt må være før slutttidspunkt."),
+        actions: [
+          okButton,
+        ],
+      );
+
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return alert;
+        },
+      );
+    } else {
+      print("Submit");
+    }
   }
 }
