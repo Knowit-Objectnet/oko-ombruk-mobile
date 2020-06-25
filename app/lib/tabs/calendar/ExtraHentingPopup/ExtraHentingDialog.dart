@@ -188,7 +188,7 @@ class _ExtraHentingDialogState extends State<ExtraHentingDialog> {
       );
 
       AlertDialog alert = AlertDialog(
-        title: Text("Tidspunktene stemmer ikke overens rem,ove"),
+        title: Text("Tidspunktene stemmer ikke overens"),
         content: Text("Starttidspunkt må være før slutttidspunkt."),
         actions: [
           okButton,
