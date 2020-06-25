@@ -1,0 +1,19 @@
+{
+  "name": "ombruk-mobile",
+  "version": "1.0.0",
+  "description": "`npm install`",
+  "main": "index.js",
+  "dependencies": {
+    "@arkweid/lefthook": "^0.7.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://kode.knowit.no/scm/oko/ombruk-mobile.git"
+  },
+  "author": "",
+  "license": "ISC"
+}
