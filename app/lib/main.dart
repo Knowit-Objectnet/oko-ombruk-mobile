@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ombruk/LoadingScreen.dart';
 import 'package:ombruk/login/LoginScreen.dart';
+import 'package:ombruk/login/LoginWebView.dart';
 import 'package:ombruk/tabs/TabsScreen.dart';
 
 void main() {
@@ -23,7 +24,8 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => LoadingScreen(),
-        '/login': (context) => LoginScreen(),
+        // '/login': (context) => LoginScreen(),
+        '/login': (context) => LoginWebView(),
         '/home': (context) => TabsScreen()
       },
     );
