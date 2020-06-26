@@ -10,6 +10,8 @@ class LoginWebView extends StatefulWidget {
 }
 
 class _LoginWebViewState extends State<LoginWebView> {
+  UserInfo _userInfo;
+
   @override
   void initState() {
     authenticate(
@@ -19,14 +21,20 @@ class _LoginWebViewState extends State<LoginWebView> {
         [
           "openid",
           "profile"
-        ]).then((value) => print("User info: " + value.toString()));
+        ]).then((value) => setState(() {
+          // _userInfo = value;
+          Navigator.of(context).pushReplacementNamed('/home');
+        }));
 
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: Center(child: Text("..")));
+    return Scaffold(
+        body: Center(
+            child: Text(
+                _userInfo == null ? "Autentiserer..." : _userInfo.toString())));
   }
 
   Future<UserInfo> authenticate(
@@ -54,6 +62,18 @@ class _LoginWebViewState extends State<LoginWebView> {
 
     // starts the authentication
     Credential credential = await authenticator.authorize();
+    // print("credential.refreshToken: " + credential.refreshToken);
+    // print("credential.idToken: " + credential.idToken.toCompactSerialization());
+
+    // Stream<Exception> x =
+    //     credential.validateToken(validateClaims: true, validateExpiry: true);
+    // await for (Exception e in x) {
+    //   print("Exception e: " + e.toString());
+    // }
+
+    // TokenResponse tokens = await credential.getTokenResponse();
+
+    // print("Credentials: " + tokens.toString());
 
     // close the webview when finished
     closeWebView();
