@@ -45,6 +45,7 @@ class MyApp extends StatelessWidget {
           if (state is AuthenticationInProgress) {
             return LoadingScreen();
           }
+          return null;
         },
       ),
       // title: 'Flutter Demo',
