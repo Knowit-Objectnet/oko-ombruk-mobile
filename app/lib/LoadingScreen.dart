@@ -8,14 +8,13 @@ class LoadingScreen extends StatefulWidget {
 class _LoadingScreenState extends State<LoadingScreen> {
   @override
   void initState() {
-    _authenticate();
+    // _authenticate();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: Center(child: Text('Venter på auth fra Keycloak...')));
+    return Scaffold(body: Center(child: Text('Loading...')));
   }
 
   // Only for concept testing

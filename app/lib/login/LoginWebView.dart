@@ -1,44 +1,48 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ombruk/resources/UserRepository.dart';
 
 import 'package:openid_client/openid_client.dart';
 import 'package:openid_client/openid_client_io.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class LoginWebView extends StatefulWidget {
-  @override
-  _LoginWebViewState createState() => _LoginWebViewState();
-}
+import 'package:ombruk/blocs/AuthenticationBloc.dart';
 
-class _LoginWebViewState extends State<LoginWebView> {
-  UserInfo _userInfo;
+class LoginWebView extends StatelessWidget {
+  final UserRepository userRepository;
 
-  @override
-  void initState() {
-    authenticate(
-        Uri.parse(
-            "http://ombruk-ecs-public-staging-85208200.eu-central-1.elb.amazonaws.com:8080/auth/realms/staging"),
-        "flutter-app",
-        [
-          "openid",
-          "profile"
-        ]).then((value) => setState(() {
-          // _userInfo = value;
-          Navigator.of(context).pushReplacementNamed('/home');
-        }));
+  LoginWebView({Key key, @required this.userRepository})
+      : assert(userRepository != null),
+        super(key: key);
 
-    super.initState();
-  }
+  // @override
+  // void initState() {
+  //   authenticate().then((value) => setState(() {
+  //         // _userInfo = value;
+  //         Navigator.of(context).pushReplacementNamed('/home');
+  //       }));
+
+  //   super.initState();
+  // }
 
   @override
   Widget build(BuildContext context) {
+    authKeycloak().then((UserInfo value) =>
+        BlocProvider.of<AuthenticationBloc>(context)
+            .add(AuthenticationLoggedIn(token: value.toString())));
     return Scaffold(
-        body: Center(
-            child: Text(
-                _userInfo == null ? "Autentiserer..." : _userInfo.toString())));
+      body: Center(
+        child: Text("Venter på keyclock..."),
+      ),
+    );
   }
 
-  Future<UserInfo> authenticate(
-      Uri uri, String clientId, List<String> scopes) async {
+  Future<UserInfo> authKeycloak() async {
+    final Uri uri =
+        Uri.parse("https://keycloak.oko.knowit.no:8443/auth/realms/staging");
+    final String clientId = "flutter-app";
+    final List<String> scopes = ["openid", "profile"];
+
     // create the client
     var issuer = await Issuer.discover(uri);
     var client = new Client(issuer, clientId);
@@ -78,7 +82,7 @@ class _LoginWebViewState extends State<LoginWebView> {
     // close the webview when finished
     closeWebView();
 
-    // return the user info
+    // TODO return token instead
     return await credential.getUserInfo();
   }
 }
