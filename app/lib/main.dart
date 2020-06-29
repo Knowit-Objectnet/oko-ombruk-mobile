@@ -32,20 +32,19 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: BlocBuilder<AuthenticationBloc, AuthenticationState>(
-        builder: (context, state) {
-          if (state is AuthenticationInitial) {
-            return SplashScreen();
+        builder: (BuildContext context, AuthenticationState state) {
+          switch (state.runtimeType) {
+            case AuthenticationInitial:
+              return SplashScreen();
+            case AuthenticationSuccess:
+              return TabsScreen();
+            case AuthenticationFailure:
+              return LoginWebView(userRepository: userRepository);
+            case AuthenticationInProgress:
+              return LoadingScreen();
+            default:
+              return null;
           }
-          if (state is AuthenticationSuccess) {
-            return TabsScreen();
-          }
-          if (state is AuthenticationFailure) {
-            return LoginWebView(userRepository: userRepository);
-          }
-          if (state is AuthenticationInProgress) {
-            return LoadingScreen();
-          }
-          return null;
         },
       ),
       // title: 'Flutter Demo',

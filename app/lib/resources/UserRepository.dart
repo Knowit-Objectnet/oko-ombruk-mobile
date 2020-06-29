@@ -43,7 +43,7 @@ class UserRepository {
     return;
   }
 
-  Future<void> persistToken(String token) async {
+  Future<void> persistToken(Credential token) async {
     /// write to keystore/keychain
     await Future.delayed(Duration(seconds: 1));
     return;

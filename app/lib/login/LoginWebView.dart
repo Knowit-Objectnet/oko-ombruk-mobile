@@ -15,21 +15,10 @@ class LoginWebView extends StatelessWidget {
       : assert(userRepository != null),
         super(key: key);
 
-  // @override
-  // void initState() {
-  //   authenticate().then((value) => setState(() {
-  //         // _userInfo = value;
-  //         Navigator.of(context).pushReplacementNamed('/home');
-  //       }));
-
-  //   super.initState();
-  // }
-
   @override
   Widget build(BuildContext context) {
-    authKeycloak().then((UserInfo value) =>
-        BlocProvider.of<AuthenticationBloc>(context)
-            .add(AuthenticationLoggedIn(token: value.toString())));
+    authKeycloak().then((value) => BlocProvider.of<AuthenticationBloc>(context)
+        .add(AuthenticationLoggedIn(credential: value)));
     return Scaffold(
       body: Center(
         child: Text("Venter på keyclock..."),
@@ -37,17 +26,15 @@ class LoginWebView extends StatelessWidget {
     );
   }
 
-  Future<UserInfo> authKeycloak() async {
+  Future<Credential> authKeycloak() async {
     final Uri uri =
         Uri.parse("https://keycloak.oko.knowit.no:8443/auth/realms/staging");
     final String clientId = "flutter-app";
     final List<String> scopes = ["openid", "profile"];
 
-    // create the client
     var issuer = await Issuer.discover(uri);
     var client = new Client(issuer, clientId);
 
-    // create a function to open a browser with an url
     Future<Null> urlLauncher(String url) async {
       if (await canLaunch(url)) {
         await launch(url, forceWebView: true);
@@ -56,7 +43,6 @@ class LoginWebView extends StatelessWidget {
       }
     }
 
-    // create an authenticator
     var authenticator = new Authenticator(
       client,
       scopes: scopes,
@@ -64,25 +50,8 @@ class LoginWebView extends StatelessWidget {
       urlLancher: urlLauncher,
     );
 
-    // starts the authentication
     Credential credential = await authenticator.authorize();
-    // print("credential.refreshToken: " + credential.refreshToken);
-    // print("credential.idToken: " + credential.idToken.toCompactSerialization());
-
-    // Stream<Exception> x =
-    //     credential.validateToken(validateClaims: true, validateExpiry: true);
-    // await for (Exception e in x) {
-    //   print("Exception e: " + e.toString());
-    // }
-
-    // TokenResponse tokens = await credential.getTokenResponse();
-
-    // print("Credentials: " + tokens.toString());
-
-    // close the webview when finished
     closeWebView();
-
-    // TODO return token instead
-    return await credential.getUserInfo();
+    return credential;
   }
 }

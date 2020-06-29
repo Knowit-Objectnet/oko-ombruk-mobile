@@ -1,11 +1,9 @@
-// import 'dart:async';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
 import 'package:bloc/bloc.dart';
-// import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ombruk/resources/UserRepository.dart';
-// import 'package:ombruk/blocs/bloc.dart';
+import 'package:openid_client/openid_client.dart';
 
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
@@ -23,26 +21,27 @@ class AuthenticationBloc
       AuthenticationEvent event) async* {
     // async* = stream of values
 
-    if (event is AuthenticationStarted) {
-      final bool hasToken = await userRepository.hasToken();
+    switch (event.runtimeType) {
+      case AuthenticationStarted:
+        final bool hasToken = await userRepository.hasToken();
 
-      if (hasToken) {
+        if (hasToken) {
+          yield AuthenticationSuccess();
+        } else {
+          yield AuthenticationFailure();
+        }
+        break;
+      case AuthenticationLoggedIn:
+        yield AuthenticationInProgress();
+        await userRepository
+            .persistToken((event as AuthenticationLoggedIn).credential);
         yield AuthenticationSuccess();
-      } else {
+        break;
+      case AuthenticationLoggedOut:
+        yield AuthenticationInProgress();
+        await userRepository.deleteToken();
         yield AuthenticationFailure();
-      }
-    }
-
-    if (event is AuthenticationLoggedIn) {
-      yield AuthenticationInProgress();
-      await userRepository.persistToken(event.token);
-      yield AuthenticationSuccess();
-    }
-
-    if (event is AuthenticationLoggedOut) {
-      yield AuthenticationInProgress();
-      await userRepository.deleteToken();
-      yield AuthenticationFailure();
+        break;
     }
   }
 }
@@ -63,6 +62,8 @@ class AuthenticationFailure extends AuthenticationState {}
 
 class AuthenticationInProgress extends AuthenticationState {}
 
+// Events
+
 abstract class AuthenticationEvent extends Equatable {
   const AuthenticationEvent();
 
@@ -70,20 +71,15 @@ abstract class AuthenticationEvent extends Equatable {
   List<Object> get props => [];
 }
 
-// Events
-
 class AuthenticationStarted extends AuthenticationEvent {}
 
 class AuthenticationLoggedIn extends AuthenticationEvent {
-  final String token;
+  final Credential credential;
 
-  const AuthenticationLoggedIn({@required this.token});
-
-  @override
-  List<Object> get props => [token];
+  const AuthenticationLoggedIn({@required this.credential});
 
   @override
-  String toString() => 'AuthenticationLoggedIn { token: $token }';
+  List<Object> get props => [credential];
 }
 
 class AuthenticationLoggedOut extends AuthenticationEvent {}
