@@ -23,24 +23,28 @@ class AuthenticationBloc
 
     switch (event.runtimeType) {
       case AuthenticationStarted:
-        final bool hasToken = await userRepository.hasToken();
+        final bool hasToken = await userRepository.hasCredentials();
 
         if (hasToken) {
           yield AuthenticationSuccess();
         } else {
-          yield AuthenticationFailure();
+          yield AuthenticationNoToken();
         }
         break;
       case AuthenticationLoggedIn:
-        yield AuthenticationInProgress();
-        await userRepository
-            .persistToken((event as AuthenticationLoggedIn).credential);
-        yield AuthenticationSuccess();
+        AuthenticationLoggedIn authIn = event as AuthenticationLoggedIn;
+        if (authIn.exception != null) {
+          yield AuthenticationError(exception: authIn.exception);
+        } else {
+          yield AuthenticationInProgress();
+          await userRepository.saveCredentials(authIn.credential);
+          yield AuthenticationSuccess();
+        }
         break;
       case AuthenticationLoggedOut:
-        yield AuthenticationInProgress();
-        await userRepository.deleteToken();
-        yield AuthenticationFailure();
+        // yield AuthenticationInProgress();
+        await userRepository.deleteCredentials();
+        // yield AuthenticationNoToken();
         break;
     }
   }
@@ -49,6 +53,8 @@ class AuthenticationBloc
 // States
 
 abstract class AuthenticationState extends Equatable {
+  const AuthenticationState();
+
   // Equatale: to compare two instances of AuthenticationState. By default, == returns true only if the two objects are the same instance.
   @override
   List<Object> get props => [];
@@ -58,9 +64,18 @@ class AuthenticationInitial extends AuthenticationState {}
 
 class AuthenticationSuccess extends AuthenticationState {}
 
-class AuthenticationFailure extends AuthenticationState {}
+class AuthenticationNoToken extends AuthenticationState {}
 
 class AuthenticationInProgress extends AuthenticationState {}
+
+class AuthenticationError extends AuthenticationState {
+  final Exception exception;
+
+  const AuthenticationError({@required this.exception});
+
+  @override
+  List<Object> get props => [exception];
+}
 
 // Events
 
@@ -75,8 +90,10 @@ class AuthenticationStarted extends AuthenticationEvent {}
 
 class AuthenticationLoggedIn extends AuthenticationEvent {
   final Credential credential;
+  final Exception exception;
 
-  const AuthenticationLoggedIn({@required this.credential});
+  const AuthenticationLoggedIn(
+      {@required this.credential, @required this.exception});
 
   @override
   List<Object> get props => [credential];

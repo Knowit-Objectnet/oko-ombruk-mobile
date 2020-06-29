@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ombruk/blocs/AuthenticationBloc.dart';
+import 'package:ombruk/main.dart';
 import 'package:ombruk/tabs/calendar/CalendarScreen.dart';
 import 'package:ombruk/tabs/notifications/NotificationScreen.dart';
 import 'package:ombruk/tabs/partners/PartnerScreen.dart';
@@ -73,6 +74,7 @@ class _TabsScreenState extends State<TabsScreen> {
         // Navigator.of(context).pushReplacementNamed('/login');
         BlocProvider.of<AuthenticationBloc>(context)
             .add(AuthenticationLoggedOut());
+        RestartWidget.restartApp(context);
         break;
       default:
         break;
