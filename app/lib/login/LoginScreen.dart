@@ -62,6 +62,7 @@ class _LoginScreenState extends State<LoginScreen> {
           Padding(
             padding: EdgeInsets.all(16.0),
             child: RaisedButton(
+              key: Key("login"),
               onPressed: _login,
               child: Text('Logg inn'),
             ),
