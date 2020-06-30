@@ -31,8 +31,8 @@ class AuthenticationBloc
           yield AuthenticationNoToken();
         }
         break;
-      case AuthenticationLoggedIn:
-        AuthenticationLoggedIn authIn = event as AuthenticationLoggedIn;
+      case AuthenticationLogIn:
+        AuthenticationLogIn authIn = event as AuthenticationLogIn;
         if (authIn.exception != null) {
           yield AuthenticationError(exception: authIn.exception);
         } else {
@@ -41,10 +41,14 @@ class AuthenticationBloc
           yield AuthenticationSuccess();
         }
         break;
-      case AuthenticationLoggedOut:
-        // yield AuthenticationInProgress();
-        await userRepository.deleteCredentials();
-        // yield AuthenticationNoToken();
+      case AuthenticationLogOut:
+        bool successfulLogout = await userRepository.requestLogOut();
+        if (successfulLogout) {
+          await userRepository.deleteCredentials();
+          yield AuthenticationNoToken();
+        } else {
+          print("Not logged out");
+        }
         break;
     }
   }
@@ -88,15 +92,15 @@ abstract class AuthenticationEvent extends Equatable {
 
 class AuthenticationStarted extends AuthenticationEvent {}
 
-class AuthenticationLoggedIn extends AuthenticationEvent {
+class AuthenticationLogIn extends AuthenticationEvent {
   final Credential credential;
   final Exception exception;
 
-  const AuthenticationLoggedIn(
+  const AuthenticationLogIn(
       {@required this.credential, @required this.exception});
 
   @override
   List<Object> get props => [credential];
 }
 
-class AuthenticationLoggedOut extends AuthenticationEvent {}
+class AuthenticationLogOut extends AuthenticationEvent {}

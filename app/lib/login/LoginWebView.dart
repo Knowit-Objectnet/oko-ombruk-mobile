@@ -22,22 +22,29 @@ class LoginWebView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    authKeycloak().then((value) {
-      Credential c = value is Credential ? value : null;
-      Exception e = value is Exception ? value : null;
-      BlocProvider.of<AuthenticationBloc>(context)
-          .add(AuthenticationLoggedIn(credential: c, exception: e));
-    });
     return Scaffold(
       body: Center(
-        child: Text("Venter på keyclock..."),
+        child: RaisedButton(
+          child: Text("Logg inn"),
+          onPressed: () => authKeycloak().then((value) {
+            Credential c;
+            Exception exception;
+            if (value is Credential) {
+              c = value;
+            } else {
+              exception = value;
+            }
+            BlocProvider.of<AuthenticationBloc>(context)
+                .add(AuthenticationLogIn(credential: c, exception: exception));
+          }),
+        ),
       ),
     );
   }
 
   Future<dynamic> authKeycloak() async {
-    final Uri uri =
-        Uri.parse("https://keycloak.oko.knowit.no:8443/auth/realms/staging");
+    final Uri uri = Uri.parse(
+        "https://keycloak.staging.oko.knowit.no:8443/auth/realms/staging");
     final String clientId = "flutter-app";
     final List<String> scopes = ["openid", "profile"];
 
@@ -63,11 +70,12 @@ class LoginWebView extends StatelessWidget {
       Credential credential = await authenticator.authorize();
       closeWebView();
       return credential;
-    } on SocketException catch (e) {
-      print(e);
+    } on SocketException catch (_) {
+      return Exception("Fikk ikke kontakt med serveren");
+    } on NoSuchMethodError catch (_) {
+      return Exception("Fikk ikke kontakt med serveren");
     } catch (e) {
-      print(e);
-      return Exception("Unknown exception");
+      return Exception("Noe gikk galt");
     }
   }
 }
