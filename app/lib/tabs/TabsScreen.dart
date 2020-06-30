@@ -21,22 +21,39 @@ class _TabsScreenState extends State<TabsScreen> {
     WeightReportScreen()
   ];
 
-    void _onItemTapped(int index) {
+  void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
-      switch(index){
-        case 0: {_title = 'Kalender'; }
-        break;
-        case 1: {_title = 'Varsler'; }
-        break;
-        case 2: {_title = 'Samarbeidspartnere'; }
-        break;
-        case 3: {_title = 'Vektuttak'; }
-        break;
+      switch (index) {
+        case 0:
+          {
+            _title = 'Kalender';
+          }
+          break;
+        case 1:
+          {
+            _title = 'Varsler';
+          }
+          break;
+        case 2:
+          {
+            _title = 'Samarbeidspartnere';
+          }
+          break;
+        case 3:
+          {
+            _title = 'Vektuttak';
+          }
+          break;
       }
     });
   }
 
+  @override
+  void initState() {
+    _title = 'Kalender';
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
