@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:ombruk/models/CalendarEvent.dart';
-import 'package:ombruk/tabs/calendar/HorizontalCalendar/DateText.dart';
-import 'package:ombruk/tabs/calendar/HorizontalCalendar/DayScroller.dart';
-import 'package:ombruk/tabs/calendar/HorizontalCalendar/StationFilter.dart';
-import 'package:ombruk/tabs/calendar/HorizontalCalendar/WeekCalendar.dart';
+import 'package:ombruk/ui/tabs/calendar/HorizontalCalendar/DateText.dart';
+import 'package:ombruk/ui/tabs/calendar/HorizontalCalendar/DayScroller.dart';
+import 'package:ombruk/ui/tabs/calendar/HorizontalCalendar/StationFilter.dart';
+import 'package:ombruk/ui/tabs/calendar/HorizontalCalendar/WeekCalendar.dart';
 
 class HorizontalCalendar extends StatefulWidget {
   HorizontalCalendar({Key key, @required this.events}) : super(key: key);

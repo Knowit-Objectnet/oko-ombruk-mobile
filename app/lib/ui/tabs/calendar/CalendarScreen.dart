@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:ombruk/models/CalendarEvent.dart';
-import 'package:ombruk/tabs/calendar/ExtraHentingPopup/ExtraHentingDialog.dart';
-import 'package:ombruk/tabs/calendar/HorizontalCalendar/HorizontalCalendar.dart';
-import 'package:ombruk/tabs/calendar/VerticalCalendar/VerticalCalendar.dart';
+import 'package:ombruk/ui/tabs/calendar/ExtraHentingPopup/ExtraHentingDialog.dart';
+import 'package:ombruk/ui/tabs/calendar/HorizontalCalendar/HorizontalCalendar.dart';
+import 'package:ombruk/ui/tabs/calendar/VerticalCalendar/VerticalCalendar.dart';
 
 // To be removed
 List<CalendarEvent> events = [
