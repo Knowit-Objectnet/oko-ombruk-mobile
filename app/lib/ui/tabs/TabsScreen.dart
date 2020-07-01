@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:ombruk/blocs/AuthenticationBloc.dart';
-import 'package:ombruk/tabs/calendar/CalendarScreen.dart';
-import 'package:ombruk/tabs/notifications/NotificationScreen.dart';
-import 'package:ombruk/tabs/partners/PartnerScreen.dart';
-import 'package:ombruk/tabs/something/SomethingScreen.dart';
+import 'package:ombruk/ui/tabs/calendar/CalendarScreen.dart';
+import 'package:ombruk/ui/tabs/notifications/NotificationScreen.dart';
+import 'package:ombruk/ui/tabs/partners/PartnerScreen.dart';
+import 'package:ombruk/ui/tabs/something/SomethingScreen.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 

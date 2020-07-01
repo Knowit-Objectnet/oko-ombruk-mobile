@@ -42,6 +42,7 @@ class AuthenticationBloc
         }
         break;
       case AuthenticationLogOut:
+        yield AuthenticationInProgressLoggingOut();
         bool successfulLogout = await userRepository.requestLogOut();
         if (successfulLogout) {
           await userRepository.deleteCredentials();
@@ -80,6 +81,8 @@ class AuthenticationError extends AuthenticationState {
   @override
   List<Object> get props => [exception];
 }
+
+class AuthenticationInProgressLoggingOut extends AuthenticationState {}
 
 // Events
 
