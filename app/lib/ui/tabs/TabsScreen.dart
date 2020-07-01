@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:ombruk/tabs/calendar/CalendarScreen.dart';
-import 'package:ombruk/tabs/notifications/NotificationScreen.dart';
-import 'package:ombruk/tabs/partners/PartnerScreen.dart';
-import 'package:ombruk/tabs/something/SomethingScreen.dart';
+import 'package:ombruk/blocs/AuthenticationBloc.dart';
+import 'package:ombruk/ui/tabs/calendar/CalendarScreen.dart';
+import 'package:ombruk/ui/tabs/notifications/NotificationScreen.dart';
+import 'package:ombruk/ui/tabs/partners/PartnerScreen.dart';
+import 'package:ombruk/ui/tabs/something/SomethingScreen.dart';
+
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 enum PopUpMenuOptions { logOut }
 
@@ -38,7 +41,9 @@ class _TabsScreenState extends State<TabsScreen> {
             itemBuilder: (BuildContext context) =>
                 <PopupMenuEntry<PopUpMenuOptions>>[
               PopupMenuItem(
-                  value: PopUpMenuOptions.logOut, child: Text('Logg ut'), key: Key('logout')), 
+                  value: PopUpMenuOptions.logOut,
+                  child: Text('Logg ut'),
+                  key: Key('logout')),
             ],
             icon: Icon(Icons.person_pin),
           )
@@ -68,7 +73,8 @@ class _TabsScreenState extends State<TabsScreen> {
   void _popUpItemSelected(PopUpMenuOptions option) {
     switch (option) {
       case PopUpMenuOptions.logOut:
-        Navigator.of(context).pushReplacementNamed('/login');
+        BlocProvider.of<AuthenticationBloc>(context)
+            .add(AuthenticationLogOut());
         break;
       default:
         break;

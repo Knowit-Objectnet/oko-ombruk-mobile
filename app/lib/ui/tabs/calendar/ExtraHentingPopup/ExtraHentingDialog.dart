@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:ombruk/tabs/calendar/ExtraHentingPopup/DateField.dart';
-import 'package:ombruk/tabs/calendar/ExtraHentingPopup/TimeField.dart';
+import 'package:ombruk/ui/tabs/calendar/ExtraHentingPopup/DateField.dart';
+import 'package:ombruk/ui/tabs/calendar/ExtraHentingPopup/TimeField.dart';
 
 class ExtraHentingDialog extends StatefulWidget {
   @override
