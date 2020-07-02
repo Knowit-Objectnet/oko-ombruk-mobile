@@ -36,11 +36,14 @@ class _TabsScreenState extends State<TabsScreen> {
         title: const Text('Fancy titel'),
         actions: <Widget>[
           PopupMenuButton<PopUpMenuOptions>(
+            key: Key('popMenu'),
             onSelected: _popUpItemSelected,
             itemBuilder: (BuildContext context) =>
                 <PopupMenuEntry<PopUpMenuOptions>>[
               PopupMenuItem(
-                  value: PopUpMenuOptions.logOut, child: Text('Logg ut')),
+                  value: PopUpMenuOptions.logOut,
+                  child: Text('Logg ut'),
+                  key: Key('logout')),
             ],
             icon: Icon(Icons.person_pin),
           )

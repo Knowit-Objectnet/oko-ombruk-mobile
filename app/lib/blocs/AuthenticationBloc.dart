@@ -48,7 +48,8 @@ class AuthenticationBloc
           await userRepository.deleteCredentials();
           yield AuthenticationNoToken();
         } else {
-          print("Not logged out");
+          // TODO: show snackbar or alert message
+          yield AuthenticationSuccess();
         }
         break;
     }
