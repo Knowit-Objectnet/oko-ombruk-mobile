@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:ombruk/LoadingScreen.dart';
-import 'package:ombruk/login/LoginScreen.dart';
-import 'package:ombruk/tabs/TabsScreen.dart';
+import 'package:ombruk/ui/LoadingScreen.dart';
+import 'package:ombruk/ui/login/LoginScreen.dart';
+import 'package:ombruk/ui/tabs/TabsScreen.dart';
 
 void main() {
   runApp(MyApp());

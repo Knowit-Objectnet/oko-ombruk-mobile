@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:ombruk/tabs/calendar/CalendarScreen.dart';
-import 'package:ombruk/tabs/notifications/NotificationScreen.dart';
-import 'package:ombruk/tabs/partners/PartnerScreen.dart';
-import 'package:ombruk/tabs/weightreport/WeightReportScreen.dart';
+import 'package:ombruk/ui/tabs/calendar/CalendarScreen.dart';
+import 'package:ombruk/ui/tabs/notifications/NotificationScreen.dart';
+import 'package:ombruk/ui/tabs/partners/PartnerScreen.dart';
+import 'package:ombruk/ui/tabs/weightreport/WeightReportScreen.dart';
 
 enum PopUpMenuOptions { logOut }
 
