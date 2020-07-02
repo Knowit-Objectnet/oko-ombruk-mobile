@@ -1,15 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:ombruk/models/CalendarEvent.dart';
-import 'package:grouped_list/grouped_list.dart';
-import 'package:ombruk/ui/tabs/calendar/CalendarScreen.dart';
-import 'package:ombruk/models/events.json';
-import 'dart:async';
 import 'dart:convert';
-
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-//import 'package:flutter_load_local_json/events.dart';
+import 'package:ombruk/ui/tabs/weightreport/eventList.dart';
 
 List<CalendarEvent> events = [
   CalendarEvent(
@@ -90,54 +84,29 @@ class _WeightReportScreenState extends State<WeightReportScreen> {
                       ]),
                   Text('Tidligere uttak',
                       style: TextStyle(fontWeight: FontWeight.w700)),
-                  Container(
-                      height: 200,
-                      width: 400,
-                      child: ListView.builder(
-                          itemCount: events == null ? 0 : events.length,
-                          itemBuilder: (BuildContext ctxt, int index) {
-                            return Padding(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 24.0, vertical: 5),
-                                child: Row(children: <Widget>[
-                                  Container(
-                                      width: 101,
-                                      height: 37,
-                                      color: (events[index].weight != 0)
-                                          ? Color(0xFF43F8B6)
-                                          : Color(0xFFFF8274),
-                                      child:
-                                          Text(events[index].start.toString())),
-                                  Container(
-                                      width: 187,
-                                      height: 37,
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 24.0, vertical: 5),
-                                      color: Colors.white,
-                                      child: ((events[index].weight != 0)
-                                          ? Text(
-                                              events[index].weight.toString())
-                                          : TextField(
-                                              decoration: InputDecoration(
-                                                  hintText: 'Vekt'))))
-                                ]));
-                          })
-                      //   GroupedListView<CalendarEvent, DateTime>(
-                      // elements: widget.events,
-                      // groupBy: (CalendarEvent event) {
-                      //   // Sort without time
-                      //   DateTime date = event.start;
-                      //   DateTime sortDate = DateTime.utc(date.year, date.month, date.day);
-                      //   return sortDate;
-                      // },
-                      // groupSeparatorBuilder: (DateTime groupByValue) => Padding(
-                      //   padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
-                      //   ),
-                      //   itemBuilder: (_, CalendarEvent event) => Container(
-                      //     color: Colors.grey[200],
-                      //     ),)
-                      )
+                  FutureBuilder(
+                      future: DefaultAssetBundle.of(context)
+                          .loadString('assets/events.json'),
+                      builder: (context, snapshot) {
+                        List<CalendarEvent> events = parsing(snapshot.data);
+                        return EventList(events: events);
+                      }),
                 ])));
+  }
+
+  List<CalendarEvent> parsing(dynamic response) {
+    if (response == null) {
+      return [];
+    }
+    String reponseString = response.toString();
+    final Map<String, dynamic> parsed = jsonDecode(reponseString);
+    if (parsed == null) {
+      return [];
+    }
+    List<dynamic> events = parsed['events'];
+    return events
+        .map<CalendarEvent>((json) => CalendarEvent.fromJson(json))
+        .toList();
   }
 
   void _submit() {}
