@@ -17,8 +17,8 @@ void main() {
   });
 
   Future<void> delay([int milliseconds = 250]) async {
-  await Future<void>.delayed(Duration(milliseconds: milliseconds));
-}
+    await Future<void>.delayed(Duration(milliseconds: milliseconds));
+  }
 
   // Initial test to check health sttus of Flutter Driver
   test('check flutter driver health', () async {
@@ -26,6 +26,7 @@ void main() {
     expect(health.status, HealthStatus.ok);
   });
 
+  // Does not work at the moment
   test('log in and log out', () async {
     final signinButton = find.byValueKey('login');
     await driver.waitFor(signinButton);
@@ -33,7 +34,7 @@ void main() {
     await driver.tap(signinButton);
 
     // if (auth == true){
-    
+
     /*
     final logoutButton = find.byValueKey('logout');
     final popMenu = find.byValueKey('popMenu');
@@ -50,10 +51,5 @@ void main() {
     // else{
     //   login failer;
     // }
-
-
-
-
   });
-
 }

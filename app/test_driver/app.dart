@@ -1,7 +1,6 @@
 // project-specific imports
 import 'package:ombruk/main.dart' as app;
 // flutter-specific imports
-import 'package:flutter/material.dart';
 import 'package:flutter_driver/driver_extension.dart';
 
 void main() {
