@@ -3,9 +3,9 @@ import 'package:ombruk/blocs/AuthenticationBloc.dart';
 import 'package:ombruk/ui/tabs/calendar/CalendarScreen.dart';
 import 'package:ombruk/ui/tabs/notifications/NotificationScreen.dart';
 import 'package:ombruk/ui/tabs/partners/PartnerScreen.dart';
-import 'package:ombruk/ui/tabs/something/SomethingScreen.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ombruk/ui/tabs/weightreport/WeightReportScreen.dart';
 
 enum PopUpMenuOptions { logOut }
 
@@ -16,16 +16,31 @@ class TabsScreen extends StatefulWidget {
 
 class _TabsScreenState extends State<TabsScreen> {
   int _selectedIndex = 0;
+  String _title = 'Kalender';
   List<Widget> _widgetOptions = <Widget>[
     CalendarScreen(),
     NotificationScreen(),
     PartnerScreen(),
-    SomethingScreen()
+    WeightReportScreen()
   ];
 
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
+      switch (index) {
+        case 0:
+          _title = 'Kalender';
+          break;
+        case 1:
+          _title = 'Varsler';
+          break;
+        case 2:
+          _title = 'Samarbeidspartnere';
+          break;
+        case 3:
+          _title = 'Vektuttak';
+          break;
+      }
     });
   }
 
@@ -33,7 +48,7 @@ class _TabsScreenState extends State<TabsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Fancy titel'),
+        title: Text(_title),
         actions: <Widget>[
           PopupMenuButton<PopUpMenuOptions>(
             key: Key('popMenu'),
@@ -61,7 +76,7 @@ class _TabsScreenState extends State<TabsScreen> {
           BottomNavigationBarItem(
               icon: Icon(Icons.people), title: Text('Samarbeidspartnere')),
           BottomNavigationBarItem(
-              icon: Icon(Icons.error_outline), title: Text('Something')),
+              icon: Icon(Icons.report), title: Text('Vektuttak')),
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.amber[800],

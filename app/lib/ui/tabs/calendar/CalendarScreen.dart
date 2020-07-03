@@ -10,19 +10,22 @@ List<CalendarEvent> events = [
       "Fretex",
       "beskrivelse",
       DateTime.now().subtract(Duration(hours: 5)),
-      DateTime.now().subtract(Duration(hours: 1))),
+      DateTime.now().subtract(Duration(hours: 1)),
+      3),
   CalendarEvent("frigo", "noe", DateTime.now().add(Duration(hours: 1)),
-      DateTime.now().add(Duration(hours: 3))),
+      DateTime.now().add(Duration(hours: 3)), 6),
   CalendarEvent(
       "Oslo kollega",
       ".......",
       DateTime.now().add(Duration(hours: 2)),
-      DateTime.now().add(Duration(hours: 6))),
+      DateTime.now().add(Duration(hours: 6)),
+      0),
   CalendarEvent(
       "Ny dag",
       "Beskrivelse av opplegget",
       DateTime.now().add(Duration(days: 1)),
-      DateTime.now().add(Duration(days: 1, hours: 1))),
+      DateTime.now().add(Duration(days: 1, hours: 1)),
+      9),
 ];
 
 class CalendarScreen extends StatefulWidget {
