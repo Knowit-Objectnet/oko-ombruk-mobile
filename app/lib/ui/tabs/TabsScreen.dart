@@ -4,7 +4,6 @@ import 'package:ombruk/ui/tabs/calendar/CalendarScreen.dart';
 import 'package:ombruk/ui/tabs/notifications/NotificationScreen.dart';
 import 'package:ombruk/ui/tabs/partners/PartnerScreen.dart';
 import 'package:ombruk/ui/tabs/something/SomethingScreen.dart';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 enum PopUpMenuOptions { logOut }
@@ -28,11 +27,12 @@ class _TabsScreenState extends State<TabsScreen> {
       _selectedIndex = index;
     });
   }
-
+  dynamic selected = Color(0xFF6FE9FF);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Color(0xFF2A2859),
         title: const Text('Fancy titel'),
         actions: <Widget>[
           PopupMenuButton<PopUpMenuOptions>(
@@ -45,26 +45,28 @@ class _TabsScreenState extends State<TabsScreen> {
                   child: Text('Logg ut'),
                   key: Key('logout')),
             ],
-            icon: Icon(Icons.person_pin),
+            icon: Image.asset('assets/icons/person-ikon.png', color: Colors.white),
           )
         ],
       ),
       body: _widgetOptions.elementAt(_selectedIndex),
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Color(0xFF2A2859),
         type: BottomNavigationBarType
             .fixed, // Fixes an issue because the navbar cannot have more than 3 items
-        items: const <BottomNavigationBarItem>[
+        items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-              icon: Icon(Icons.calendar_today), title: Text('Kalender')),
+              icon: Image.asset('assets/icons/listeikon-ny.png', height: 25, color: Colors.white), activeIcon: Image.asset('assets/icons/listeikon-ny.png', height: 25, color: selected), title: Text('Kalender')),
           BottomNavigationBarItem(
-              icon: Icon(Icons.notifications), title: Text('Varsler')),
+              icon: Image.asset('assets/icons/varsel-ikon.png', height: 25, color: Colors.white), activeIcon: Image.asset('assets/icons/varsel-ikon.png', height: 25, color: selected), title: Text('Varsler')),
           BottomNavigationBarItem(
-              icon: Icon(Icons.people), title: Text('Samarbeidspartnere')),
+              icon: Image.asset('assets/icons/sampartnere.png', height: 25, color: Colors.white), activeIcon: Image.asset('assets/icons/sampartnere.png', height: 25, color: selected), title: Text('Samarbeidspartnere')),
           BottomNavigationBarItem(
-              icon: Icon(Icons.error_outline), title: Text('Something')),
+              icon: Image.asset('assets/icons/vekt-ikon.png', height: 25, color: Colors.white), activeIcon: Image.asset('assets/icons/vekt-ikon.png', height: 25, color: selected), title: Text('Something')),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.amber[800],
+        selectedItemColor: selected,
+        unselectedItemColor: Colors.white,
         onTap: _onItemTapped,
       ),
     );
