@@ -1,5 +1,5 @@
 pre-push:
-  parallel: true
+  parallel: false
   commands:
     tests:
       root: 'app/'
