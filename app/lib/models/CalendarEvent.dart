@@ -1,31 +1,64 @@
 class CalendarEvent {
-  final String title;
-  final String description;
-  final DateTime start;
-  final DateTime end;
-  final double weight;
+  final int id;
+  final DateTime startDateTime;
+  final DateTime endDateTime;
+  final int stationID;
+  final int partnerID;
+  final _Station station;
+  final _Partner partner;
 
-  CalendarEvent(
-      this.title, this.description, this.start, this.end, this.weight);
+  CalendarEvent(this.id, this.startDateTime, this.endDateTime, this.stationID,
+      this.partnerID, this.station, this.partner);
 
   factory CalendarEvent.fromJson(Map<String, dynamic> json) {
     DateTime startDate;
     DateTime endDate;
     try {
       startDate = DateTime.parse(json['start']);
-      endDate = DateTime.parse('end');
+      endDate = DateTime.parse(json['end']);
     } catch (_) {
-      // TODO: set state errror
+      throw Exception("Invalid DateTime format in CalendarEvent");
     }
     return CalendarEvent(
-        json['title'], json['description'], startDate, endDate, json['weight']);
+      json['id'],
+      startDate,
+      endDate,
+      json['stationID'],
+      json['partnerID'],
+      _Station.fromJson(json['station']),
+      _Partner.fromJson(json['sa']),
+    );
   }
 
   Map<String, dynamic> toJson() => {
-        'title': title,
-        'description': description,
-        'start': start,
-        'end': end,
-        'weight': weight
+        'id': id,
+        'startDateTime': startDateTime,
+        'endDateTime': endDateTime,
+        'stationID': stationID,
+        'partnerID': partnerID,
+        'station': station.toJson(),
+        'partner': partner.toJson()
       };
+}
+
+class _Station {
+  final int id;
+  final String name;
+
+  _Station.fromJson(Map<String, dynamic> json)
+      : id = json['id'],
+        name = json['name'];
+
+  Map<String, dynamic> toJson() => {'id': id, 'name': name};
+}
+
+class _Partner {
+  final int id;
+  final String name;
+
+  _Partner.fromJson(Map<String, dynamic> json)
+      : id = json['id'],
+        name = json['name'];
+
+  Map<String, dynamic> toJson() => {'id': id, 'name': name};
 }

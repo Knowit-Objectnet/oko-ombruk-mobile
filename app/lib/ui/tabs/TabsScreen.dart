@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ombruk/blocs/AuthenticationBloc.dart';
-import 'package:ombruk/ui/tabs/calendar/CalendarScreen.dart';
+import 'package:ombruk/ui/tabs/calendar/CalendarRouter.dart';
 import 'package:ombruk/ui/tabs/notifications/NotificationScreen.dart';
 import 'package:ombruk/ui/tabs/partners/PartnerScreen.dart';
 
@@ -17,12 +17,6 @@ class TabsScreen extends StatefulWidget {
 class _TabsScreenState extends State<TabsScreen> {
   int _selectedIndex = 0;
   String _title = 'Kalender';
-  List<Widget> _widgetOptions = <Widget>[
-    CalendarScreen(),
-    NotificationScreen(),
-    PartnerScreen(),
-    WeightReportScreen()
-  ];
 
   void _onItemTapped(int index) {
     setState(() {
@@ -64,7 +58,16 @@ class _TabsScreenState extends State<TabsScreen> {
           )
         ],
       ),
-      body: _widgetOptions.elementAt(_selectedIndex),
+      body: IndexedStack(
+        // IndexStack keeps the screen states alive between tab changes
+        index: _selectedIndex,
+        children: <Widget>[
+          CalendarRouter(),
+          NotificationScreen(),
+          PartnerScreen(),
+          WeightReportScreen()
+        ],
+      ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType
             .fixed, // Fixes an issue because the navbar cannot have more than 3 items

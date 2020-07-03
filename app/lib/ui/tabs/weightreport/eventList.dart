@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:ombruk/models/CalendarEvent.dart';
+import 'package:ombruk/models/WeightEvent.dart';
 import 'package:flutter/foundation.dart';
 
 class EventList extends StatelessWidget {
-  final List<CalendarEvent> events;
+  final List<WeightEvent> events;
   EventList({Key key, this.events}) : super(key: key);
   @override
   Widget build(BuildContext context) {

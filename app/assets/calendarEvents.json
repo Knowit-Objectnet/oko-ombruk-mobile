@@ -1,0 +1,77 @@
+[
+    {
+        "id": 1,
+        "startDateTime": "2020-07-02T12: 17: 39",
+        "endDateTime": "2020-07-02T13: 17: 39",
+        "stationID": 1,
+        "partnerID": 2,
+        "station": {
+            "id": 1,
+            "name": ""
+        },
+        "partner": {
+            "id": 2,
+            "name": ""
+        }
+    },
+    {
+        "id": 2,
+        "startDateTime": "2020-07-02T12: 17: 39",
+        "endDateTime": "2020-07-02T13: 17: 39",
+        "stationID": 1,
+        "partnerID": 2,
+        "station": {
+            "id": 1,
+            "name": ""
+        },
+        "partner": {
+            "id": 2,
+            "name": ""
+        }
+    },
+    {
+        "id": 3,
+        "startDateTime": "2020-07-02T12: 17: 39",
+        "endDateTime": "2020-07-02T13: 17: 39",
+        "stationID": 1,
+        "partnerID": 2,
+        "station": {
+            "id": 1,
+            "name": ""
+        },
+        "partner": {
+            "id": 2,
+            "name": ""
+        }
+    },
+    {
+        "id"': 4,
+        "startDateTime": "2020-07-02T12: 17: 39",
+        "endDateTime": "2020-07-02T13: 17: 39",
+        "stationID": 1,
+        "partnerID": 2,
+        "station": {
+            "id": 1,
+            "name": ""
+        },
+        "partner": {
+            "id": 2,
+            "name": ""
+        }
+    },
+    {
+        "id": 5,
+        "startDateTime": "2020-07-02T12: 17: 39",
+        "endDateTime": "2020-07-02T13: 17: 39",
+        "stationID": 1,
+        "partnerID": 2,
+        "station": {
+            "id": 1,
+            "name": ""
+        },
+        "partner": {
+            "id": 2,
+            "name": ""
+        }
+    }
+]

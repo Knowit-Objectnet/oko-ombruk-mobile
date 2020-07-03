@@ -1,26 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:ombruk/models/CalendarEvent.dart';
+import 'package:ombruk/models/WeightEvent.dart';
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
-import 'package:ombruk/ui/tabs/weightreport/EventList.dart';
+import 'package:ombruk/ui/tabs/weightreport/eventList.dart';
 
-List<CalendarEvent> events = [
-  CalendarEvent(
+List<WeightEvent> events = [
+  WeightEvent(
       "Fretex",
       "beskrivelse",
       DateTime.now().subtract(Duration(hours: 5)),
       DateTime.now().subtract(Duration(hours: 1)),
       6),
-  CalendarEvent("frigo", "noe", DateTime.now().add(Duration(hours: 1)),
+  WeightEvent("frigo", "noe", DateTime.now().add(Duration(hours: 1)),
       DateTime.now().add(Duration(hours: 3)), 7),
-  CalendarEvent(
-      "Oslo kollega",
-      ".......",
-      DateTime.now().add(Duration(hours: 2)),
-      DateTime.now().add(Duration(hours: 6)),
-      0),
-  CalendarEvent(
+  WeightEvent("Oslo kollega", ".......", DateTime.now().add(Duration(hours: 2)),
+      DateTime.now().add(Duration(hours: 6)), 0),
+  WeightEvent(
       "Ny dag",
       "Beskrivelse av opplegget",
       DateTime.now().add(Duration(days: 1)),
@@ -86,15 +82,15 @@ class _WeightReportScreenState extends State<WeightReportScreen> {
                       style: TextStyle(fontWeight: FontWeight.w700)),
                   FutureBuilder(
                       future: DefaultAssetBundle.of(context)
-                          .loadString('assets/events.json'),
+                          .loadString('assets/weightEvents.json'),
                       builder: (context, snapshot) {
-                        List<CalendarEvent> events = parsing(snapshot.data);
+                        List<WeightEvent> events = parsing(snapshot.data);
                         return EventList(events: events);
                       }),
                 ])));
   }
 
-  List<CalendarEvent> parsing(dynamic response) {
+  List<WeightEvent> parsing(dynamic response) {
     if (response == null) {
       return [];
     }
@@ -105,7 +101,7 @@ class _WeightReportScreenState extends State<WeightReportScreen> {
     }
     List<dynamic> events = parsed['events'];
     return events
-        .map<CalendarEvent>((json) => CalendarEvent.fromJson(json))
+        .map<WeightEvent>((json) => WeightEvent.fromJson(json))
         .toList();
   }
 
