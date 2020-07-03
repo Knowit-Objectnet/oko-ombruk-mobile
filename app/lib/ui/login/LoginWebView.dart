@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ombruk/blocs/AuthenticationBloc.dart';
-import 'package:ombruk/resources/UserRepository.dart';
+import 'package:ombruk/repositories/UserRepository.dart';
 
 import 'package:openid_client/openid_client.dart';
 import 'package:openid_client/openid_client_io.dart';

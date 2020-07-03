@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:mockito/mockito.dart';
-import 'package:ombruk/resources/UserRepository.dart';
+import 'package:ombruk/repositories/UserRepository.dart';
 
 import 'package:ombruk/blocs/AuthenticationBloc.dart';
 import 'package:openid_client/openid_client.dart';
