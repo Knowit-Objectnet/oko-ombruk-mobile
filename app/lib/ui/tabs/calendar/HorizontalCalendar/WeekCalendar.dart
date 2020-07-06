@@ -30,8 +30,8 @@ class _WeekCalendarState extends State<WeekCalendar> {
       userZoomable: false,
       events: widget.events
           .map((e) => FlutterWeekViewEvent(
-              title: "tittel",
-              description: "beskrivelse",
+              title: e.partner?.name ?? '',
+              description: e.station?.name ?? '',
               start: e.startDateTime,
               end: e.endDateTime))
           .toList(),

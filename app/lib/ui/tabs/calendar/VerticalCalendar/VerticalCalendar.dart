@@ -38,7 +38,7 @@ class _VerticalCalendarState extends State<VerticalCalendar> {
               children: <Widget>[
                 _timeText(event.startDateTime, event.endDateTime),
                 VerticalDivider(thickness: 100, color: Colors.black),
-                Text("En tittel")
+                Text(event.partner?.name ?? '')
               ],
             ),
             children: <Widget>[
