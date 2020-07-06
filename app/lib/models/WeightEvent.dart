@@ -17,7 +17,7 @@ class WeightEvent {
       throw Exception("Invalid DateTime format in WeightEvent");
     }
     return WeightEvent(json['title'], json['description'], startDate, endDate,
-        json['weight'].toDouble());
+        json['weight']?.toDouble());
   }
 
   Map<String, dynamic> toJson() => {

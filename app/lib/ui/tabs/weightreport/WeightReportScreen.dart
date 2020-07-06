@@ -1,24 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:ombruk/models/WeightEvent.dart';
 import 'dart:convert';
-import 'package:flutter/foundation.dart';
-import 'package:ombruk/ui/tabs/weightreport/EventList.dart';
 
-List<WeightEvent> events = [
-  WeightEvent(
-      "Fretex",
-      "beskrivelse",
-      DateTime.now().subtract(Duration(hours: 5)),
-      DateTime.now().subtract(Duration(hours: 1)),
-      6),
-  WeightEvent(
-      "Ny dag",
-      "Beskrivelse av opplegget",
-      DateTime.now().add(Duration(days: 1)),
-      DateTime.now().add(Duration(days: 1, hours: 1)),
-      0),
-];
+import 'package:ombruk/models/WeightEvent.dart';
+import 'package:ombruk/ui/tabs/weightreport/DateTimeBox.dart';
 
 class WeightReportScreen extends StatefulWidget {
   WeightReportScreen({Key key}) : super(key: key);
@@ -27,73 +12,91 @@ class WeightReportScreen extends StatefulWidget {
 }
 
 class _WeightReportScreenState extends State<WeightReportScreen> {
+  List<WeightEvent> _weights = [];
+
+  @override
+  void initState() {
+    // TODO: remove later
+    _loadString().then((value) {
+      setState(() {
+        _weights = _parse(value);
+      });
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Color(0xFFF9C66B),
-        body: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 24.0, vertical: 0),
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text('Siste uttak',
-                      style: TextStyle(fontWeight: FontWeight.w700)),
-                  Expanded(
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Expanded(
-                            flex: 1,
-                            child: Container(
-                              padding: EdgeInsets.all(10.0),
-                              decoration: BoxDecoration(
-                                color: Color(0xFFFF8274),
-                              ),
-                              child: Text(events[0].start.toString()),
-                            ),
-                          ),
-                          Expanded(
-                              flex: 2,
-                              child: Padding(
-                                  padding: EdgeInsets.only(left: 25),
-                                  child: Container(
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 4),
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                    ),
-                                    child: TextField(
-                                      decoration: InputDecoration(
-                                        hintText: 'Vektuttak (kg)',
-                                      ),
-                                      keyboardType:
-                                          TextInputType.numberWithOptions(
-                                              decimal: true),
-                                      inputFormatters: [
-                                        BlacklistingTextInputFormatter(
-                                            new RegExp('[\\-|\\ ]'))
-                                      ],
-                                    ),
-                                  ))),
-                          RawMaterialButton(
-                              fillColor: Color(0xFFFF8274),
-                              child: Text('OK'),
-                              onPressed: _submit,
-                              shape: CircleBorder()),
-                        ]),
-                    flex: 1,
-                  ),
-                  Text('Tidligere uttak',
-                      style: TextStyle(fontWeight: FontWeight.w700)),
-                  Expanded(
-                      child: FutureBuilder(
-                          future: _loadString(),
-                          builder: (context, snapshot) {
-                            return EventList(events: _parse(snapshot.data));
-                          }),
-                      flex: 3),
-                ])));
+        body: _weights.isEmpty
+            ? Center(child: Text("Du har ingen uttak"))
+            : ListView(
+                padding: EdgeInsets.symmetric(horizontal: 16.0),
+                children: _buildListWithSeperators(),
+              ));
+  }
+
+  List<Widget> _buildListWithSeperators() {
+    Widget _textDivider(String text) {
+      return Padding(
+        padding: EdgeInsets.symmetric(vertical: 8.0),
+        child: Text(text,
+            style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16.0)),
+      );
+    }
+
+    List<Widget> list = [];
+    list.add(_textDivider('Siste uttak'));
+    for (int index = 0; index < _weights.length; index++) {
+      if (index == 1) {
+        list.add(_textDivider('Tidligere uttak'));
+      }
+      list.add(_weightElement(_weights[index]));
+    }
+    return list;
+  }
+
+  Widget _weightElement(WeightEvent weightEvent) {
+    return Padding(
+        padding: EdgeInsets.symmetric(vertical: 4.0),
+        child: IntrinsicHeight(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              DateTimeBox(weightEvent: weightEvent),
+              Expanded(
+                child: Container(
+                  alignment: Alignment.centerLeft,
+                  margin: EdgeInsets.only(left: 16.0),
+                  padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+                  color: Colors.white,
+                  child: weightEvent.weight != null
+                      ? Text(weightEvent.weight.toString())
+                      : TextField(
+                          decoration: InputDecoration(hintText: 'Vekt i kg...'),
+                          style: TextStyle(fontSize: 12.0),
+                          keyboardType: TextInputType
+                              .number, // Decimal not allowed right now, may fix later
+                          inputFormatters: [
+                            // WhitelistingTextInputFormatter(
+                            // RegExp(r"^\d+\.?\d*$"))
+                            // ],
+                            WhitelistingTextInputFormatter.digitsOnly
+                          ],
+                        ),
+                ),
+              ),
+              weightEvent.weight != null
+                  ? Container()
+                  : RawMaterialButton(
+                      fillColor: Color(0xFFFF8274),
+                      child: Text('OK'),
+                      onPressed: _submit,
+                      shape: CircleBorder()),
+            ],
+          ),
+        ));
   }
 
   // TODO: Put this parser in data provider -> Bloc
@@ -113,8 +116,8 @@ class _WeightReportScreenState extends State<WeightReportScreen> {
   }
 
   // TODO: Remove this
-  Future<String> _loadString() {
-    Future.delayed(Duration(seconds: 2));
+  Future<String> _loadString() async {
+    await Future.delayed(Duration(seconds: 2));
     return Future.value('''{
       "events": [
         {
@@ -122,7 +125,7 @@ class _WeightReportScreenState extends State<WeightReportScreen> {
           "description": "Beskrivelse",
           "start": "1969-07-20 18:18:04Z",
           "end": "1969-07-20 19:18:04Z",
-          "weight": 2.0
+          "weight": null
         },
         {
           "title": "Fretex",
@@ -130,6 +133,13 @@ class _WeightReportScreenState extends State<WeightReportScreen> {
           "start": "1969-07-20 20:18:04Z",
           "end": "1969-07-20 20:18:04Z",
           "weight": 3.0
+        },
+        {
+          "title": "Fretex",
+          "description": "Beskrivelse",
+          "start": "1969-07-20 17:18:04Z",
+          "end": "1969-07-20 21:18:04Z",
+          "weight": null
         },
         {
           "title": "Maria",

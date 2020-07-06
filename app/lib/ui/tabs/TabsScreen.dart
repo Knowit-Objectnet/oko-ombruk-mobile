@@ -31,7 +31,7 @@ class _TabsScreenState extends State<TabsScreen> {
           _title = 'Samarbeidspartnere';
           break;
         case 3:
-          _title = 'Vektuttak';
+          _title = 'Dine vektuttak';
           break;
       }
     });
