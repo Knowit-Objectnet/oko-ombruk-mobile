@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:ombruk/models/WeightEvent.dart';
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
-import 'package:ombruk/ui/tabs/weightreport/EventList.dart';
+import 'package:ombruk/ui/tabs/weightreport/RenameMe.dart';
 
 List<WeightEvent> events = [
   WeightEvent(
