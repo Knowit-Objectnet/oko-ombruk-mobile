@@ -43,50 +43,62 @@ class _WeightReportScreenState extends State<WeightReportScreen> {
                 children: <Widget>[
                   Text('Siste uttak',
                       style: TextStyle(fontWeight: FontWeight.w700)),
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[
-                        Container(
-                          padding: EdgeInsets.all(10.0),
-                          decoration: BoxDecoration(
-                            color: Color(0xFFFF8274),
-                          ),
-                          child: Text('Dato'),
-                        ),
-                        Container(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 24.0, vertical: 0),
-                            height: 40,
-                            width: 200,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                            ),
-                            child: TextField(
-                              decoration: InputDecoration(
-                                hintText: 'Vektuttak (kg)',
+                  Expanded(
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Expanded(
+                            flex: 1,
+                            child: Container(
+                              padding: EdgeInsets.all(10.0),
+                              decoration: BoxDecoration(
+                                color: Color(0xFFFF8274),
                               ),
-                              keyboardType: TextInputType.numberWithOptions(
-                                  decimal: true),
-                              inputFormatters: [
-                                BlacklistingTextInputFormatter(
-                                    new RegExp('[\\-|\\ ]'))
-                              ],
-                            )),
-                        RawMaterialButton(
-                            fillColor: Color(0xFFFF8274),
-                            child: Text('OK'),
-                            onPressed: _submit,
-                            shape: CircleBorder())
-                      ]),
+                              child: Text(events[0].start.toString()),
+                            ),
+                          ),
+                          Expanded(
+                              flex: 2,
+                              child: Padding(
+                                  padding: EdgeInsets.only(left: 25),
+                                  child: Container(
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 4),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                    ),
+                                    child: TextField(
+                                      decoration: InputDecoration(
+                                        hintText: 'Vektuttak (kg)',
+                                      ),
+                                      keyboardType:
+                                          TextInputType.numberWithOptions(
+                                              decimal: true),
+                                      inputFormatters: [
+                                        BlacklistingTextInputFormatter(
+                                            new RegExp('[\\-|\\ ]'))
+                                      ],
+                                    ),
+                                  ))),
+                          RawMaterialButton(
+                              fillColor: Color(0xFFFF8274),
+                              child: Text('OK'),
+                              onPressed: _submit,
+                              shape: CircleBorder()),
+                        ]),
+                    flex: 1,
+                  ),
                   Text('Tidligere uttak',
                       style: TextStyle(fontWeight: FontWeight.w700)),
-                  FutureBuilder(
-                      future: DefaultAssetBundle.of(context)
-                          .loadString('assets/weightEvents.json'),
-                      builder: (context, snapshot) {
-                        List<WeightEvent> events = parsing(snapshot.data);
-                        return EventList(events: events);
-                      }),
+                  Expanded(
+                      child: FutureBuilder(
+                          future: DefaultAssetBundle.of(context)
+                              .loadString('assets/weightEvents.json'),
+                          builder: (context, snapshot) {
+                            List<WeightEvent> events = parsing(snapshot.data);
+                            return EventList(events: events);
+                          }),
+                      flex: 3),
                 ])));
   }
 
