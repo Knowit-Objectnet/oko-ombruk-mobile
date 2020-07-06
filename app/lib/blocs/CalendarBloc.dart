@@ -1,10 +1,10 @@
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:bloc/bloc.dart';
-import 'package:ombruk/models/CalendarEvent.dart' as model;
+import 'package:ombruk/models/CalendarEvent.dart';
 import 'package:ombruk/repositories/CalendarRepository.dart';
 
-class CalendarBloc extends Bloc<CalendarEvent, CalendarState> {
+class CalendarBloc extends Bloc<CalendarBlocEvent, CalendarState> {
   final CalendarRepository calendarRepository;
 
   CalendarBloc({@required this.calendarRepository})
@@ -14,12 +14,12 @@ class CalendarBloc extends Bloc<CalendarEvent, CalendarState> {
   CalendarState get initialState => CalendarInitial();
 
   @override
-  Stream<CalendarState> mapEventToState(CalendarEvent event) async* {
+  Stream<CalendarState> mapEventToState(CalendarBlocEvent event) async* {
     switch (event.runtimeType) {
       case CalendarInitialEventsRequested:
         yield CalendarInitialLoadInProgress();
         try {
-          final List<model.CalendarEvent> events =
+          final List<CalendarEvent> events =
               await calendarRepository.getEvents();
           yield CalendarLoadSuccess(calendarEvents: events);
         } catch (_) {
@@ -29,7 +29,7 @@ class CalendarBloc extends Bloc<CalendarEvent, CalendarState> {
       case CalendarRefreshRequested:
         yield CalendarRefreshInProgress();
         try {
-          final List<model.CalendarEvent> events =
+          final List<CalendarEvent> events =
               await calendarRepository.getEvents();
           yield CalendarLoadSuccess(calendarEvents: events);
         } catch (_) {
@@ -57,7 +57,7 @@ class CalendarInitialLoadInProgress extends CalendarState {}
 class CalendarRefreshInProgress extends CalendarState {}
 
 class CalendarLoadSuccess extends CalendarState {
-  final List<model.CalendarEvent> calendarEvents;
+  final List<CalendarEvent> calendarEvents;
   const CalendarLoadSuccess({@required this.calendarEvents})
       : assert(calendarEvents != null);
 
@@ -69,13 +69,13 @@ class CalendarLoadFailure extends CalendarState {}
 
 //* Events
 
-abstract class CalendarEvent extends Equatable {
-  const CalendarEvent();
+abstract class CalendarBlocEvent extends Equatable {
+  const CalendarBlocEvent();
 
   @override
   List<Object> get props => [];
 }
 
-class CalendarInitialEventsRequested extends CalendarEvent {}
+class CalendarInitialEventsRequested extends CalendarBlocEvent {}
 
-class CalendarRefreshRequested extends CalendarEvent {}
+class CalendarRefreshRequested extends CalendarBlocEvent {}
