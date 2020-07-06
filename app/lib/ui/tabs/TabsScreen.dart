@@ -27,7 +27,7 @@ class _TabsScreenState extends State<TabsScreen> {
       _selectedIndex = index;
     });
   }
-  dynamic selected = Color(0xFF6FE9FF);
+  Color selected = Color(0xFF6FE9FF);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
