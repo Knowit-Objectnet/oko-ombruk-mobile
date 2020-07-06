@@ -1,11 +1,11 @@
 final Map<int, String> weekdaysShort = {
-  1: 'man',
-  2: 'tir',
-  3: 'ons',
-  4: 'tors',
-  5: 'fre',
-  6: 'lør',
-  7: 'søn'
+  1: 'Man',
+  2: 'Tir',
+  3: 'Ons',
+  4: 'Tors',
+  5: 'Fre',
+  6: 'Lør',
+  7: 'Søn'
 };
 
 final Map<int, String> weekdaysLong = {

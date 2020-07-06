@@ -31,7 +31,8 @@ class EventList extends StatelessWidget {
                                         .toString() +
                                     ', ' +
                                     globals.weekdaysShort[
-                                        events[index].start.weekday] +
+                                            events[index].start.weekday]
+                                        .toLowerCase() +
                                     '\n' +
                                     events[index]
                                         .start
