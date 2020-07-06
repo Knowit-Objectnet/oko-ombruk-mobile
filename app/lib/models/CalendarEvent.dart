@@ -14,8 +14,8 @@ class CalendarEvent {
     DateTime startDate;
     DateTime endDate;
     try {
-      startDate = DateTime.parse(json['start']);
-      endDate = DateTime.parse(json['end']);
+      startDate = DateTime.parse(json['startDateTime']);
+      endDate = DateTime.parse(json['endDateTime']);
     } catch (_) {
       throw Exception("Invalid DateTime format in CalendarEvent");
     }
@@ -26,14 +26,19 @@ class CalendarEvent {
       json['stationID'],
       json['partnerID'],
       _Station.fromJson(json['station']),
-      _Partner.fromJson(json['sa']),
+      _Partner.fromJson(json['partner']),
     );
   }
 
   Map<String, dynamic> toJson() => {
         'id': id,
-        'startDateTime': startDateTime,
-        'endDateTime': endDateTime,
+        // substring removes milliseconds
+        'startDateTime': startDateTime
+            .toIso8601String()
+            .substring(0, startDateTime.toString().length - 4),
+        'endDateTime': endDateTime
+            .toIso8601String()
+            .substring(0, startDateTime.toString().length - 4),
         'stationID': stationID,
         'partnerID': partnerID,
         'station': station.toJson(),
