@@ -4,7 +4,7 @@ import 'package:ombruk/ui/LoadingScreen.dart';
 import 'package:ombruk/ui/SplashScreen.dart';
 import 'package:ombruk/ui/login/ErrorScreen.dart';
 import 'package:ombruk/ui/login/LoginWebView.dart';
-import 'package:ombruk/resources/UserRepository.dart';
+import 'package:ombruk/repositories/UserRepository.dart';
 import 'package:ombruk/ui/tabs/TabsScreen.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';

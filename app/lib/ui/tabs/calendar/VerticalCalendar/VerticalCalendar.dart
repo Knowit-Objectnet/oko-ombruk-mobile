@@ -24,7 +24,7 @@ class _VerticalCalendarState extends State<VerticalCalendar> {
       elements: widget.events,
       groupBy: (CalendarEvent event) {
         // Sort without time
-        DateTime date = event.start;
+        DateTime date = event.startDateTime;
         DateTime sortDate = DateTime.utc(date.year, date.month, date.day);
         return sortDate;
       },
@@ -36,9 +36,9 @@ class _VerticalCalendarState extends State<VerticalCalendar> {
           child: ExpansionTile(
             title: Row(
               children: <Widget>[
-                _timeText(event.start, event.end),
+                _timeText(event.startDateTime, event.endDateTime),
                 VerticalDivider(thickness: 100, color: Colors.black),
-                Text(event.title)
+                Text(event.partner?.name ?? '')
               ],
             ),
             children: <Widget>[

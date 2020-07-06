@@ -4,28 +4,11 @@ import 'package:ombruk/ui/tabs/calendar/ExtraHentingPopup/ExtraHentingDialog.dar
 import 'package:ombruk/ui/tabs/calendar/HorizontalCalendar/HorizontalCalendar.dart';
 import 'package:ombruk/ui/tabs/calendar/VerticalCalendar/VerticalCalendar.dart';
 
-// To be removed
-List<CalendarEvent> events = [
-  CalendarEvent(
-      "Fretex",
-      "beskrivelse",
-      DateTime.now().subtract(Duration(hours: 5)),
-      DateTime.now().subtract(Duration(hours: 1))),
-  CalendarEvent("frigo", "noe", DateTime.now().add(Duration(hours: 1)),
-      DateTime.now().add(Duration(hours: 3))),
-  CalendarEvent(
-      "Oslo kollega",
-      ".......",
-      DateTime.now().add(Duration(hours: 2)),
-      DateTime.now().add(Duration(hours: 6))),
-  CalendarEvent(
-      "Ny dag",
-      "Beskrivelse av opplegget",
-      DateTime.now().add(Duration(days: 1)),
-      DateTime.now().add(Duration(days: 1, hours: 1))),
-];
-
 class CalendarScreen extends StatefulWidget {
+  final List<CalendarEvent> events;
+
+  CalendarScreen({@required this.events}) : assert(events != null);
+
   @override
   _CalendarScreenState createState() => _CalendarScreenState();
 }
@@ -60,8 +43,8 @@ class _CalendarScreenState extends State<CalendarScreen> {
           ),
           Expanded(
               child: _showHorizontalCalendar
-                  ? HorizontalCalendar(events: events)
-                  : VerticalCalendar(events: events))
+                  ? HorizontalCalendar(events: widget.events)
+                  : VerticalCalendar(events: widget.events))
         ])));
   }
 }
