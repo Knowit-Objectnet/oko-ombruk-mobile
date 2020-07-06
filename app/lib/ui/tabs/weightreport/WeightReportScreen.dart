@@ -12,10 +12,6 @@ List<WeightEvent> events = [
       DateTime.now().subtract(Duration(hours: 5)),
       DateTime.now().subtract(Duration(hours: 1)),
       6),
-  WeightEvent("frigo", "noe", DateTime.now().add(Duration(hours: 1)),
-      DateTime.now().add(Duration(hours: 3)), 7),
-  WeightEvent("Oslo kollega", ".......", DateTime.now().add(Duration(hours: 2)),
-      DateTime.now().add(Duration(hours: 6)), 0),
   WeightEvent(
       "Ny dag",
       "Beskrivelse av opplegget",
@@ -94,14 +90,14 @@ class _WeightReportScreenState extends State<WeightReportScreen> {
                       child: FutureBuilder(
                           future: _loadString(),
                           builder: (context, snapshot) {
-                            List<WeightEvent> events = parsing(snapshot.data);
-                            return EventList(events: events);
+                            return EventList(events: _parse(snapshot.data));
                           }),
                       flex: 3),
                 ])));
   }
 
-  List<WeightEvent> parsing(dynamic response) {
+  // TODO: Put this parser in data provider -> Bloc
+  List<WeightEvent> _parse(dynamic response) {
     if (response == null) {
       return [];
     }
@@ -116,10 +112,18 @@ class _WeightReportScreenState extends State<WeightReportScreen> {
         .toList();
   }
 
+  // TODO: Remove this
   Future<String> _loadString() {
     Future.delayed(Duration(seconds: 2));
     return Future.value('''{
       "events": [
+        {
+          "title": "Fretex",
+          "description": "Beskrivelse",
+          "start": "1969-07-20 18:18:04Z",
+          "end": "1969-07-20 19:18:04Z",
+          "weight": 2.0
+        },
         {
           "title": "Fretex",
           "description": "heihei",

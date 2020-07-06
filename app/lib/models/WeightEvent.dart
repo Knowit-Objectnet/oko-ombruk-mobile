@@ -15,7 +15,6 @@ class WeightEvent {
       endDate = DateTime.parse(json['end']);
     } catch (_) {
       throw Exception("Invalid DateTime format in WeightEvent");
-      // TODO: set state errror
     }
     return WeightEvent(json['title'], json['description'], startDate, endDate,
         json['weight'].toDouble());
@@ -24,8 +23,10 @@ class WeightEvent {
   Map<String, dynamic> toJson() => {
         'title': title,
         'description': description,
-        'start': start,
-        'end': end,
+        // substring removes milliseconds
+        'start':
+            start.toIso8601String().substring(0, start.toString().length - 4),
+        'end': end.toIso8601String().substring(0, end.toString().length - 4),
         'weight': weight
       };
 }
