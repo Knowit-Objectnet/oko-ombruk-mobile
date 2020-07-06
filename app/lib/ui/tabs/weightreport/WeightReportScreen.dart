@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:ombruk/models/WeightEvent.dart';
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
-import 'package:ombruk/ui/tabs/weightreport/eventList.dart';
+import 'package:ombruk/ui/tabs/weightreport/EventList.dart';
 
 List<WeightEvent> events = [
   WeightEvent(
@@ -92,8 +92,7 @@ class _WeightReportScreenState extends State<WeightReportScreen> {
                       style: TextStyle(fontWeight: FontWeight.w700)),
                   Expanded(
                       child: FutureBuilder(
-                          future: DefaultAssetBundle.of(context)
-                              .loadString('assets/weightEvents.json'),
+                          future: _loadString(),
                           builder: (context, snapshot) {
                             List<WeightEvent> events = parsing(snapshot.data);
                             return EventList(events: events);
@@ -115,6 +114,28 @@ class _WeightReportScreenState extends State<WeightReportScreen> {
     return events
         .map<WeightEvent>((json) => WeightEvent.fromJson(json))
         .toList();
+  }
+
+  Future<String> _loadString() {
+    Future.delayed(Duration(seconds: 2));
+    return Future.value('''{
+      "events": [
+        {
+          "title": "Fretex",
+          "description": "heihei",
+          "start": "1969-07-20 20:18:04Z",
+          "end": "1969-07-20 20:18:04Z",
+          "weight": 3.0
+        },
+        {
+          "title": "Maria",
+          "description": "heihei",
+          "start": "1969-07-20 20:18:04Z",
+          "end": "1969-07-20 20:18:04Z",
+          "weight": 0.0
+        }
+      ]
+    }''');
   }
 
   void _submit() {}
