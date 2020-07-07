@@ -4,7 +4,7 @@ import 'package:ombruk/ui/tabs/calendar/CalendarRouter.dart';
 import 'package:ombruk/ui/tabs/notifications/NotificationScreen.dart';
 import 'package:ombruk/ui/tabs/partners/PartnerScreen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ombruk/ui/tabs/weightreport/WeightReportScreen.dart';
+import 'package:ombruk/ui/tabs/weightreport/WeightRouter.dart';
 
 enum PopUpMenuOptions { logOut }
 
@@ -67,7 +67,7 @@ class _TabsScreenState extends State<TabsScreen> {
           CalendarRouter(),
           NotificationScreen(),
           PartnerScreen(),
-          WeightReportScreen()
+          WeightRouter()
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(

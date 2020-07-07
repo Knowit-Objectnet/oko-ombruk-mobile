@@ -1,3 +1,5 @@
+final String baseUrl = 'https://example.com'; // TODO
+
 final Map<int, String> weekdaysShort = {
   1: 'Man',
   2: 'Tir',
