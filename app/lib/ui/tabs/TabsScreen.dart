@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:ombruk/blocs/AuthenticationBloc.dart';
 import 'package:ombruk/ui/tabs/calendar/CalendarRouter.dart';
 import 'package:ombruk/ui/tabs/notifications/NotificationScreen.dart';
-import 'package:ombruk/ui/tabs/partners/PartnerScreen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ombruk/ui/tabs/weightreport/WeightRouter.dart';
 
-enum PopUpMenuOptions { logOut }
+enum PopUpMenuOptions { myPage, logOut }
 
 class TabsScreen extends StatefulWidget {
   @override
@@ -16,6 +15,7 @@ class TabsScreen extends StatefulWidget {
 class _TabsScreenState extends State<TabsScreen> {
   int _selectedIndex = 0;
   String _title = 'Kalender';
+  Color _selectedItemColor = Color(0xFF6FE9FF);
 
   void _onItemTapped(int index) {
     setState(() {
@@ -25,19 +25,15 @@ class _TabsScreenState extends State<TabsScreen> {
           _title = 'Kalender';
           break;
         case 1:
-          _title = 'Varsler';
+          _title = 'Dine vektuttak';
           break;
         case 2:
-          _title = 'Samarbeidspartnere';
-          break;
-        case 3:
-          _title = 'Dine vektuttak';
+          _title = 'Varsler';
           break;
       }
     });
   }
 
-  Color selected = Color(0xFF6FE9FF);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,58 +46,100 @@ class _TabsScreenState extends State<TabsScreen> {
             onSelected: _popUpItemSelected,
             itemBuilder: (BuildContext context) =>
                 <PopupMenuEntry<PopUpMenuOptions>>[
-              PopupMenuItem(
-                  value: PopUpMenuOptions.logOut,
-                  child: Text('Logg ut'),
-                  key: Key('logout')),
+              const PopupMenuItem(
+                value: PopUpMenuOptions.myPage,
+                child: Text('Min side'),
+                key: Key('mypage'),
+              ),
+              const PopupMenuDivider(),
+              const PopupMenuItem(
+                value: PopUpMenuOptions.logOut,
+                child: Text('Logg ut'),
+                key: Key('logout'),
+              ),
             ],
             icon: Image.asset('assets/icons/person-ikon.png',
                 color: Colors.white),
           )
         ],
       ),
+      drawer: Drawer(
+        child: ListView(
+          children: <Widget>[
+            ListTile(
+              leading: Icon(Icons.people),
+              title: Text('Sam. partnere'),
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.directions_run),
+              title: Text('Gjenvinningsstasjoner'),
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.message),
+              title: Text('Send beskjed'),
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.add),
+              title: Text('Søk om ekstra uttak'),
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.settings),
+              title: Text('Innstillinger'),
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        ),
+      ),
       body: IndexedStack(
         // IndexStack keeps the screen states alive between tab changes
         index: _selectedIndex,
         children: <Widget>[
           CalendarRouter(),
+          WeightRouter(),
           NotificationScreen(),
-          PartnerScreen(),
-          WeightRouter()
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Color(0xFF2A2859),
-        type: BottomNavigationBarType
-            .fixed, // Fixes an issue because the navbar cannot have more than 3 items
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-              icon: Image.asset('assets/icons/listeikon-ny.png',
-                  height: 25, color: Colors.white),
-              activeIcon: Image.asset('assets/icons/listeikon-ny.png',
-                  height: 25, color: selected),
-              title: Text('Kalender')),
+            icon: Image.asset('assets/icons/listeikon-ny.png',
+                height: 25, color: Colors.white),
+            activeIcon: Image.asset('assets/icons/listeikon-ny.png',
+                height: 25, color: _selectedItemColor),
+            title: Container(),
+          ),
           BottomNavigationBarItem(
-              icon: Image.asset('assets/icons/varsel-ikon.png',
-                  height: 25, color: Colors.white),
-              activeIcon: Image.asset('assets/icons/varsel-ikon.png',
-                  height: 25, color: selected),
-              title: Text('Varsler')),
+            icon: Image.asset('assets/icons/vekt-ikon.png',
+                height: 25, color: Colors.white),
+            activeIcon: Image.asset('assets/icons/vekt-ikon.png',
+                height: 25, color: _selectedItemColor),
+            title: Container(),
+          ),
           BottomNavigationBarItem(
-              icon: Image.asset('assets/icons/sampartnere.png',
-                  height: 25, color: Colors.white),
-              activeIcon: Image.asset('assets/icons/sampartnere.png',
-                  height: 25, color: selected),
-              title: Text('Samarbeidspartnere')),
-          BottomNavigationBarItem(
-              icon: Image.asset('assets/icons/vekt-ikon.png',
-                  height: 25, color: Colors.white),
-              activeIcon: Image.asset('assets/icons/vekt-ikon.png',
-                  height: 25, color: selected),
-              title: Text('Something')),
+            icon: Image.asset('assets/icons/varsel-ikon.png',
+                height: 25, color: Colors.white),
+            activeIcon: Image.asset('assets/icons/varsel-ikon.png',
+                height: 25, color: _selectedItemColor),
+            title: Container(),
+          ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: selected,
+        selectedItemColor: _selectedItemColor,
         unselectedItemColor: Colors.white,
         onTap: _onItemTapped,
       ),
@@ -110,6 +148,9 @@ class _TabsScreenState extends State<TabsScreen> {
 
   void _popUpItemSelected(PopUpMenuOptions option) {
     switch (option) {
+      case PopUpMenuOptions.myPage:
+        // TODO
+        break;
       case PopUpMenuOptions.logOut:
         BlocProvider.of<AuthenticationBloc>(context)
             .add(AuthenticationLogOut());
