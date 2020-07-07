@@ -1,12 +1,11 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:ombruk/models/CalendarEvent.dart';
+import 'package:ombruk/globals.dart' as globals;
 
 class CalendarApiClient {
-  static const baseUrl = 'https://example.com'; // TODO
-
   Future<List<CalendarEvent>> fetchEvents() async {
-    final http.Response response = await http.get('$baseUrl/events');
+    final http.Response response = await http.get('${globals.baseUrl}/events');
     if (response.statusCode != 200) {
       throw Exception('Could not fetch events');
     }
