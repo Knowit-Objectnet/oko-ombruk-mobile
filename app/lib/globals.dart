@@ -1,7 +1,10 @@
-final String baseUrl = 'https://example.com'; // TODO
-
 final String keycloakBaseUrl =
     'https://keycloak.staging.oko.knowit.no:8443/auth/realms/staging';
+
+final String calendarBaseUrl =
+    'https://tcuk58u5ge.execute-api.eu-central-1.amazonaws.com/staging/calendar';
+
+final String weightReportBaseUrl = 'https://example.com';
 
 final Map<int, String> weekdaysShort = {
   1: 'Man',

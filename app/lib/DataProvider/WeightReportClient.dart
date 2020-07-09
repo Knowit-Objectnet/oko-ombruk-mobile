@@ -3,7 +3,8 @@ import 'package:ombruk/globals.dart' as globals;
 
 class WeightReportClient {
   Future<Response> fetchWeightEvents() async {
-    final Response response = await get('${globals.baseUrl}/weightEvents');
+    final Response response =
+        await get('${globals.weightReportBaseUrl}/weightEvents');
     if (response.statusCode == 200) {
       return response;
     }

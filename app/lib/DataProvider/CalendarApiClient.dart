@@ -5,7 +5,8 @@ import 'package:ombruk/globals.dart' as globals;
 
 class CalendarApiClient {
   Future<List<CalendarEvent>> fetchEvents() async {
-    final http.Response response = await http.get('${globals.baseUrl}/events');
+    final http.Response response =
+        await http.get('${globals.calendarBaseUrl}/events');
     if (response.statusCode != 200) {
       throw Exception('Could not fetch events');
     }
