@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:ombruk/models/CalendarEvent.dart';
 import 'package:ombruk/ui/tabs/calendar/HorizontalCalendar/DateText.dart';
 import 'package:ombruk/ui/tabs/calendar/HorizontalCalendar/DayScroller.dart';
-import 'package:ombruk/ui/tabs/calendar/HorizontalCalendar/StationFilter.dart';
 import 'package:ombruk/ui/tabs/calendar/HorizontalCalendar/WeekCalendar.dart';
 
 class HorizontalCalendar extends StatefulWidget {
@@ -15,15 +14,6 @@ class HorizontalCalendar extends StatefulWidget {
 
 class _HorizontalCalendarState extends State<HorizontalCalendar> {
   DateTime _selectedDay;
-
-  // Remove
-  final List<String> stations = [
-    'Haraldrud',
-    'Smestad',
-    'Grønmo',
-    // 'Some',
-    // 'Stasjon 4'
-  ];
 
   @override
   void initState() {
@@ -49,7 +39,6 @@ class _HorizontalCalendarState extends State<HorizontalCalendar> {
         DateText(dateTime: _selectedDay),
         Expanded(
             child: WeekCalendar(dateTime: _selectedDay, events: widget.events)),
-        StationFilter(stations: stations)
       ],
     );
   }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ombruk/blocs/AuthenticationBloc.dart';
 import 'package:ombruk/ui/tabs/calendar/CalendarRouter.dart';
+import 'package:ombruk/ui/tabs/ExtraHentingPopup/ExtraHentingDialog.dart';
 import 'package:ombruk/ui/tabs/notifications/NotificationScreen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ombruk/ui/tabs/weightreport/WeightRouter.dart';
@@ -92,6 +93,8 @@ class _TabsScreenState extends State<TabsScreen> {
               title: Text('Søk om ekstra uttak'),
               onTap: () {
                 Navigator.pop(context);
+                showDialog(
+                    context: context, builder: (_) => ExtraHentingDialog());
               },
             ),
             ListTile(

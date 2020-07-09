@@ -12,6 +12,8 @@ import 'package:url_launcher/url_launcher.dart';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
+import 'package:ombruk/globals.dart' as globals;
+
 class LoginWebView extends StatelessWidget {
   final UserRepository userRepository;
   final storage = FlutterSecureStorage();
@@ -43,8 +45,7 @@ class LoginWebView extends StatelessWidget {
   }
 
   Future<dynamic> authKeycloak() async {
-    final Uri uri = Uri.parse(
-        "https://keycloak.staging.oko.knowit.no:8443/auth/realms/staging");
+    final Uri uri = Uri.parse("${globals.keycloakBaseUrl}");
     final String clientId = "flutter-app";
     final List<String> scopes = ["openid", "profile"];
 

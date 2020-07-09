@@ -1,4 +1,10 @@
-final String baseUrl = 'https://example.com'; // TODO
+final String keycloakBaseUrl =
+    'https://keycloak.staging.oko.knowit.no:8443/auth/realms/staging';
+
+final String calendarBaseUrl =
+    'https://tcuk58u5ge.execute-api.eu-central-1.amazonaws.com/staging/calendar';
+
+final String weightReportBaseUrl = 'https://example.com';
 
 final Map<int, String> weekdaysShort = {
   1: 'Man',
@@ -34,3 +40,18 @@ final Map<int, String> months = {
   11: 'November',
   12: 'Desember',
 };
+
+// The order of the lists are important to match the ID index
+final List<String> stations = [
+  'Haraldrud',
+  'Smestad',
+  'Grefsen',
+  'Grønmo',
+  'Ryen'
+];
+
+final List<String> partners = [
+  'Fretex',
+  'Maritastiftelsen',
+  'Jobben',
+];
