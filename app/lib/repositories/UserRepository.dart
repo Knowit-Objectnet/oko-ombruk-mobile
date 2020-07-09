@@ -2,6 +2,7 @@ import 'package:openid_client/openid_client.dart';
 import 'package:openid_client/openid_client_io.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
+import 'package:ombruk/globals.dart' as globals;
 
 class UserRepository {
   final storage = FlutterSecureStorage();
@@ -31,8 +32,7 @@ class UserRepository {
   }
 
   Future<bool> requestLogOut() async {
-    var url =
-        'https://keycloak.staging.oko.knowit.no:8443/auth/realms/staging/protocol/openid-connect/logout';
+    String url = '${globals.keycloakBaseUrl}/protocol/openid-connect/logout';
     Map<String, String> headers = {};
     headers['Authorization'] = 'Bearer ' + accessToken;
     headers['Content-Type'] = 'application/x-www-form-urlencoded';

@@ -1,5 +1,8 @@
 final String baseUrl = 'https://example.com'; // TODO
 
+final String keycloakBaseUrl =
+    'https://keycloak.staging.oko.knowit.no:8443/auth/realms/staging';
+
 final Map<int, String> weekdaysShort = {
   1: 'Man',
   2: 'Tir',
