@@ -31,8 +31,13 @@ class _CalendarRouterState extends State<CalendarRouter> {
                   child: CircularProgressIndicator(),
                 );
               case CalendarRefreshInProgress:
+                return CalendarScreen(
+                  isLoading: true,
+                  events: (state as CalendarRefreshInProgress).calendarEvents,
+                );
               case CalendarLoadSuccess:
                 return CalendarScreen(
+                    isLoading: false,
                     events: (state as CalendarLoadSuccess).calendarEvents);
               case CalendarLoadFailure:
                 return Center(

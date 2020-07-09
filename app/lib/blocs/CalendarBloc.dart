@@ -27,7 +27,9 @@ class CalendarBloc extends Bloc<CalendarBlocEvent, CalendarState> {
         }
         break;
       case CalendarRefreshRequested:
-        yield CalendarRefreshInProgress();
+        final List<CalendarEvent> events =
+            (state as CalendarLoadSuccess).calendarEvents;
+        yield CalendarRefreshInProgress(calendarEvents: events);
         try {
           final List<CalendarEvent> events =
               await calendarRepository.getEvents();
@@ -54,7 +56,14 @@ class CalendarInitial extends CalendarState {}
 
 class CalendarInitialLoadInProgress extends CalendarState {}
 
-class CalendarRefreshInProgress extends CalendarState {}
+class CalendarRefreshInProgress extends CalendarState {
+  final List<CalendarEvent> calendarEvents;
+  const CalendarRefreshInProgress({@required this.calendarEvents})
+      : assert(calendarEvents != null);
+
+  @override
+  List<Object> get props => [calendarEvents];
+}
 
 class CalendarLoadSuccess extends CalendarState {
   final List<CalendarEvent> calendarEvents;
