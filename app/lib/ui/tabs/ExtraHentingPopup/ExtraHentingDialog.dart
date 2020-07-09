@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:ombruk/ui/tabs/calendar/ExtraHentingPopup/DateField.dart';
-import 'package:ombruk/ui/tabs/calendar/ExtraHentingPopup/TimeField.dart';
+import 'package:ombruk/ui/tabs/ExtraHentingPopup/DateField.dart';
+import 'package:ombruk/ui/tabs/ExtraHentingPopup/TimeField.dart';
+import 'package:ombruk/globals.dart' as globals;
 
 class ExtraHentingDialog extends StatefulWidget {
   @override
@@ -9,10 +10,10 @@ class ExtraHentingDialog extends StatefulWidget {
 
 class _ExtraHentingDialogState extends State<ExtraHentingDialog> {
   final whoController = TextEditingController();
-  final whatController = TextEditingController();
   DateTime _selectedDate;
   TimeOfDay _selectedTime;
   TimeOfDay _selectedDur;
+  String _selectedStation = globals.stations[0];
 
   @override
   void initState() {
@@ -27,7 +28,6 @@ class _ExtraHentingDialogState extends State<ExtraHentingDialog> {
   @override
   void dispose() {
     whoController.dispose();
-    whatController.dispose();
     super.dispose();
   }
 
@@ -53,28 +53,55 @@ class _ExtraHentingDialogState extends State<ExtraHentingDialog> {
                 color: Colors.black,
                 thickness: 1,
               )),
-          Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-            GestureDetector(
-              child: DateField(
-                date: _selectedDate,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              GestureDetector(
+                child: DateField(
+                  date: _selectedDate,
+                ),
+                onTap: () => _selectDate(context),
               ),
-              onTap: () => _selectDate(context),
-            ),
-            Icon(Icons.access_time),
-            GestureDetector(
-              child: TimeField(
-                time: _selectedTime,
+              Icon(Icons.access_time),
+              GestureDetector(
+                child: TimeField(
+                  time: _selectedTime,
+                ),
+                onTap: () => _selectTime(context),
               ),
-              onTap: () => _selectTime(context),
-            ),
-            Text(" - "),
-            GestureDetector(
-              child: TimeField(
-                time: _selectedDur,
-              ),
-              onTap: () => _selectDur(context),
-            )
-          ]),
+              Text(" - "),
+              GestureDetector(
+                child: TimeField(
+                  time: _selectedDur,
+                ),
+                onTap: () => _selectDur(context),
+              )
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Icon(Icons.pin_drop),
+              Container(
+                // color: , // TODO
+                child: DropdownButton<String>(
+                  value: _selectedStation,
+                  onChanged: (value) {
+                    setState(() {
+                      _selectedStation = value;
+                    });
+                  },
+                  underline: Container(),
+                  items: globals.stations
+                      .map((station) => DropdownMenuItem(
+                            value: station,
+                            child: Text(station),
+                          ))
+                      .toList(),
+                ),
+              )
+            ],
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
@@ -88,21 +115,6 @@ class _ExtraHentingDialogState extends State<ExtraHentingDialog> {
                       controller: whoController,
                       decoration:
                           InputDecoration(hintText: 'Hvem skal hente?'))),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              Flexible(
-                flex: 1,
-                child: Text('Hva skal hentes?'),
-              ),
-              Flexible(
-                  flex: 1,
-                  child: TextField(
-                      controller: whatController,
-                      decoration:
-                          InputDecoration(hintText: 'Hva skal hentes?'))),
             ],
           ),
           ButtonBar(
