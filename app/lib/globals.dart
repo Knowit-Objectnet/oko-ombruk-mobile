@@ -40,3 +40,18 @@ final Map<int, String> months = {
   11: 'November',
   12: 'Desember',
 };
+
+// The order of the lists are important to match the ID index
+final List<String> stations = [
+  'Haraldrud',
+  'Smestad',
+  'Grefsen',
+  'Grønmo',
+  'Ryen'
+];
+
+final List<String> partners = [
+  'Fretex',
+  'Maritastiftelsen',
+  'Jobben',
+];
