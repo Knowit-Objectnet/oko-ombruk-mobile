@@ -11,7 +11,7 @@ class DateField extends StatelessWidget {
     return Padding(
         padding: EdgeInsets.all(16.0),
         child: Row(children: <Widget>[
-          Icon(Icons.calendar_today),
+          Image.asset('assets/icons/kalender.png', height: 20, width: 20),
           Text(' ' +
               globals.months[date.month] +
               ' ' +

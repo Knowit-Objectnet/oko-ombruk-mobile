@@ -44,13 +44,16 @@ class _ExtraHentingDialogState extends State<ExtraHentingDialog> {
                   padding: EdgeInsets.only(left: 8.0),
                   child: Text('Søk om ekstra henting',
                       style: TextStyle(fontSize: 20.0))),
-              IconButton(icon: Icon(Icons.close), onPressed: _closeDialog)
+              IconButton(
+                  icon: Image.asset('assets/icons/lukk.png',
+                      height: 25, width: 25),
+                  onPressed: _closeDialog)
             ],
           ),
           Padding(
               padding: EdgeInsets.symmetric(horizontal: 8.0),
               child: Divider(
-                color: Colors.black,
+                color: globals.osloBlack,
                 thickness: 1,
               )),
           Row(
@@ -62,7 +65,7 @@ class _ExtraHentingDialogState extends State<ExtraHentingDialog> {
                 ),
                 onTap: () => _selectDate(context),
               ),
-              Icon(Icons.access_time),
+              Image.asset('assets/icons/klokke.png', height: 20, width: 20),
               GestureDetector(
                 child: TimeField(
                   time: _selectedTime,
@@ -81,7 +84,7 @@ class _ExtraHentingDialogState extends State<ExtraHentingDialog> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Icon(Icons.pin_drop),
+              Image.asset('assets/icons/kart.png', height: 20, width: 20),
               Container(
                 // color: , // TODO
                 child: DropdownButton<String>(
@@ -121,11 +124,11 @@ class _ExtraHentingDialogState extends State<ExtraHentingDialog> {
             children: <Widget>[
               FlatButton(
                   onPressed: _closeDialog,
-                  color: Colors.red,
+                  color: globals.osloRed,
                   child: Text('Avbryt')),
               FlatButton(
                   onPressed: _submitDialog,
-                  color: Colors.green,
+                  color: globals.osloGreen,
                   child: Text('Søk'))
             ],
           )
