@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:mockito/mockito.dart';
+import 'package:ombruk/models/UserCredentials.dart';
 import 'package:ombruk/repositories/UserRepository.dart';
 
 import 'package:ombruk/blocs/AuthenticationBloc.dart';
@@ -85,8 +86,9 @@ void main() {
         emitsInOrder(expectedResponse),
       );
 
-      authenticationBloc
-          .add(AuthenticationLogIn(credential: null, exception: exception));
+      authenticationBloc.add(AuthenticationLogIn(
+          userCredentials:
+              UserCredentials.withException(exception: exception)));
 
       // when(authenticationBloc.state).thenAnswer((_) => AuthenticationSuccess());
     });
@@ -106,8 +108,9 @@ void main() {
 
       expectLater(authenticationBloc, emitsInOrder(expectedResponse));
 
-      authenticationBloc
-          .add(AuthenticationLogIn(credential: credential, exception: null));
+      authenticationBloc.add(AuthenticationLogIn(
+          userCredentials: UserCredentials.withCredentials(
+              credential: credential, roles: [])));
 
       // when(authenticationBloc.state).thenAnswer((_) => AuthenticationSuccess());
     });

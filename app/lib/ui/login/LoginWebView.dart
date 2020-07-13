@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ombruk/blocs/AuthenticationBloc.dart';
+import 'package:ombruk/models/UserCredentials.dart';
 import 'package:ombruk/repositories/UserRepository.dart';
 
 import 'package:openid_client/openid_client.dart';
@@ -11,6 +12,8 @@ import 'package:openid_client/openid_client_io.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
+import 'package:jose/jose.dart';
 
 import 'package:ombruk/globals.dart' as globals;
 
@@ -28,23 +31,16 @@ class LoginWebView extends StatelessWidget {
       body: Center(
         child: RaisedButton(
           child: Text("Logg inn"),
-          onPressed: () => authKeycloak().then((value) {
-            Credential c;
-            Exception exception;
-            if (value is Credential) {
-              c = value;
-            } else {
-              exception = value;
-            }
+          onPressed: () => authKeycloak().then((userCredentials) {
             BlocProvider.of<AuthenticationBloc>(context)
-                .add(AuthenticationLogIn(credential: c, exception: exception));
+                .add(AuthenticationLogIn(userCredentials: userCredentials));
           }),
         ),
       ),
     );
   }
 
-  Future<dynamic> authKeycloak() async {
+  Future<UserCredentials> authKeycloak() async {
     final Uri uri = Uri.parse("${globals.keycloakBaseUrl}");
     final String clientId = "flutter-app";
     final List<String> scopes = ["openid", "profile"];
@@ -69,14 +65,33 @@ class LoginWebView extends StatelessWidget {
       );
 
       Credential credential = await authenticator.authorize();
+      TokenResponse tokenResponse = await credential.getTokenResponse();
+
       closeWebView();
-      return credential;
+
+      List<String> roles = _getRoles(tokenResponse.accessToken);
+      return UserCredentials.withCredentials(
+          credential: credential, roles: roles);
     } on SocketException catch (_) {
-      return Exception("Fikk ikke kontakt med serveren");
+      return UserCredentials.withException(
+          exception: Exception("Fikk ikke kontakt med serveren"));
     } on NoSuchMethodError catch (_) {
-      return Exception("Fikk ikke kontakt med serveren");
+      return UserCredentials.withException(
+          exception: Exception("Fikk ikke kontakt med serveren"));
     } catch (e) {
-      return Exception("Noe gikk galt");
+      return UserCredentials.withException(
+          exception: Exception("Noe gikk galt"));
     }
+  }
+
+  List<String> _getRoles(String accessToken) {
+    JsonWebSignature jws =
+        JsonWebSignature.fromCompactSerialization(accessToken);
+
+    JosePayload payload = jws.unverifiedPayload;
+    dynamic jsonContent = payload.jsonContent;
+    dynamic realmAccess = jsonContent['realm_access'];
+    List<dynamic> roles = realmAccess['roles'];
+    return roles.map((e) => e.toString()).toList();
   }
 }

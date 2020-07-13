@@ -9,12 +9,12 @@ import 'package:ombruk/globals.dart' as globals;
 
 enum PopUpMenuOptions { myPage, logOut }
 
-class TabsScreen extends StatefulWidget {
+class TabsScreenPartner extends StatefulWidget {
   @override
-  _TabsScreenState createState() => _TabsScreenState();
+  _TabsScreenPartnerState createState() => _TabsScreenPartnerState();
 }
 
-class _TabsScreenState extends State<TabsScreen> {
+class _TabsScreenPartnerState extends State<TabsScreenPartner> {
   int _selectedIndex = 0;
   String _title = 'Kalender';
   Color _selectedItemColor = globals.osloLightBlue;

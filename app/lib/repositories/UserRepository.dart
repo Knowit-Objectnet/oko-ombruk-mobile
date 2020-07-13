@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:openid_client/openid_client.dart';
 import 'package:openid_client/openid_client_io.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -11,12 +13,19 @@ class UserRepository {
   String refreshToken;
   String clientId;
   String clientSecret;
+  List<String> roles;
 
   Future<void> init() async {
     expiresAt = await storage.read(key: "expiresAt");
     accessToken = await storage.read(key: "accessToken");
     refreshToken = await storage.read(key: 'refreshToken');
     clientId = await storage.read(key: 'clientId');
+
+    String roleString = await storage.read(key: 'roles');
+    if (roleString != null) {
+      List<dynamic> list = jsonDecode(roleString);
+      roles = list.map((e) => e.toString()).toList();
+    }
   }
 
   /*void printTokens() {
@@ -42,19 +51,22 @@ class UserRepository {
     return response.statusCode == 204;
   }
 
-  Future<void> saveCredentials(Credential credential) async {
+  Future<void> saveCredentials(
+      Credential credential, List<String> roles) async {
     Map<String, dynamic> map = credential.response;
     expiresAt = map['expires_at'].toString();
     accessToken = map['access_token'].toString();
     refreshToken = credential.refreshToken;
     clientId = credential.client.clientId;
     clientSecret = credential.client.clientSecret;
+    this.roles = roles;
 
     storage.write(key: "expiresAt", value: expiresAt);
     storage.write(key: "accessToken", value: accessToken);
     storage.write(key: "refreshToken", value: refreshToken);
     storage.write(key: "clientId", value: clientId);
     storage.write(key: "clientSecret", value: clientSecret);
+    storage.write(key: 'roles', value: jsonEncode(roles));
   }
 
   Future<bool> hasCredentials() async {

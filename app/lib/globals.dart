@@ -58,6 +58,14 @@ final List<String> partners = [
   'Jobben',
 ];
 
+enum KeycloakRoles {
+  reg_employee,
+  offline_access,
+  uma_authorization,
+  partner,
+  reuse_station
+}
+
 final Color osloDarkBlue = Color(0xFF2A2859);
 final Color osloGreen = Color(0xFF43F8B6);
 final Color osloRed = Color(0xFFFF8274);

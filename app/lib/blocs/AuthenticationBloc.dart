@@ -2,8 +2,8 @@ import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
 import 'package:bloc/bloc.dart';
+import 'package:ombruk/models/UserCredentials.dart';
 import 'package:ombruk/repositories/UserRepository.dart';
-import 'package:openid_client/openid_client.dart';
 
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
@@ -33,11 +33,13 @@ class AuthenticationBloc
         break;
       case AuthenticationLogIn:
         AuthenticationLogIn authIn = event as AuthenticationLogIn;
-        if (authIn.exception != null) {
-          yield AuthenticationError(exception: authIn.exception);
+        if (authIn.userCredentials.exception != null) {
+          yield AuthenticationError(
+              exception: authIn.userCredentials.exception);
         } else {
           yield AuthenticationInProgress();
-          await userRepository.saveCredentials(authIn.credential);
+          await userRepository.saveCredentials(
+              authIn.userCredentials.credential, authIn.userCredentials.roles);
           yield AuthenticationSuccess();
         }
         break;
@@ -97,14 +99,12 @@ abstract class AuthenticationEvent extends Equatable {
 class AuthenticationStarted extends AuthenticationEvent {}
 
 class AuthenticationLogIn extends AuthenticationEvent {
-  final Credential credential;
-  final Exception exception;
+  final UserCredentials userCredentials;
 
-  const AuthenticationLogIn(
-      {@required this.credential, @required this.exception});
+  const AuthenticationLogIn({@required this.userCredentials});
 
   @override
-  List<Object> get props => [credential];
+  List<Object> get props => [userCredentials];
 }
 
 class AuthenticationLogOut extends AuthenticationEvent {}
