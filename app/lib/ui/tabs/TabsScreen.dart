@@ -60,37 +60,43 @@ class _TabsScreenState extends State<TabsScreen> {
                 key: Key('logout'),
               ),
             ],
-            icon: Image.asset('assets/icons/person-ikon.png',
+            icon: Image.asset('assets/icons/person.png',
                 color: globals.osloWhite),
           )
         ],
       ),
       drawer: Drawer(
+          child: Container(
+        color: globals.osloDarkBlue,
         child: ListView(
           children: <Widget>[
             ListTile(
-              leading: Icon(Icons.people),
+              leading: Image.asset('assets/icons/sampartnere.png',
+                  color: globals.osloWhite),
               title: Text('Sam. partnere'),
               onTap: () {
                 Navigator.pop(context);
               },
             ),
             ListTile(
-              leading: Icon(Icons.directions_run),
+              leading: Image.asset('assets/icons/kart.png',
+                  color: globals.osloWhite),
               title: Text('Gjenvinningsstasjoner'),
               onTap: () {
                 Navigator.pop(context);
               },
             ),
             ListTile(
-              leading: Icon(Icons.message),
+              leading: Image.asset('assets/icons/mail.png',
+                  color: globals.osloWhite),
               title: Text('Send beskjed'),
               onTap: () {
                 Navigator.pop(context);
               },
             ),
             ListTile(
-              leading: Icon(Icons.add),
+              leading:
+                  Image.asset('assets/icons/add.png', color: globals.osloWhite),
               title: Text('Søk om ekstra uttak'),
               onTap: () {
                 Navigator.pop(context);
@@ -99,7 +105,8 @@ class _TabsScreenState extends State<TabsScreen> {
               },
             ),
             ListTile(
-              leading: Icon(Icons.settings),
+              leading: Image.asset('assets/icons/innstillinger.png',
+                  color: globals.osloWhite),
               title: Text('Innstillinger'),
               onTap: () {
                 Navigator.pop(context);
@@ -107,7 +114,7 @@ class _TabsScreenState extends State<TabsScreen> {
             ),
           ],
         ),
-      ),
+      )),
       body: IndexedStack(
         // IndexStack keeps the screen states alive between tab changes
         index: _selectedIndex,
@@ -121,9 +128,9 @@ class _TabsScreenState extends State<TabsScreen> {
         backgroundColor: globals.osloDarkBlue,
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Image.asset('assets/icons/listeikon-ny.png',
+            icon: Image.asset('assets/icons/listeikon.png',
                 height: 25, color: globals.osloWhite),
-            activeIcon: Image.asset('assets/icons/listeikon-ny.png',
+            activeIcon: Image.asset('assets/icons/listeikon.png',
                 height: 25, color: _selectedItemColor),
             title: Container(),
           ),

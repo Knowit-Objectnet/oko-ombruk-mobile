@@ -52,14 +52,16 @@ class _CalendarScreenState extends State<CalendarScreen>
                   children: <Widget>[
                     Padding(
                         padding: EdgeInsets.only(left: 8.0),
-                        child: Icon(Icons.filter_list)),
+                        child: Image.asset('assets/icons/filter.png',
+                            height: 15, width: 15)),
                     Padding(
                         padding: EdgeInsets.symmetric(horizontal: 4.0),
                         child: Text(
                           _selectedStation,
                           style: TextStyle(fontSize: 16),
                         )),
-                    Icon(Icons.arrow_downward),
+                    Image.asset('assets/icons/pil-tynn-ned.png',
+                        height: 15, width: 15),
                   ],
                 ),
                 itemBuilder: (context) => globals.stations
@@ -81,8 +83,10 @@ class _CalendarScreenState extends State<CalendarScreen>
               Spacer(),
               IconButton(
                 icon: _showHorizontalCalendar
-                    ? Icon(Icons.list)
-                    : Icon(Icons.calendar_today),
+                    ? Image.asset('assets/icons/listeikon.png',
+                        height: 20, width: 20)
+                    : Image.asset('assets/icons/kalender.png',
+                        height: 20, width: 20),
                 onPressed: () => setState(() {
                   _showHorizontalCalendar = !_showHorizontalCalendar;
                 }),
@@ -92,12 +96,14 @@ class _CalendarScreenState extends State<CalendarScreen>
                       turns: Tween(begin: 0.0, end: 1.0)
                           .animate(_rotationController),
                       child: IconButton(
-                        icon: Icon(Icons.refresh),
+                        icon: Image.asset('assets/icons/refresh.png',
+                            height: 20, width: 20),
                         onPressed: () => null,
                       ),
                     )
                   : IconButton(
-                      icon: Icon(Icons.refresh),
+                      icon: Image.asset('assets/icons/refresh.png',
+                          height: 20, width: 20),
                       onPressed: _refreshCalendar,
                     )
             ],
