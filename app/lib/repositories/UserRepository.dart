@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:openid_client/openid_client.dart';
 import 'package:openid_client/openid_client_io.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -12,7 +13,7 @@ class UserRepository {
   String expiresAt;
   String refreshToken;
   String clientId;
-  List<String> roles;
+  List<String> roles = [];
 
   Future<void> loadFromStorage() async {
     expiresAt = await storage.read(key: "expiresAt");
@@ -74,5 +75,19 @@ class UserRepository {
   Future<bool> requestRefreshToken() async {
     //TODO: make api call to get a new token
     return false;
+  }
+
+  /// returns a value from [globals.KeycloakRoles] or null if no match
+  globals.KeycloakRoles getRole() {
+    if (roles.contains(describeEnum(globals.KeycloakRoles.partner))) {
+      return globals.KeycloakRoles.partner;
+    }
+    if (roles.contains(describeEnum(globals.KeycloakRoles.reg_employee))) {
+      return globals.KeycloakRoles.reg_employee;
+    }
+    if (roles.contains(describeEnum(globals.KeycloakRoles.reuse_station))) {
+      return globals.KeycloakRoles.reuse_station;
+    }
+    return null;
   }
 }
