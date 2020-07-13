@@ -50,7 +50,7 @@ class _ExtraHentingDialogState extends State<ExtraHentingDialog> {
           Padding(
               padding: EdgeInsets.symmetric(horizontal: 8.0),
               child: Divider(
-                color: Colors.black,
+                color: globals.osloBlack,
                 thickness: 1,
               )),
           Row(
@@ -121,11 +121,11 @@ class _ExtraHentingDialogState extends State<ExtraHentingDialog> {
             children: <Widget>[
               FlatButton(
                   onPressed: _closeDialog,
-                  color: Colors.red,
+                  color: globals.osloRed,
                   child: Text('Avbryt')),
               FlatButton(
                   onPressed: _submitDialog,
-                  color: Colors.green,
+                  color: globals.osloGreen,
                   child: Text('Søk'))
             ],
           )

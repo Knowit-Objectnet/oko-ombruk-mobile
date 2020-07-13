@@ -31,13 +31,14 @@ class _DateButtonState extends State<DateButton> {
     if (widget.isSelected) {
       return Column(
         children: <Widget>[
-          Text('$weekday', style: TextStyle(fontSize: 12.0, color: Colors.red)),
+          Text('$weekday',
+              style: TextStyle(fontSize: 12.0, color: globals.osloRed)),
           CircleAvatar(
-              backgroundColor: Colors.red,
+              backgroundColor: globals.osloRed,
               radius: 16.0,
               child: Text(
                 '${widget.dateTime.day}',
-                style: TextStyle(fontSize: 20.0, color: Colors.white),
+                style: TextStyle(fontSize: 20.0, color: globals.osloWhite),
               ))
         ],
       );

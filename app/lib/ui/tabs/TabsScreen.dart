@@ -5,6 +5,7 @@ import 'package:ombruk/ui/tabs/ExtraHentingPopup/ExtraHentingDialog.dart';
 import 'package:ombruk/ui/tabs/notifications/NotificationScreen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ombruk/ui/tabs/weightreport/WeightRouter.dart';
+import 'package:ombruk/globals.dart' as globals;
 
 enum PopUpMenuOptions { myPage, logOut }
 
@@ -16,7 +17,7 @@ class TabsScreen extends StatefulWidget {
 class _TabsScreenState extends State<TabsScreen> {
   int _selectedIndex = 0;
   String _title = 'Kalender';
-  Color _selectedItemColor = Color(0xFF6FE9FF);
+  Color _selectedItemColor = globals.osloLightBlue;
 
   void _onItemTapped(int index) {
     setState(() {
@@ -40,7 +41,7 @@ class _TabsScreenState extends State<TabsScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(_title),
-        backgroundColor: Color(0xFF2A2859),
+        backgroundColor: globals.osloDarkBlue,
         actions: <Widget>[
           PopupMenuButton<PopUpMenuOptions>(
             key: Key('popMenu'),
@@ -60,7 +61,7 @@ class _TabsScreenState extends State<TabsScreen> {
               ),
             ],
             icon: Image.asset('assets/icons/person-ikon.png',
-                color: Colors.white),
+                color: globals.osloWhite),
           )
         ],
       ),
@@ -117,25 +118,25 @@ class _TabsScreenState extends State<TabsScreen> {
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Color(0xFF2A2859),
+        backgroundColor: globals.osloDarkBlue,
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Image.asset('assets/icons/listeikon-ny.png',
-                height: 25, color: Colors.white),
+                height: 25, color: globals.osloWhite),
             activeIcon: Image.asset('assets/icons/listeikon-ny.png',
                 height: 25, color: _selectedItemColor),
             title: Container(),
           ),
           BottomNavigationBarItem(
             icon: Image.asset('assets/icons/vekt-ikon.png',
-                height: 25, color: Colors.white),
+                height: 25, color: globals.osloWhite),
             activeIcon: Image.asset('assets/icons/vekt-ikon.png',
                 height: 25, color: _selectedItemColor),
             title: Container(),
           ),
           BottomNavigationBarItem(
             icon: Image.asset('assets/icons/varsel-ikon.png',
-                height: 25, color: Colors.white),
+                height: 25, color: globals.osloWhite),
             activeIcon: Image.asset('assets/icons/varsel-ikon.png',
                 height: 25, color: _selectedItemColor),
             title: Container(),
@@ -143,7 +144,7 @@ class _TabsScreenState extends State<TabsScreen> {
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: _selectedItemColor,
-        unselectedItemColor: Colors.white,
+        unselectedItemColor: globals.osloWhite,
         onTap: _onItemTapped,
       ),
     );
