@@ -26,6 +26,7 @@ class AuthenticationBloc
         final bool hasToken = await userRepository.hasCredentials();
 
         if (hasToken) {
+          await userRepository.loadFromStorage();
           yield AuthenticationSuccess();
         } else {
           yield AuthenticationNoToken();
