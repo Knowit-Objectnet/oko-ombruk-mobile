@@ -11,8 +11,7 @@ class DateTimeBox extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         padding: EdgeInsets.symmetric(horizontal: 8.0),
-        color:
-            weightEvent.weight != null ? Color(0xFF43F8B6) : Color(0xFFFF8274),
+        color: weightEvent.weight != null ? globals.osloGreen : globals.osloRed,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[

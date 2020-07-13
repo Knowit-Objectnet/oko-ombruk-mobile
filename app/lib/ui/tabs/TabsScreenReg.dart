@@ -5,6 +5,7 @@ import 'package:ombruk/ui/tabs/ExtraHentingPopup/ExtraHentingDialog.dart';
 import 'package:ombruk/ui/tabs/notifications/NotificationScreen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ombruk/ui/tabs/weightreport/WeightRouter.dart';
+import 'package:ombruk/globals.dart' as globals;
 
 enum PopUpMenuOptions { myPage, logOut }
 
@@ -16,7 +17,7 @@ class TabsScreenReg extends StatefulWidget {
 class _TabsScreenRegState extends State<TabsScreenReg> {
   int _selectedIndex = 0;
   String _title = 'Kalender';
-  Color _selectedItemColor = Color(0xFF6FE9FF);
+  Color _selectedItemColor = globals.osloLightBlue;
 
   void _onItemTapped(int index) {
     setState(() {

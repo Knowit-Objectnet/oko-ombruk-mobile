@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
+import 'package:ombruk/globals.dart' as globals;
 import 'package:ombruk/models/WeightEvent.dart';
 import 'package:ombruk/ui/tabs/weightreport/DateTimeBox.dart';
 
@@ -17,7 +17,7 @@ class _WeightReportScreenState extends State<WeightReportScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Color(0xFFF9C66B),
+        backgroundColor: globals.osloYellow,
         body: widget.weightEvents.isEmpty
             ? Center(child: Text("Du har ingen uttak"))
             : ListView(
@@ -59,7 +59,7 @@ class _WeightReportScreenState extends State<WeightReportScreen> {
                   alignment: Alignment.centerLeft,
                   margin: EdgeInsets.only(left: 16.0),
                   padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-                  color: Colors.white,
+                  color: globals.osloWhite,
                   child: weightEvent.weight != null
                       ? Text(weightEvent.weight.toString())
                       : TextField(
@@ -79,7 +79,7 @@ class _WeightReportScreenState extends State<WeightReportScreen> {
               weightEvent.weight != null
                   ? Container()
                   : RawMaterialButton(
-                      fillColor: Color(0xFFFF8274),
+                      fillColor: globals.osloRed,
                       child: Text('OK'),
                       onPressed: () => null,
                       shape: CircleBorder()),

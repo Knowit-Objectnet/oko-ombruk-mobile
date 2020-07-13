@@ -32,12 +32,12 @@ class _VerticalCalendarState extends State<VerticalCalendar> {
           padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
           child: _dateText(groupByValue)),
       itemBuilder: (_, CalendarEvent event) => Container(
-          color: Colors.grey[200],
+          color: globals.osloLightBeige,
           child: ExpansionTile(
             title: Row(
               children: <Widget>[
                 _timeText(event.startDateTime, event.endDateTime),
-                VerticalDivider(thickness: 100, color: Colors.black),
+                VerticalDivider(thickness: 100, color: globals.osloBlack),
                 Text(event.partner?.name ?? '')
               ],
             ),
@@ -46,11 +46,11 @@ class _VerticalCalendarState extends State<VerticalCalendar> {
                 children: <Widget>[
                   FlatButton(
                       onPressed: () => null,
-                      color: Colors.red,
+                      color: globals.osloRed,
                       child: Text('Avbryt')),
                   FlatButton(
                       onPressed: () => null,
-                      color: Colors.green,
+                      color: globals.osloGreen,
                       child: Text('Godkjenn'))
                 ],
               )
