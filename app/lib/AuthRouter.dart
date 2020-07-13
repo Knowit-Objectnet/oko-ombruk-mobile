@@ -1,11 +1,15 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:ombruk/globals.dart';
 
 import 'package:ombruk/ui/LoadingScreen.dart';
 import 'package:ombruk/ui/SplashScreen.dart';
 import 'package:ombruk/ui/login/ErrorScreen.dart';
 import 'package:ombruk/ui/login/LoginWebView.dart';
 import 'package:ombruk/repositories/UserRepository.dart';
-import 'package:ombruk/ui/tabs/TabsScreen.dart';
+import 'package:ombruk/ui/tabs/TabsScreenPartner.dart';
+import 'package:ombruk/ui/tabs/TabsScreenReg.dart';
+import 'package:ombruk/ui/tabs/TabsScreenStasjon.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ombruk/blocs/AuthenticationBloc.dart';
@@ -35,7 +39,21 @@ class AuthRouter extends StatelessWidget {
                   return SplashScreen();
                 case AuthenticationInProgressLoggingOut:
                 case AuthenticationSuccess:
-                  return TabsScreen();
+                  if (userRepository.roles
+                      .contains(describeEnum(KeycloakRoles.partner))) {
+                    return TabsScreenPartner();
+                  }
+                  if (userRepository.roles
+                      .contains(describeEnum(KeycloakRoles.reg_employee))) {
+                    return TabsScreenReg();
+                  }
+                  if (userRepository.roles
+                      .contains(describeEnum(KeycloakRoles.reuse_station))) {
+                    return TabsScreenStasjon();
+                  }
+                  return ErrorScreen(
+                      exception: Exception('Du har ikke en rolle'));
+
                 case AuthenticationNoToken:
                   return LoginWebView(userRepository: userRepository);
                 case AuthenticationInProgress:

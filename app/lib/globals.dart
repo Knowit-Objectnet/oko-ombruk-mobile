@@ -55,3 +55,11 @@ final List<String> partners = [
   'Maritastiftelsen',
   'Jobben',
 ];
+
+enum KeycloakRoles {
+  reg_employee,
+  offline_access,
+  uma_authorization,
+  partner,
+  reuse_station
+}

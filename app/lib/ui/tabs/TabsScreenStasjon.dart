@@ -8,12 +8,12 @@ import 'package:ombruk/ui/tabs/weightreport/WeightRouter.dart';
 
 enum PopUpMenuOptions { myPage, logOut }
 
-class TabsScreen extends StatefulWidget {
+class TabsScreenStasjon extends StatefulWidget {
   @override
-  _TabsScreenState createState() => _TabsScreenState();
+  _TabsScreenStasjonState createState() => _TabsScreenStasjonState();
 }
 
-class _TabsScreenState extends State<TabsScreen> {
+class _TabsScreenStasjonState extends State<TabsScreenStasjon> {
   int _selectedIndex = 0;
   String _title = 'Kalender';
   Color _selectedItemColor = Color(0xFF6FE9FF);
@@ -127,7 +127,7 @@ class _TabsScreenState extends State<TabsScreen> {
             title: Container(),
           ),
           BottomNavigationBarItem(
-            icon: Image.asset('assets/icons/vekt-ikon.png',
+            icon: Image.asset('assets/icons/klokke-ikon.png',
                 height: 25, color: Colors.white),
             activeIcon: Image.asset('assets/icons/vekt-ikon.png',
                 height: 25, color: _selectedItemColor),
