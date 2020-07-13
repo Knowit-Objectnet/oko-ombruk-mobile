@@ -5,6 +5,7 @@ import 'package:ombruk/ui/tabs/ExtraHentingPopup/ExtraHentingDialog.dart';
 import 'package:ombruk/ui/tabs/notifications/NotificationScreen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ombruk/ui/tabs/weightreport/WeightRouter.dart';
+import 'package:ombruk/globals.dart' as globals;
 
 enum PopUpMenuOptions { myPage, logOut }
 
@@ -16,7 +17,7 @@ class TabsScreen extends StatefulWidget {
 class _TabsScreenState extends State<TabsScreen> {
   int _selectedIndex = 0;
   String _title = 'Kalender';
-  Color _selectedItemColor = Color(0xFF6FE9FF);
+  Color _selectedItemColor = globals.osloLightBlue;
 
   void _onItemTapped(int index) {
     setState(() {
@@ -40,7 +41,7 @@ class _TabsScreenState extends State<TabsScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(_title),
-        backgroundColor: Color(0xFF2A2859),
+        backgroundColor: globals.osloDarkBlue,
         actions: <Widget>[
           PopupMenuButton<PopUpMenuOptions>(
             key: Key('popMenu'),
@@ -59,37 +60,43 @@ class _TabsScreenState extends State<TabsScreen> {
                 key: Key('logout'),
               ),
             ],
-            icon: Image.asset('assets/icons/person-ikon.png',
-                color: Colors.white),
+            icon: Image.asset('assets/icons/person.png',
+                color: globals.osloWhite),
           )
         ],
       ),
       drawer: Drawer(
+          child: Container(
+        color: globals.osloDarkBlue,
         child: ListView(
           children: <Widget>[
             ListTile(
-              leading: Icon(Icons.people),
+              leading: Image.asset('assets/icons/sampartnere.png',
+                  color: globals.osloWhite),
               title: Text('Sam. partnere'),
               onTap: () {
                 Navigator.pop(context);
               },
             ),
             ListTile(
-              leading: Icon(Icons.directions_run),
+              leading: Image.asset('assets/icons/kart.png',
+                  color: globals.osloWhite),
               title: Text('Gjenvinningsstasjoner'),
               onTap: () {
                 Navigator.pop(context);
               },
             ),
             ListTile(
-              leading: Icon(Icons.message),
+              leading: Image.asset('assets/icons/mail.png',
+                  color: globals.osloWhite),
               title: Text('Send beskjed'),
               onTap: () {
                 Navigator.pop(context);
               },
             ),
             ListTile(
-              leading: Icon(Icons.add),
+              leading:
+                  Image.asset('assets/icons/add.png', color: globals.osloWhite),
               title: Text('Søk om ekstra uttak'),
               onTap: () {
                 Navigator.pop(context);
@@ -98,7 +105,8 @@ class _TabsScreenState extends State<TabsScreen> {
               },
             ),
             ListTile(
-              leading: Icon(Icons.settings),
+              leading: Image.asset('assets/icons/innstillinger.png',
+                  color: globals.osloWhite),
               title: Text('Innstillinger'),
               onTap: () {
                 Navigator.pop(context);
@@ -106,7 +114,7 @@ class _TabsScreenState extends State<TabsScreen> {
             ),
           ],
         ),
-      ),
+      )),
       body: IndexedStack(
         // IndexStack keeps the screen states alive between tab changes
         index: _selectedIndex,
@@ -117,25 +125,25 @@ class _TabsScreenState extends State<TabsScreen> {
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Color(0xFF2A2859),
+        backgroundColor: globals.osloDarkBlue,
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Image.asset('assets/icons/listeikon-ny.png',
-                height: 25, color: Colors.white),
-            activeIcon: Image.asset('assets/icons/listeikon-ny.png',
+            icon: Image.asset('assets/icons/listeikon.png',
+                height: 25, color: globals.osloWhite),
+            activeIcon: Image.asset('assets/icons/listeikon.png',
                 height: 25, color: _selectedItemColor),
             title: Container(),
           ),
           BottomNavigationBarItem(
             icon: Image.asset('assets/icons/vekt-ikon.png',
-                height: 25, color: Colors.white),
+                height: 25, color: globals.osloWhite),
             activeIcon: Image.asset('assets/icons/vekt-ikon.png',
                 height: 25, color: _selectedItemColor),
             title: Container(),
           ),
           BottomNavigationBarItem(
             icon: Image.asset('assets/icons/varsel-ikon.png',
-                height: 25, color: Colors.white),
+                height: 25, color: globals.osloWhite),
             activeIcon: Image.asset('assets/icons/varsel-ikon.png',
                 height: 25, color: _selectedItemColor),
             title: Container(),
@@ -143,7 +151,7 @@ class _TabsScreenState extends State<TabsScreen> {
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: _selectedItemColor,
-        unselectedItemColor: Colors.white,
+        unselectedItemColor: globals.osloWhite,
         onTap: _onItemTapped,
       ),
     );

@@ -9,7 +9,8 @@ class DateText extends StatelessWidget {
   Widget build(BuildContext context) {
     return RichText(
         text: TextSpan(
-            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
+            style: TextStyle(
+                fontWeight: FontWeight.bold, color: globals.osloBlack),
             children: <TextSpan>[
           TextSpan(
               text: globals.weekdaysLong[dateTime.weekday],
