@@ -1,0 +1,57 @@
+import 'package:meta/meta.dart';
+import 'package:flutter/material.dart';
+import 'package:ombruk/globals.dart' as globals;
+
+class WeekdayPicker extends StatelessWidget {
+  final List<globals.Weekdays> selectedWeekdays;
+  final Function(globals.Weekdays) weekdaysChanged;
+
+  WeekdayPicker(
+      {@required this.selectedWeekdays, @required this.weekdaysChanged});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: globals.Weekdays.values
+          .map(
+            (e) => Container(
+              decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(width: 2.0, color: globals.osloLightBlue)),
+              child: GestureDetector(
+                child: CircleAvatar(
+                  child: Text(_stringFromEnum(e)),
+                  backgroundColor: selectedWeekdays.contains(e)
+                      ? globals.osloLightBlue
+                      : globals.osloWhite,
+                  foregroundColor: globals.osloBlack,
+                ),
+                onTap: () => weekdaysChanged(e),
+                // shape: CircleBorder(),
+                // padding: EdgeInsets.all(15.0),
+                // child: Text(_stringFromEnum(e)),
+              ),
+            ),
+          )
+          .toList(),
+    );
+  }
+
+  String _stringFromEnum(globals.Weekdays weekday) {
+    switch (weekday) {
+      case globals.Weekdays.mo:
+        return 'M';
+      case globals.Weekdays.tu:
+        return 'Ti';
+      case globals.Weekdays.we:
+        return 'O';
+      case globals.Weekdays.th:
+        return 'To';
+      case globals.Weekdays.fr:
+        return 'F';
+      default:
+        return '';
+    }
+  }
+}

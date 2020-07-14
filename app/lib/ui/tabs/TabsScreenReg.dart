@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:ombruk/blocs/AuthenticationBloc.dart';
+import 'package:ombruk/ui/tabs/RegComponents/CreateCalendarEventScreen.dart';
 import 'package:ombruk/ui/tabs/calendar/CalendarRouter.dart';
 import 'package:ombruk/ui/tabs/ExtraHentingPopup/ExtraHentingDialog.dart';
 import 'package:ombruk/ui/tabs/notifications/NotificationScreen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ombruk/ui/tabs/weightreport/WeightRouter.dart';
 import 'package:ombruk/globals.dart' as globals;
 
 enum PopUpMenuOptions { myPage, logOut }
@@ -27,10 +27,10 @@ class _TabsScreenRegState extends State<TabsScreenReg> {
           _title = 'Kalender';
           break;
         case 1:
-          _title = 'Dine vektuttak';
+          _title = 'Ekstra henting';
           break;
         case 2:
-          _title = 'Varsler';
+          _title = 'Statistikk';
           break;
       }
     });
@@ -120,7 +120,7 @@ class _TabsScreenRegState extends State<TabsScreenReg> {
         index: _selectedIndex,
         children: <Widget>[
           CalendarRouter(),
-          WeightRouter(),
+          CreateCalendarEventScreen(),
           NotificationScreen(),
         ],
       ),
@@ -135,16 +135,16 @@ class _TabsScreenRegState extends State<TabsScreenReg> {
             title: Container(),
           ),
           BottomNavigationBarItem(
-            icon: Image.asset('assets/icons/vekt-ikon.png',
+            icon: Image.asset('assets/icons/kalender.png',
                 height: 25, color: globals.osloWhite),
-            activeIcon: Image.asset('assets/icons/vekt-ikon.png',
+            activeIcon: Image.asset('assets/icons/kalender.png',
                 height: 25, color: _selectedItemColor),
             title: Container(),
           ),
           BottomNavigationBarItem(
-            icon: Image.asset('assets/icons/varsel-ikon.png',
+            icon: Image.asset('assets/icons/statistikk.png',
                 height: 25, color: globals.osloWhite),
-            activeIcon: Image.asset('assets/icons/varsel-ikon.png',
+            activeIcon: Image.asset('assets/icons/statistikk.png',
                 height: 25, color: _selectedItemColor),
             title: Container(),
           ),
