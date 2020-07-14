@@ -18,7 +18,7 @@ class ErrorScreen extends StatelessWidget {
         children: <Widget>[
           Text(errorText),
           RaisedButton(
-            child: Text("Prøv igjen"),
+            child: Text("OK"),
             onPressed: () => BlocProvider.of<AuthenticationBloc>(context)
                 .add(AuthenticationStarted()),
           )

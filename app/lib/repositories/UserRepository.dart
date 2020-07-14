@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:openid_client/openid_client.dart';
 import 'package:openid_client/openid_client_io.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -12,10 +13,9 @@ class UserRepository {
   String expiresAt;
   String refreshToken;
   String clientId;
-  String clientSecret;
-  List<String> roles;
+  List<String> roles = [];
 
-  Future<void> init() async {
+  Future<void> loadFromStorage() async {
     expiresAt = await storage.read(key: "expiresAt");
     accessToken = await storage.read(key: "accessToken");
     refreshToken = await storage.read(key: 'refreshToken');
@@ -58,22 +58,16 @@ class UserRepository {
     accessToken = map['access_token'].toString();
     refreshToken = credential.refreshToken;
     clientId = credential.client.clientId;
-    clientSecret = credential.client.clientSecret;
     this.roles = roles;
 
-    storage.write(key: "expiresAt", value: expiresAt);
-    storage.write(key: "accessToken", value: accessToken);
-    storage.write(key: "refreshToken", value: refreshToken);
-    storage.write(key: "clientId", value: clientId);
-    storage.write(key: "clientSecret", value: clientSecret);
-    storage.write(key: 'roles', value: jsonEncode(roles));
+    await storage.write(key: "expiresAt", value: expiresAt);
+    await storage.write(key: "accessToken", value: accessToken);
+    await storage.write(key: "refreshToken", value: refreshToken);
+    await storage.write(key: "clientId", value: clientId);
+    await storage.write(key: 'roles', value: jsonEncode(roles));
   }
 
   Future<bool> hasCredentials() async {
-    await init();
-
-    /// read from keystore/keychain
-    // String expiresAt = await storage.read(key: "expires_at");
     String accessToken = await storage.read(key: "accessToken");
     return accessToken != null;
   }
@@ -81,5 +75,19 @@ class UserRepository {
   Future<bool> requestRefreshToken() async {
     //TODO: make api call to get a new token
     return false;
+  }
+
+  /// returns a value from [globals.KeycloakRoles] or null if no match
+  globals.KeycloakRoles getRole() {
+    if (roles.contains(describeEnum(globals.KeycloakRoles.partner))) {
+      return globals.KeycloakRoles.partner;
+    }
+    if (roles.contains(describeEnum(globals.KeycloakRoles.reg_employee))) {
+      return globals.KeycloakRoles.reg_employee;
+    }
+    if (roles.contains(describeEnum(globals.KeycloakRoles.reuse_station))) {
+      return globals.KeycloakRoles.reuse_station;
+    }
+    return null;
   }
 }

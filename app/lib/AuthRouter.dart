@@ -1,6 +1,4 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:ombruk/globals.dart';
 
 import 'package:ombruk/ui/LoadingScreen.dart';
 import 'package:ombruk/ui/SplashScreen.dart';
@@ -38,22 +36,12 @@ class AuthRouter extends StatelessWidget {
                 case AuthenticationInitial:
                   return SplashScreen();
                 case AuthenticationInProgressLoggingOut:
-                case AuthenticationSuccess:
-                  if (userRepository.roles
-                      .contains(describeEnum(KeycloakRoles.partner))) {
-                    return TabsScreenPartner();
-                  }
-                  if (userRepository.roles
-                      .contains(describeEnum(KeycloakRoles.reg_employee))) {
-                    return TabsScreenReg();
-                  }
-                  if (userRepository.roles
-                      .contains(describeEnum(KeycloakRoles.reuse_station))) {
-                    return TabsScreenStasjon();
-                  }
-                  return ErrorScreen(
-                      exception: Exception('Du har ikke en rolle'));
-
+                case AuthenticationSuccessPartner:
+                  return TabsScreenPartner();
+                case AuthenticationSuccessReg:
+                  return TabsScreenReg();
+                case AuthenticationSuccessStasjoner:
+                  return TabsScreenStasjon();
                 case AuthenticationNoToken:
                   return LoginWebView(userRepository: userRepository);
                 case AuthenticationInProgress:

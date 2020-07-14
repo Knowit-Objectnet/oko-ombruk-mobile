@@ -1,9 +1,12 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
 import 'package:meta/meta.dart';
 
 import 'package:bloc/bloc.dart';
 import 'package:ombruk/models/UserCredentials.dart';
 import 'package:ombruk/repositories/UserRepository.dart';
+
+import 'package:ombruk/globals.dart';
 
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
@@ -26,7 +29,8 @@ class AuthenticationBloc
         final bool hasToken = await userRepository.hasCredentials();
 
         if (hasToken) {
-          yield AuthenticationSuccess();
+          await userRepository.loadFromStorage();
+          yield* _yieldSuccessState();
         } else {
           yield AuthenticationNoToken();
         }
@@ -40,7 +44,7 @@ class AuthenticationBloc
           yield AuthenticationInProgress();
           await userRepository.saveCredentials(
               authIn.userCredentials.credential, authIn.userCredentials.roles);
-          yield AuthenticationSuccess();
+          yield* _yieldSuccessState();
         }
         break;
       case AuthenticationLogOut:
@@ -51,9 +55,29 @@ class AuthenticationBloc
           yield AuthenticationNoToken();
         } else {
           // TODO: show snackbar or alert message
-          yield AuthenticationSuccess();
+          yield AuthenticationError(
+              exception: Exception('OBS: Du ble ikke logget ut!'));
         }
         break;
+    }
+  }
+
+  Stream<AuthenticationState> _yieldSuccessState() async* {
+    KeycloakRoles role = userRepository.getRole();
+    if (role == KeycloakRoles.partner) {
+      yield AuthenticationSuccessPartner();
+    } else if (role == KeycloakRoles.reg_employee) {
+      yield AuthenticationSuccessReg();
+    } else if (role == KeycloakRoles.reuse_station) {
+      yield AuthenticationSuccessStasjoner();
+    } else {
+      // Force deletion of tokens so we can get updated roles on a new login attempt.
+      await userRepository.requestLogOut();
+      await userRepository.deleteCredentials();
+      yield AuthenticationError(
+        exception: Exception(
+            "Du har ikke en rolle. Vennligst kontakt en administrator."),
+      );
     }
   }
 }
@@ -70,7 +94,11 @@ abstract class AuthenticationState extends Equatable {
 
 class AuthenticationInitial extends AuthenticationState {}
 
-class AuthenticationSuccess extends AuthenticationState {}
+class AuthenticationSuccessPartner extends AuthenticationState {}
+
+class AuthenticationSuccessReg extends AuthenticationState {}
+
+class AuthenticationSuccessStasjoner extends AuthenticationState {}
 
 class AuthenticationNoToken extends AuthenticationState {}
 
@@ -80,9 +108,6 @@ class AuthenticationError extends AuthenticationState {
   final Exception exception;
 
   const AuthenticationError({@required this.exception});
-
-  @override
-  List<Object> get props => [exception];
 }
 
 class AuthenticationInProgressLoggingOut extends AuthenticationState {}

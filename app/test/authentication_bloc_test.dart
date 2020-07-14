@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:mockito/mockito.dart';
+import 'package:ombruk/globals.dart';
 import 'package:ombruk/models/UserCredentials.dart';
 import 'package:ombruk/repositories/UserRepository.dart';
 
@@ -57,11 +58,13 @@ void main() {
     test('emits [initial, success] for a saved token', () {
       final expectedResponse = [
         AuthenticationInitial(),
-        AuthenticationSuccess()
+        AuthenticationSuccessPartner()
       ];
 
       when(mockUserRepository.hasCredentials())
           .thenAnswer((_) => Future.value(true));
+
+      when(mockUserRepository.getRole()).thenReturn(KeycloakRoles.partner);
 
       expectLater(
         authenticationBloc,
@@ -100,10 +103,12 @@ void main() {
       final Credential credential =
           client.createCredential(accessToken: 'some token');
 
+      when(mockUserRepository.getRole()).thenReturn(KeycloakRoles.partner);
+
       final expectedResponse = [
         AuthenticationInitial(),
         AuthenticationInProgress(),
-        AuthenticationSuccess()
+        AuthenticationSuccessPartner()
       ];
 
       expectLater(authenticationBloc, emitsInOrder(expectedResponse));
@@ -133,16 +138,21 @@ void main() {
     });
 
     test('emits [initial, logging out, still loged in] on failed logout', () {
+      final Exception exception = Exception('');
+
       final expectedResponse = [
         AuthenticationInitial(),
         AuthenticationInProgressLoggingOut(),
-        AuthenticationSuccess()
+        AuthenticationError(exception: exception)
       ];
 
       when(mockUserRepository.requestLogOut())
           .thenAnswer((_) => Future.value(false));
 
-      expectLater(authenticationBloc, emitsInOrder(expectedResponse));
+      expectLater(
+        authenticationBloc,
+        emitsInOrder(expectedResponse),
+      );
 
       authenticationBloc.add(AuthenticationLogOut());
     });
