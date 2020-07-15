@@ -40,15 +40,15 @@ class WeekdayPicker extends StatelessWidget {
 
   String _stringFromEnum(globals.Weekdays weekday) {
     switch (weekday) {
-      case globals.Weekdays.mo:
+      case globals.Weekdays.monday:
         return 'M';
-      case globals.Weekdays.tu:
+      case globals.Weekdays.tuesday:
         return 'Ti';
-      case globals.Weekdays.we:
+      case globals.Weekdays.wednesday:
         return 'O';
-      case globals.Weekdays.th:
+      case globals.Weekdays.thursday:
         return 'To';
-      case globals.Weekdays.fr:
+      case globals.Weekdays.friday:
         return 'F';
       default:
         return '';

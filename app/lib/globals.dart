@@ -66,7 +66,7 @@ enum KeycloakRoles {
   reuse_station
 }
 
-enum Weekdays { mo, tu, we, th, fr }
+enum Weekdays { monday, tuesday, wednesday, thursday, friday }
 
 const Color osloDarkBlue = Color(0xFF2A2859);
 const Color osloGreen = Color(0xFF43F8B6);
@@ -80,3 +80,10 @@ const Color osloBlack = Color(0xFF2C2C2C);
 const Color osloDarkBeige = Color(0xFFD0BFAE);
 const Color osloDarkGreen = Color(0xFF034B45);
 const Color osloWhite = Color(0xFFFFFFFF);
+
+/// Removes the microseconds from [DateTime] so that the backend don't whine
+String getDateString(DateTime dateTime) {
+  return dateTime
+      .toIso8601String()
+      .substring(0, dateTime.toString().length - 4);
+}

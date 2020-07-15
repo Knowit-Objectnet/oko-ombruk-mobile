@@ -1,3 +1,5 @@
+import 'package:ombruk/globals.dart' as globals;
+
 class WeightEvent {
   final String title;
   final String description;
@@ -23,10 +25,8 @@ class WeightEvent {
   Map<String, dynamic> toJson() => {
         'title': title,
         'description': description,
-        // substring removes milliseconds
-        'start':
-            start.toIso8601String().substring(0, start.toString().length - 4),
-        'end': end.toIso8601String().substring(0, end.toString().length - 4),
+        'start': globals.getDateString(start),
+        'end': globals.getDateString(end),
         'weight': weight
       };
 }

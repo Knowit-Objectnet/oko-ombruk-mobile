@@ -1,3 +1,5 @@
+import 'package:ombruk/globals.dart' as globals;
+
 class CalendarEvent {
   final int id;
   final DateTime startDateTime;
@@ -33,12 +35,8 @@ class CalendarEvent {
   Map<String, dynamic> toJson() => {
         'id': id,
         // substring removes milliseconds
-        'startDateTime': startDateTime
-            .toIso8601String()
-            .substring(0, startDateTime.toString().length - 4),
-        'endDateTime': endDateTime
-            .toIso8601String()
-            .substring(0, startDateTime.toString().length - 4),
+        'startDateTime': globals.getDateString(startDateTime),
+        'endDateTime': globals.getDateString(endDateTime),
         'stationID': stationID,
         'partnerID': partnerID,
         'station': station.toJson(),

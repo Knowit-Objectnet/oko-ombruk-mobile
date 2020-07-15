@@ -8,6 +8,8 @@ import 'package:ombruk/models/WeightEvent.dart';
 class WeightReportRepository {
   final WeightReportClient apiClient;
 
+  // TODO: Save weightEvents here instead of passing it down
+
   WeightReportRepository({@required this.apiClient})
       : assert(apiClient != null);
 
