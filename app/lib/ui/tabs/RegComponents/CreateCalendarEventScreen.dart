@@ -2,6 +2,9 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ombruk/blocs/CalendarBloc.dart';
+
 import 'package:ombruk/ui/tabs/components/DatePicker.dart';
 import 'package:ombruk/ui/tabs/components/PartnerPicker.dart';
 import 'package:ombruk/ui/tabs/components/StationPicker.dart';
@@ -244,6 +247,7 @@ class _CreateCalendarEventScreenState extends State<CreateCalendarEventScreen> {
         throw Exception();
       } else {
         uiHelper.showSnackbar(context, 'Opprettet hendele');
+        BlocProvider.of<CalendarBloc>(context).add(CalendarRefreshRequested());
       }
     } catch (e) {
       print(e.toString());
