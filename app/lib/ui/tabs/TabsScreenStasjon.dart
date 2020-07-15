@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:ombruk/blocs/AuthenticationBloc.dart';
-import 'package:ombruk/ui/tabs/calendar/CalendarRouter.dart';
-import 'package:ombruk/ui/tabs/notifications/NotificationScreen.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ombruk/blocs/AuthenticationBloc.dart';
+
+import 'package:ombruk/ui/tabs/calendar/CalendarBlocProvider.dart';
+import 'package:ombruk/ui/tabs/notifications/NotificationScreen.dart';
 import 'package:ombruk/ui/tabs/weightreport/WeightRouter.dart';
+
 import 'package:ombruk/globals.dart' as globals;
 
 enum PopUpMenuOptions { myPage, logOut }
@@ -108,7 +111,7 @@ class _TabsScreenStasjonState extends State<TabsScreenStasjon> {
         // IndexStack keeps the screen states alive between tab changes
         index: _selectedIndex,
         children: <Widget>[
-          CalendarRouter(),
+          CalendarBlocProvider(),
           WeightRouter(),
           NotificationScreen(),
         ],

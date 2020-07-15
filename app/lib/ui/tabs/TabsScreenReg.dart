@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ombruk/blocs/AuthenticationBloc.dart';
 import 'package:ombruk/blocs/CalendarBloc.dart';
 import 'package:ombruk/DataProvider/CalendarApiClient.dart';
 import 'package:ombruk/repositories/CalendarRepository.dart';
 
 import 'package:ombruk/ui/tabs/RegComponents/CreateCalendarEventScreen.dart';
-import 'package:ombruk/ui/tabs/calendar/CalendarRouter.dart';
+import 'package:ombruk/ui/tabs/calendar/CalendarBlocBuilder.dart';
 import 'package:ombruk/ui/tabs/ExtraHentingPopup/ExtraHentingDialog.dart';
 import 'package:ombruk/ui/tabs/notifications/NotificationScreen.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:ombruk/globals.dart' as globals;
 
 enum PopUpMenuOptions { myPage, logOut }
@@ -131,7 +132,7 @@ class _TabsScreenRegState extends State<TabsScreenReg> {
           // IndexStack keeps the screen states alive between tab changes
           index: _selectedIndex,
           children: <Widget>[
-            CalendarRouter(),
+            CalendarBlocBuilder(),
             CreateCalendarEventScreen(),
             NotificationScreen(),
           ],

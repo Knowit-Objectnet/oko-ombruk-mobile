@@ -48,7 +48,7 @@ class AuthenticationBloc
         }
         break;
       case AuthenticationLogOut:
-        yield AuthenticationInProgressLoggingOut();
+        yield AuthenticationInProgressLoggingOut(previousState: state);
         bool successfulLogout = await userRepository.requestLogOut();
         if (successfulLogout) {
           await userRepository.deleteCredentials();
@@ -110,7 +110,12 @@ class AuthenticationError extends AuthenticationState {
   const AuthenticationError({@required this.exception});
 }
 
-class AuthenticationInProgressLoggingOut extends AuthenticationState {}
+class AuthenticationInProgressLoggingOut extends AuthenticationState {
+  final AuthenticationState previousState;
+
+  AuthenticationInProgressLoggingOut({@required this.previousState})
+      : assert(previousState != null);
+}
 
 // Events
 

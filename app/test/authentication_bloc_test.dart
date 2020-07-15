@@ -125,7 +125,8 @@ void main() {
     test('emits [initial, logging out, noToken] on successful logout', () {
       final expectedResponse = [
         AuthenticationInitial(),
-        AuthenticationInProgressLoggingOut(),
+        AuthenticationInProgressLoggingOut(
+            previousState: AuthenticationSuccessPartner()),
         AuthenticationNoToken()
       ];
 
@@ -142,7 +143,8 @@ void main() {
 
       final expectedResponse = [
         AuthenticationInitial(),
-        AuthenticationInProgressLoggingOut(),
+        AuthenticationInProgressLoggingOut(
+            previousState: AuthenticationSuccessPartner()),
         AuthenticationError(exception: exception)
       ];
 

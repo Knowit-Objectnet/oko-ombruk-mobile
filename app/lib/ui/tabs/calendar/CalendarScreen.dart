@@ -37,8 +37,8 @@ class _CalendarScreenState extends State<CalendarScreen>
 
   @override
   void dispose() {
-    super.dispose();
     _rotationController.dispose();
+    super.dispose();
   }
 
   @override
