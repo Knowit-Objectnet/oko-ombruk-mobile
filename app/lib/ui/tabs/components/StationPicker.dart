@@ -2,16 +2,16 @@ import 'package:meta/meta.dart';
 import 'package:flutter/material.dart';
 import 'package:ombruk/globals.dart' as globals;
 
-class PartnerPicker extends StatelessWidget {
-  final String selectedPartner;
-  final ValueChanged<String> partnerChanged;
+class StationPicker extends StatelessWidget {
+  final String selectedStation;
+  final ValueChanged<String> stationChanged;
   final Color backgroundColor;
 
-  PartnerPicker({
-    @required this.selectedPartner,
-    @required this.partnerChanged,
+  StationPicker({
+    @required this.selectedStation,
+    @required this.stationChanged,
     this.backgroundColor = globals.osloWhite,
-  }) : assert(partnerChanged != null);
+  }) : assert(stationChanged != null);
 
   @override
   Widget build(BuildContext context) {
@@ -19,18 +19,19 @@ class PartnerPicker extends StatelessWidget {
       color: backgroundColor,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Padding(
               padding: EdgeInsets.only(right: 8.0),
-              child: Image.asset('assets/icons/driver.png',
-                  height: 20, width: 20)),
+              child:
+                  Image.asset('assets/icons/kart.png', height: 20, width: 20)),
           Container(
             child: DropdownButton<String>(
-              value: selectedPartner,
-              hint: Text('Velg partner'),
-              onChanged: partnerChanged,
+              value: selectedStation,
+              hint: Text('Velg stasjon'),
+              onChanged: stationChanged,
               underline: Container(),
-              items: globals.partners
+              items: globals.stations
                   .map((station) => DropdownMenuItem(
                         value: station,
                         child: Text(station),

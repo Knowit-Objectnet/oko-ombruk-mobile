@@ -59,6 +59,7 @@ class _ExtraHentingDialogState extends State<ExtraHentingDialog> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
+              // TODO: Replace with the DatePicker component
               GestureDetector(
                 child: DateField(
                   date: _selectedDate,

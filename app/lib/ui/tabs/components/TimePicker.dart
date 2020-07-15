@@ -8,12 +8,12 @@ class TimePicker extends StatelessWidget {
   final Color backgroundColor;
   final Color borderColor;
 
-  TimePicker(
-      {@required this.selectedTime,
-      @required this.timeChanged,
-      this.backgroundColor = globals.osloWhite,
-      this.borderColor = globals.osloLightBlue})
-      : assert(selectedTime != null),
+  TimePicker({
+    @required this.selectedTime,
+    @required this.timeChanged,
+    this.backgroundColor = globals.osloWhite,
+    this.borderColor = globals.osloLightBlue,
+  })  : assert(selectedTime != null),
         assert(timeChanged != null);
 
   @override
