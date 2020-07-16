@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:ombruk/blocs/AuthenticationBloc.dart';
-import 'package:ombruk/ui/tabs/calendar/CalendarRouter.dart';
-import 'package:ombruk/ui/tabs/ExtraHentingPopup/ExtraHentingDialog.dart';
-import 'package:ombruk/ui/tabs/notifications/NotificationScreen.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ombruk/blocs/AuthenticationBloc.dart';
+
+import 'package:ombruk/ui/tabs/calendar/CalendarBlocProvider.dart';
+import 'package:ombruk/ui/tabs/notifications/NotificationScreen.dart';
 import 'package:ombruk/ui/tabs/weightreport/WeightRouter.dart';
+
 import 'package:ombruk/globals.dart' as globals;
 
 enum PopUpMenuOptions { myPage, logOut }
@@ -27,7 +29,7 @@ class _TabsScreenStasjonState extends State<TabsScreenStasjon> {
           _title = 'Kalender';
           break;
         case 1:
-          _title = 'Dine vektuttak';
+          _title = 'Send beskjed';
           break;
         case 2:
           _title = 'Varsler';
@@ -95,16 +97,6 @@ class _TabsScreenStasjonState extends State<TabsScreenStasjon> {
               },
             ),
             ListTile(
-              leading:
-                  Image.asset('assets/icons/add.png', color: globals.osloWhite),
-              title: Text('Søk om ekstra uttak'),
-              onTap: () {
-                Navigator.pop(context);
-                showDialog(
-                    context: context, builder: (_) => ExtraHentingDialog());
-              },
-            ),
-            ListTile(
               leading: Image.asset('assets/icons/innstillinger.png',
                   color: globals.osloWhite),
               title: Text('Innstillinger'),
@@ -119,7 +111,7 @@ class _TabsScreenStasjonState extends State<TabsScreenStasjon> {
         // IndexStack keeps the screen states alive between tab changes
         index: _selectedIndex,
         children: <Widget>[
-          CalendarRouter(),
+          CalendarBlocProvider(),
           WeightRouter(),
           NotificationScreen(),
         ],
@@ -135,9 +127,9 @@ class _TabsScreenStasjonState extends State<TabsScreenStasjon> {
             title: Container(),
           ),
           BottomNavigationBarItem(
-            icon: Image.asset('assets/icons/vekt-ikon.png',
+            icon: Image.asset('assets/icons/meld-avvik-ikon.png',
                 height: 25, color: globals.osloWhite),
-            activeIcon: Image.asset('assets/icons/vekt-ikon.png',
+            activeIcon: Image.asset('assets/icons/meld-avvik-ikon.png',
                 height: 25, color: _selectedItemColor),
             title: Container(),
           ),

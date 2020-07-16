@@ -36,6 +36,19 @@ class AuthRouter extends StatelessWidget {
                 case AuthenticationInitial:
                   return SplashScreen();
                 case AuthenticationInProgressLoggingOut:
+                  AuthenticationState previousState =
+                      (state as AuthenticationInProgressLoggingOut)
+                          .previousState;
+                  if (previousState is AuthenticationSuccessPartner) {
+                    return TabsScreenPartner();
+                  }
+                  if (previousState is AuthenticationSuccessReg) {
+                    return TabsScreenReg();
+                  }
+                  if (previousState is AuthenticationSuccessStasjoner) {
+                    return TabsScreenStasjon();
+                  }
+                  throw Exception();
                 case AuthenticationSuccessPartner:
                   return TabsScreenPartner();
                 case AuthenticationSuccessReg:

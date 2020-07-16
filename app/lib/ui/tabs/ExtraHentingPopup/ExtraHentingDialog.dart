@@ -59,6 +59,7 @@ class _ExtraHentingDialogState extends State<ExtraHentingDialog> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
+              // TODO: Replace with the DatePicker component
               GestureDetector(
                 child: DateField(
                   date: _selectedDate,
@@ -66,6 +67,7 @@ class _ExtraHentingDialogState extends State<ExtraHentingDialog> {
                 onTap: () => _selectDate(context),
               ),
               Image.asset('assets/icons/klokke.png', height: 20, width: 20),
+              // TODO: Replace with the TimePicker component
               GestureDetector(
                 child: TimeField(
                   time: _selectedTime,
@@ -82,6 +84,7 @@ class _ExtraHentingDialogState extends State<ExtraHentingDialog> {
             ],
           ),
           Row(
+            // TODO: Use the component StationPickerDropdownButton instead of Row here
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Image.asset('assets/icons/kart.png', height: 20, width: 20),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ombruk/blocs/AuthenticationBloc.dart';
-import 'package:ombruk/ui/tabs/calendar/CalendarRouter.dart';
-import 'package:ombruk/ui/tabs/ExtraHentingPopup/ExtraHentingDialog.dart';
+import 'package:ombruk/ui/tabs/SamPartnersComponents/PickupDialogPartners.dart';
+import 'package:ombruk/ui/tabs/calendar/CalendarBlocProvider.dart';
 import 'package:ombruk/ui/tabs/notifications/NotificationScreen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ombruk/ui/tabs/weightreport/WeightRouter.dart';
@@ -101,7 +101,7 @@ class _TabsScreenPartnerState extends State<TabsScreenPartner> {
               onTap: () {
                 Navigator.pop(context);
                 showDialog(
-                    context: context, builder: (_) => ExtraHentingDialog());
+                    context: context, builder: (_) => PickupDialogPartners());
               },
             ),
             ListTile(
@@ -119,7 +119,7 @@ class _TabsScreenPartnerState extends State<TabsScreenPartner> {
         // IndexStack keeps the screen states alive between tab changes
         index: _selectedIndex,
         children: <Widget>[
-          CalendarRouter(),
+          CalendarBlocProvider(),
           WeightRouter(),
           NotificationScreen(),
         ],
