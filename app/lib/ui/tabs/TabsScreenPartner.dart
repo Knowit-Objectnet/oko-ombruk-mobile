@@ -17,7 +17,7 @@ class TabsScreenPartner extends StatefulWidget {
 class _TabsScreenPartnerState extends State<TabsScreenPartner> {
   int _selectedIndex = 0;
   String _title = 'Kalender';
-  Color _selectedItemColor = globals.osloLightBlue;
+  List<String> _bottomAppBarItems = ['listeikon', 'vekt-ikon', 'varsel-ikon'];
 
   void _onItemTapped(int index) {
     setState(() {
@@ -65,56 +65,6 @@ class _TabsScreenPartnerState extends State<TabsScreenPartner> {
           )
         ],
       ),
-      drawer: Drawer(
-          child: Container(
-        color: globals.osloDarkBlue,
-        child: ListView(
-          children: <Widget>[
-            ListTile(
-              leading: Image.asset('assets/icons/sampartnere.png',
-                  color: globals.osloWhite),
-              title: Text('Sam. partnere'),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              leading: Image.asset('assets/icons/kart.png',
-                  color: globals.osloWhite),
-              title: Text('Gjenvinningsstasjoner'),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              leading: Image.asset('assets/icons/mail.png',
-                  color: globals.osloWhite),
-              title: Text('Send beskjed'),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              leading:
-                  Image.asset('assets/icons/add.png', color: globals.osloWhite),
-              title: Text('Søk om ekstra uttak'),
-              onTap: () {
-                Navigator.pop(context);
-                showDialog(
-                    context: context, builder: (_) => PickupDialogPartners());
-              },
-            ),
-            ListTile(
-              leading: Image.asset('assets/icons/innstillinger.png',
-                  color: globals.osloWhite),
-              title: Text('Innstillinger'),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
-          ],
-        ),
-      )),
       body: IndexedStack(
         // IndexStack keeps the screen states alive between tab changes
         index: _selectedIndex,
@@ -124,37 +74,33 @@ class _TabsScreenPartnerState extends State<TabsScreenPartner> {
           NotificationScreen(),
         ],
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: globals.osloDarkBlue,
-        items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Image.asset('assets/icons/listeikon.png',
-                height: 25, color: globals.osloWhite),
-            activeIcon: Image.asset('assets/icons/listeikon.png',
-                height: 25, color: _selectedItemColor),
-            title: Container(),
-          ),
-          BottomNavigationBarItem(
-            icon: Image.asset('assets/icons/vekt-ikon.png',
-                height: 25, color: globals.osloWhite),
-            activeIcon: Image.asset('assets/icons/vekt-ikon.png',
-                height: 25, color: _selectedItemColor),
-            title: Container(),
-          ),
-          BottomNavigationBarItem(
-            icon: Image.asset('assets/icons/varsel-ikon.png',
-                height: 25, color: globals.osloWhite),
-            activeIcon: Image.asset('assets/icons/varsel-ikon.png',
-                height: 25, color: _selectedItemColor),
-            title: Container(),
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: _selectedItemColor,
-        unselectedItemColor: globals.osloWhite,
-        onTap: _onItemTapped,
+      bottomNavigationBar: BottomAppBar(
+        color: globals.osloDarkBlue,
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: _bottomAppBarChildren(),
+        ),
       ),
     );
+  }
+
+  List<Widget> _bottomAppBarChildren() {
+    List<Widget> list = [];
+    list.add(IconButton(
+      icon: _imageIcon(fileName: 'meny', isSelected: false),
+      onPressed: _showNavigationDrawer,
+    ));
+    list.add(Spacer());
+    for (int index = 0; index < _bottomAppBarItems.length; index++) {
+      list.add(IconButton(
+        icon: _imageIcon(
+            fileName: _bottomAppBarItems[index],
+            isSelected: _selectedIndex == index),
+        onPressed: () => _onItemTapped(index),
+      ));
+    }
+    return list;
   }
 
   void _popUpItemSelected(PopUpMenuOptions option) {
@@ -169,5 +115,71 @@ class _TabsScreenPartnerState extends State<TabsScreenPartner> {
       default:
         break;
     }
+  }
+
+  Widget _imageIcon({@required String fileName, @required bool isSelected}) {
+    return Image.asset(
+      'assets/icons/$fileName.png',
+      height: 25,
+      width: 25,
+      color: isSelected ? globals.osloLightBlue : globals.osloWhite,
+    );
+  }
+
+  void _showNavigationDrawer() {
+    showModalBottomSheet(
+        context: context,
+        builder: (_) {
+          return Container(
+            color: globals.osloDarkBlue,
+            child: ListView(
+              children: <Widget>[
+                ListTile(
+                  leading: Image.asset('assets/icons/sampartnere.png',
+                      color: globals.osloWhite),
+                  title: Text('Sam. partnere'),
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                ),
+                ListTile(
+                  leading: Image.asset('assets/icons/kart.png',
+                      color: globals.osloWhite),
+                  title: Text('Gjenvinningsstasjoner'),
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                ),
+                ListTile(
+                  leading: Image.asset('assets/icons/mail.png',
+                      color: globals.osloWhite),
+                  title: Text('Send beskjed'),
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                ),
+                ListTile(
+                  leading: Image.asset('assets/icons/add.png',
+                      color: globals.osloWhite),
+                  title: Text('Søk om ekstra uttak'),
+                  onTap: () {
+                    Navigator.pop(context);
+                    showDialog(
+                        context: context,
+                        builder: (_) => PickupDialogPartners());
+                  },
+                ),
+                ListTile(
+                  leading: Image.asset('assets/icons/innstillinger.png',
+                      color: globals.osloWhite),
+                  title: Text('Innstillinger'),
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
+            ),
+          );
+        });
   }
 }
