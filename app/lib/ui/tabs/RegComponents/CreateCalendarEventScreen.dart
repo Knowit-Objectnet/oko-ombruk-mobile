@@ -1,5 +1,3 @@
-import 'dart:convert';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,11 +8,11 @@ import 'package:ombruk/ui/tabs/components/PartnerPicker.dart';
 import 'package:ombruk/ui/tabs/components/StationPicker.dart';
 import 'package:ombruk/ui/tabs/components/TimePicker.dart';
 import 'package:ombruk/ui/tabs/components/WeekdayPicker.dart';
+import 'package:ombruk/DataProvider/CalendarApiClient.dart';
+import 'package:ombruk/ui/tabs/RegComponents/CreateCalendarEventData.dart';
 
 import 'package:ombruk/globals.dart' as globals;
 import 'package:ombruk/ui/ui.helper.dart';
-
-import 'package:http/http.dart' as http;
 
 class CreateCalendarEventScreen extends StatefulWidget {
   @override
@@ -184,70 +182,33 @@ class _CreateCalendarEventScreenState extends State<CreateCalendarEventScreen> {
   }
 
   Future<void> _submitForm() async {
-    if (_selectedStation == null) {
-      uiHelper.showSnackbar(context, 'Vennligst velg en stasjon');
-      return;
-    }
-    if (_selectedPartner == null) {
-      uiHelper.showSnackbar(context, 'Vennligst velg en partner');
-      return;
-    }
-    if (_selectedWeekdays.isEmpty) {
-      uiHelper.showSnackbar(context, 'Vennligst velg minst én dag');
-      return;
-    }
-    if (_startTime.hour > _endTime.hour) {
-      uiHelper.showSnackbar(context, 'Start tid kan ikke vær før slutt tid');
-      return;
-    }
-    if (_startTime.hour == _endTime.hour &&
-        _startTime.minute >= _endTime.minute) {
+    CreateCalendarEventData eventData;
+    try {
+      eventData = CreateCalendarEventData.fromData(
+          startDate: _startDate,
+          endDate: _endDate,
+          startTime: _startTime,
+          endTime: _endTime,
+          station: _selectedStation,
+          partner: _selectedPartner,
+          weekdays: _selectedWeekdays);
+    } catch (e) {
       uiHelper.showSnackbar(
-          context, 'Start tid kan ikke vær før eller lik slutt tid');
+          context,
+          e.toString().substring(
+              11, e.toString().length)); // substring removes 'Exception: '
       return;
     }
-    if (_startDate.isAfter(_endDate)) {
-      uiHelper.showSnackbar(context, 'Slutt dato kan ikke være før start dato');
-      return;
-    }
-
-    DateTime startDateTime = DateTime(_startDate.year, _startDate.month,
-        _startDate.day, _startTime.hour, _startTime.minute);
-    // endDateTime is the same DAY as startDateTime and the same TIME as untilDatetime
-    DateTime endDateTime = DateTime(_startDate.year, _startDate.month,
-        _startDate.day, _endTime.hour, _endTime.minute);
-    DateTime untilDateTime = DateTime(_endDate.year, _endDate.month,
-        _endDate.day, _endTime.hour, _endTime.minute);
-
-    String startString = globals.getDateString(startDateTime);
-    String endString = globals.getDateString(endDateTime);
-    String untilString = globals.getDateString(untilDateTime);
-
-    List<String> _weekdays =
-        _selectedWeekdays.map((e) => describeEnum(e).toUpperCase()).toList();
-
-    String _json = jsonEncode({
-      'startDateTime': startString,
-      'endDateTime': endString,
-      'station': {'id': globals.stations.indexOf(_selectedStation) + 1},
-      'partner': {'id': globals.partners.indexOf(_selectedPartner) + 1},
-      'recurrenceRule': {'until': untilString, 'days': _weekdays}
-    });
 
     uiHelper.showLoading(context);
     try {
-      http.Response response = await http.post(
-          '${globals.calendarBaseUrl}/events',
-          headers: {
-            'Content-type': 'application/json',
-            'Accept': 'application/json'
-          },
-          body: _json);
-      if (response.statusCode != 201) {
-        throw Exception();
-      } else {
+      bool creationSuccess =
+          await CalendarApiClient().createCalendarEvent(eventData);
+      if (creationSuccess) {
         uiHelper.showSnackbar(context, 'Opprettet hendele');
         BlocProvider.of<CalendarBloc>(context).add(CalendarRefreshRequested());
+      } else {
+        throw Exception();
       }
     } catch (e) {
       print(e.toString());
