@@ -24,7 +24,7 @@ class CreateCalendarEventData {
         assert(endTime != null),
         assert(weekdays != null) {
     if (station == null) {
-      throw Exception('Vennligst velg en stasjon'); // TODO Se ove dette
+      throw Exception('Vennligst velg en stasjon');
     }
     if (partner == null) {
       throw Exception('Vennligst velg en partner');
@@ -33,10 +33,10 @@ class CreateCalendarEventData {
       throw Exception('Vennligst velg minst én dag');
     }
     if (startTime.hour > endTime.hour) {
-      throw Exception('Start tid kan ikke vær før slutt tid');
+      throw Exception('Start tid kan ikke være før slutt tid');
     }
     if (startTime.hour == endTime.hour && startTime.minute >= endTime.minute) {
-      throw Exception('Start tid kan ikke vær før eller lik slutt tid');
+      throw Exception('Start tid kan ikke være før eller lik slutt tid');
     }
     if (startDate.isAfter(endDate)) {
       throw Exception('Slutt dato kan ikke være før start dato');
