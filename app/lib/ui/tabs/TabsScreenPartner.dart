@@ -5,9 +5,9 @@ import 'package:ombruk/ui/tabs/calendar/CalendarBlocProvider.dart';
 import 'package:ombruk/ui/tabs/notifications/NotificationScreen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ombruk/ui/tabs/weightreport/WeightRouter.dart';
-import 'package:ombruk/globals.dart' as globals;
 
-enum PopUpMenuOptions { myPage, logOut }
+import 'package:ombruk/globals.dart' as globals;
+import 'package:ombruk/ui/customIcons.dart' as customIcons;
 
 class TabsScreenPartner extends StatefulWidget {
   @override
@@ -16,21 +16,21 @@ class TabsScreenPartner extends StatefulWidget {
 
 class _TabsScreenPartnerState extends State<TabsScreenPartner> {
   int _selectedIndex = 0;
-  String _title = 'Kalender';
-  List<String> _bottomAppBarItems = ['listeikon', 'vekt-ikon', 'varsel-ikon'];
+  List<String> _bottomAppBarItems = [
+    customIcons.list,
+    customIcons.weight,
+    customIcons.notification
+  ];
 
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
       switch (index) {
         case 0:
-          _title = 'Kalender';
           break;
         case 1:
-          _title = 'Dine vektuttak';
           break;
         case 2:
-          _title = 'Varsler';
           break;
       }
     });
@@ -39,37 +39,11 @@ class _TabsScreenPartnerState extends State<TabsScreenPartner> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(_title),
-        backgroundColor: globals.osloDarkBlue,
-        actions: <Widget>[
-          PopupMenuButton<PopUpMenuOptions>(
-            key: Key('popMenu'),
-            onSelected: _popUpItemSelected,
-            itemBuilder: (BuildContext context) =>
-                <PopupMenuEntry<PopUpMenuOptions>>[
-              const PopupMenuItem(
-                value: PopUpMenuOptions.myPage,
-                child: Text('Min side'),
-                key: Key('mypage'),
-              ),
-              const PopupMenuDivider(),
-              const PopupMenuItem(
-                value: PopUpMenuOptions.logOut,
-                child: Text('Logg ut'),
-                key: Key('logout'),
-              ),
-            ],
-            icon: Image.asset('assets/icons/person.png',
-                color: globals.osloWhite),
-          )
-        ],
-      ),
       body: IndexedStack(
         // IndexStack keeps the screen states alive between tab changes
         index: _selectedIndex,
         children: <Widget>[
-          CalendarBlocProvider(),
+          SafeArea(child: CalendarBlocProvider()),
           WeightRouter(),
           NotificationScreen(),
         ],
@@ -88,7 +62,7 @@ class _TabsScreenPartnerState extends State<TabsScreenPartner> {
   List<Widget> _bottomAppBarChildren() {
     List<Widget> list = [];
     list.add(IconButton(
-      icon: _imageIcon(fileName: 'meny', isSelected: false),
+      icon: _imageIcon(fileName: customIcons.menu, isSelected: false),
       onPressed: _showNavigationDrawer,
     ));
     list.add(Spacer());
@@ -103,23 +77,9 @@ class _TabsScreenPartnerState extends State<TabsScreenPartner> {
     return list;
   }
 
-  void _popUpItemSelected(PopUpMenuOptions option) {
-    switch (option) {
-      case PopUpMenuOptions.myPage:
-        // TODO
-        break;
-      case PopUpMenuOptions.logOut:
-        BlocProvider.of<AuthenticationBloc>(context)
-            .add(AuthenticationLogOut());
-        break;
-      default:
-        break;
-    }
-  }
-
   Widget _imageIcon({@required String fileName, @required bool isSelected}) {
     return Image.asset(
-      'assets/icons/$fileName.png',
+      'assets/icons/$fileName',
       height: 25,
       width: 25,
       color: isSelected ? globals.osloLightBlue : globals.osloWhite,
@@ -127,6 +87,23 @@ class _TabsScreenPartnerState extends State<TabsScreenPartner> {
   }
 
   void _showNavigationDrawer() {
+    ListTile customListTile(
+        String iconName, String title, Function onTapFunction) {
+      return ListTile(
+        leading: Image.asset(
+          'assets/icons/$iconName',
+          color: globals.osloWhite,
+          height: 28,
+          width: 28,
+        ),
+        title: Text(title, style: TextStyle(color: globals.osloWhite)),
+        onTap: () {
+          Navigator.pop(context);
+          onTapFunction();
+        },
+      );
+    }
+
     showModalBottomSheet(
         context: context,
         builder: (_) {
@@ -134,49 +111,22 @@ class _TabsScreenPartnerState extends State<TabsScreenPartner> {
             color: globals.osloDarkBlue,
             child: ListView(
               children: <Widget>[
-                ListTile(
-                  leading: Image.asset('assets/icons/sampartnere.png',
-                      color: globals.osloWhite),
-                  title: Text('Sam. partnere'),
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                ),
-                ListTile(
-                  leading: Image.asset('assets/icons/kart.png',
-                      color: globals.osloWhite),
-                  title: Text('Gjenvinningsstasjoner'),
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                ),
-                ListTile(
-                  leading: Image.asset('assets/icons/mail.png',
-                      color: globals.osloWhite),
-                  title: Text('Send beskjed'),
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                ),
-                ListTile(
-                  leading: Image.asset('assets/icons/add.png',
-                      color: globals.osloWhite),
-                  title: Text('Søk om ekstra uttak'),
-                  onTap: () {
-                    Navigator.pop(context);
-                    showDialog(
+                customListTile(customIcons.partners, 'Sam. partnere', null),
+                customListTile(customIcons.map, 'Stasjonene', null),
+                customListTile(
+                    customIcons.add,
+                    'Søk ekstrauttak',
+                    () => showDialog(
                         context: context,
-                        builder: (_) => PickupDialogPartners());
-                  },
-                ),
-                ListTile(
-                  leading: Image.asset('assets/icons/innstillinger.png',
-                      color: globals.osloWhite),
-                  title: Text('Innstillinger'),
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                ),
+                        builder: (_) => PickupDialogPartners())),
+                customListTile(
+                    customIcons.addDiscrepancy, 'Send beskjed', null),
+                customListTile(customIcons.person, 'Min side', null),
+                customListTile(customIcons.close, 'Logg ut', () {
+                  BlocProvider.of<AuthenticationBloc>(context)
+                      .add(AuthenticationLogOut());
+                }),
+                customListTile(customIcons.settings, 'Innstillinger', null),
               ],
             ),
           );
