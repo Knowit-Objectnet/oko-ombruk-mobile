@@ -18,8 +18,15 @@ class DateButton extends StatefulWidget {
 }
 
 class _DateButtonState extends State<DateButton> {
+  Color _backgroundColor;
+  Color _textColor;
+
   @override
   Widget build(BuildContext context) {
+    _backgroundColor =
+        widget.isSelected ? globals.osloDarkBlue : globals.osloWhite;
+    _textColor = widget.isSelected ? globals.osloWhite : globals.osloBlack;
+
     String weekday = globals.weekdaysShort[widget.dateTime.weekday];
     return Expanded(
         // TODO: The GestureDetector doesn't fill the entire parent, only the child, so the onTap may be working so so
@@ -28,29 +35,19 @@ class _DateButtonState extends State<DateButton> {
   }
 
   Widget _numberWidget(String weekday) {
-    if (widget.isSelected) {
-      return Column(
-        children: <Widget>[
-          Text('$weekday',
-              style: TextStyle(fontSize: 12.0, color: globals.osloRed)),
-          CircleAvatar(
-              backgroundColor: globals.osloRed,
-              radius: 16.0,
-              child: Text(
-                '${widget.dateTime.day}',
-                style: TextStyle(fontSize: 20.0, color: globals.osloWhite),
-              ))
-        ],
-      );
-    }
-
     return Column(
       children: <Widget>[
-        Text('$weekday', style: TextStyle(fontSize: 12.0)),
         Text(
-          '${widget.dateTime.day}',
-          style: TextStyle(fontSize: 20.0),
-        )
+          '$weekday',
+          style: TextStyle(fontSize: 12.0, color: globals.osloBlack),
+        ),
+        CircleAvatar(
+            backgroundColor: _backgroundColor,
+            radius: 16.0,
+            child: Text(
+              '${widget.dateTime.day}',
+              style: TextStyle(fontSize: 16.0, color: _textColor),
+            ))
       ],
     );
   }

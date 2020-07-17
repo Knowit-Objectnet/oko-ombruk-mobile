@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ombruk/ui/tabs/calendar/HorizontalCalendar/DateButton.dart';
+import 'package:ombruk/globals.dart' as globals;
 
 class DayScroller extends StatefulWidget {
   DayScroller({Key key, @required this.selectedDay, @required this.selectDay})
@@ -14,24 +15,50 @@ class DayScroller extends StatefulWidget {
 
 class _DayScrollerState extends State<DayScroller> {
   final controller = PageController(initialPage: 0);
-  DateTime now = DateTime.now();
+  final DateTime now = DateTime.now();
+
+  // Weekday calculation from https://en.wikipedia.org/wiki/ISO_week_date#Calculation
+  int _weeknumberNow;
+  int _weeknumberInSwipe;
+
+  _DayScrollerState() {
+    _weeknumberNow = 25; // TODO: Caluclate weeknumber
+    _weeknumberInSwipe = _weeknumberNow;
+  }
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 12.0),
       height: 80,
-      child: PageView.builder(
-          controller: controller,
-          scrollDirection: Axis.horizontal,
-          itemBuilder: (_, weekOffset) => Row(
+      child: Row(
+        children: <Widget>[
+          Container(
+            padding: EdgeInsets.all(8.0),
+            color: globals.osloLightBlue,
+            child: Text('Uke $_weeknumberInSwipe'),
+          ),
+          Expanded(
+            child: PageView.builder(
+              controller: controller,
+              onPageChanged: (int index) {
+                setState(() {
+                  _weeknumberInSwipe = _weeknumberNow + index;
+                });
+              },
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (_, weekOffset) => Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: _weekdays(weekOffset),
-              )),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
-  // Builds a 7 day list of DateButtons
+  // Builds a 5 day list of DateButtons
   List<Widget> _weekdays(int weekIndex) {
     int _weekdayOffset() {
       // 0 = Monday, 1 = Tuesday...
@@ -39,7 +66,7 @@ class _DayScrollerState extends State<DayScroller> {
     }
 
     List<Widget> weekdays = [];
-    for (int i = _weekdayOffset() * (-1); i < 7 - _weekdayOffset(); i++) {
+    for (int i = _weekdayOffset() * (-1); i < 5 - _weekdayOffset(); i++) {
       DateTime date = now.add(Duration(days: weekIndex * 7 + i));
       weekdays.add(DateButton(
           dateTime: date,
