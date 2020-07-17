@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:ombruk/ui/tabs/calendar/HorizontalCalendar/DateButton.dart';
 import 'package:ombruk/globals.dart' as globals;
 
@@ -17,12 +18,14 @@ class _DayScrollerState extends State<DayScroller> {
   final controller = PageController(initialPage: 0);
   final DateTime now = DateTime.now();
 
-  // Weekday calculation from https://en.wikipedia.org/wiki/ISO_week_date#Calculation
   int _weeknumberNow;
   int _weeknumberInSwipe;
 
   _DayScrollerState() {
-    _weeknumberNow = 25; // TODO: Caluclate weeknumber
+    // Weekday calculation from https://en.wikipedia.org/wiki/ISO_week_date#Calculation
+    int dayOfYear =
+        int.parse(DateFormat('D').format(now)); // day count from. 1. January
+    _weeknumberNow = ((dayOfYear - now.weekday + 10) / 7).floor();
     _weeknumberInSwipe = _weeknumberNow;
   }
 
