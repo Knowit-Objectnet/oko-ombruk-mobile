@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 const String add = 'add.png';
 const String arrowDown = 'arrow-down.png';
 const String arrowLeft = 'arrow-left.png';
@@ -32,3 +34,7 @@ const String statistics = 'statistikk.png';
 const String chosenCircle = 'valgt-sirkel.png';
 const String notification = 'varsel-ikon.png';
 const String weight = 'vekt-ikon.png';
+
+Image image(String icon, {double size = 20.0}) {
+  return Image.asset('assets/icons/$icon', height: size, width: size);
+}
