@@ -25,8 +25,7 @@ class DatePicker extends StatelessWidget {
         decoration: BoxDecoration(
             color: backgroundColor,
             border: Border.all(width: 2.0, color: borderColor)),
-        child: Text(" " +
-            globals.months[dateTime.month].substring(0, 3) +
+        child: Text(globals.months[dateTime.month].substring(0, 3) +
             ' ' +
             dateTime.day.toString() +
             ', ' +

@@ -18,36 +18,36 @@ class TimePicker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => _selectTime(context),
-      child: Container(
-        padding: EdgeInsets.all(8.0),
-        decoration: BoxDecoration(
-            color: backgroundColor,
-            border: Border.all(width: 2.0, color: borderColor)),
-        child: Text(
-          " " +
-              selectedTime.hour.toString().padLeft(2, "0") +
-              ':' +
-              selectedTime.minute.toString().padLeft(2, "0"),
-        ),
+    return Container(
+      padding: EdgeInsets.all(6.0),
+      decoration: BoxDecoration(
+        color: backgroundColor,
+        border: Border.all(width: 2.0, color: borderColor),
+      ),
+      child: DropdownButton<TimeOfDay>(
+        value: selectedTime,
+        hint: Text('Velg tidspunkt'),
+        onChanged: timeChanged,
+        underline: Container(),
+        isDense: true,
+        items: _timeList()
+            .map((e) => DropdownMenuItem(
+                  value: e,
+                  child: Text(e.hour.toString().padLeft(2, '0') +
+                      ':' +
+                      e.minute.toString().padLeft(2, '0')),
+                ))
+            .toList(),
       ),
     );
   }
 
-  Future<Null> _selectTime(BuildContext context) async {
-    final TimeOfDay picked = await showTimePicker(
-      initialTime: TimeOfDay.now(),
-      context: context,
-      builder: (BuildContext context, Widget child) {
-        return MediaQuery(
-          data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
-          child: child,
-        );
-      },
-    );
-    if (picked != null && picked != selectedTime) {
-      timeChanged(picked);
+  List<TimeOfDay> _timeList() {
+    List<TimeOfDay> list = [];
+    for (int i = 7; i < 16; i++) {
+      list.add(TimeOfDay(hour: i, minute: 0));
+      list.add(TimeOfDay(hour: i, minute: 30));
     }
+    return list;
   }
 }

@@ -24,15 +24,14 @@ class _CreateCalendarEventScreenState extends State<CreateCalendarEventScreen> {
   String _selectedStation;
   String _selectedPartner;
   List<globals.Weekdays> _selectedWeekdays = [];
-  TimeOfDay _startTime = TimeOfDay.now();
-  TimeOfDay _endTime;
+  TimeOfDay _startTime = TimeOfDay(hour: 8, minute: 0);
+  TimeOfDay _endTime = TimeOfDay(hour: 9, minute: 0);
   DateTime _startDate = DateTime.now();
   DateTime _endDate = DateTime.now();
   TextEditingController _merknadController = TextEditingController();
 
   @override
   void initState() {
-    _endTime = TimeOfDay(hour: _startTime.hour + 1, minute: _startTime.minute);
     super.initState();
   }
 
@@ -79,7 +78,7 @@ class _CreateCalendarEventScreenState extends State<CreateCalendarEventScreen> {
               }
             },
           ),
-          _textWithPadding('Velg tidspunkt for uttak'),
+          _textWithPadding('Velg starttidspunkt'),
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
@@ -98,11 +97,11 @@ class _CreateCalendarEventScreenState extends State<CreateCalendarEventScreen> {
                         },
                       ),
                       Text('-'),
-                      TimePicker(
-                        selectedTime: _endTime,
-                        timeChanged: (value) {
+                      DatePicker(
+                        dateTime: _startDate,
+                        dateChanged: (value) {
                           setState(() {
-                            _endTime = value;
+                            _startDate = value;
                           });
                         },
                       ),
@@ -112,21 +111,21 @@ class _CreateCalendarEventScreenState extends State<CreateCalendarEventScreen> {
               ),
             ],
           ),
-          _textWithPadding('Velg periode'),
+          _textWithPadding('Velg slutttidspunkt'),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
-              Image.asset('assets/icons/kalender.png', height: 20, width: 20),
+              Image.asset('assets/icons/klokke.png', height: 20, width: 20),
               Expanded(
                 child: Center(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
-                      DatePicker(
-                        dateTime: _startDate,
-                        dateChanged: (value) {
+                      TimePicker(
+                        selectedTime: _endTime,
+                        timeChanged: (value) {
                           setState(() {
-                            _startDate = value;
+                            _endTime = value;
                           });
                         },
                       ),
