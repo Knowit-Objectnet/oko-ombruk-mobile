@@ -7,6 +7,7 @@ import 'package:ombruk/ui/tabs/bottomAppBarComponents/bottomAppBarButton.dart';
 
 import 'package:ombruk/ui/tabs/calendar/CalendarBlocProvider.dart';
 import 'package:ombruk/ui/tabs/notifications/NotificationScreen.dart';
+import 'package:ombruk/ui/tabs/stasjonComponents/MessageScreen.dart';
 
 import 'package:ombruk/globals.dart' as globals;
 import 'package:ombruk/ui/customIcons.dart' as customIcons;
@@ -32,7 +33,7 @@ class _TabsScreenStasjonState extends State<TabsScreenStasjon> {
         index: _selectedIndex,
         children: <Widget>[
           SafeArea(child: CalendarBlocProvider()),
-          Center(child: Text('Send beskjed')),
+          SafeArea(child: MessageScreen()),
           NotificationScreen(),
         ],
       ),
