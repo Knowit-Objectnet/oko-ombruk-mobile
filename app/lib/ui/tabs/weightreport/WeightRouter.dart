@@ -17,18 +17,16 @@ class WeightRouter extends StatelessWidget {
             ..add(WeightReportLoadRequested()),
       child: BlocBuilder<WeightReportBloc, WeightReportState>(
         builder: (context, state) {
-          switch (state.runtimeType) {
-            case WeightReportInitial:
-              return Center(child: CircularProgressIndicator());
-            case WeightReportLoadSuccess:
-              return WeightReportScreen(
-                weightEvents: (state as WeightReportLoadSuccess).weightEvents,
-              );
-            case WeightReportLoadFailure:
-              return Center(child: Text('Kunne ikke laste inn vektuttakt'));
-            default:
-              return Container();
+          if (state is WeightReportInitial) {
+            return Center(child: CircularProgressIndicator());
           }
+          if (state is WeightReportLoadSuccess) {
+            return WeightReportScreen(weightEvents: state.weightEvents);
+          }
+          if (state is WeightReportLoadFailure) {
+            return Center(child: Text('Kunne ikke laste inn vektuttakt'));
+          }
+          return Container();
         },
       ),
     );

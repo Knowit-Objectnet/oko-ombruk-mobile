@@ -1,32 +1,43 @@
 import 'package:ombruk/globals.dart' as globals;
 
 class WeightEvent {
-  final String title;
-  final String description;
-  final DateTime start;
-  final DateTime end;
-  final double weight;
+  final int reportID;
+  final _Partner partner;
+  final int weight;
+  final DateTime createdDateTime;
 
-  WeightEvent(this.title, this.description, this.start, this.end, this.weight);
+  WeightEvent(this.reportID, this.partner, this.weight, this.createdDateTime);
 
   factory WeightEvent.fromJson(Map<String, dynamic> json) {
-    DateTime startDate;
-    DateTime endDate;
+    DateTime createdDateTime;
     try {
-      startDate = DateTime.parse(json['start']);
-      endDate = DateTime.parse(json['end']);
+      createdDateTime = DateTime.parse(json['createdDateTime']);
     } catch (_) {
       throw Exception("Invalid DateTime format in WeightEvent");
     }
-    return WeightEvent(json['title'], json['description'], startDate, endDate,
-        json['weight']?.toDouble());
+    return WeightEvent(
+      json['reportID'],
+      _Partner.fromJson(json['partner']),
+      json['weight']?.toDouble(),
+      createdDateTime,
+    );
   }
 
   Map<String, dynamic> toJson() => {
-        'title': title,
-        'description': description,
-        'start': globals.getDateString(start),
-        'end': globals.getDateString(end),
-        'weight': weight
+        'reportID': reportID,
+        'partner': partner.toJson(),
+        'weight': weight,
+        'createdDateTime': globals.getDateString(createdDateTime)
       };
+}
+
+class _Partner {
+  final int id;
+  final String name;
+
+  _Partner.fromJson(Map<String, dynamic> json)
+      : id = json['id'],
+        name = json['name'];
+
+  Map<String, dynamic> toJson() => {'id': id, 'name': name};
 }

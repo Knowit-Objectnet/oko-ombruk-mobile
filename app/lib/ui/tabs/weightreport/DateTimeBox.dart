@@ -5,7 +5,7 @@ import 'package:ombruk/models/WeightEvent.dart';
 class DateTimeBox extends StatelessWidget {
   DateTimeBox({Key key, @required this.weightEvent}) : super(key: key);
 
-  final WeightEvent weightEvent;
+  final WeightEvent weightEvent; // TODO CalendarEvent instead
 
   @override
   Widget build(BuildContext context) {
@@ -15,8 +15,8 @@ class DateTimeBox extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            Text(_getDate(weightEvent.start)),
-            Text(_getTime(weightEvent.start, weightEvent.end))
+            Container(),
+            // TODO
           ],
         ));
   }
