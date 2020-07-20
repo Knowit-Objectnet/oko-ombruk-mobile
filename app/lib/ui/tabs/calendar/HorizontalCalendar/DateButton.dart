@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ombruk/globals.dart' as globals;
+import 'package:ombruk/ui/customColors.dart' as customColors;
 
 class DateButton extends StatefulWidget {
   DateButton(
@@ -24,8 +25,9 @@ class _DateButtonState extends State<DateButton> {
   @override
   Widget build(BuildContext context) {
     _backgroundColor =
-        widget.isSelected ? globals.osloDarkBlue : globals.osloWhite;
-    _textColor = widget.isSelected ? globals.osloWhite : globals.osloBlack;
+        widget.isSelected ? customColors.osloDarkBlue : customColors.osloWhite;
+    _textColor =
+        widget.isSelected ? customColors.osloWhite : customColors.osloBlack;
 
     String weekday = globals.weekdaysShort[widget.dateTime.weekday];
     return Expanded(
@@ -39,7 +41,7 @@ class _DateButtonState extends State<DateButton> {
       children: <Widget>[
         Text(
           '$weekday',
-          style: TextStyle(fontSize: 12.0, color: globals.osloBlack),
+          style: TextStyle(fontSize: 12.0, color: customColors.osloBlack),
         ),
         CircleAvatar(
             backgroundColor: _backgroundColor,

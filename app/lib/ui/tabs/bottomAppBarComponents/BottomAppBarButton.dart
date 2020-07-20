@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ombruk/globals.dart' as globals;
+import 'package:ombruk/ui/customColors.dart' as customColors;
 
 class BottomAppBarButton extends StatelessWidget {
   final String icon;
@@ -22,7 +22,8 @@ class BottomAppBarButton extends StatelessWidget {
           'assets/icons/$icon',
           height: 25,
           width: 25,
-          color: isSelected ? globals.osloLightBlue : globals.osloWhite,
+          color:
+              isSelected ? customColors.osloLightBlue : customColors.osloWhite,
         ),
       ),
     );

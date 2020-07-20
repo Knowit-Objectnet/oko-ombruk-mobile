@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+
 import 'package:ombruk/ui/tabs/ExtraHentingPopup/DateField.dart';
 import 'package:ombruk/ui/tabs/ExtraHentingPopup/TimeField.dart';
+
 import 'package:ombruk/globals.dart' as globals;
+import 'package:ombruk/ui/customColors.dart' as customColors;
 
 class ExtraHentingDialog extends StatefulWidget {
   @override
@@ -53,7 +56,7 @@ class _ExtraHentingDialogState extends State<ExtraHentingDialog> {
           Padding(
               padding: EdgeInsets.symmetric(horizontal: 8.0),
               child: Divider(
-                color: globals.osloBlack,
+                color: customColors.osloBlack,
                 thickness: 1,
               )),
           Row(
@@ -127,11 +130,11 @@ class _ExtraHentingDialogState extends State<ExtraHentingDialog> {
             children: <Widget>[
               FlatButton(
                   onPressed: _closeDialog,
-                  color: globals.osloRed,
+                  color: customColors.osloRed,
                   child: Text('Avbryt')),
               FlatButton(
                   onPressed: _submitDialog,
-                  color: globals.osloGreen,
+                  color: customColors.osloGreen,
                   child: Text('Søk'))
             ],
           )

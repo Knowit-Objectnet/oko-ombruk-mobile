@@ -1,6 +1,8 @@
 import 'package:meta/meta.dart';
 import 'package:flutter/material.dart';
+
 import 'package:ombruk/globals.dart' as globals;
+import 'package:ombruk/ui/customColors.dart' as customColors;
 
 class StationPicker extends StatelessWidget {
   final String selectedStation;
@@ -10,7 +12,7 @@ class StationPicker extends StatelessWidget {
   StationPicker({
     @required this.selectedStation,
     @required this.stationChanged,
-    this.backgroundColor = globals.osloWhite,
+    this.backgroundColor = customColors.osloWhite,
   }) : assert(stationChanged != null);
 
   @override
