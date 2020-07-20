@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:ombruk/globals.dart' as globals;
+
 import 'package:ombruk/models/WeightEvent.dart';
+
+import 'package:ombruk/globals.dart' as globals;
+import 'package:ombruk/ui/customColors.dart' as customColors;
 
 class DateTimeBox extends StatelessWidget {
   DateTimeBox({Key key, @required this.weightEvent}) : super(key: key);
@@ -11,7 +14,9 @@ class DateTimeBox extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         padding: EdgeInsets.symmetric(horizontal: 8.0),
-        color: weightEvent.weight != null ? globals.osloGreen : globals.osloRed,
+        color: weightEvent.weight != null
+            ? customColors.osloGreen
+            : customColors.osloRed,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[

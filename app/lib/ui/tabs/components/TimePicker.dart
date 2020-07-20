@@ -1,6 +1,6 @@
 import 'package:meta/meta.dart';
 import 'package:flutter/material.dart';
-import 'package:ombruk/globals.dart' as globals;
+import 'package:ombruk/ui/customColors.dart' as customColors;
 
 class TimePicker extends StatelessWidget {
   final TimeOfDay selectedTime;
@@ -11,8 +11,8 @@ class TimePicker extends StatelessWidget {
   TimePicker({
     @required this.selectedTime,
     @required this.timeChanged,
-    this.backgroundColor = globals.osloWhite,
-    this.borderColor = globals.osloLightBlue,
+    this.backgroundColor = customColors.osloWhite,
+    this.borderColor = customColors.osloLightBlue,
   })  : assert(selectedTime != null),
         assert(timeChanged != null);
 

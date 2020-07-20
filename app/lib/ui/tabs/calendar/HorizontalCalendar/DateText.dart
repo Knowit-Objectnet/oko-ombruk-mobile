@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ombruk/globals.dart' as globals;
+import 'package:ombruk/ui/customColors.dart' as customColors;
 
 class DateText extends StatelessWidget {
   DateText({Key key, @required this.dateTime}) : super(key: key);
@@ -10,7 +11,7 @@ class DateText extends StatelessWidget {
     return RichText(
         text: TextSpan(
             style: TextStyle(
-                fontWeight: FontWeight.bold, color: globals.osloBlack),
+                fontWeight: FontWeight.bold, color: customColors.osloBlack),
             children: <TextSpan>[
           TextSpan(
               text: globals.weekdaysLong[dateTime.weekday],

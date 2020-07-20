@@ -1,6 +1,8 @@
 import 'package:meta/meta.dart';
 import 'package:flutter/material.dart';
+
 import 'package:ombruk/globals.dart' as globals;
+import 'package:ombruk/ui/customColors.dart' as customColors;
 
 class PartnerPicker extends StatelessWidget {
   final String selectedPartner;
@@ -10,7 +12,7 @@ class PartnerPicker extends StatelessWidget {
   PartnerPicker({
     @required this.selectedPartner,
     @required this.partnerChanged,
-    this.backgroundColor = globals.osloWhite,
+    this.backgroundColor = customColors.osloWhite,
   }) : assert(partnerChanged != null);
 
   @override

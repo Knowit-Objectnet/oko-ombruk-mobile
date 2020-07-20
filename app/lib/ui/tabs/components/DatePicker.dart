@@ -1,6 +1,8 @@
 import 'package:meta/meta.dart';
 import 'package:flutter/material.dart';
+
 import 'package:ombruk/globals.dart' as globals;
+import 'package:ombruk/ui/customColors.dart' as customColors;
 
 class DatePicker extends StatelessWidget {
   final DateTime dateTime;
@@ -11,8 +13,8 @@ class DatePicker extends StatelessWidget {
   DatePicker(
       {@required this.dateTime,
       @required this.dateChanged,
-      this.backgroundColor = globals.osloWhite,
-      this.borderColor = globals.osloLightBlue})
+      this.backgroundColor = customColors.osloWhite,
+      this.borderColor = customColors.osloLightBlue})
       : assert(dateTime != null),
         assert(dateChanged != null);
 

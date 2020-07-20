@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:ombruk/ui/tabs/calendar/HorizontalCalendar/DateButton.dart';
-import 'package:ombruk/globals.dart' as globals;
+import 'package:ombruk/ui/customColors.dart' as customColors;
 
 class DayScroller extends StatefulWidget {
   DayScroller({Key key, @required this.selectedDay, @required this.selectDay})
@@ -38,7 +38,7 @@ class _DayScrollerState extends State<DayScroller> {
         children: <Widget>[
           Container(
             padding: EdgeInsets.all(8.0),
-            color: globals.osloLightBlue,
+            color: customColors.osloLightBlue,
             child: Text('Uke $_weeknumberInSwipe'),
           ),
           Expanded(
