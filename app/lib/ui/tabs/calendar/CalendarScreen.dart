@@ -121,11 +121,17 @@ class _CalendarScreenState extends State<CalendarScreen>
           ),
           Expanded(
               child: _showHorizontalCalendar
-                  ? HorizontalCalendar(events: widget.events)
-                  : VerticalCalendar(events: widget.events))
+                  ? HorizontalCalendar(events: _getFilteredList())
+                  : VerticalCalendar(events: _getFilteredList()))
         ],
       ),
     );
+  }
+
+  List<CalendarEvent> _getFilteredList() {
+    return widget.events
+        .where((element) => element.station.name == _selectedStation)
+        .toList();
   }
 
   Future<void> _refreshCalendar() async {
