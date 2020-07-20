@@ -35,7 +35,7 @@ class _VerticalCalendarState extends State<VerticalCalendar> {
           padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
           child: _dateText(groupByValue)),
       itemBuilder: (_, CalendarEvent event) => Container(
-          color: customColors.osloLightBeige,
+          color: customColors.partnerColor(event.partner?.name),
           child: ExpansionTile(
             title: Row(
               children: <Widget>[

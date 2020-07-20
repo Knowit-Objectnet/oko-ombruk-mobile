@@ -39,7 +39,7 @@ class _WeekCalendarState extends State<WeekCalendar> {
       ),
       events: widget.events
           .map((e) => FlutterWeekViewEvent(
-              backgroundColor: customColors.osloLightBeige,
+              backgroundColor: customColors.partnerColor(e.partner?.name),
               textStyle: TextStyle(color: customColors.osloBlack),
               title: e.partner?.name ?? '',
               description: e.station?.name ?? '',

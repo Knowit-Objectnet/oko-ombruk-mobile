@@ -12,3 +12,23 @@ const Color osloBlack = Color(0xFF2C2C2C);
 const Color osloDarkBeige = Color(0xFFD0BFAE);
 const Color osloDarkGreen = Color(0xFF034B45);
 const Color osloWhite = Color(0xFFFFFFFF);
+
+Color partnerColor(String partner) {
+  // Hardcoded values for now
+  switch (partner) {
+    case 'Fretex':
+      return osloRed;
+    case 'Maritastiftelsen':
+      return osloLightBeige;
+    case 'Jobben':
+      return osloDarkBeige;
+    case 'Frigo':
+      return osloLightBlue;
+    case 'Marita':
+      return osloLightGreen;
+    case 'Norske Mikrohus':
+      return osloLightBeige;
+    default:
+      return osloLightBeige;
+  }
+}
