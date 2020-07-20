@@ -28,6 +28,8 @@ Color partnerColor(String partner) {
       return osloLightGreen;
     case 'Norske Mikrohus':
       return osloLightBeige;
+    case 'Circular Ways':
+      return osloLightGreen;
     default:
       return osloLightBeige;
   }
