@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 
 import 'package:ombruk/models/CalendarEvent.dart';
 import 'package:grouped_list/grouped_list.dart';
+import 'package:ombruk/ui/tabs/SamPartnersComponents/CalendarEventExpander.dart';
 
 import 'package:ombruk/globals.dart' as globals;
 import 'package:ombruk/ui/customColors.dart' as customColors;
+import 'package:ombruk/ui/customIcons.dart' as customIcons;
 
 class VerticalCalendar extends StatefulWidget {
   VerticalCalendar({Key key, @required this.events}) : super(key: key);
@@ -15,6 +17,8 @@ class VerticalCalendar extends StatefulWidget {
 }
 
 class _VerticalCalendarState extends State<VerticalCalendar> {
+  int _expandedIndex = -1;
+
   @override
   void initState() {
     super.initState();
@@ -32,44 +36,70 @@ class _VerticalCalendarState extends State<VerticalCalendar> {
         return sortDate;
       },
       groupSeparatorBuilder: (DateTime groupByValue) => Padding(
-          padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
-          child: _dateText(groupByValue)),
-      itemBuilder: (_, CalendarEvent event) => Container(
+        padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+        child: _dateText(groupByValue),
+      ),
+      indexedItemBuilder: (_, CalendarEvent event, index) {
+        final bool isExpanded = _expandedIndex == index;
+        return Container(
           color: customColors.partnerColor(event.partner?.name),
           child: ExpansionTile(
+            initiallyExpanded: isExpanded,
             title: Row(
               children: <Widget>[
                 _timeText(event.startDateTime, event.endDateTime),
                 VerticalDivider(thickness: 100, color: customColors.osloBlack),
-                Text(event.partner?.name ?? '')
+                Flexible(
+                  child: Text(
+                    event.partner?.name ?? '',
+                    style: TextStyle(
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.bold,
+                        color: customColors.osloBlack),
+                  ),
+                ),
               ],
             ),
-            children: <Widget>[
-              ButtonBar(
-                children: <Widget>[
-                  FlatButton(
-                      onPressed: () => null,
-                      color: customColors.osloRed,
-                      child: Text('Avbryt')),
-                  FlatButton(
-                      onPressed: () => null,
-                      color: customColors.osloGreen,
-                      child: Text('Godkjenn'))
-                ],
-              )
-            ],
-          )),
+            trailing: _trailingRow(isExpanded),
+            onExpansionChanged: (bool newState) {
+              setState(() {
+                if (isExpanded) {
+                  _expandedIndex = -1;
+                } else {
+                  _expandedIndex = index;
+                }
+              });
+            },
+            children: <Widget>[CalendarEventExpander(event: event)],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _trailingRow(bool expanded) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        Text(expanded ? 'Mindre info' : 'Mer info',
+            style: TextStyle(fontSize: 9.0)),
+        expanded
+            ? customIcons.image(customIcons.arrowUpThin)
+            : customIcons.image(customIcons.arrowDownThin)
+      ],
     );
   }
 
   Widget _timeText(DateTime start, DateTime end) {
-    return Text(start.hour.toString().padLeft(2, '0') +
-        ':' +
-        start.minute.toString().padLeft(2, '0') +
-        '-' +
-        end.hour.toString().padLeft(2, '0') +
-        ':' +
-        end.minute.toString().padLeft(2, '0'));
+    return Text(
+        start.hour.toString().padLeft(2, '0') +
+            ':' +
+            start.minute.toString().padLeft(2, '0') +
+            '-' +
+            end.hour.toString().padLeft(2, '0') +
+            ':' +
+            end.minute.toString().padLeft(2, '0'),
+        style: TextStyle(fontSize: 12.0, color: customColors.osloBlack));
   }
 
   Widget _dateText(DateTime dateTime) {
@@ -79,6 +109,6 @@ class _VerticalCalendarState extends State<VerticalCalendar> {
             dateTime.day.toString() +
             '. ' +
             globals.months[dateTime.month],
-        style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold));
+        style: TextStyle(fontWeight: FontWeight.bold));
   }
 }

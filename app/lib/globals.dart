@@ -41,6 +41,21 @@ final Map<int, String> months = {
   12: 'Desember',
 };
 
+final Map<int, String> monthsShort = {
+  1: 'JAN',
+  2: 'FEB',
+  3: 'MAR',
+  4: 'APR',
+  5: 'MAI',
+  6: 'JUN',
+  7: 'JUL',
+  8: 'AUG',
+  9: 'SEP',
+  10: 'OKT',
+  11: 'NOV',
+  12: 'DES',
+};
+
 // The order of the lists are important to match the ID index
 final List<String> stations = [
   'Haraldrud',
