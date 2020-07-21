@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ombruk/blocs/AuthenticationBloc.dart';
+import 'package:ombruk/ui/tabs/SamPartnersComponents/MyPagePartners.dart';
 import 'package:ombruk/ui/tabs/calendar/CalendarBlocProvider.dart';
 
 import 'package:ombruk/ui/tabs/SamPartnersComponents/PickupDialogPartners.dart';
 import 'package:ombruk/ui/tabs/bottomAppBarComponents/DrawerButton.dart';
 import 'package:ombruk/ui/tabs/bottomAppBarComponents/BottomAppBarButton.dart';
 import 'package:ombruk/ui/tabs/notifications/NotificationScreen.dart';
+import 'package:ombruk/ui/tabs/partners/PartnerScreen.dart';
 import 'package:ombruk/ui/tabs/weightreport/WeightRouter.dart';
 
 import 'package:ombruk/ui/customColors.dart' as customColors;
@@ -36,6 +36,8 @@ class _TabsScreenPartnerState extends State<TabsScreenPartner> {
           SafeArea(child: CalendarBlocProvider()),
           WeightRouter(),
           NotificationScreen(),
+          SafeArea(child: PartnerScreen()),
+          SafeArea(child: MyPagePartners()),
         ],
       ),
       bottomNavigationBar: BottomAppBar(
@@ -81,7 +83,11 @@ class _TabsScreenPartnerState extends State<TabsScreenPartner> {
             color: customColors.osloDarkBlue,
             child: ListView(
               children: <Widget>[
-                DrawerButton(customIcons.partners, 'Sam. partnere', null),
+                DrawerButton(customIcons.partners, 'Sam. partnere', () {
+                  setState(() {
+                    _selectedIndex = 3;
+                  });
+                }),
                 DrawerButton(customIcons.map, 'Stasjonene', null),
                 DrawerButton(
                     customIcons.add,
@@ -90,10 +96,10 @@ class _TabsScreenPartnerState extends State<TabsScreenPartner> {
                         context: context,
                         builder: (_) => PickupDialogPartners())),
                 DrawerButton(customIcons.addDiscrepancy, 'Send beskjed', null),
-                DrawerButton(customIcons.person, 'Min side', null),
-                DrawerButton(customIcons.close, 'Logg ut (to be removed)', () {
-                  BlocProvider.of<AuthenticationBloc>(context)
-                      .add(AuthenticationLogOut());
+                DrawerButton(customIcons.person, 'Min side', () {
+                  setState(() {
+                    _selectedIndex = 4;
+                  });
                 }),
                 DrawerButton(customIcons.settings, 'Innstillinger', null),
               ],
