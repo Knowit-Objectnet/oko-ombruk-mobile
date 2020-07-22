@@ -1,6 +1,8 @@
 import 'package:meta/meta.dart';
 import 'package:flutter/material.dart';
+
 import 'package:ombruk/globals.dart' as globals;
+import 'package:ombruk/ui/customColors.dart' as customColors;
 
 class WeekdayPicker extends StatelessWidget {
   final List<globals.Weekdays> selectedWeekdays;
@@ -18,14 +20,15 @@ class WeekdayPicker extends StatelessWidget {
             (e) => Container(
               decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  border: Border.all(width: 2.0, color: globals.osloLightBlue)),
+                  border: Border.all(
+                      width: 2.0, color: customColors.osloLightBlue)),
               child: GestureDetector(
                 child: CircleAvatar(
                   child: Text(_stringFromEnum(e)),
                   backgroundColor: selectedWeekdays.contains(e)
-                      ? globals.osloLightBlue
-                      : globals.osloWhite,
-                  foregroundColor: globals.osloBlack,
+                      ? customColors.osloLightBlue
+                      : customColors.osloWhite,
+                  foregroundColor: customColors.osloBlack,
                 ),
                 onTap: () => weekdaysChanged(e),
                 // shape: CircleBorder(),

@@ -6,7 +6,7 @@ import 'package:ombruk/ui/tabs/components/TimePicker.dart';
 import 'package:ombruk/ui/tabs/components/DatePicker.dart';
 
 import 'package:ombruk/ui/customIcons.dart' as customIcons;
-import 'package:ombruk/globals.dart' as globals;
+import 'package:ombruk/ui/customColors.dart' as customColors;
 
 class MessageScreen extends StatefulWidget {
   _MessageScreenState createState() => _MessageScreenState();
@@ -31,7 +31,7 @@ class _MessageScreenState extends State<MessageScreen> {
       onTap: () => FocusScope.of(context).unfocus(),
       onVerticalDragDown: (_) => FocusScope.of(context).unfocus(),
       child: Container(
-        color: globals.osloLightBeige,
+        color: customColors.osloLightBeige,
         padding: EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
@@ -41,7 +41,7 @@ class _MessageScreenState extends State<MessageScreen> {
               _subtitle('Emne'),
               Container(
                 padding: EdgeInsets.only(left: 4.0),
-                color: globals.osloWhite,
+                color: customColors.osloWhite,
                 child: TextFormField(
                   controller: _emneController,
                   decoration: InputDecoration(
@@ -144,7 +144,7 @@ class _MessageScreenState extends State<MessageScreen> {
               _subtitle('Melding'),
               Container(
                 padding: EdgeInsets.only(left: 4.0),
-                color: globals.osloWhite,
+                color: customColors.osloWhite,
                 child: TextFormField(
                   controller: _messageController,
                   decoration: InputDecoration(
@@ -165,7 +165,7 @@ class _MessageScreenState extends State<MessageScreen> {
                 padding: EdgeInsets.symmetric(vertical: 16.0),
                 child: FlatButton(
                   onPressed: _submitForm,
-                  color: globals.osloLightGreen,
+                  color: customColors.osloLightGreen,
                   child: Text('Send'),
                 ),
               ),

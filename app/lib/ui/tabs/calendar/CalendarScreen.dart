@@ -5,7 +5,9 @@ import 'package:ombruk/blocs/CalendarBloc.dart';
 import 'package:ombruk/models/CalendarEvent.dart';
 import 'package:ombruk/ui/tabs/calendar/HorizontalCalendar/HorizontalCalendar.dart';
 import 'package:ombruk/ui/tabs/calendar/VerticalCalendar/VerticalCalendar.dart';
+
 import 'package:ombruk/globals.dart' as globals;
+import 'package:ombruk/ui/customColors.dart' as customColors;
 
 class CalendarScreen extends StatefulWidget {
   final List<CalendarEvent> events;
@@ -44,7 +46,7 @@ class _CalendarScreenState extends State<CalendarScreen>
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: globals.osloWhite,
+      color: customColors.osloWhite,
       child: Column(
         children: <Widget>[
           Row(
@@ -121,11 +123,17 @@ class _CalendarScreenState extends State<CalendarScreen>
           ),
           Expanded(
               child: _showHorizontalCalendar
-                  ? HorizontalCalendar(events: widget.events)
-                  : VerticalCalendar(events: widget.events))
+                  ? HorizontalCalendar(events: _getFilteredList())
+                  : VerticalCalendar(events: _getFilteredList()))
         ],
       ),
     );
+  }
+
+  List<CalendarEvent> _getFilteredList() {
+    return widget.events
+        .where((element) => element.station.name == _selectedStation)
+        .toList();
   }
 
   Future<void> _refreshCalendar() async {

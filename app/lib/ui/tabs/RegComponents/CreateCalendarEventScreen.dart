@@ -12,6 +12,7 @@ import 'package:ombruk/DataProvider/CalendarApiClient.dart';
 import 'package:ombruk/ui/tabs/RegComponents/CreateCalendarEventData.dart';
 
 import 'package:ombruk/globals.dart' as globals;
+import 'package:ombruk/ui/customColors.dart' as customColors;
 import 'package:ombruk/ui/ui.helper.dart';
 
 class CreateCalendarEventScreen extends StatefulWidget {
@@ -38,7 +39,7 @@ class _CreateCalendarEventScreenState extends State<CreateCalendarEventScreen> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: globals.osloLightBeige,
+      color: customColors.osloLightBeige,
       child: ListView(
         padding: EdgeInsets.symmetric(horizontal: 16.0),
         children: <Widget>[
@@ -147,7 +148,7 @@ class _CreateCalendarEventScreenState extends State<CreateCalendarEventScreen> {
           _textWithPadding('Alternativt'),
           Container(
             padding: EdgeInsets.only(left: 4.0),
-            color: globals.osloWhite,
+            color: customColors.osloWhite,
             child: TextField(
               controller: _merknadController,
               decoration: InputDecoration(
@@ -162,7 +163,7 @@ class _CreateCalendarEventScreenState extends State<CreateCalendarEventScreen> {
             padding: EdgeInsets.symmetric(vertical: 16.0),
             child: FlatButton(
               onPressed: _submitForm,
-              color: globals.osloLightGreen,
+              color: customColors.osloLightGreen,
               child: Text('Opprett'),
             ),
           ),

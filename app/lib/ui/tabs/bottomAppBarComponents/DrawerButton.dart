@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ombruk/globals.dart' as globals;
+import 'package:ombruk/ui/customColors.dart' as customColors;
 
 class DrawerButton extends StatelessWidget {
   final String icon;
@@ -13,11 +13,11 @@ class DrawerButton extends StatelessWidget {
     return ListTile(
       leading: Image.asset(
         'assets/icons/$icon',
-        color: globals.osloWhite,
+        color: customColors.osloWhite,
         height: 28,
         width: 28,
       ),
-      title: Text(title, style: TextStyle(color: globals.osloWhite)),
+      title: Text(title, style: TextStyle(color: customColors.osloWhite)),
       onTap: () {
         Navigator.pop(context);
         onTap();

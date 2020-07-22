@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ombruk/globals.dart' as globals;
+import 'package:ombruk/ui/customColors.dart' as customColors;
 
 class PickupDialogPartners extends StatelessWidget {
   @override
@@ -9,7 +9,7 @@ class PickupDialogPartners extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Container(
-            color: globals.osloDarkBlue,
+            color: customColors.osloDarkBlue,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
@@ -17,13 +17,13 @@ class PickupDialogPartners extends StatelessWidget {
                     padding: EdgeInsets.only(left: 16.0),
                     child: Text('Søk om ekstra uttak',
                         style: TextStyle(
-                            color: globals.osloWhite, fontSize: 16.0))),
+                            color: customColors.osloWhite, fontSize: 16.0))),
                 IconButton(
                     icon: Image.asset(
                       'assets/icons/lukk.png',
                       height: 25,
                       width: 25,
-                      color: globals.osloWhite,
+                      color: customColors.osloWhite,
                     ),
                     onPressed: () => Navigator.of(context).pop()),
               ],
@@ -36,7 +36,7 @@ class PickupDialogPartners extends StatelessWidget {
           Padding(
             padding: EdgeInsets.only(left: 16.0, right: 16.0, bottom: 16.0),
             child: FlatButton(
-              color: globals.osloLightGreen,
+              color: customColors.osloLightGreen,
               child: Row(
                 children: <Widget>[
                   Expanded(

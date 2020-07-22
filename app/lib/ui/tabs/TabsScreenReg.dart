@@ -13,7 +13,7 @@ import 'package:ombruk/ui/tabs/ExtraHentingPopup/ExtraHentingDialog.dart';
 import 'package:ombruk/ui/tabs/notifications/NotificationScreen.dart';
 import 'package:ombruk/ui/tabs/bottomAppBarComponents/BottomAppBarButton.dart';
 
-import 'package:ombruk/globals.dart' as globals;
+import 'package:ombruk/ui/customColors.dart' as customColors;
 import 'package:ombruk/ui/customIcons.dart' as customIcons;
 
 class TabsScreenReg extends StatefulWidget {
@@ -49,7 +49,7 @@ class _TabsScreenRegState extends State<TabsScreenReg> {
           ],
         ),
         bottomNavigationBar: BottomAppBar(
-          color: globals.osloDarkBlue,
+          color: customColors.osloDarkBlue,
           child: Row(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -89,7 +89,7 @@ class _TabsScreenRegState extends State<TabsScreenReg> {
         context: context,
         builder: (_) {
           return Container(
-            color: globals.osloDarkBlue,
+            color: customColors.osloDarkBlue,
             child: ListView(
               children: <Widget>[
                 DrawerButton(customIcons.partners, 'Sam. partnere', null),

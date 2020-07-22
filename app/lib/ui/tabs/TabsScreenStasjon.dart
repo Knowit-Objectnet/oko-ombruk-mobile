@@ -10,7 +10,7 @@ import 'package:ombruk/ui/tabs/bottomAppBarComponents/BottomAppBarButton.dart';
 import 'package:ombruk/ui/tabs/notifications/NotificationScreen.dart';
 import 'package:ombruk/ui/tabs/stasjonComponents/MessageScreen.dart';
 
-import 'package:ombruk/globals.dart' as globals;
+import 'package:ombruk/ui/customColors.dart' as customColors;
 import 'package:ombruk/ui/customIcons.dart' as customIcons;
 
 class TabsScreenStasjon extends StatefulWidget {
@@ -39,7 +39,7 @@ class _TabsScreenStasjonState extends State<TabsScreenStasjon> {
         ],
       ),
       bottomNavigationBar: BottomAppBar(
-        color: globals.osloDarkBlue,
+        color: customColors.osloDarkBlue,
         child: Row(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -78,7 +78,7 @@ class _TabsScreenStasjonState extends State<TabsScreenStasjon> {
         context: context,
         builder: (_) {
           return Container(
-            color: globals.osloDarkBlue,
+            color: customColors.osloDarkBlue,
             child: ListView(
               children: <Widget>[
                 DrawerButton(customIcons.partners, 'Sam. partnere', null),
