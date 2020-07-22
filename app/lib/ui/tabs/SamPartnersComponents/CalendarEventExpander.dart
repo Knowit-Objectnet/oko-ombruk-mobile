@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:ombruk/models/CalendarEvent.dart';
 import 'package:ombruk/ui/tabs/components/DatePicker.dart';
+import 'package:ombruk/ui/tabs/components/TimePicker.dart';
 
 import 'package:ombruk/ui/customColors.dart' as customColors;
 import 'package:ombruk/ui/customIcons.dart' as customIcons;
@@ -18,7 +19,11 @@ class CalendarEventExpander extends StatefulWidget {
 class _CalendarEventExpanderState extends State<CalendarEventExpander> {
   bool isExpanded = false;
   bool periode = false;
+  bool edit = false;
   DateTime endPeriode = DateTime.now();
+  DateTime updatedDate = DateTime.now();
+  TimeOfDay updatedStartTime = TimeOfDay(hour: 8, minute: 0);
+  TimeOfDay updatedEndTime = TimeOfDay(hour: 9, minute: 0);
 
   @override
   void initState() {
@@ -34,7 +39,20 @@ class _CalendarEventExpanderState extends State<CalendarEventExpander> {
         child: Column(
           children: <Widget>[
             Column(children: <Widget>[
-              _dateTextDropDown(widget.event.startDateTime),
+              Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    _dateTextDropDown(widget.event.startDateTime),
+                    RawMaterialButton(
+                        fillColor: customColors.osloLightBlue,
+                        child: customIcons.image(customIcons.editIcon),
+                        onPressed: () => {
+                              setState(() {
+                                edit = true;
+                              })
+                            },
+                        shape: CircleBorder())
+                  ]),
               SizedBox(
                 height: 20,
               ),
@@ -141,20 +159,41 @@ class _CalendarEventExpanderState extends State<CalendarEventExpander> {
     );
   }
 
+  void _editInfo() {}
+
   Widget _timeTextDropDown(DateTime start, DateTime end) {
     return Row(
       children: <Widget>[
         customIcons.image(customIcons.clock, size: 25),
         VerticalDivider(thickness: 100),
-        Text(
-            start.hour.toString().padLeft(2, '0') +
-                ':' +
-                start.minute.toString().padLeft(2, '0') +
-                ' til ' +
-                end.hour.toString().padLeft(2, '0') +
-                ':' +
-                end.minute.toString().padLeft(2, '0'),
-            style: TextStyle(fontSize: 18.0))
+        edit
+            ? Flexible(
+                child: Row(children: <Widget>[
+                TimePicker(
+                    selectedTime: updatedStartTime,
+                    timeChanged: (value) {
+                      setState(() {
+                        updatedStartTime = value;
+                      });
+                    }),
+                Text('  til  ', style: TextStyle(fontSize: 18.0)),
+                TimePicker(
+                    selectedTime: updatedEndTime,
+                    timeChanged: (value) {
+                      setState(() {
+                        updatedEndTime = value;
+                      });
+                    })
+              ]))
+            : Text(
+                start.hour.toString().padLeft(2, '0') +
+                    ':' +
+                    start.minute.toString().padLeft(2, '0') +
+                    ' til ' +
+                    end.hour.toString().padLeft(2, '0') +
+                    ':' +
+                    end.minute.toString().padLeft(2, '0'),
+                style: TextStyle(fontSize: 18.0))
       ],
     );
   }
@@ -164,13 +203,21 @@ class _CalendarEventExpanderState extends State<CalendarEventExpander> {
       children: <Widget>[
         customIcons.image(customIcons.calendar, size: 25),
         VerticalDivider(thickness: 100),
-        Text(
-            globals.monthsShort[dateTime.month] +
-                ' ' +
-                dateTime.day.toString() +
-                ', ' +
-                dateTime.year.toString(),
-            style: TextStyle(fontSize: 18.0))
+        edit
+            ? DatePicker(
+                dateTime: updatedDate,
+                dateChanged: (value) {
+                  setState(() {
+                    updatedDate = value;
+                  });
+                })
+            : Text(
+                globals.monthsShort[dateTime.month] +
+                    ' ' +
+                    dateTime.day.toString() +
+                    ', ' +
+                    dateTime.year.toString(),
+                style: TextStyle(fontSize: 18.0))
       ],
     );
   }
