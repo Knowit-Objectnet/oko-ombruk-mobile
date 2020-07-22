@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+
 import 'package:ombruk/models/CalendarEvent.dart';
 import 'package:ombruk/ui/tabs/components/DatePicker.dart';
+
 import 'package:ombruk/ui/customColors.dart' as customColors;
 import 'package:ombruk/ui/customIcons.dart' as customIcons;
 import 'package:ombruk/globals.dart' as globals;
@@ -25,131 +27,118 @@ class _CalendarEventExpanderState extends State<CalendarEventExpander> {
 
   @override
   Widget build(BuildContext context) {
-    CalendarEvent event = widget.event;
-    return Padding(
-        padding: EdgeInsets.all(6),
-        child: IntrinsicHeight(
-            child: Container(
-          color: customColors.osloWhite,
-          child: Padding(
-            padding: EdgeInsets.all(10),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Container(
+      color: customColors.osloWhite,
+      child: Padding(
+        padding: EdgeInsets.all(10),
+        child: Column(
+          children: <Widget>[
+            Column(children: <Widget>[
+              _dateTextDropDown(widget.event.startDateTime),
+              SizedBox(
+                height: 20,
+              ),
+              _timeTextDropDown(
+                  widget.event.startDateTime, widget.event.endDateTime),
+              SizedBox(
+                height: 20,
+              ),
+              Row(
+                children: <Widget>[
+                  customIcons.image(customIcons.map, size: 25),
+                  VerticalDivider(thickness: 100),
+                  Text(widget.event.station.name.toString(),
+                      style: TextStyle(fontSize: 18.0))
+                ],
+              ),
+              SizedBox(height: 15)
+            ]),
+            IntrinsicHeight(
+                child: ExpansionTile(
+              title: Text('Avlys uttak',
+                  textAlign: TextAlign.right,
+                  style: TextStyle(
+                    color: customColors.osloBlack,
+                    fontSize: 14.0,
+                    fontWeight: FontWeight.bold,
+                  )),
+              trailing: CircleAvatar(
+                backgroundColor: customColors.osloRed,
+                radius: 20.0,
+                child: isExpanded
+                    ? customIcons.image(customIcons.arrowUpThin)
+                    : customIcons.image(customIcons.arrowDownThin),
+              ),
+              onExpansionChanged: (bool newState) {
+                setState(() {
+                  isExpanded = !isExpanded;
+                });
+              },
               children: <Widget>[
-                Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    mainAxisSize: MainAxisSize.min,
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
-                      _dateTextDropDown(event.startDateTime),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      _timeTextDropDown(event.startDateTime, event.endDateTime),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Row(
-                        children: <Widget>[
-                          customIcons.image(customIcons.map, size: 25),
-                          VerticalDivider(thickness: 100),
-                          Text(event.station.name.toString(),
-                              style: TextStyle(fontSize: 18.0))
-                        ],
-                      ),
-                      SizedBox(height: 15)
-                    ]),
-                IntrinsicHeight(
-                    child: ExpansionTile(
-                  initiallyExpanded: false,
-                  title: Text('Avlys uttak',
-                      textAlign: TextAlign.right,
-                      style: TextStyle(
-                        color: customColors.osloBlack,
-                        fontSize: 14.0,
-                        fontWeight: FontWeight.bold,
-                      )),
-                  trailing: CircleAvatar(
-                    backgroundColor: customColors.osloRed,
-                    radius: 20.0,
-                    child: isExpanded
-                        ? customIcons.image(customIcons.arrowUpThin)
-                        : customIcons.image(customIcons.arrowDownThin),
-                  ),
-                  onExpansionChanged: (bool newState) {
-                    setState(() {
-                      isExpanded = !isExpanded;
-                    });
-                  },
-                  children: <Widget>[
-                    Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: <Widget>[
-                          Row(children: <Widget>[
-                            Transform.scale(
-                                scale: 1.5,
-                                child: Radio(
-                                    activeColor: customColors.osloBlack,
-                                    groupValue: periode,
-                                    value: false,
-                                    onChanged: (bool value) {
-                                      setState(() {
-                                        periode = value;
-                                      });
-                                    })),
-                            Text('Engangstilfelle')
-                          ]),
-                          Row(children: <Widget>[
-                            Transform.scale(
-                                scale: 1.5,
-                                child: Radio(
-                                    activeColor: customColors.osloBlack,
-                                    groupValue: periode,
-                                    value: true,
-                                    onChanged: (bool value) {
-                                      setState(() {
-                                        periode = value;
-                                      });
-                                    })),
-                            Text(
-                              'Periode',
-                              textAlign: TextAlign.right,
-                            )
-                          ])
-                        ]),
-                    SizedBox(height: 10),
-                    periode
-                        ? Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: <Widget>[
-                              Text('Sluttdato',
-                                  style: TextStyle(fontSize: 16.0)),
-                              DatePicker(
-                                dateTime: endPeriode,
-                                dateChanged: (value) {
+                      Row(children: <Widget>[
+                        Transform.scale(
+                            scale: 1.5,
+                            child: Radio(
+                                activeColor: customColors.osloBlack,
+                                groupValue: periode,
+                                value: false,
+                                onChanged: (bool value) {
                                   setState(() {
-                                    endPeriode = value;
+                                    periode = value;
                                   });
-                                },
-                              )
-                            ],
-                          )
-                        : Text(' '),
-                    SizedBox(height: 10),
-                    FlatButton(
-                        onPressed: () {
-                          null;
+                                })),
+                        Text('Engangstilfelle')
+                      ]),
+                      Row(children: <Widget>[
+                        Transform.scale(
+                            scale: 1.5,
+                            child: Radio(
+                                activeColor: customColors.osloBlack,
+                                groupValue: periode,
+                                value: true,
+                                onChanged: (bool value) {
+                                  setState(() {
+                                    periode = value;
+                                  });
+                                })),
+                        Text('Periode')
+                      ])
+                    ]),
+                SizedBox(height: 10),
+                if (periode)
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      Text('Sluttdato', style: TextStyle(fontSize: 16.0)),
+                      DatePicker(
+                        dateTime: endPeriode,
+                        dateChanged: (value) {
+                          setState(() {
+                            endPeriode = value;
+                          });
                         },
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 150, vertical: 10),
-                        color: customColors.osloGreen,
-                        child: Text('Bekreft',
-                            style: TextStyle(fontWeight: FontWeight.bold)))
-                  ],
-                ))
+                      )
+                    ],
+                  ),
+                SizedBox(height: 10),
+                FlatButton(
+                    onPressed: () {
+                      null;
+                    },
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 120, vertical: 10),
+                    color: customColors.osloGreen,
+                    child: Text('Bekreft',
+                        style: TextStyle(fontWeight: FontWeight.bold)))
               ],
-            ),
-          ),
-        )));
+            ))
+          ],
+        ),
+      ),
+    );
   }
 
   Widget _timeTextDropDown(DateTime start, DateTime end) {

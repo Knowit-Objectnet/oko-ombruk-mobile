@@ -70,7 +70,12 @@ class _VerticalCalendarState extends State<VerticalCalendar> {
                 }
               });
             },
-            children: <Widget>[CalendarEventExpander(event: event)],
+            children: <Widget>[
+              Padding(
+                  padding: EdgeInsets.all(6),
+                  child: IntrinsicHeight(
+                      child: CalendarEventExpander(event: event)))
+            ],
           ),
         );
       },
