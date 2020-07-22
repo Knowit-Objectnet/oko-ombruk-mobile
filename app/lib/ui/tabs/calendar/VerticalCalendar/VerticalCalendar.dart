@@ -5,6 +5,7 @@ import 'package:grouped_list/grouped_list.dart';
 
 import 'package:ombruk/globals.dart' as globals;
 import 'package:ombruk/ui/customColors.dart' as customColors;
+import 'package:ombruk/ui/customIcons.dart' as customIcons;
 
 class VerticalCalendar extends StatefulWidget {
   VerticalCalendar({Key key, @required this.events}) : super(key: key);
@@ -22,6 +23,27 @@ class _VerticalCalendarState extends State<VerticalCalendar> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.events.isEmpty) {
+      return Container(
+        padding: EdgeInsets.symmetric(horizontal: 16.0),
+        child: Column(
+          children: <Widget>[
+            Spacer(),
+            customIcons.image(customIcons.calendar, size: 50.0),
+            Text(
+              'Ingen avtaler',
+              style: TextStyle(fontSize: 28.0),
+            ),
+            Text(
+              'Det er ingen avtaler opprettet for den valgte stasjonen. Prøv å opddatere siden.',
+              textAlign: TextAlign.center,
+            ),
+            Spacer(),
+          ],
+        ),
+      );
+    }
+
     // Groups the list on dates, with pretty text dividers
     return GroupedListView<CalendarEvent, DateTime>(
       elements: widget.events,
