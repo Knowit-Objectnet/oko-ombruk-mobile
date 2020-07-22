@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ombruk/models/CalendarEvent.dart';
+import 'package:ombruk/ui/tabs/components/DatePicker.dart';
 import 'package:ombruk/ui/customColors.dart' as customColors;
 import 'package:ombruk/ui/customIcons.dart' as customIcons;
 import 'package:ombruk/globals.dart' as globals;
@@ -14,6 +15,8 @@ class CalendarEventExpander extends StatefulWidget {
 
 class _CalendarEventExpanderState extends State<CalendarEventExpander> {
   bool isExpanded = false;
+  bool periode = false;
+  DateTime endPeriode = DateTime.now();
 
   @override
   void initState() {
@@ -38,7 +41,13 @@ class _CalendarEventExpanderState extends State<CalendarEventExpander> {
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       _dateTextDropDown(event.startDateTime),
+                      SizedBox(
+                        height: 20,
+                      ),
                       _timeTextDropDown(event.startDateTime, event.endDateTime),
+                      SizedBox(
+                        height: 20,
+                      ),
                       Row(
                         children: <Widget>[
                           customIcons.image(customIcons.map, size: 25),
@@ -46,7 +55,8 @@ class _CalendarEventExpanderState extends State<CalendarEventExpander> {
                           Text(event.station.name.toString(),
                               style: TextStyle(fontSize: 18.0))
                         ],
-                      )
+                      ),
+                      SizedBox(height: 15)
                     ]),
                 IntrinsicHeight(
                     child: ExpansionTile(
@@ -72,27 +82,68 @@ class _CalendarEventExpanderState extends State<CalendarEventExpander> {
                   },
                   children: <Widget>[
                     Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: <Widget>[
-                          Radio(
-                            activeColor: customColors.osloBlack,
-                            value: false,
-                            onChanged: null,
-                          ),
-                          Text('Engangstilfelle'),
-                          Radio(
-                            activeColor: customColors.osloBlack,
-                            value: true,
-                            onChanged: null,
-                          ),
-                          Text('Periode')
+                          Row(children: <Widget>[
+                            Transform.scale(
+                                scale: 1.5,
+                                child: Radio(
+                                    activeColor: customColors.osloBlack,
+                                    groupValue: periode,
+                                    value: false,
+                                    onChanged: (bool value) {
+                                      setState(() {
+                                        periode = value;
+                                      });
+                                    })),
+                            Text('Engangstilfelle')
+                          ]),
+                          Row(children: <Widget>[
+                            Transform.scale(
+                                scale: 1.5,
+                                child: Radio(
+                                    activeColor: customColors.osloBlack,
+                                    groupValue: periode,
+                                    value: true,
+                                    onChanged: (bool value) {
+                                      setState(() {
+                                        periode = value;
+                                      });
+                                    })),
+                            Text(
+                              'Periode',
+                              textAlign: TextAlign.right,
+                            )
+                          ])
                         ]),
+                    SizedBox(height: 10),
+                    periode
+                        ? Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: <Widget>[
+                              Text('Sluttdato',
+                                  style: TextStyle(fontSize: 16.0)),
+                              DatePicker(
+                                dateTime: endPeriode,
+                                dateChanged: (value) {
+                                  setState(() {
+                                    endPeriode = value;
+                                  });
+                                },
+                              )
+                            ],
+                          )
+                        : Text(' '),
+                    SizedBox(height: 10),
                     FlatButton(
                         onPressed: () {
                           null;
                         },
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 150, vertical: 10),
                         color: customColors.osloGreen,
-                        child: Text('Bekreft'))
+                        child: Text('Bekreft',
+                            style: TextStyle(fontWeight: FontWeight.bold)))
                   ],
                 ))
               ],
