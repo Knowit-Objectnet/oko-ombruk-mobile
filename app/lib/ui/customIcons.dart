@@ -35,6 +35,11 @@ const String chosenCircle = 'valgt-sirkel.png';
 const String notification = 'varsel-ikon.png';
 const String weight = 'vekt-ikon.png';
 
-Image image(String icon, {double size = 20.0}) {
-  return Image.asset('assets/icons/$icon', height: size, width: size);
+/// Returns the icon as an Image.asset. If the icon is not found, it returns an empty Container().
+Widget image(String icon, {double size = 20.0}) {
+  try {
+    return Image.asset('assets/icons/$icon', height: size, width: size);
+  } catch (_) {
+    return Container();
+  }
 }
