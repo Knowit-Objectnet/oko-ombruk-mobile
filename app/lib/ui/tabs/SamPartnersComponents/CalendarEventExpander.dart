@@ -4,58 +4,94 @@ import 'package:ombruk/ui/customColors.dart' as customColors;
 import 'package:ombruk/ui/customIcons.dart' as customIcons;
 import 'package:ombruk/globals.dart' as globals;
 
-class CalendarEventExpander extends StatelessWidget {
+class CalendarEventExpander extends StatefulWidget {
   CalendarEventExpander({Key key, @required this.event}) : super(key: key);
 
   final CalendarEvent event;
   @override
+  _CalendarEventExpanderState createState() => _CalendarEventExpanderState();
+}
+
+class _CalendarEventExpanderState extends State<CalendarEventExpander> {
+  bool isExpanded = false;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    CalendarEvent event = widget.event;
     return Padding(
         padding: EdgeInsets.all(6),
         child: IntrinsicHeight(
             child: Container(
-          //height: 350,
           color: customColors.osloWhite,
           child: Padding(
             padding: EdgeInsets.all(10),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Column(children: <Widget>[
-                  _dateTextDropDown(event.startDateTime),
-                  _timeTextDropDown(event.startDateTime, event.endDateTime),
-                  Row(
+                Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
-                      customIcons.image(customIcons.map, size: 25),
-                      VerticalDivider(thickness: 100),
-                      Text(event.station.name.toString(),
-                          style: TextStyle(fontSize: 18.0))
-                    ],
-                  )
-                ]),
-                Flexible(
+                      _dateTextDropDown(event.startDateTime),
+                      _timeTextDropDown(event.startDateTime, event.endDateTime),
+                      Row(
+                        children: <Widget>[
+                          customIcons.image(customIcons.map, size: 25),
+                          VerticalDivider(thickness: 100),
+                          Text(event.station.name.toString(),
+                              style: TextStyle(fontSize: 18.0))
+                        ],
+                      )
+                    ]),
+                IntrinsicHeight(
                     child: ExpansionTile(
                   initiallyExpanded: false,
-                  title: Row(
-                    children: <Widget>[
-                      Text('Avlys uttak',
-                          style: TextStyle(
-                              color: customColors.osloBlack,
-                              fontSize: 18.0,
-                              fontWeight: FontWeight.bold)),
-                    ],
-                  ),
+                  title: Text('Avlys uttak',
+                      textAlign: TextAlign.right,
+                      style: TextStyle(
+                        color: customColors.osloBlack,
+                        fontSize: 14.0,
+                        fontWeight: FontWeight.bold,
+                      )),
                   trailing: CircleAvatar(
                     backgroundColor: customColors.osloRed,
                     radius: 20.0,
-                    child: customIcons.image(customIcons.arrowDownThin),
+                    child: isExpanded
+                        ? customIcons.image(customIcons.arrowUpThin)
+                        : customIcons.image(customIcons.arrowDownThin),
                   ),
+                  onExpansionChanged: (bool newState) {
+                    setState(() {
+                      isExpanded = !isExpanded;
+                    });
+                  },
                   children: <Widget>[
-                    Text('Her kommer det en slider!'),
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Radio(
+                            activeColor: customColors.osloBlack,
+                            value: false,
+                            onChanged: null,
+                          ),
+                          Text('Engangstilfelle'),
+                          Radio(
+                            activeColor: customColors.osloBlack,
+                            value: true,
+                            onChanged: null,
+                          ),
+                          Text('Periode')
+                        ]),
                     FlatButton(
                         onPressed: () {
                           null;
                         },
+                        color: customColors.osloGreen,
                         child: Text('Bekreft'))
                   ],
                 ))
