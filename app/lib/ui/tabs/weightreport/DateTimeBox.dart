@@ -1,27 +1,29 @@
 import 'package:flutter/material.dart';
 
-import 'package:ombruk/models/WeightEvent.dart';
+import 'package:ombruk/models/CalendarEvent.dart';
 
 import 'package:ombruk/globals.dart' as globals;
 import 'package:ombruk/ui/customColors.dart' as customColors;
 
 class DateTimeBox extends StatelessWidget {
-  DateTimeBox({Key key, @required this.weightEvent}) : super(key: key);
+  final CalendarEvent calendarEvent;
+  final bool isReported;
 
-  final WeightEvent weightEvent; // TODO CalendarEvent instead
+  DateTimeBox(
+      {Key key, @required this.calendarEvent, @required this.isReported})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: EdgeInsets.symmetric(horizontal: 8.0),
-        color: weightEvent.weight != null
-            ? customColors.osloGreen
-            : customColors.osloRed,
+        padding: EdgeInsets.all(4.0),
+        color: isReported ? customColors.osloGreen : customColors.osloRed,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            Container(),
-            // TODO
+            Text(_getDate(calendarEvent.startDateTime)),
+            Text(_getTime(
+                calendarEvent.startDateTime, calendarEvent.endDateTime)),
           ],
         ));
   }
