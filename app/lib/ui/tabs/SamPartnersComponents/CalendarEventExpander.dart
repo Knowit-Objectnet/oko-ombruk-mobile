@@ -157,6 +157,8 @@ class _CalendarEventExpanderState extends State<CalendarEventExpander> {
                                           onChanged: (bool value) {
                                             setState(() {
                                               periode = value;
+                                              endPeriode =
+                                                  widget.event.startDateTime;
                                             });
                                           })),
                                   Text('Periode')
@@ -233,7 +235,6 @@ class _CalendarEventExpanderState extends State<CalendarEventExpander> {
 
   void _deleteEvent(int id, DateTime startDate, DateTime endDate,
       dynamic recurrenceRuleId) async {
-    periode ? id = null : recurrenceRuleId = null;
     try {
       bool deleteSuccess = await CalendarApiClient()
           .deleteCalendarEvent(id, startDate, endDate, recurrenceRuleId);

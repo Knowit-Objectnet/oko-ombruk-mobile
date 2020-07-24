@@ -4,6 +4,10 @@ final String keycloakBaseUrl =
 final String calendarBaseUrl =
     'https://tcuk58u5ge.execute-api.eu-central-1.amazonaws.com/staging/calendar';
 
+final String calendarBaseUrlStripped =
+    'tcuk58u5ge.execute-api.eu-central-1.amazonaws.com';
+final String calendarBaseUrlPath = '/staging/calendar';
+
 final String weightReportBaseUrl = 'https://example.com';
 
 final Map<int, String> weekdaysShort = {

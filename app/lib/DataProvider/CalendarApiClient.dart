@@ -9,6 +9,11 @@ import 'package:ombruk/globals.dart' as globals;
 import 'package:ombruk/ui/tabs/RegComponents/CreateCalendarEventData.dart';
 
 class CalendarApiClient {
+  final Map<String, String> headers = {
+    'Content-type': 'application/json',
+    'Accept': 'application/json'
+  };
+
   Future<List<CalendarEvent>> fetchEvents() async {
     final http.Response response =
         await http.get('${globals.calendarBaseUrl}/events');
@@ -29,10 +34,7 @@ class CalendarApiClient {
 
     final http.Response response = await http.post(
       '${globals.calendarBaseUrl}/events',
-      headers: {
-        'Content-type': 'application/json',
-        'Accept': 'application/json'
-      },
+      headers: headers,
       body: jsonEncode({
         'startDateTime': startString,
         'endDateTime': endString,
@@ -41,41 +43,36 @@ class CalendarApiClient {
         'recurrenceRule': {'until': untilString, 'days': weekdaysString}
       }),
     );
+    print(response.statusCode);
 
     return response.statusCode == 200;
   }
 
   Future<bool> deleteCalendarEvent(int id, DateTime startDate, DateTime endDate,
       dynamic recurrenceRuleID) async {
-    String idName;
-    String idString;
-
-    if (id == null) {
-      idName = 'recurrence-rule-id';
-      idString = recurrenceRuleID.toString();
-    } else {
-      idName = 'event-id';
-      idString = id.toString();
-    }
     final String startString = globals.getDateString(startDate);
     final String endString = globals.getDateString(endDate);
+    var queryParameters;
 
-    var queryParameters = {
-      idName: idString,
-      'from-date': startString,
-      'to-date': endString,
-    };
+    if (id == null) {
+      queryParameters = {
+        'recurrence-rule-id': recurrenceRuleID.toString(),
+        'from-date': startString,
+        'to-date': endString
+      };
+    } else {
+      queryParameters = {'event-id': id.toString()};
+    }
 
-    var url = 'tcuk58u5ge.execute-api.eu-central-1.amazonaws.com';
-    var uri = Uri.https(url, '/staging/calendar/events', queryParameters);
-
+    var uri = Uri.https('${globals.calendarBaseUrlStripped}',
+        '${globals.calendarBaseUrlPath}/events', queryParameters);
+    print(uri.toString());
     final http.Response response = await http.delete(
       uri,
-      headers: {
-        'Content-type': 'application/json',
-        'Accept': 'application/json'
-      },
+      headers: headers,
     );
+    print(response.body);
+    print(response.statusCode);
 
     return response.statusCode == 200;
   }
@@ -92,10 +89,7 @@ class CalendarApiClient {
 
     final http.Response response = await http.patch(
       '${globals.calendarBaseUrl}/events',
-      headers: {
-        'Content-type': 'application/json',
-        'Accept': 'application/json'
-      },
+      headers: headers,
       body: jsonEncode({
         'id': id,
         'startDateTime': startDateTimeString,
