@@ -205,7 +205,7 @@ class _CreateCalendarEventScreenState extends State<CreateCalendarEventScreen> {
       bool creationSuccess =
           await CalendarApiClient().createCalendarEvent(eventData);
       if (creationSuccess) {
-        uiHelper.showSnackbar(context, 'Opprettet hendele');
+        uiHelper.showSnackbar(context, 'Opprettet hendelse');
         BlocProvider.of<CalendarBloc>(context).add(CalendarRefreshRequested());
       } else {
         throw Exception();
