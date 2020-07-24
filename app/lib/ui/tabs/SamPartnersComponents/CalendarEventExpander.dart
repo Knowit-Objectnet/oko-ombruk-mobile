@@ -53,6 +53,13 @@ class _CalendarEventExpanderState extends State<CalendarEventExpander> {
                         onPressed: () => {
                               setState(() {
                                 edit = true;
+                                updatedDate = widget.event.startDateTime;
+                                updatedStartTime = TimeOfDay(
+                                    hour: widget.event.startDateTime.hour,
+                                    minute: widget.event.startDateTime.minute);
+                                updatedEndTime = TimeOfDay(
+                                    hour: widget.event.endDateTime.hour,
+                                    minute: widget.event.endDateTime.minute);
                               })
                             },
                         shape: CircleBorder())
@@ -76,92 +83,152 @@ class _CalendarEventExpanderState extends State<CalendarEventExpander> {
               SizedBox(height: 15)
             ]),
             IntrinsicHeight(
-                child: ExpansionTile(
-              title: Text('Avlys uttak',
-                  textAlign: TextAlign.right,
-                  style: TextStyle(
-                    color: customColors.osloBlack,
-                    fontSize: 14.0,
-                    fontWeight: FontWeight.bold,
-                  )),
-              trailing: CircleAvatar(
-                backgroundColor: customColors.osloRed,
-                radius: 20.0,
-                child: isExpanded
-                    ? customIcons.image(customIcons.arrowUpThin)
-                    : customIcons.image(customIcons.arrowDownThin),
-              ),
-              onExpansionChanged: (bool newState) {
-                setState(() {
-                  isExpanded = !isExpanded;
-                });
-              },
-              children: <Widget>[
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      Row(children: <Widget>[
-                        Transform.scale(
-                            scale: 1.5,
-                            child: Radio(
-                                activeColor: customColors.osloBlack,
-                                groupValue: periode,
-                                value: false,
-                                onChanged: (bool value) {
-                                  setState(() {
-                                    periode = value;
-                                  });
-                                })),
-                        Text('Engangstilfelle')
-                      ]),
-                      Row(children: <Widget>[
-                        Transform.scale(
-                            scale: 1.5,
-                            child: Radio(
-                                activeColor: customColors.osloBlack,
-                                groupValue: periode,
-                                value: true,
-                                onChanged: (bool value) {
-                                  setState(() {
-                                    periode = value;
-                                  });
-                                })),
-                        Text('Periode')
-                      ])
-                    ]),
-                SizedBox(height: 10),
-                if (periode)
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      Text('Sluttdato', style: TextStyle(fontSize: 16.0)),
-                      DatePicker(
-                        dateTime: endPeriode,
-                        dateChanged: (value) {
+                child: edit
+                    ? ButtonBar(
+                        children: <Widget>[
+                          RawMaterialButton(
+                            fillColor: customColors.osloRed,
+                            child: customIcons.image(customIcons.close),
+                            shape: CircleBorder(),
+                            onPressed: () {
+                              setState(() {
+                                edit = false;
+                              });
+                            },
+                          ),
+                          RawMaterialButton(
+                            fillColor: customColors.osloGreen,
+                            child: Icon(
+                              Icons.check,
+                              color: customColors.osloBlack,
+                            ),
+                            shape: CircleBorder(),
+                            //customIcons.image(customIcons.checkedCheckbox),
+                            onPressed: () => _updateEvent(widget.event.id,
+                                updatedDate, updatedStartTime, updatedEndTime),
+                          )
+                        ],
+                      )
+                    : ExpansionTile(
+                        title: Text('Avlys uttak',
+                            textAlign: TextAlign.right,
+                            style: TextStyle(
+                              color: customColors.osloBlack,
+                              fontSize: 14.0,
+                              fontWeight: FontWeight.bold,
+                            )),
+                        trailing: CircleAvatar(
+                          backgroundColor: customColors.osloRed,
+                          radius: 20.0,
+                          child: isExpanded
+                              ? customIcons.image(customIcons.arrowUpThin)
+                              : customIcons.image(customIcons.arrowDownThin),
+                        ),
+                        onExpansionChanged: (bool newState) {
                           setState(() {
-                            endPeriode = value;
+                            isExpanded = !isExpanded;
                           });
                         },
-                      )
-                    ],
-                  ),
-                SizedBox(height: 10),
-                FlatButton(
-                    onPressed: () {
-                      _deleteEvent(widget.event.id, widget.event.startDateTime,
-                          endPeriode, widget.event.recurrenceRule.id);
-                    },
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 120, vertical: 10),
-                    color: customColors.osloGreen,
-                    child: Text('Bekreft',
-                        style: TextStyle(fontWeight: FontWeight.bold)))
-              ],
-            ))
+                        children: <Widget>[
+                          Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: <Widget>[
+                                Row(children: <Widget>[
+                                  Transform.scale(
+                                      scale: 1.5,
+                                      child: Radio(
+                                          activeColor: customColors.osloBlack,
+                                          groupValue: periode,
+                                          value: false,
+                                          onChanged: (bool value) {
+                                            setState(() {
+                                              periode = value;
+                                            });
+                                          })),
+                                  Text('Engangstilfelle')
+                                ]),
+                                Row(children: <Widget>[
+                                  Transform.scale(
+                                      scale: 1.5,
+                                      child: Radio(
+                                          activeColor: customColors.osloBlack,
+                                          groupValue: periode,
+                                          value: true,
+                                          onChanged: (bool value) {
+                                            setState(() {
+                                              periode = value;
+                                            });
+                                          })),
+                                  Text('Periode')
+                                ])
+                              ]),
+                          SizedBox(height: 10),
+                          if (periode)
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: <Widget>[
+                                Text('Sluttdato',
+                                    style: TextStyle(fontSize: 16.0)),
+                                DatePicker(
+                                  dateTime: endPeriode,
+                                  dateChanged: (value) {
+                                    setState(() {
+                                      endPeriode = value;
+                                    });
+                                  },
+                                )
+                              ],
+                            ),
+                          SizedBox(height: 10),
+                          FlatButton(
+                              onPressed: () {
+                                _deleteEvent(
+                                    widget.event.id,
+                                    widget.event.startDateTime,
+                                    endPeriode,
+                                    widget.event.recurrenceRule.id);
+                              },
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 120, vertical: 10),
+                              color: customColors.osloGreen,
+                              child: Text('Bekreft',
+                                  style:
+                                      TextStyle(fontWeight: FontWeight.bold)))
+                        ],
+                      ))
           ],
         ),
       ),
     );
+  }
+
+  void _updateEvent(
+      int id, DateTime date, TimeOfDay startTime, TimeOfDay endTime) async {
+    print('id:' +
+        id.toString() +
+        ', date: ' +
+        date.toString() +
+        ', startTime: ' +
+        startTime.toString() +
+        ', endTime: ' +
+        endTime.toString());
+    try {
+      bool updateSuccess =
+          await CalendarApiClient().updateEvent(id, date, startTime, endTime);
+      if (updateSuccess) {
+        setState(() {
+          edit = false;
+        });
+        BlocProvider.of<CalendarBloc>(context).add(CalendarRefreshRequested());
+        uiHelper.showSnackbar(context, 'Hendelsen er oppdatert');
+      } else {
+        throw Exception();
+      }
+    } catch (e) {
+      uiHelper.showSnackbar(context, 'Intern feil');
+    } finally {
+      uiHelper.hideLoading(context);
+    }
   }
 
   void _deleteEvent(int id, DateTime startDate, DateTime endDate,

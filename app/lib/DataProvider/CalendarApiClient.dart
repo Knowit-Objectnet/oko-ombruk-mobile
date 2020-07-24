@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:ombruk/models/CalendarEvent.dart';
@@ -56,10 +57,8 @@ class CalendarApiClient {
       idName = 'event-id';
       idString = id.toString();
     }
-    //final String eventID = id.toString();
     final String startString = globals.getDateString(startDate);
     final String endString = globals.getDateString(endDate);
-    //final String recurrenceRuleIDString = recurrenceRuleID.toString();
 
     var queryParameters = {
       idName: idString,
@@ -77,6 +76,33 @@ class CalendarApiClient {
         'Accept': 'application/json'
       },
     );
+
+    return response.statusCode == 200;
+  }
+
+  Future<bool> updateEvent(
+      int id, DateTime date, TimeOfDay startTime, TimeOfDay endTime) async {
+    DateTime startDateTime = DateTime(
+        date.year, date.month, date.day, startTime.hour, startTime.minute);
+    DateTime endDateTime =
+        DateTime(date.year, date.month, date.day, endTime.hour, endTime.minute);
+
+    final String startDateTimeString = globals.getDateString(startDateTime);
+    final String endDateTimeString = globals.getDateString(endDateTime);
+
+    final http.Response response = await http.patch(
+      '${globals.calendarBaseUrl}/events',
+      headers: {
+        'Content-type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: jsonEncode({
+        'id': id,
+        'startDateTime': startDateTimeString,
+        'endDateTime': endDateTimeString,
+      }),
+    );
+    print(response.statusCode);
 
     return response.statusCode == 200;
   }
