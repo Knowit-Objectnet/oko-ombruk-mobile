@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ombruk/ui/customColors.dart' as customColors;
+import 'package:ombruk/ui/customIcons.dart' as customIcons;
 
 class PickupDialogPartners extends StatelessWidget {
   @override
@@ -19,12 +20,8 @@ class PickupDialogPartners extends StatelessWidget {
                         style: TextStyle(
                             color: customColors.osloWhite, fontSize: 16.0))),
                 IconButton(
-                    icon: Image.asset(
-                      'assets/icons/lukk.png',
-                      height: 25,
-                      width: 25,
-                      color: customColors.osloWhite,
-                    ),
+                    icon: customIcons.image(customIcons.close,
+                        size: 25, color: customColors.osloWhite),
                     onPressed: () => Navigator.of(context).pop()),
               ],
             ),
@@ -45,8 +42,7 @@ class PickupDialogPartners extends StatelessWidget {
                     textAlign: TextAlign.center,
                   )),
                   IconButton(
-                    icon: Image.asset('assets/icons/arrow-right.png',
-                        height: 25, width: 25),
+                    icon: customIcons.image(customIcons.arrowRight, size: 25),
                     onPressed: _submitPickup,
                   )
                 ],

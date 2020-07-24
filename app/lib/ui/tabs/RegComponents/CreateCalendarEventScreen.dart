@@ -2,18 +2,19 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ombruk/blocs/CalendarBloc.dart';
+import 'package:ombruk/DataProvider/CalendarApiClient.dart';
 
 import 'package:ombruk/ui/tabs/components/DatePicker.dart';
 import 'package:ombruk/ui/tabs/components/PartnerPicker.dart';
 import 'package:ombruk/ui/tabs/components/StationPicker.dart';
 import 'package:ombruk/ui/tabs/components/TimePicker.dart';
 import 'package:ombruk/ui/tabs/components/WeekdayPicker.dart';
-import 'package:ombruk/DataProvider/CalendarApiClient.dart';
 import 'package:ombruk/ui/tabs/RegComponents/CreateCalendarEventData.dart';
+import 'package:ombruk/ui/ui.helper.dart';
 
 import 'package:ombruk/globals.dart' as globals;
 import 'package:ombruk/ui/customColors.dart' as customColors;
-import 'package:ombruk/ui/ui.helper.dart';
+import 'package:ombruk/ui/customIcons.dart' as customIcons;
 
 class CreateCalendarEventScreen extends StatefulWidget {
   @override
@@ -83,7 +84,7 @@ class _CreateCalendarEventScreenState extends State<CreateCalendarEventScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
-              Image.asset('assets/icons/klokke.png', height: 20, width: 20),
+              customIcons.image(customIcons.clock),
               Expanded(
                 child: Center(
                   child: Row(
@@ -116,7 +117,7 @@ class _CreateCalendarEventScreenState extends State<CreateCalendarEventScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
-              Image.asset('assets/icons/klokke.png', height: 20, width: 20),
+              customIcons.image(customIcons.clock),
               Expanded(
                 child: Center(
                   child: Row(

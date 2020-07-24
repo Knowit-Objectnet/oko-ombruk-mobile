@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ombruk/ui/customColors.dart' as customColors;
 
 const String add = 'add.png';
 const String arrowDown = 'arrow-down.png';
@@ -7,7 +8,7 @@ const String arrowRight = 'arrow-right.png';
 const String arrowUp = 'arrow-up.png';
 const String checkbox = 'checkbox.png';
 const String checkedCheckbox = 'checked-box.png';
-const String driver = 'diver.png';
+const String driver = 'driver.png';
 const String editIcon = 'edit-ikon.png';
 const String filter = 'filter.png';
 const String historyIcon = 'historie-ikon.png';
@@ -36,9 +37,15 @@ const String notification = 'varsel-ikon.png';
 const String weight = 'vekt-ikon.png';
 
 /// Returns the icon as an Image.asset. If the icon is not found, it returns an empty Container().
-Widget image(String icon, {double size = 20.0}) {
+Widget image(String icon,
+    {double size = 20.0, Color color = customColors.osloBlack}) {
   try {
-    return Image.asset('assets/icons/$icon', height: size, width: size);
+    return Image.asset(
+      'assets/icons/$icon',
+      height: size,
+      width: size,
+      color: color,
+    );
   } catch (_) {
     return Container();
   }

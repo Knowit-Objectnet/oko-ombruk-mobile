@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'package:ombruk/globals.dart' as globals;
 import 'package:ombruk/ui/customColors.dart' as customColors;
+import 'package:ombruk/ui/customIcons.dart' as customIcons;
 
 class PartnerPicker extends StatelessWidget {
   final String selectedPartner;
@@ -24,8 +25,7 @@ class PartnerPicker extends StatelessWidget {
         children: <Widget>[
           Padding(
               padding: EdgeInsets.only(right: 8.0),
-              child: Image.asset('assets/icons/driver.png',
-                  height: 20, width: 20)),
+              child: customIcons.image(customIcons.driver)),
           Container(
             child: DropdownButton<String>(
               value: selectedPartner,

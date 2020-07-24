@@ -43,7 +43,6 @@ class CalendarApiClient {
         'recurrenceRule': {'until': untilString, 'days': weekdaysString}
       }),
     );
-    print(response.statusCode);
 
     return response.statusCode == 200;
   }
@@ -66,13 +65,11 @@ class CalendarApiClient {
 
     var uri = Uri.https('${globals.calendarBaseUrlStripped}',
         '${globals.calendarBaseUrlPath}/events', queryParameters);
-    print(uri.toString());
+
     final http.Response response = await http.delete(
       uri,
       headers: headers,
     );
-    print(response.body);
-    print(response.statusCode);
 
     return response.statusCode == 200;
   }
@@ -96,7 +93,6 @@ class CalendarApiClient {
         'endDateTime': endDateTimeString,
       }),
     );
-    print(response.statusCode);
 
     return response.statusCode == 200;
   }
