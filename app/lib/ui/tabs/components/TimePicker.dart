@@ -26,7 +26,6 @@ class TimePicker extends StatelessWidget {
       ),
       child: DropdownButton<TimeOfDay>(
         value: selectedTime,
-        hint: Text('Velg tidspunkt'),
         onChanged: timeChanged,
         underline: Container(),
         isDense: true,

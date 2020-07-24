@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:ombruk/models/CalendarEvent.dart';
 import 'package:flutter_week_view/flutter_week_view.dart';
+
+import 'package:ombruk/models/CalendarEvent.dart';
+import 'package:ombruk/ui/tabs/calendar/HorizontalCalendar/EventInfoDialog.dart';
 
 import 'package:ombruk/ui/customColors.dart' as customColors;
 
@@ -44,7 +46,9 @@ class _WeekCalendarState extends State<WeekCalendar> {
               title: e.partner?.name ?? '',
               description: e.station?.name ?? '',
               start: e.startDateTime,
-              end: e.endDateTime))
+              end: e.endDateTime,
+              onTap: () => showDialog(
+                  context: context, builder: (_) => EventInfoDialog(event: e))))
           .toList(),
     );
   }
