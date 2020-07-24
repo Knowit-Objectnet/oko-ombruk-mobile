@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:ombruk/models/CalendarEvent.dart';
 import 'package:ombruk/ui/tabs/components/DatePicker.dart';
 import 'package:ombruk/ui/tabs/components/TimePicker.dart';
+import 'package:ombruk/DataProvider/CalendarApiClient.dart';
+import 'package:ombruk/blocs/CalendarBloc.dart';
+import 'package:ombruk/ui/ui.helper.dart';
 
 import 'package:ombruk/ui/customColors.dart' as customColors;
 import 'package:ombruk/ui/customIcons.dart' as customIcons;
@@ -144,7 +148,8 @@ class _CalendarEventExpanderState extends State<CalendarEventExpander> {
                 SizedBox(height: 10),
                 FlatButton(
                     onPressed: () {
-                      null;
+                      _deleteEvent(widget.event.id, widget.event.startDateTime,
+                          endPeriode, widget.event.recurrenceRule.id);
                     },
                     padding:
                         EdgeInsets.symmetric(horizontal: 120, vertical: 10),
@@ -159,7 +164,24 @@ class _CalendarEventExpanderState extends State<CalendarEventExpander> {
     );
   }
 
-  void _editInfo() {}
+  void _deleteEvent(int id, DateTime startDate, DateTime endDate,
+      dynamic recurrenceRuleId) async {
+    periode ? id = null : recurrenceRuleId = null;
+    try {
+      bool deleteSuccess = await CalendarApiClient()
+          .deleteCalendarEvent(id, startDate, endDate, recurrenceRuleId);
+      if (deleteSuccess) {
+        uiHelper.showSnackbar(context, 'Slettet hendelse');
+        BlocProvider.of<CalendarBloc>(context).add(CalendarRefreshRequested());
+      } else {
+        throw Exception();
+      }
+    } catch (e) {
+      uiHelper.showSnackbar(context, 'Intern feil');
+    } finally {
+      uiHelper.hideLoading(context);
+    }
+  }
 
   Widget _timeTextDropDown(DateTime start, DateTime end) {
     return Row(
