@@ -13,10 +13,21 @@ class CalendarApiClient {
     'Content-type': 'application/json',
     'Accept': 'application/json'
   };
+  Future<List<CalendarEvent>> fetchEvents(
+      {int stationID, int partnerID}) async {
+    // TODO: Add time parameter to filter on time
+    Map<String, String> parameters = {};
+    if (stationID != null) {
+      parameters.putIfAbsent('station-id', () => stationID.toString());
+    }
+    if (partnerID != null) {
+      parameters.putIfAbsent('partner-id', () => partnerID.toString());
+    }
 
-  Future<List<CalendarEvent>> fetchEvents() async {
-    final http.Response response =
-        await http.get('${globals.calendarBaseUrl}/events');
+    Uri uri = Uri.https('${globals.calendarBaseUrlStripped}',
+        '${globals.calendarPath}/events', parameters);
+    final http.Response response = await http.get(uri);
+
     if (response.statusCode != 200) {
       throw Exception('Could not fetch events');
     }
@@ -32,8 +43,11 @@ class CalendarApiClient {
     final List<String> weekdaysString =
         eventData.weekdays.map((e) => describeEnum(e).toUpperCase()).toList();
 
+    Uri uri = Uri.https(
+        '${globals.calendarBaseUrlStripped}', '${globals.calendarPath}/events');
+
     final http.Response response = await http.post(
-      '${globals.calendarBaseUrl}/events',
+      uri,
       headers: headers,
       body: jsonEncode({
         'startDateTime': startString,
@@ -43,7 +57,6 @@ class CalendarApiClient {
         'recurrenceRule': {'until': untilString, 'days': weekdaysString}
       }),
     );
-    print(response.statusCode);
 
     return response.statusCode == 200;
   }
@@ -64,15 +77,12 @@ class CalendarApiClient {
       queryParameters = {'event-id': id.toString()};
     }
 
-    var uri = Uri.https('${globals.calendarBaseUrlStripped}',
-        '${globals.calendarBaseUrlPath}/events', queryParameters);
-    print(uri.toString());
+    Uri uri = Uri.https('${globals.calendarBaseUrlStripped}',
+        '${globals.calendarPath}/events', queryParameters);
     final http.Response response = await http.delete(
       uri,
       headers: headers,
     );
-    print(response.body);
-    print(response.statusCode);
 
     return response.statusCode == 200;
   }
@@ -87,8 +97,11 @@ class CalendarApiClient {
     final String startDateTimeString = globals.getDateString(startDateTime);
     final String endDateTimeString = globals.getDateString(endDateTime);
 
+    Uri uri = Uri.https(
+        '${globals.calendarBaseUrlStripped}', '${globals.calendarPath}/events');
+
     final http.Response response = await http.patch(
-      '${globals.calendarBaseUrl}/events',
+      uri,
       headers: headers,
       body: jsonEncode({
         'id': id,
@@ -96,7 +109,6 @@ class CalendarApiClient {
         'endDateTime': endDateTimeString,
       }),
     );
-    print(response.statusCode);
 
     return response.statusCode == 200;
   }

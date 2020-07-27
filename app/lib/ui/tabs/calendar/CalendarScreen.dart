@@ -8,7 +8,7 @@ import 'package:ombruk/ui/tabs/calendar/VerticalCalendar/VerticalCalendar.dart';
 
 import 'package:ombruk/globals.dart' as globals;
 import 'package:ombruk/ui/customColors.dart' as customColors;
-import 'package:ombruk/ui/customicons.dart' as customIcons;
+import 'package:ombruk/ui/customIcons.dart' as customIcons;
 
 class CalendarScreen extends StatefulWidget {
   final List<CalendarEvent> events;
