@@ -8,9 +8,20 @@ import 'package:ombruk/globals.dart' as globals;
 import 'package:ombruk/ui/tabs/RegComponents/CreateCalendarEventData.dart';
 
 class CalendarApiClient {
-  Future<List<CalendarEvent>> fetchEvents() async {
-    final http.Response response =
-        await http.get('${globals.calendarBaseUrl}/events');
+  Future<List<CalendarEvent>> fetchEvents(
+      {int stationID, int partnerID}) async {
+    // TODO: Add time parameter to filter on time
+    Map<String, String> parameters = {};
+    if (stationID != null) {
+      parameters.putIfAbsent('station-id', () => stationID.toString());
+    }
+    if (partnerID != null) {
+      parameters.putIfAbsent('partner-id', () => partnerID.toString());
+    }
+
+    Uri uri = Uri.https('${globals.calendarBaseUrl}',
+        '${globals.calendarPath}/events', parameters);
+    final http.Response response = await http.get(uri);
     if (response.statusCode != 200) {
       throw Exception('Could not fetch events');
     }
