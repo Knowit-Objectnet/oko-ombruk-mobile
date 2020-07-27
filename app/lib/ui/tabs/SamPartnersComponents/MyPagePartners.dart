@@ -56,7 +56,7 @@ class _MyPagePartnersState extends State<MyPagePartners> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              _subtitle('Om Frigo'),
+              _subtitle('Om Fretex'),
               Text(
                   'Fretex skal bidra til at mennesker får og beholder arbeid. Fretex skal bidra til et bedre miljø gjennom blant annet gjenbruk og gjenvinning. Selskapets virksomhet skal drives i overensstemmelse med Frelsesarmeens verdigrunnlag.'),
             ],

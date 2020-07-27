@@ -22,9 +22,9 @@ class CalendarEventExpander extends StatefulWidget {
 
 class _CalendarEventExpanderState extends State<CalendarEventExpander> {
   bool isExpanded = false;
-  bool periode = false;
+  bool period = false;
   bool edit = false;
-  DateTime endPeriode = DateTime.now();
+  DateTime endPeriod = DateTime.now();
   DateTime updatedDate = DateTime.now();
   TimeOfDay updatedStartTime = TimeOfDay(hour: 8, minute: 0);
   TimeOfDay updatedEndTime = TimeOfDay(hour: 9, minute: 0);
@@ -99,11 +99,10 @@ class _CalendarEventExpanderState extends State<CalendarEventExpander> {
                           RawMaterialButton(
                             fillColor: customColors.osloGreen,
                             child: Icon(
-                              Icons.check,
+                              Icons.check, // TODO add proper icon
                               color: customColors.osloBlack,
                             ),
                             shape: CircleBorder(),
-                            //customIcons.image(customIcons.checkedCheckbox),
                             onPressed: () => _updateEvent(widget.event.id,
                                 updatedDate, updatedStartTime, updatedEndTime),
                           )
@@ -138,11 +137,11 @@ class _CalendarEventExpanderState extends State<CalendarEventExpander> {
                                       scale: 1.5,
                                       child: Radio(
                                           activeColor: customColors.osloBlack,
-                                          groupValue: periode,
+                                          groupValue: period,
                                           value: false,
                                           onChanged: (bool value) {
                                             setState(() {
-                                              periode = value;
+                                              period = value;
                                             });
                                           })),
                                   Text('Engangstilfelle')
@@ -152,30 +151,30 @@ class _CalendarEventExpanderState extends State<CalendarEventExpander> {
                                       scale: 1.5,
                                       child: Radio(
                                           activeColor: customColors.osloBlack,
-                                          groupValue: periode,
+                                          groupValue: period,
                                           value: true,
                                           onChanged: (bool value) {
                                             setState(() {
-                                              periode = value;
-                                              endPeriode =
-                                                  widget.event.startDateTime;
+                                              period = value;
+                                              endPeriod =
+                                                  widget.event.endDateTime;
                                             });
                                           })),
                                   Text('Periode')
                                 ])
                               ]),
                           SizedBox(height: 10),
-                          if (periode)
+                          if (period)
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: <Widget>[
                                 Text('Sluttdato',
                                     style: TextStyle(fontSize: 16.0)),
                                 DatePicker(
-                                  dateTime: endPeriode,
+                                  dateTime: endPeriod,
                                   dateChanged: (value) {
                                     setState(() {
-                                      endPeriode = value;
+                                      endPeriod = value;
                                     });
                                   },
                                 )
@@ -187,7 +186,7 @@ class _CalendarEventExpanderState extends State<CalendarEventExpander> {
                                 _deleteEvent(
                                     widget.event.id,
                                     widget.event.startDateTime,
-                                    endPeriode,
+                                    endPeriod,
                                     widget.event.recurrenceRule.id);
                               },
                               padding: EdgeInsets.symmetric(
@@ -206,14 +205,6 @@ class _CalendarEventExpanderState extends State<CalendarEventExpander> {
 
   void _updateEvent(
       int id, DateTime date, TimeOfDay startTime, TimeOfDay endTime) async {
-    print('id:' +
-        id.toString() +
-        ', date: ' +
-        date.toString() +
-        ', startTime: ' +
-        startTime.toString() +
-        ', endTime: ' +
-        endTime.toString());
     try {
       bool updateSuccess =
           await CalendarApiClient().updateEvent(id, date, startTime, endTime);
@@ -235,6 +226,7 @@ class _CalendarEventExpanderState extends State<CalendarEventExpander> {
 
   void _deleteEvent(int id, DateTime startDate, DateTime endDate,
       dynamic recurrenceRuleId) async {
+    period ? id = null : recurrenceRuleId = null;
     try {
       bool deleteSuccess = await CalendarApiClient()
           .deleteCalendarEvent(id, startDate, endDate, recurrenceRuleId);
