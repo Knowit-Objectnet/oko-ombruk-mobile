@@ -86,21 +86,17 @@ class _CalendarScreenState extends State<CalendarScreen>
                     .toList(),
               ),
               Spacer(),
-              RawMaterialButton(
-                fillColor: customColors.osloGreen,
-                shape: CircleBorder(),
-                child: _showHorizontalCalendar
-                    ? customIcons.image(customIcons.list)
-                    : customIcons.image(customIcons.calendar),
+              _headerButton(
+                icon: _showHorizontalCalendar
+                    ? customIcons.list
+                    : customIcons.calendar,
                 onPressed: () => setState(() {
                   _showHorizontalCalendar = !_showHorizontalCalendar;
                 }),
               ),
               role == globals.KeycloakRoles.reuse_station
-                  ? RawMaterialButton(
-                      fillColor: customColors.osloGreen,
-                      shape: CircleBorder(),
-                      child: customIcons.image(customIcons.add),
+                  ? _headerButton(
+                      icon: customIcons.add,
                       onPressed: () => null,
                     )
                   : Container(),
@@ -108,19 +104,11 @@ class _CalendarScreenState extends State<CalendarScreen>
                   ? RotationTransition(
                       turns: Tween(begin: 0.0, end: 1.0)
                           .animate(_rotationController),
-                      child: RawMaterialButton(
-                        fillColor: customColors.osloGreen,
-                        shape: CircleBorder(),
-                        child: customIcons.image(customIcons.refresh),
-                        onPressed: () => null,
-                      ),
+                      child: _headerButton(
+                          icon: customIcons.refresh, onPressed: () => null),
                     )
-                  : RawMaterialButton(
-                      fillColor: customColors.osloGreen,
-                      shape: CircleBorder(),
-                      child: customIcons.image(customIcons.refresh),
-                      onPressed: _refreshCalendar,
-                    ),
+                  : _headerButton(
+                      icon: customIcons.refresh, onPressed: _refreshCalendar),
             ],
           ),
           Expanded(
@@ -128,6 +116,20 @@ class _CalendarScreenState extends State<CalendarScreen>
                   ? HorizontalCalendar(events: _getFilteredList())
                   : VerticalCalendar(events: _getFilteredList()))
         ],
+      ),
+    );
+  }
+
+  Widget _headerButton(
+      {@required String icon, @required Function() onPressed}) {
+    return Padding(
+      padding: EdgeInsets.all(4.0),
+      child: CircleAvatar(
+        backgroundColor: customColors.osloGreen,
+        child: IconButton(
+          icon: customIcons.image(icon),
+          onPressed: onPressed,
+        ),
       ),
     );
   }
