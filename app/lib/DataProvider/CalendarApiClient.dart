@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:ombruk/models/CalendarEvent.dart';
@@ -8,6 +9,10 @@ import 'package:ombruk/globals.dart' as globals;
 import 'package:ombruk/ui/tabs/RegComponents/CreateCalendarEventData.dart';
 
 class CalendarApiClient {
+  final Map<String, String> headers = {
+    'Content-type': 'application/json',
+    'Accept': 'application/json'
+  };
   Future<List<CalendarEvent>> fetchEvents(
       {int stationID, int partnerID}) async {
     // TODO: Add time parameter to filter on time
@@ -19,9 +24,10 @@ class CalendarApiClient {
       parameters.putIfAbsent('partner-id', () => partnerID.toString());
     }
 
-    Uri uri = Uri.https('${globals.calendarBaseUrl}',
+    Uri uri = Uri.https('${globals.calendarBaseUrlStripped}',
         '${globals.calendarPath}/events', parameters);
     final http.Response response = await http.get(uri);
+
     if (response.statusCode != 200) {
       throw Exception('Could not fetch events');
     }
@@ -37,12 +43,12 @@ class CalendarApiClient {
     final List<String> weekdaysString =
         eventData.weekdays.map((e) => describeEnum(e).toUpperCase()).toList();
 
+    Uri uri = Uri.https(
+        '${globals.calendarBaseUrlStripped}', '${globals.calendarPath}/events');
+
     final http.Response response = await http.post(
-      '${globals.calendarBaseUrl}/events',
-      headers: {
-        'Content-type': 'application/json',
-        'Accept': 'application/json'
-      },
+      uri,
+      headers: headers,
       body: jsonEncode({
         'startDateTime': startString,
         'endDateTime': endString,
@@ -52,6 +58,58 @@ class CalendarApiClient {
       }),
     );
 
-    return response.statusCode == 201;
+    return response.statusCode == 200;
+  }
+
+  Future<bool> deleteCalendarEvent(int id, DateTime startDate, DateTime endDate,
+      dynamic recurrenceRuleID) async {
+    final String startString = globals.getDateString(startDate);
+    final String endString = globals.getDateString(endDate);
+    var queryParameters;
+
+    if (id == null) {
+      queryParameters = {
+        'recurrence-rule-id': recurrenceRuleID.toString(),
+        'from-date': startString,
+        'to-date': endString
+      };
+    } else {
+      queryParameters = {'event-id': id.toString()};
+    }
+
+    Uri uri = Uri.https('${globals.calendarBaseUrlStripped}',
+        '${globals.calendarPath}/events', queryParameters);
+    final http.Response response = await http.delete(
+      uri,
+      headers: headers,
+    );
+
+    return response.statusCode == 200;
+  }
+
+  Future<bool> updateEvent(
+      int id, DateTime date, TimeOfDay startTime, TimeOfDay endTime) async {
+    DateTime startDateTime = DateTime(
+        date.year, date.month, date.day, startTime.hour, startTime.minute);
+    DateTime endDateTime =
+        DateTime(date.year, date.month, date.day, endTime.hour, endTime.minute);
+
+    final String startDateTimeString = globals.getDateString(startDateTime);
+    final String endDateTimeString = globals.getDateString(endDateTime);
+
+    Uri uri = Uri.https(
+        '${globals.calendarBaseUrlStripped}', '${globals.calendarPath}/events');
+
+    final http.Response response = await http.patch(
+      uri,
+      headers: headers,
+      body: jsonEncode({
+        'id': id,
+        'startDateTime': startDateTimeString,
+        'endDateTime': endDateTimeString,
+      }),
+    );
+
+    return response.statusCode == 200;
   }
 }

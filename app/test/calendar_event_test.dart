@@ -9,7 +9,8 @@ void main() {
     "stationID": 1,
     "partnerID": 2,
     "station": {"id": 1, "name": ""},
-    "partner": {"id": 2, "name": ""}
+    "partner": {"id": 2, "name": ""},
+    "recurrenceRule": null
   };
 
   final invalidDateJson = {

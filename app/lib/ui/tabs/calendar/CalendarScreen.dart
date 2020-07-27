@@ -8,6 +8,7 @@ import 'package:ombruk/ui/tabs/calendar/VerticalCalendar/VerticalCalendar.dart';
 
 import 'package:ombruk/globals.dart' as globals;
 import 'package:ombruk/ui/customColors.dart' as customColors;
+import 'package:ombruk/ui/customIcons.dart' as customIcons;
 
 class CalendarScreen extends StatefulWidget {
   final List<CalendarEvent> events;
@@ -58,16 +59,14 @@ class _CalendarScreenState extends State<CalendarScreen>
                   children: <Widget>[
                     Padding(
                         padding: EdgeInsets.only(left: 8.0),
-                        child: Image.asset('assets/icons/filter.png',
-                            height: 15, width: 15)),
+                        child: customIcons.image(customIcons.filter, size: 15)),
                     Padding(
                         padding: EdgeInsets.symmetric(horizontal: 4.0),
                         child: Text(
                           _selectedStation,
                           style: TextStyle(fontSize: 16),
                         )),
-                    Image.asset('assets/icons/pil-tynn-ned.png',
-                        height: 15, width: 15),
+                    customIcons.image(customIcons.arrowDownThin, size: 15)
                   ],
                 ),
                 itemBuilder: (context) => globals.stations
@@ -87,20 +86,21 @@ class _CalendarScreenState extends State<CalendarScreen>
                     .toList(),
               ),
               Spacer(),
-              IconButton(
-                icon: _showHorizontalCalendar
-                    ? Image.asset('assets/icons/listeikon.png',
-                        height: 20, width: 20)
-                    : Image.asset('assets/icons/kalender.png',
-                        height: 20, width: 20),
+              RawMaterialButton(
+                fillColor: customColors.osloGreen,
+                shape: CircleBorder(),
+                child: _showHorizontalCalendar
+                    ? customIcons.image(customIcons.list)
+                    : customIcons.image(customIcons.calendar),
                 onPressed: () => setState(() {
                   _showHorizontalCalendar = !_showHorizontalCalendar;
                 }),
               ),
               role == globals.KeycloakRoles.reuse_station
-                  ? IconButton(
-                      icon: Image.asset('assets/icons/add.png',
-                          height: 20, width: 20),
+                  ? RawMaterialButton(
+                      fillColor: customColors.osloGreen,
+                      shape: CircleBorder(),
+                      child: customIcons.image(customIcons.add),
                       onPressed: () => null,
                     )
                   : Container(),
@@ -108,17 +108,19 @@ class _CalendarScreenState extends State<CalendarScreen>
                   ? RotationTransition(
                       turns: Tween(begin: 0.0, end: 1.0)
                           .animate(_rotationController),
-                      child: IconButton(
-                        icon: Image.asset('assets/icons/refresh.png',
-                            height: 20, width: 20),
+                      child: RawMaterialButton(
+                        fillColor: customColors.osloGreen,
+                        shape: CircleBorder(),
+                        child: customIcons.image(customIcons.refresh),
                         onPressed: () => null,
                       ),
                     )
-                  : IconButton(
-                      icon: Image.asset('assets/icons/refresh.png',
-                          height: 20, width: 20),
+                  : RawMaterialButton(
+                      fillColor: customColors.osloGreen,
+                      shape: CircleBorder(),
+                      child: customIcons.image(customIcons.refresh),
                       onPressed: _refreshCalendar,
-                    )
+                    ),
             ],
           ),
           Expanded(

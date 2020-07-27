@@ -1,13 +1,15 @@
 final String keycloakBaseUrl =
     'https://keycloak.staging.oko.knowit.no:8443/auth/realms/staging';
 
-final String calendarBaseUrl =
+final String calendarBaseUrlStripped =
+    'tcuk58u5ge.execute-api.eu-central-1.amazonaws.com';
+
+final String weightReportBaseUrl =
     'tcuk58u5ge.execute-api.eu-central-1.amazonaws.com';
 
 final String calendarPath = '/staging/calendar';
 
-final String weightReportBaseUrl =
-    'https://tcuk58u5ge.execute-api.eu-central-1.amazonaws.com/staging/weight-reporting';
+final String weightReportPath = '/staging/weight-reporting';
 
 final Map<int, String> weekdaysShort = {
   1: 'Man',
@@ -42,6 +44,21 @@ final Map<int, String> months = {
   10: 'Oktober',
   11: 'November',
   12: 'Desember',
+};
+
+final Map<int, String> monthsShort = {
+  1: 'JAN',
+  2: 'FEB',
+  3: 'MAR',
+  4: 'APR',
+  5: 'MAI',
+  6: 'JUN',
+  7: 'JUL',
+  8: 'AUG',
+  9: 'SEP',
+  10: 'OKT',
+  11: 'NOV',
+  12: 'DES',
 };
 
 // The order of the lists are important to match the ID index
