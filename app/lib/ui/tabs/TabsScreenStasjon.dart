@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ombruk/blocs/AuthenticationBloc.dart';
-import 'package:ombruk/ui/tabs/calendar/CalendarBlocProvider.dart';
 
+import 'package:ombruk/ui/tabs/calendar/CalendarBlocProvider.dart';
 import 'package:ombruk/ui/tabs/bottomAppBarComponents/DrawerButton.dart';
 import 'package:ombruk/ui/tabs/bottomAppBarComponents/BottomAppBarButton.dart';
-
 import 'package:ombruk/ui/tabs/notifications/NotificationScreen.dart';
 import 'package:ombruk/ui/tabs/stasjonComponents/MessageScreen.dart';
+import 'package:ombruk/ui/tabs/weightreport/WeightReportScreen.dart';
 
 import 'package:ombruk/ui/customColors.dart' as customColors;
 import 'package:ombruk/ui/customIcons.dart' as customIcons;
@@ -36,6 +36,7 @@ class _TabsScreenStasjonState extends State<TabsScreenStasjon> {
           SafeArea(child: CalendarBlocProvider()),
           SafeArea(child: MessageScreen()),
           NotificationScreen(),
+          WeightReportScreen(),
         ],
       ),
       bottomNavigationBar: BottomAppBar(
@@ -83,6 +84,12 @@ class _TabsScreenStasjonState extends State<TabsScreenStasjon> {
               children: <Widget>[
                 DrawerButton(customIcons.partners, 'Sam. partnere', null),
                 DrawerButton(customIcons.map, 'Stasjonene', null),
+                DrawerButton(customIcons.add, 'Søk om ekstrauttak', null),
+                DrawerButton(customIcons.weight, 'Vektuttak', () {
+                  setState(() {
+                    _selectedIndex = 3;
+                  });
+                }),
                 DrawerButton(customIcons.person, 'Min side', null),
                 DrawerButton(customIcons.close, 'Logg ut (to be removed)', () {
                   BlocProvider.of<AuthenticationBloc>(context)

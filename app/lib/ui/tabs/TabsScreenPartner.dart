@@ -8,7 +8,7 @@ import 'package:ombruk/ui/tabs/bottomAppBarComponents/DrawerButton.dart';
 import 'package:ombruk/ui/tabs/bottomAppBarComponents/BottomAppBarButton.dart';
 import 'package:ombruk/ui/tabs/notifications/NotificationScreen.dart';
 import 'package:ombruk/ui/tabs/partners/PartnerScreen.dart';
-import 'package:ombruk/ui/tabs/weightreport/WeightRouter.dart';
+import 'package:ombruk/ui/tabs/weightreport/WeightReportScreen.dart';
 
 import 'package:ombruk/ui/customColors.dart' as customColors;
 import 'package:ombruk/ui/customIcons.dart' as customIcons;
@@ -34,7 +34,7 @@ class _TabsScreenPartnerState extends State<TabsScreenPartner> {
         index: _selectedIndex,
         children: <Widget>[
           SafeArea(child: CalendarBlocProvider()),
-          WeightRouter(),
+          WeightReportScreen(),
           NotificationScreen(),
           SafeArea(child: PartnerScreen()),
           SafeArea(child: MyPagePartners()),
