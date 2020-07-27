@@ -94,7 +94,8 @@ class _CalendarScreenState extends State<CalendarScreen>
                   _showHorizontalCalendar = !_showHorizontalCalendar;
                 }),
               ),
-              role == globals.KeycloakRoles.reuse_station
+              role == globals.KeycloakRoles.reuse_station ||
+                      role == globals.KeycloakRoles.reg_employee
                   ? _headerButton(
                       icon: customIcons.add,
                       onPressed: () => null,
