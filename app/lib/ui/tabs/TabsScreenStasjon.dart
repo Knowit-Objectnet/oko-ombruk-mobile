@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ombruk/blocs/AuthenticationBloc.dart';
-
 import 'package:ombruk/ui/tabs/calendar/CalendarBlocProvider.dart';
 import 'package:ombruk/ui/tabs/bottomAppBarComponents/DrawerButton.dart';
 import 'package:ombruk/ui/tabs/bottomAppBarComponents/BottomAppBarButton.dart';
+import 'package:ombruk/ui/tabs/myPage/MyPage.dart';
 import 'package:ombruk/ui/tabs/notifications/NotificationScreen.dart';
 import 'package:ombruk/ui/tabs/weightreport/WeightReportScreen.dart';
 
@@ -36,6 +34,7 @@ class _TabsScreenStasjonState extends State<TabsScreenStasjon> {
           NotificationScreen(),
           // The screens below are in the drawer
           WeightReportScreen(),
+          SafeArea(child: MyPage()),
         ],
       ),
       bottomNavigationBar: BottomAppBar(
@@ -112,17 +111,12 @@ class _TabsScreenStasjonState extends State<TabsScreenStasjon> {
                 DrawerButton(
                   icon: customIcons.person,
                   title: 'Min side',
-                  onTap: null,
-                  isSelected: false,
-                ),
-                DrawerButton(
-                  icon: customIcons.close,
-                  title: 'Logg ut (to be removed)',
                   onTap: () {
-                    BlocProvider.of<AuthenticationBloc>(context)
-                        .add(AuthenticationLogOut());
+                    setState(() {
+                      _selectedIndex = 3;
+                    });
                   },
-                  isSelected: false,
+                  isSelected: _selectedIndex == 3,
                 ),
                 DrawerButton(
                   icon: customIcons.settings,

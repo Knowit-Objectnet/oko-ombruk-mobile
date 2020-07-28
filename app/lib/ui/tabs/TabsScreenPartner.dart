@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'package:ombruk/ui/tabs/SamPartnersComponents/MyPagePartners.dart';
 import 'package:ombruk/ui/tabs/calendar/CalendarBlocProvider.dart';
-
 import 'package:ombruk/ui/tabs/SamPartnersComponents/PickupDialogPartners.dart';
+import 'package:ombruk/ui/tabs/MyPage/MyPage.dart';
 import 'package:ombruk/ui/tabs/bottomAppBarComponents/DrawerButton.dart';
 import 'package:ombruk/ui/tabs/bottomAppBarComponents/BottomAppBarButton.dart';
 import 'package:ombruk/ui/tabs/notifications/NotificationScreen.dart';
@@ -39,7 +38,7 @@ class _TabsScreenPartnerState extends State<TabsScreenPartner> {
           NotificationScreen(),
           // The screens below are in the drawer
           SafeArea(child: PartnerScreen()),
-          SafeArea(child: MyPagePartners()),
+          SafeArea(child: MyPage()),
         ],
       ),
       bottomNavigationBar: BottomAppBar(

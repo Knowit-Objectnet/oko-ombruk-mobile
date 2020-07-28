@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ombruk/blocs/AuthenticationBloc.dart';
 import 'package:ombruk/blocs/CalendarBloc.dart';
 
 import 'package:ombruk/DataProvider/CalendarApiClient.dart';
@@ -11,6 +10,7 @@ import 'package:ombruk/repositories/CalendarRepository.dart';
 import 'package:ombruk/ui/tabs/RegComponents/CreateCalendarEventScreen.dart';
 import 'package:ombruk/ui/tabs/bottomAppBarComponents/DrawerButton.dart';
 import 'package:ombruk/ui/tabs/calendar/CalendarBlocBuilder.dart';
+import 'package:ombruk/ui/tabs/myPage/MyPage.dart';
 import 'package:ombruk/ui/tabs/notifications/NotificationScreen.dart';
 import 'package:ombruk/ui/tabs/bottomAppBarComponents/BottomAppBarButton.dart';
 
@@ -52,6 +52,7 @@ class _TabsScreenRegState extends State<TabsScreenReg> {
             // The screens below are in the drawer
             SafeArea(child: CreateCalendarEventScreen()),
             MessageScreen(),
+            SafeArea(child: MyPage()),
           ],
         ),
         bottomNavigationBar: BottomAppBar(
@@ -133,17 +134,12 @@ class _TabsScreenRegState extends State<TabsScreenReg> {
                 DrawerButton(
                   icon: customIcons.person,
                   title: 'Min side',
-                  onTap: null,
-                  isSelected: false,
-                ),
-                DrawerButton(
-                  icon: customIcons.close,
-                  title: 'Logg ut (to be removed)',
                   onTap: () {
-                    BlocProvider.of<AuthenticationBloc>(context)
-                        .add(AuthenticationLogOut());
+                    setState(() {
+                      _selectedIndex = 5;
+                    });
                   },
-                  isSelected: false,
+                  isSelected: _selectedIndex == 5,
                 ),
                 DrawerButton(
                   icon: customIcons.settings,
