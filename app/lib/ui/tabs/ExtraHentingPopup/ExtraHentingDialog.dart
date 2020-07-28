@@ -6,6 +6,7 @@ import 'package:ombruk/ui/tabs/ExtraHentingPopup/TimeField.dart';
 import 'package:ombruk/globals.dart' as globals;
 import 'package:ombruk/ui/customColors.dart' as customColors;
 
+///! This components is deprecated
 class ExtraHentingDialog extends StatefulWidget {
   @override
   _ExtraHentingDialogState createState() => _ExtraHentingDialogState();

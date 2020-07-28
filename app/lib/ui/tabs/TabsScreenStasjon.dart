@@ -7,7 +7,6 @@ import 'package:ombruk/ui/tabs/calendar/CalendarBlocProvider.dart';
 import 'package:ombruk/ui/tabs/bottomAppBarComponents/DrawerButton.dart';
 import 'package:ombruk/ui/tabs/bottomAppBarComponents/BottomAppBarButton.dart';
 import 'package:ombruk/ui/tabs/notifications/NotificationScreen.dart';
-import 'package:ombruk/ui/tabs/stasjonComponents/MessageScreen.dart';
 import 'package:ombruk/ui/tabs/weightreport/WeightReportScreen.dart';
 
 import 'package:ombruk/ui/customColors.dart' as customColors;
@@ -19,12 +18,12 @@ class TabsScreenStasjon extends StatefulWidget {
 }
 
 class _TabsScreenStasjonState extends State<TabsScreenStasjon> {
-  int _selectedIndex = 0;
-  List<String> _bottomAppBarItems = [
-    customIcons.list,
-    customIcons.addDiscrepancy,
+  final List<String> _bottomAppBarItems = [
+    customIcons.calendar,
     customIcons.notification
   ];
+
+  int _selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -34,8 +33,8 @@ class _TabsScreenStasjonState extends State<TabsScreenStasjon> {
         index: _selectedIndex,
         children: <Widget>[
           SafeArea(child: CalendarBlocProvider()),
-          SafeArea(child: MessageScreen()),
           NotificationScreen(),
+          // The screens below are in the drawer
           WeightReportScreen(),
         ],
       ),
@@ -55,7 +54,7 @@ class _TabsScreenStasjonState extends State<TabsScreenStasjon> {
     list.add(
       BottomAppBarButton(
           icon: customIcons.menu,
-          isSelected: false,
+          isSelected: _selectedIndex > 1,
           onPressed: _showNavigationDrawer),
     );
     list.add(Spacer());
@@ -82,20 +81,55 @@ class _TabsScreenStasjonState extends State<TabsScreenStasjon> {
             color: customColors.osloDarkBlue,
             child: ListView(
               children: <Widget>[
-                DrawerButton(customIcons.partners, 'Sam. partnere', null),
-                DrawerButton(customIcons.map, 'Stasjonene', null),
-                DrawerButton(customIcons.add, 'Søk om ekstrauttak', null),
-                DrawerButton(customIcons.weight, 'Vektuttak', () {
-                  setState(() {
-                    _selectedIndex = 3;
-                  });
-                }),
-                DrawerButton(customIcons.person, 'Min side', null),
-                DrawerButton(customIcons.close, 'Logg ut (to be removed)', () {
-                  BlocProvider.of<AuthenticationBloc>(context)
-                      .add(AuthenticationLogOut());
-                }),
-                DrawerButton(customIcons.settings, 'Innstillinger', null),
+                DrawerButton(
+                  icon: customIcons.partners,
+                  title: 'Sam. partnere',
+                  onTap: null,
+                  isSelected: false,
+                ),
+                DrawerButton(
+                  icon: customIcons.map,
+                  title: 'Stasjonene',
+                  onTap: null,
+                  isSelected: false,
+                ),
+                DrawerButton(
+                  icon: customIcons.add,
+                  title: 'Søk om ekstrauttak',
+                  onTap: null,
+                  isSelected: false,
+                ),
+                DrawerButton(
+                  icon: customIcons.weight,
+                  title: 'Vektuttak',
+                  onTap: () {
+                    setState(() {
+                      _selectedIndex = 2;
+                    });
+                  },
+                  isSelected: _selectedIndex == 2,
+                ),
+                DrawerButton(
+                  icon: customIcons.person,
+                  title: 'Min side',
+                  onTap: null,
+                  isSelected: false,
+                ),
+                DrawerButton(
+                  icon: customIcons.close,
+                  title: 'Logg ut (to be removed)',
+                  onTap: () {
+                    BlocProvider.of<AuthenticationBloc>(context)
+                        .add(AuthenticationLogOut());
+                  },
+                  isSelected: false,
+                ),
+                DrawerButton(
+                  icon: customIcons.settings,
+                  title: 'Innstillinger',
+                  onTap: null,
+                  isSelected: false,
+                ),
               ],
             ),
           );

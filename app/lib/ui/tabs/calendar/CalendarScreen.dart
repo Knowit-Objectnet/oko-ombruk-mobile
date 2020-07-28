@@ -124,7 +124,7 @@ class _CalendarScreenState extends State<CalendarScreen>
   Widget _headerButton(
       {@required String icon, @required Function() onPressed}) {
     return Padding(
-      padding: EdgeInsets.all(4.0),
+      padding: EdgeInsets.only(left: 0, right: 8.0, top: 8.0, bottom: 8.0),
       child: CircleAvatar(
         backgroundColor: customColors.osloGreen,
         child: IconButton(

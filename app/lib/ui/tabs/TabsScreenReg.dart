@@ -11,12 +11,12 @@ import 'package:ombruk/repositories/CalendarRepository.dart';
 import 'package:ombruk/ui/tabs/RegComponents/CreateCalendarEventScreen.dart';
 import 'package:ombruk/ui/tabs/bottomAppBarComponents/DrawerButton.dart';
 import 'package:ombruk/ui/tabs/calendar/CalendarBlocBuilder.dart';
-import 'package:ombruk/ui/tabs/ExtraHentingPopup/ExtraHentingDialog.dart';
 import 'package:ombruk/ui/tabs/notifications/NotificationScreen.dart';
 import 'package:ombruk/ui/tabs/bottomAppBarComponents/BottomAppBarButton.dart';
 
 import 'package:ombruk/ui/customColors.dart' as customColors;
 import 'package:ombruk/ui/customIcons.dart' as customIcons;
+import 'package:ombruk/ui/tabs/stasjonComponents/MessageScreen.dart';
 
 class TabsScreenReg extends StatefulWidget {
   @override
@@ -24,12 +24,13 @@ class TabsScreenReg extends StatefulWidget {
 }
 
 class _TabsScreenRegState extends State<TabsScreenReg> {
-  int _selectedIndex = 0;
-  List<String> _bottomAppBarItems = [
-    customIcons.list,
+  final List<String> _bottomAppBarItems = [
+    customIcons.notification,
     customIcons.calendar,
     customIcons.statistics
   ];
+
+  int _selectedIndex = 0;
 
   final CalendarRepository calendarRepository =
       CalendarRepository(apiClient: CalendarApiClient());
@@ -45,9 +46,12 @@ class _TabsScreenRegState extends State<TabsScreenReg> {
           // IndexStack keeps the screen states alive between tab changes
           index: _selectedIndex,
           children: <Widget>[
-            SafeArea(child: CalendarBlocBuilder()),
-            SafeArea(child: CreateCalendarEventScreen()),
             NotificationScreen(),
+            SafeArea(child: CalendarBlocBuilder()),
+            NotificationScreen(),
+            // The screens below are in the drawer
+            SafeArea(child: CreateCalendarEventScreen()),
+            MessageScreen(),
           ],
         ),
         bottomNavigationBar: BottomAppBar(
@@ -67,7 +71,7 @@ class _TabsScreenRegState extends State<TabsScreenReg> {
     list.add(
       BottomAppBarButton(
           icon: customIcons.menu,
-          isSelected: false,
+          isSelected: _selectedIndex > 2,
           onPressed: _showNavigationDrawer),
     );
     list.add(Spacer());
@@ -94,20 +98,59 @@ class _TabsScreenRegState extends State<TabsScreenReg> {
             color: customColors.osloDarkBlue,
             child: ListView(
               children: <Widget>[
-                DrawerButton(customIcons.partners, 'Sam. partnere', null),
-                DrawerButton(customIcons.map, 'Stasjonene', null),
                 DrawerButton(
-                  customIcons.add,
-                  'Søk ekstrauttak',
-                  () => showDialog(
-                      context: context, builder: (_) => ExtraHentingDialog()),
+                  icon: customIcons.partners,
+                  title: 'Sam. partnere',
+                  onTap: null,
+                  isSelected: false,
                 ),
-                DrawerButton(customIcons.person, 'Min side', null),
-                DrawerButton(customIcons.close, 'Logg ut (to be removed)', () {
-                  BlocProvider.of<AuthenticationBloc>(context)
-                      .add(AuthenticationLogOut());
-                }),
-                DrawerButton(customIcons.settings, 'Innstillinger', null),
+                DrawerButton(
+                  icon: customIcons.map,
+                  title: 'Stasjonene',
+                  onTap: null,
+                  isSelected: false,
+                ),
+                DrawerButton(
+                  icon: customIcons.add,
+                  title: 'Opprett hendelse',
+                  onTap: () {
+                    setState(() {
+                      _selectedIndex = 3;
+                    });
+                  },
+                  isSelected: _selectedIndex == 3,
+                ),
+                DrawerButton(
+                  icon: customIcons.addDiscrepancy,
+                  title: 'Send beskjed',
+                  onTap: () {
+                    setState(() {
+                      _selectedIndex = 4;
+                    });
+                  },
+                  isSelected: _selectedIndex == 4,
+                ),
+                DrawerButton(
+                  icon: customIcons.person,
+                  title: 'Min side',
+                  onTap: null,
+                  isSelected: false,
+                ),
+                DrawerButton(
+                  icon: customIcons.close,
+                  title: 'Logg ut (to be removed)',
+                  onTap: () {
+                    BlocProvider.of<AuthenticationBloc>(context)
+                        .add(AuthenticationLogOut());
+                  },
+                  isSelected: false,
+                ),
+                DrawerButton(
+                  icon: customIcons.settings,
+                  title: 'Innstillinger',
+                  onTap: null,
+                  isSelected: false,
+                ),
               ],
             ),
           );
