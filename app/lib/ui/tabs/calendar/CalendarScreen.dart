@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ombruk/blocs/AuthenticationBloc.dart';
 import 'package:ombruk/blocs/CalendarBloc.dart';
+
 import 'package:ombruk/models/CalendarEvent.dart';
+
 import 'package:ombruk/ui/tabs/calendar/HorizontalCalendar/HorizontalCalendar.dart';
 import 'package:ombruk/ui/tabs/calendar/VerticalCalendar/VerticalCalendar.dart';
-
-import 'package:ombruk/globals.dart' as globals;
+import 'package:ombruk/ui/tabs/stasjonComponents/AddExtraPickupScreen.dart';
 import 'package:ombruk/ui/customColors.dart' as customColors;
 import 'package:ombruk/ui/customIcons.dart' as customIcons;
+import 'package:ombruk/globals.dart' as globals;
 
 class CalendarScreen extends StatefulWidget {
   final List<CalendarEvent> events;
@@ -98,7 +101,13 @@ class _CalendarScreenState extends State<CalendarScreen>
                       role == globals.KeycloakRoles.reg_employee
                   ? _headerButton(
                       icon: customIcons.add,
-                      onPressed: () => null,
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => AddExtraPickupScreen(),
+                            ));
+                      },
                     )
                   : Container(),
               widget.isLoading

@@ -5,6 +5,7 @@ import 'package:ombruk/ui/tabs/bottomAppBarComponents/DrawerButton.dart';
 import 'package:ombruk/ui/tabs/bottomAppBarComponents/BottomAppBarButton.dart';
 import 'package:ombruk/ui/tabs/myPage/MyPage.dart';
 import 'package:ombruk/ui/tabs/notifications/NotificationScreen.dart';
+import 'package:ombruk/ui/tabs/stasjonComponents/AddExtraPickupScreen.dart';
 import 'package:ombruk/ui/tabs/weightreport/WeightReportScreen.dart';
 
 import 'package:ombruk/ui/customColors.dart' as customColors;
@@ -95,7 +96,13 @@ class _TabsScreenStasjonState extends State<TabsScreenStasjon> {
                 DrawerButton(
                   icon: customIcons.add,
                   title: 'Søk om ekstrauttak',
-                  onTap: null,
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AddExtraPickupScreen(),
+                        ));
+                  },
                   isSelected: false,
                 ),
                 DrawerButton(
