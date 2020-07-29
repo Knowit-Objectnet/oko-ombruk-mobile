@@ -3,12 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ombruk/blocs/AuthenticationBloc.dart';
 
-import 'package:ombruk/globals.dart' as globals;
-
+import 'package:ombruk/ui/tabs/RegComponents/NewStationScreen.dart';
+import 'package:ombruk/ui/tabs/RegComponents/NewPartnerScreen.dart';
 import 'package:ombruk/ui/tabs/components/SwitchButton.dart';
 
 import 'package:ombruk/ui/customColors.dart' as customColors;
 import 'package:ombruk/ui/customIcons.dart' as customIcons;
+import 'package:ombruk/globals.dart' as globals;
 
 class MyPage extends StatefulWidget {
   @override
@@ -134,6 +135,7 @@ class _MyPageState extends State<MyPage> {
     );
   }
 
+  /// Only for the Partner role
   Widget _aboutSection() {
     if (role != globals.KeycloakRoles.partner) {
       return Container();
@@ -151,6 +153,7 @@ class _MyPageState extends State<MyPage> {
     );
   }
 
+  /// Only for the Partner role
   Widget _shareContactInfoSection() {
     if (role != globals.KeycloakRoles.partner) {
       return Container();
@@ -201,6 +204,7 @@ class _MyPageState extends State<MyPage> {
     );
   }
 
+  /// Only for the REG role
   Widget _addPartnerAndStationButtons() {
     if (role != globals.KeycloakRoles.reg_employee) {
       return Container();
@@ -232,8 +236,20 @@ class _MyPageState extends State<MyPage> {
 
     return Column(
       children: <Widget>[
-        _buttonWithText('Legg til ny samarbeidspartner', () => null),
-        _buttonWithText('Legg til ny stasjon', () => null),
+        _buttonWithText('Legg til ny samarbeidspartner', () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => NewPartneScreen(),
+              ));
+        }),
+        _buttonWithText('Legg til ny stasjon', () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => NewStationScreen(),
+              ));
+        }),
       ],
     );
   }

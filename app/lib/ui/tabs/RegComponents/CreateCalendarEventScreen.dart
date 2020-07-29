@@ -39,6 +39,7 @@ class _CreateCalendarEventScreenState extends State<CreateCalendarEventScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // TODO: Add gesture detector to take focus off textfield
     return Container(
       color: customColors.osloLightBeige,
       child: ListView(
