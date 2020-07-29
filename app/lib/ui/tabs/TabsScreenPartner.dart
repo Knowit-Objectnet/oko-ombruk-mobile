@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'package:ombruk/ui/tabs/SamPartnersComponents/MyPagePartners.dart';
 import 'package:ombruk/ui/tabs/calendar/CalendarBlocProvider.dart';
-
 import 'package:ombruk/ui/tabs/SamPartnersComponents/PickupDialogPartners.dart';
+import 'package:ombruk/ui/tabs/MyPage/MyPage.dart';
 import 'package:ombruk/ui/tabs/bottomAppBarComponents/DrawerButton.dart';
 import 'package:ombruk/ui/tabs/bottomAppBarComponents/BottomAppBarButton.dart';
 import 'package:ombruk/ui/tabs/notifications/NotificationScreen.dart';
@@ -19,12 +18,13 @@ class TabsScreenPartner extends StatefulWidget {
 }
 
 class _TabsScreenPartnerState extends State<TabsScreenPartner> {
-  int _selectedIndex = 0;
-  List<String> _bottomAppBarItems = [
+  final List<String> _bottomAppBarItems = [
     customIcons.list,
     customIcons.weight,
     customIcons.notification
   ];
+
+  int _selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -36,8 +36,9 @@ class _TabsScreenPartnerState extends State<TabsScreenPartner> {
           SafeArea(child: CalendarBlocProvider()),
           WeightReportScreen(),
           NotificationScreen(),
+          // The screens below are in the drawer
           SafeArea(child: PartnerScreen()),
-          SafeArea(child: MyPagePartners()),
+          SafeArea(child: MyPage()),
         ],
       ),
       bottomNavigationBar: BottomAppBar(
@@ -56,7 +57,7 @@ class _TabsScreenPartnerState extends State<TabsScreenPartner> {
     list.add(
       BottomAppBarButton(
           icon: customIcons.menu,
-          isSelected: false,
+          isSelected: _selectedIndex > 2,
           onPressed: _showNavigationDrawer),
     );
     list.add(Spacer());
@@ -83,25 +84,53 @@ class _TabsScreenPartnerState extends State<TabsScreenPartner> {
             color: customColors.osloDarkBlue,
             child: ListView(
               children: <Widget>[
-                DrawerButton(customIcons.partners, 'Sam. partnere', () {
-                  setState(() {
-                    _selectedIndex = 3;
-                  });
-                }),
-                DrawerButton(customIcons.map, 'Stasjonene', null),
                 DrawerButton(
-                    customIcons.add,
-                    'Søk ekstrauttak',
-                    () => showDialog(
-                        context: context,
-                        builder: (_) => PickupDialogPartners())),
-                DrawerButton(customIcons.addDiscrepancy, 'Send beskjed', null),
-                DrawerButton(customIcons.person, 'Min side', () {
-                  setState(() {
-                    _selectedIndex = 4;
-                  });
-                }),
-                DrawerButton(customIcons.settings, 'Innstillinger', null),
+                  icon: customIcons.partners,
+                  title: 'Sam. partnere',
+                  onTap: () {
+                    setState(() {
+                      _selectedIndex = 3;
+                    });
+                  },
+                  isSelected: _selectedIndex == 3,
+                ),
+                DrawerButton(
+                  icon: customIcons.map,
+                  title: 'Stasjonene',
+                  onTap: null,
+                  isSelected: false,
+                ),
+                DrawerButton(
+                  icon: customIcons.add,
+                  title: 'Søk ekstrauttak',
+                  onTap: () => showDialog(
+                    context: context,
+                    builder: (_) => PickupDialogPartners(),
+                  ),
+                  isSelected: false,
+                ),
+                DrawerButton(
+                  icon: customIcons.addDiscrepancy,
+                  title: 'Send beskjed',
+                  onTap: null,
+                  isSelected: false,
+                ),
+                DrawerButton(
+                  icon: customIcons.person,
+                  title: 'Min side',
+                  onTap: () {
+                    setState(() {
+                      _selectedIndex = 4;
+                    });
+                  },
+                  isSelected: _selectedIndex == 4,
+                ),
+                DrawerButton(
+                  icon: customIcons.settings,
+                  title: 'Innstillinger',
+                  onTap: null,
+                  isSelected: false,
+                ),
               ],
             ),
           );

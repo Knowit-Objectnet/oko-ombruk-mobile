@@ -102,14 +102,15 @@ class _CalendarScreenState extends State<CalendarScreen>
                     )
                   : Container(),
               widget.isLoading
-                  ? RotationTransition(
-                      turns: Tween(begin: 0.0, end: 1.0)
-                          .animate(_rotationController),
-                      child: _headerButton(
-                          icon: customIcons.refresh, onPressed: () => null),
+                  ? _headerButton(
+                      icon: customIcons.refresh,
+                      onPressed: null,
+                      isSpinning: true,
                     )
                   : _headerButton(
-                      icon: customIcons.refresh, onPressed: _refreshCalendar),
+                      icon: customIcons.refresh,
+                      onPressed: _refreshCalendar,
+                    )
             ],
           ),
           Expanded(
@@ -121,16 +122,27 @@ class _CalendarScreenState extends State<CalendarScreen>
     );
   }
 
-  Widget _headerButton(
-      {@required String icon, @required Function() onPressed}) {
+  Widget _headerButton({
+    @required String icon,
+    @required Function() onPressed,
+    bool isSpinning = false,
+  }) {
     return Padding(
-      padding: EdgeInsets.all(4.0),
+      padding: EdgeInsets.only(left: 0, right: 8.0, top: 8.0, bottom: 8.0),
       child: CircleAvatar(
         backgroundColor: customColors.osloGreen,
-        child: IconButton(
-          icon: customIcons.image(icon),
-          onPressed: onPressed,
-        ),
+        child: isSpinning
+            ? RotationTransition(
+                turns: Tween(begin: 0.0, end: 1.0).animate(_rotationController),
+                child: IconButton(
+                  icon: customIcons.image(icon),
+                  onPressed: () => null,
+                ),
+              )
+            : IconButton(
+                icon: customIcons.image(icon),
+                onPressed: onPressed,
+              ),
       ),
     );
   }

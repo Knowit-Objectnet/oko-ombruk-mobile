@@ -39,14 +39,15 @@ const String weight = 'vekt-ikon.png';
 /// Returns the icon as an Image.asset. If the icon is not found, it returns an empty Container().
 Widget image(String icon,
     {double size = 20.0, Color color = customColors.osloBlack}) {
-  try {
-    return Image.asset(
-      'assets/icons/$icon',
-      height: size,
-      width: size,
-      color: color,
-    );
-  } catch (_) {
-    return Container();
-  }
+  return Image.asset(
+    'assets/icons/$icon',
+    height: size,
+    width: size,
+    color: color,
+    errorBuilder: (context, object, stackTrace) {
+      // Called if the icon path is not found in assets
+      print('Icon $icon is not included in assets');
+      return Container(height: 20, width: 20);
+    },
+  );
 }

@@ -7,14 +7,20 @@ class TimePicker extends StatelessWidget {
   final ValueChanged<TimeOfDay> timeChanged;
   final Color backgroundColor;
   final Color borderColor;
+  final int minTime;
+  final int maxTime;
 
   TimePicker({
     @required this.selectedTime,
     @required this.timeChanged,
     this.backgroundColor = customColors.osloWhite,
     this.borderColor = customColors.osloLightBlue,
+    this.minTime = 7,
+    this.maxTime = 16,
   })  : assert(selectedTime != null),
-        assert(timeChanged != null);
+        assert(timeChanged != null),
+        assert(selectedTime.hour >= minTime),
+        assert(selectedTime.hour <= maxTime);
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +49,7 @@ class TimePicker extends StatelessWidget {
 
   List<TimeOfDay> _timeList() {
     List<TimeOfDay> list = [];
-    for (int i = 7; i < 16; i++) {
+    for (int i = minTime; i < maxTime; i++) {
       list.add(TimeOfDay(hour: i, minute: 0));
       list.add(TimeOfDay(hour: i, minute: 30));
     }
