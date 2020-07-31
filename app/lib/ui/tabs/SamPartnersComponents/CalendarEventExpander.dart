@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ombruk/blocs/CalendarBloc.dart';
 
 import 'package:ombruk/models/CalendarEvent.dart';
+
+import 'package:ombruk/DataProvider/CalendarApiClient.dart';
+
+import 'package:ombruk/ui/tabs/TokenHolder.dart';
 import 'package:ombruk/ui/tabs/components/DatePicker.dart';
 import 'package:ombruk/ui/tabs/components/TimePicker.dart';
-import 'package:ombruk/DataProvider/CalendarApiClient.dart';
-import 'package:ombruk/blocs/CalendarBloc.dart';
 import 'package:ombruk/ui/ui.helper.dart';
-
-import 'package:ombruk/ui/customColors.dart' as customColors;
 import 'package:ombruk/ui/customIcons.dart' as customIcons;
+import 'package:ombruk/ui/customColors.dart' as customColors;
+
 import 'package:ombruk/globals.dart' as globals;
 
 class CalendarEventExpander extends StatefulWidget {
@@ -28,6 +32,7 @@ class _CalendarEventExpanderState extends State<CalendarEventExpander> {
   DateTime updatedDate = DateTime.now();
   TimeOfDay updatedStartTime = TimeOfDay(hour: 8, minute: 0);
   TimeOfDay updatedEndTime = TimeOfDay(hour: 9, minute: 0);
+  String _token;
 
   @override
   void initState() {
@@ -36,6 +41,8 @@ class _CalendarEventExpanderState extends State<CalendarEventExpander> {
 
   @override
   Widget build(BuildContext context) {
+    _token = TokenHolder.of(context).token;
+
     return Container(
       color: customColors.osloWhite,
       child: Padding(
@@ -206,8 +213,8 @@ class _CalendarEventExpanderState extends State<CalendarEventExpander> {
   void _updateEvent(
       int id, DateTime date, TimeOfDay startTime, TimeOfDay endTime) async {
     try {
-      bool updateSuccess =
-          await CalendarApiClient().updateEvent(id, date, startTime, endTime);
+      bool updateSuccess = await CalendarApiClient(_token)
+          .updateEvent(id, date, startTime, endTime);
       if (updateSuccess) {
         setState(() {
           edit = false;
@@ -228,7 +235,7 @@ class _CalendarEventExpanderState extends State<CalendarEventExpander> {
       dynamic recurrenceRuleId) async {
     period ? id = null : recurrenceRuleId = null;
     try {
-      bool deleteSuccess = await CalendarApiClient()
+      bool deleteSuccess = await CalendarApiClient(_token)
           .deleteCalendarEvent(id, startDate, endDate, recurrenceRuleId);
       if (deleteSuccess) {
         uiHelper.showSnackbar(context, 'Slettet hendelse');

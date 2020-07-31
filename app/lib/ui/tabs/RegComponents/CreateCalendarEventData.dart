@@ -10,6 +10,7 @@ class CreateCalendarEventData {
   int stationID;
   int partnerID;
   final List<globals.Weekdays> weekdays;
+  final int interval;
 
   CreateCalendarEventData.fromData(
       {@required DateTime startDate,
@@ -18,7 +19,8 @@ class CreateCalendarEventData {
       @required TimeOfDay endTime,
       @required String station,
       @required String partner,
-      @required this.weekdays})
+      @required this.weekdays,
+      @required this.interval})
       : assert(startDate != null),
         assert(endDate != null),
         assert(startTime != null),
@@ -52,7 +54,7 @@ class CreateCalendarEventData {
         endDate.year, endDate.month, endDate.day, endTime.hour, endTime.minute);
 
     stationID = globals.stations.indexOf(station) + 1;
-    partnerID = globals.partners.indexOf(partner) + 23;
+    partnerID = globals.partners.indexOf(partner) + 1;
     if (partnerID == -1 || stationID == -1) {
       throw Exception('Intern feil');
     }

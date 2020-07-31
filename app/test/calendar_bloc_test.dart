@@ -3,17 +3,18 @@ import 'package:mockito/mockito.dart';
 
 import 'package:ombruk/blocs/CalendarBloc.dart';
 import 'package:ombruk/models/CalendarEvent.dart';
-import 'package:ombruk/repositories/CalendarRepository.dart';
+import 'package:ombruk/DataProvider/CalendarApiClient.dart';
+import 'package:ombruk/models/CustomResponse.dart';
 
-class MockCalendarRepository extends Mock implements CalendarRepository {}
+class MockCalendarApiClient extends Mock implements CalendarApiClient {}
 
 CalendarBloc calendarBloc;
-MockCalendarRepository mockCalendarRepository;
+MockCalendarApiClient mockCalendarApiClient;
 
 void main() {
   setUp(() {
-    mockCalendarRepository = MockCalendarRepository();
-    calendarBloc = CalendarBloc(calendarRepository: mockCalendarRepository);
+    mockCalendarApiClient = MockCalendarApiClient();
+    calendarBloc = CalendarBloc(calendarApiClient: mockCalendarApiClient);
   });
 
   tearDown(() {
@@ -34,17 +35,21 @@ void main() {
 
   group('Fetching of events', () {
     test('Successful initial fetch', () {
-      final List<CalendarEvent> events = [];
+      final CustomResponse response = CustomResponse(
+        success: true,
+        statusCode: 200,
+        data: <CalendarEvent>[],
+      );
 
-      when(mockCalendarRepository.getEvents())
-          .thenAnswer((_) => Future.value(events));
+      when(mockCalendarApiClient.fetchEvents())
+          .thenAnswer((_) => Future.value(response));
 
       expectLater(
         calendarBloc,
         emitsInOrder([
           CalendarInitial(),
           CalendarInitialLoadInProgress(),
-          CalendarLoadSuccess(calendarEvents: events)
+          CalendarLoadSuccess(calendarEvents: response.data),
         ]),
       );
 
@@ -52,7 +57,14 @@ void main() {
     });
 
     test('Failed initial fetch', () {
-      when(mockCalendarRepository.getEvents()).thenThrow(Error);
+      final CustomResponse response = CustomResponse(
+        success: false,
+        statusCode: 400,
+        data: null,
+      );
+
+      when(mockCalendarApiClient.fetchEvents())
+          .thenAnswer((_) => Future.value(response));
 
       expectLater(
         calendarBloc,

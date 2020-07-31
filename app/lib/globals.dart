@@ -7,9 +7,9 @@ final String calendarBaseUrlStripped =
 final String weightReportBaseUrl =
     'tcuk58u5ge.execute-api.eu-central-1.amazonaws.com';
 
-final String calendarPath = '/staging/calendar';
+final String requiredPath = '/staging/backend';
 
-final String weightReportPath = '/staging/weight-reporting';
+final String weightReportPath = '/staging/backend'; // TODO :make into ONE
 
 final Map<int, String> weekdaysShort = {
   1: 'Man',

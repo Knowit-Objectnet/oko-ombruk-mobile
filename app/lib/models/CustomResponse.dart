@@ -12,4 +12,16 @@ class CustomResponse {
     @required this.data,
     this.message,
   });
+
+  @override
+  String toString() {
+    return toJson().toString();
+  }
+
+  Map<String, dynamic> toJson() => {
+        'success': success,
+        'statusCode': statusCode,
+        'data': data,
+        'message': message
+      };
 }

@@ -5,18 +5,17 @@ import 'package:ombruk/blocs/CalendarBloc.dart';
 
 import 'package:ombruk/DataProvider/CalendarApiClient.dart';
 
-import 'package:ombruk/repositories/CalendarRepository.dart';
-
-import 'package:ombruk/ui/tabs/RegComponents/CreateCalendarEventScreen.dart';
+import 'package:ombruk/ui/tabs/RegComponents/CreateOccurrenceScreen.dart';
+import 'package:ombruk/ui/tabs/TokenHolder.dart';
 import 'package:ombruk/ui/tabs/bottomAppBarComponents/DrawerButton.dart';
 import 'package:ombruk/ui/tabs/calendar/CalendarBlocBuilder.dart';
 import 'package:ombruk/ui/tabs/myPage/MyPage.dart';
 import 'package:ombruk/ui/tabs/notifications/NotificationScreen.dart';
 import 'package:ombruk/ui/tabs/bottomAppBarComponents/BottomAppBarButton.dart';
-
+import 'package:ombruk/ui/ui.helper.dart';
+import 'package:ombruk/ui/tabs/stasjonComponents/MessageScreen.dart';
 import 'package:ombruk/ui/customColors.dart' as customColors;
 import 'package:ombruk/ui/customIcons.dart' as customIcons;
-import 'package:ombruk/ui/tabs/stasjonComponents/MessageScreen.dart';
 
 class TabsScreenReg extends StatefulWidget {
   @override
@@ -30,16 +29,18 @@ class _TabsScreenRegState extends State<TabsScreenReg> {
     customIcons.statistics
   ];
 
+  CalendarApiClient _calendarApiClient;
   int _selectedIndex = 0;
-
-  final CalendarRepository calendarRepository =
-      CalendarRepository(apiClient: CalendarApiClient());
+  String _token;
 
   @override
   Widget build(BuildContext context) {
+    _token = TokenHolder.of(context).token;
+    _calendarApiClient = CalendarApiClient(_token);
+
     // Calendar Bloc needs to be accessed in both Calendar screen and createCalendarEvent screen
     return BlocProvider(
-      create: (context) => CalendarBloc(calendarRepository: calendarRepository)
+      create: (context) => CalendarBloc(calendarApiClient: _calendarApiClient)
         ..add(CalendarInitialEventsRequested()),
       child: Scaffold(
         body: IndexedStack(
@@ -50,7 +51,6 @@ class _TabsScreenRegState extends State<TabsScreenReg> {
             SafeArea(child: CalendarBlocBuilder()),
             NotificationScreen(),
             // The screens below are in the drawer
-            SafeArea(child: CreateCalendarEventScreen()),
             MessageScreen(),
             SafeArea(child: MyPage()),
           ],
@@ -94,7 +94,7 @@ class _TabsScreenRegState extends State<TabsScreenReg> {
   void _showNavigationDrawer() {
     showModalBottomSheet(
         context: context,
-        builder: (_) {
+        builder: (context) {
           return Container(
             color: customColors.osloDarkBlue,
             child: ListView(
@@ -114,6 +114,12 @@ class _TabsScreenRegState extends State<TabsScreenReg> {
                 DrawerButton(
                   icon: customIcons.add,
                   title: 'Opprett hendelse',
+                  onTap: _puchCreateOccurenceScreen,
+                  isSelected: _selectedIndex == 3,
+                ),
+                DrawerButton(
+                  icon: customIcons.addDiscrepancy,
+                  title: 'Send beskjed',
                   onTap: () {
                     setState(() {
                       _selectedIndex = 3;
@@ -122,24 +128,14 @@ class _TabsScreenRegState extends State<TabsScreenReg> {
                   isSelected: _selectedIndex == 3,
                 ),
                 DrawerButton(
-                  icon: customIcons.addDiscrepancy,
-                  title: 'Send beskjed',
+                  icon: customIcons.person,
+                  title: 'Min side',
                   onTap: () {
                     setState(() {
                       _selectedIndex = 4;
                     });
                   },
                   isSelected: _selectedIndex == 4,
-                ),
-                DrawerButton(
-                  icon: customIcons.person,
-                  title: 'Min side',
-                  onTap: () {
-                    setState(() {
-                      _selectedIndex = 5;
-                    });
-                  },
-                  isSelected: _selectedIndex == 5,
                 ),
                 DrawerButton(
                   icon: customIcons.settings,
@@ -151,5 +147,18 @@ class _TabsScreenRegState extends State<TabsScreenReg> {
             ),
           );
         });
+  }
+
+  Future<void> _puchCreateOccurenceScreen() async {
+    final bool occurrenceAdded = await Navigator.push(
+      context,
+      MaterialPageRoute<bool>(
+        builder: (context) => CreateOccurrenceScreen(_token),
+      ),
+    );
+    if (occurrenceAdded) {
+      uiHelper.showSnackbar(context, 'Opprettet hendelsen!');
+      BlocProvider.of<CalendarBloc>(context).add(CalendarRefreshRequested());
+    }
   }
 }

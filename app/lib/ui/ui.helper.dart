@@ -48,16 +48,23 @@ class UIHelper {
   }
 
   void showSnackbar(BuildContext context, String message) {
-    final snackBar = SnackBar(
+    Scaffold.of(context).hideCurrentSnackBar();
+    Scaffold.of(context).showSnackBar(_simpleSnackBar(message));
+  }
+
+  void showSnackbarUnknownScaffold(ScaffoldState state, String message) {
+    state.hideCurrentSnackBar();
+    state.showSnackBar(_simpleSnackBar(message));
+  }
+
+  SnackBar _simpleSnackBar(String message) {
+    return SnackBar(
       content: Text(message),
       action: SnackBarAction(
         label: 'Lukk',
         onPressed: () {},
       ),
     );
-
-    Scaffold.of(context).hideCurrentSnackBar();
-    Scaffold.of(context).showSnackBar(snackBar);
   }
 }
 

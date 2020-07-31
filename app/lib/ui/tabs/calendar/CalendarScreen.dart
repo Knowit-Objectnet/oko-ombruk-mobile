@@ -6,11 +6,15 @@ import 'package:ombruk/blocs/CalendarBloc.dart';
 
 import 'package:ombruk/models/CalendarEvent.dart';
 
+import 'package:ombruk/ui/tabs/RegComponents/CreateOccurrenceScreen.dart';
+import 'package:ombruk/ui/tabs/TokenHolder.dart';
 import 'package:ombruk/ui/tabs/calendar/HorizontalCalendar/HorizontalCalendar.dart';
 import 'package:ombruk/ui/tabs/calendar/VerticalCalendar/VerticalCalendar.dart';
 import 'package:ombruk/ui/tabs/stasjonComponents/AddExtraPickupScreen.dart';
 import 'package:ombruk/ui/customColors.dart' as customColors;
 import 'package:ombruk/ui/customIcons.dart' as customIcons;
+import 'package:ombruk/ui/ui.helper.dart';
+
 import 'package:ombruk/globals.dart' as globals;
 
 class CalendarScreen extends StatefulWidget {
@@ -31,6 +35,7 @@ class _CalendarScreenState extends State<CalendarScreen>
 
   bool _showHorizontalCalendar = true;
   String _selectedStation = globals.stations[0];
+  String _token; // Hacky solution
 
   @override
   void initState() {
@@ -49,6 +54,8 @@ class _CalendarScreenState extends State<CalendarScreen>
 
   @override
   Widget build(BuildContext context) {
+    _token = TokenHolder.of(context)?.token;
+
     return Container(
       color: customColors.osloWhite,
       child: Column(
@@ -97,8 +104,7 @@ class _CalendarScreenState extends State<CalendarScreen>
                   _showHorizontalCalendar = !_showHorizontalCalendar;
                 }),
               ),
-              role == globals.KeycloakRoles.reuse_station ||
-                      role == globals.KeycloakRoles.reg_employee
+              role == globals.KeycloakRoles.reuse_station
                   ? _headerButton(
                       icon: customIcons.add,
                       onPressed: () {
@@ -108,6 +114,12 @@ class _CalendarScreenState extends State<CalendarScreen>
                               builder: (context) => AddExtraPickupScreen(),
                             ));
                       },
+                    )
+                  : Container(),
+              role == globals.KeycloakRoles.reg_employee
+                  ? _headerButton(
+                      icon: customIcons.add,
+                      onPressed: _puchCreateOccurenceScreen,
                     )
                   : Container(),
               widget.isLoading
@@ -164,5 +176,18 @@ class _CalendarScreenState extends State<CalendarScreen>
 
   Future<void> _refreshCalendar() async {
     BlocProvider.of<CalendarBloc>(context).add(CalendarRefreshRequested());
+  }
+
+  Future<void> _puchCreateOccurenceScreen() async {
+    final bool occurrenceAdded = await Navigator.push(
+      context,
+      MaterialPageRoute<bool>(
+        builder: (context) => CreateOccurrenceScreen(_token),
+      ),
+    );
+    if (occurrenceAdded) {
+      uiHelper.showSnackbar(context, 'Opprettet hendelsen!');
+      BlocProvider.of<CalendarBloc>(context).add(CalendarRefreshRequested());
+    }
   }
 }

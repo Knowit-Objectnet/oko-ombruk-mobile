@@ -9,22 +9,24 @@ import 'package:ombruk/globals.dart' as globals;
 
 class UserRepository {
   final storage = FlutterSecureStorage();
-  String accessToken;
-  String expiresAt;
-  String refreshToken;
-  String clientId;
-  List<String> roles = [];
+  String _accessToken;
+  String _expiresAt;
+  String _refreshToken;
+  String _clientId;
+  List<String> _roles = [];
+
+  String get accessToken => _accessToken;
 
   Future<void> loadFromStorage() async {
-    expiresAt = await storage.read(key: "expiresAt");
-    accessToken = await storage.read(key: "accessToken");
-    refreshToken = await storage.read(key: 'refreshToken');
-    clientId = await storage.read(key: 'clientId');
+    _expiresAt = await storage.read(key: "expiresAt");
+    _accessToken = await storage.read(key: "accessToken");
+    _refreshToken = await storage.read(key: 'refreshToken');
+    _clientId = await storage.read(key: 'clientId');
 
     String roleString = await storage.read(key: 'roles');
     if (roleString != null) {
       List<dynamic> list = jsonDecode(roleString);
-      roles = list.map((e) => e.toString()).toList();
+      _roles = list.map((e) => e.toString()).toList();
     }
   }
 
@@ -43,27 +45,27 @@ class UserRepository {
   Future<bool> requestLogOut() async {
     String url = '${globals.keycloakBaseUrl}/protocol/openid-connect/logout';
     Map<String, String> headers = {};
-    headers['Authorization'] = 'Bearer ' + accessToken;
+    headers['Authorization'] = 'Bearer ' + _accessToken;
     headers['Content-Type'] = 'application/x-www-form-urlencoded';
     final response = await http.post(url,
         headers: headers,
-        body: {'client_id': clientId, 'refresh_token': refreshToken});
+        body: {'client_id': _clientId, 'refresh_token': _refreshToken});
     return response.statusCode == 204;
   }
 
   Future<void> saveCredentials(
       Credential credential, List<String> roles) async {
     Map<String, dynamic> map = credential.response;
-    expiresAt = map['expires_at'].toString();
-    accessToken = map['access_token'].toString();
-    refreshToken = credential.refreshToken;
-    clientId = credential.client.clientId;
-    this.roles = roles;
+    _expiresAt = map['expires_at'].toString();
+    _accessToken = map['access_token'].toString();
+    _refreshToken = credential.refreshToken;
+    _clientId = credential.client.clientId;
+    this._roles = roles;
 
-    await storage.write(key: "expiresAt", value: expiresAt);
-    await storage.write(key: "accessToken", value: accessToken);
-    await storage.write(key: "refreshToken", value: refreshToken);
-    await storage.write(key: "clientId", value: clientId);
+    await storage.write(key: "expiresAt", value: _expiresAt);
+    await storage.write(key: "accessToken", value: _accessToken);
+    await storage.write(key: "refreshToken", value: _refreshToken);
+    await storage.write(key: "clientId", value: _clientId);
     await storage.write(key: 'roles', value: jsonEncode(roles));
   }
 
@@ -79,13 +81,13 @@ class UserRepository {
 
   /// returns a value from [globals.KeycloakRoles] or null if no match
   globals.KeycloakRoles getRole() {
-    if (roles.contains(describeEnum(globals.KeycloakRoles.partner))) {
+    if (_roles.contains(describeEnum(globals.KeycloakRoles.partner))) {
       return globals.KeycloakRoles.partner;
     }
-    if (roles.contains(describeEnum(globals.KeycloakRoles.reg_employee))) {
+    if (_roles.contains(describeEnum(globals.KeycloakRoles.reg_employee))) {
       return globals.KeycloakRoles.reg_employee;
     }
-    if (roles.contains(describeEnum(globals.KeycloakRoles.reuse_station))) {
+    if (_roles.contains(describeEnum(globals.KeycloakRoles.reuse_station))) {
       return globals.KeycloakRoles.reuse_station;
     }
     return null;

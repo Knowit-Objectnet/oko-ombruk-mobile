@@ -4,6 +4,7 @@ import 'package:ombruk/ui/customIcons.dart' as customIcons;
 import 'package:ombruk/ui/customColors.dart' as customColors;
 import 'package:ombruk/ui/tabs/components/DatePicker.dart';
 import 'package:ombruk/ui/tabs/components/PartnerPicker.dart';
+import 'package:ombruk/ui/tabs/components/ReturnButton.dart';
 import 'package:ombruk/ui/tabs/components/TextFormInput.dart';
 import 'package:ombruk/ui/tabs/components/TimePicker.dart';
 
@@ -33,20 +34,7 @@ class _AddExtraPickupScreenState extends State<AddExtraPickupScreen> {
           child: ListView(
             padding: EdgeInsets.symmetric(horizontal: 16.0),
             children: <Widget>[
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 8.0),
-                child: Row(
-                  children: <Widget>[
-                    CircleAvatar(
-                      backgroundColor: customColors.osloBlue,
-                      child: IconButton(
-                        icon: customIcons.image(customIcons.arrowLeft),
-                        onPressed: () => Navigator.pop(context),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              ReturnButton(),
               Text(
                 'Utlys ekstrauttak',
                 style: TextStyle(

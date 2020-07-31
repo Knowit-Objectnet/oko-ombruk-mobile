@@ -11,6 +11,7 @@ import 'package:ombruk/ui/tabs/TabsScreenStasjon.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ombruk/blocs/AuthenticationBloc.dart';
+import 'package:ombruk/ui/tabs/TokenHolder.dart';
 import 'package:ombruk/ui/ui.helper.dart';
 
 class AuthRouter extends StatelessWidget {
@@ -32,29 +33,52 @@ class AuthRouter extends StatelessWidget {
           },
           child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
             builder: (BuildContext context, AuthenticationState state) {
+              // Rmember that we cannot just take userRepository.accessToken, but we need bloc
+              String token =
+                  context.bloc<AuthenticationBloc>().userRepository.accessToken;
+
               switch (state.runtimeType) {
                 case AuthenticationInitial:
                   return SplashScreen();
                 case AuthenticationInProgressLoggingOut:
+                  // All this displays the same screen while we are waiting for log out.
                   AuthenticationState previousState =
                       (state as AuthenticationInProgressLoggingOut)
                           .previousState;
                   if (previousState is AuthenticationSuccessPartner) {
-                    return TabsScreenPartner();
+                    return TokenHolder(
+                      token: token,
+                      child: TabsScreenPartner(),
+                    );
                   }
                   if (previousState is AuthenticationSuccessReg) {
-                    return TabsScreenReg();
+                    return TokenHolder(
+                      token: token,
+                      child: TabsScreenReg(),
+                    );
                   }
                   if (previousState is AuthenticationSuccessStasjoner) {
-                    return TabsScreenStasjon();
+                    return TokenHolder(
+                      token: token,
+                      child: TabsScreenStasjon(),
+                    );
                   }
                   throw Exception();
                 case AuthenticationSuccessPartner:
-                  return TabsScreenPartner();
+                  return TokenHolder(
+                    token: token,
+                    child: TabsScreenPartner(),
+                  );
                 case AuthenticationSuccessReg:
-                  return TabsScreenReg();
+                  return TokenHolder(
+                    token: token,
+                    child: TabsScreenReg(),
+                  );
                 case AuthenticationSuccessStasjoner:
-                  return TabsScreenStasjon();
+                  return TokenHolder(
+                    token: token,
+                    child: TabsScreenStasjon(),
+                  );
                 case AuthenticationNoToken:
                   return LoginWebView(userRepository: userRepository);
                 case AuthenticationInProgress:

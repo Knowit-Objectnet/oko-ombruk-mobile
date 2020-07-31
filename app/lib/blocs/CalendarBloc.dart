@@ -1,14 +1,17 @@
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:bloc/bloc.dart';
+
+import 'package:ombruk/DataProvider/CalendarApiClient.dart';
+
 import 'package:ombruk/models/CalendarEvent.dart';
-import 'package:ombruk/repositories/CalendarRepository.dart';
+import 'package:ombruk/models/CustomResponse.dart';
 
 class CalendarBloc extends Bloc<CalendarBlocEvent, CalendarState> {
-  final CalendarRepository calendarRepository;
+  final CalendarApiClient calendarApiClient;
 
-  CalendarBloc({@required this.calendarRepository})
-      : assert(calendarRepository != null);
+  CalendarBloc({@required this.calendarApiClient})
+      : assert(calendarApiClient != null);
 
   @override
   CalendarState get initialState => CalendarInitial();
@@ -18,26 +21,24 @@ class CalendarBloc extends Bloc<CalendarBlocEvent, CalendarState> {
     switch (event.runtimeType) {
       case CalendarInitialEventsRequested:
         yield CalendarInitialLoadInProgress();
-        try {
-          final List<CalendarEvent> events =
-              await calendarRepository.getEvents();
-          yield CalendarLoadSuccess(calendarEvents: events);
-        } catch (_) {
-          yield CalendarLoadFailure();
-        }
+        yield* _fetchEvents();
         break;
       case CalendarRefreshRequested:
         final List<CalendarEvent> events =
             (state as CalendarLoadSuccess).calendarEvents;
         yield CalendarRefreshInProgress(calendarEvents: events);
-        try {
-          final List<CalendarEvent> events =
-              await calendarRepository.getEvents();
-          yield CalendarLoadSuccess(calendarEvents: events);
-        } catch (_) {
-          yield CalendarLoadFailure();
-        }
+        yield* _fetchEvents();
         break;
+    }
+  }
+
+  Stream<CalendarState> _fetchEvents() async* {
+    final CustomResponse response = await calendarApiClient.fetchEvents();
+    if (response.success) {
+      yield CalendarLoadSuccess(calendarEvents: response.data);
+    } else {
+      print(response);
+      yield CalendarLoadFailure();
     }
   }
 }

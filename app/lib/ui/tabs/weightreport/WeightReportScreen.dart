@@ -10,7 +10,7 @@ import 'package:ombruk/ui/tabs/weightreport/ListElementWithoutWeight.dart';
 import 'package:ombruk/ui/tabs/weightreport/ListElementWithWeight.dart';
 import 'package:ombruk/ui/tabs/weightreport/WeightReportDialog.dart';
 import 'package:ombruk/ui/ui.helper.dart';
-
+import 'package:ombruk/ui/tabs/TokenHolder.dart';
 import 'package:ombruk/ui/customColors.dart' as customColors;
 import 'package:ombruk/ui/customIcons.dart' as customIcons;
 
@@ -21,8 +21,8 @@ class WeightReportScreen extends StatefulWidget {
 
 class _WeightReportScreenState extends State<WeightReportScreen> {
   final WeightReportClient _weightReportClient = WeightReportClient();
-  final CalendarApiClient _calendarClient = CalendarApiClient();
 
+  CalendarApiClient _calendarClient;
   List<CalendarEvent> _nonReportedList;
   List<_EventWithWeight> _reportedList;
   bool _initialLoaded = false;
@@ -39,6 +39,9 @@ class _WeightReportScreenState extends State<WeightReportScreen> {
 
   @override
   Widget build(BuildContext context) {
+    String token = TokenHolder.of(context).token;
+    _calendarClient = CalendarApiClient(token);
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -85,14 +88,14 @@ class _WeightReportScreenState extends State<WeightReportScreen> {
 
   Future<void> _fetchData() async {
     try {
-      Future<List<CalendarEvent>> futureEvents = _calendarClient.fetchEvents();
+      Future<CustomResponse> futureEvents = _calendarClient.fetchEvents();
       Future<CustomResponse> futureResponse =
           _weightReportClient.fetchWeightReports();
-      await Future.wait<dynamic>([futureEvents, futureResponse],
+      await Future.wait<CustomResponse>([futureEvents, futureResponse],
           eagerError: true, cleanUp: (_) {
         uiHelper.showSnackbar(context, 'Kunne ikke hente vekt rapporter');
       }).then((value) {
-        _buildLists(value[0], value[1].data);
+        _buildLists(value[0].data, value[1].data);
       });
     } catch (_e) {
       uiHelper.showSnackbar(context, 'Kunne ikke hente vekt rapporter');
