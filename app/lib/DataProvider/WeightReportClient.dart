@@ -7,6 +7,14 @@ import 'package:ombruk/models/WeightReport.dart';
 import 'package:ombruk/globals.dart' as globals;
 
 class WeightReportClient {
+  final String token;
+
+  WeightReportClient(this.token) {
+    if (token != null) {
+      _headers.putIfAbsent('Authorization', () => 'Bearer ' + token);
+    }
+  }
+
   final Map<String, String> _headers = {
     'Content-type': 'application/json',
     'Accept': 'application/json'
@@ -46,22 +54,19 @@ class WeightReportClient {
   }
 
   /// Returns a CustomResponse with a WeightReport if it was sucecssfully added
-  Future<CustomResponse<WeightReport>> addWeight(
-      int eventID, int partnerID, int weight) async {
+  Future<CustomResponse<WeightReport>> addWeight(int id, int weight) async {
     Uri uri =
         Uri.https(globals.baseUrlStripped, '${globals.requiredPath}/reports');
-    final Response response = await post(
+
+    final String body = jsonEncode({'id': id, 'weight': weight});
+
+    final Response response = await patch(
       uri,
       headers: _headers,
-      body: jsonEncode({
-        'event': {'id': eventID},
-        'partner': {'id': partnerID},
-        'weight': weight
-      }),
+      body: body,
     );
 
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      // fix only 200 or 201
+    if (response.statusCode == 200) {
       try {
         final dynamic parsed = jsonDecode(response.body);
         return CustomResponse(

@@ -83,7 +83,5 @@ enum Weekdays { monday, tuesday, wednesday, thursday, friday }
 
 /// Removes the microseconds from [DateTime] so that the backend don't whine
 String getDateString(DateTime dateTime) {
-  return dateTime
-      .toIso8601String()
-      .substring(0, dateTime.toString().length - 4);
+  return dateTime?.toIso8601String()?.substring(0, 19);
 }

@@ -20,12 +20,12 @@ class WeightReportScreen extends StatefulWidget {
 }
 
 class _WeightReportScreenState extends State<WeightReportScreen> {
-  final WeightReportClient _weightReportClient = WeightReportClient();
-
+  WeightReportClient _weightReportClient;
   CalendarApiClient _calendarClient;
   List<CalendarEvent> _nonReportedList;
   List<_EventWithWeight> _reportedList;
   bool _initialLoaded = false;
+  String _token;
 
   @override
   void initState() {
@@ -39,8 +39,9 @@ class _WeightReportScreenState extends State<WeightReportScreen> {
 
   @override
   Widget build(BuildContext context) {
-    String token = TokenHolder.of(context).token;
-    _calendarClient = CalendarApiClient(token);
+    _token = TokenHolder.of(context).token;
+    _weightReportClient = WeightReportClient(_token);
+    _calendarClient = CalendarApiClient(_token);
 
     return Scaffold(
       appBar: AppBar(
@@ -60,7 +61,7 @@ class _WeightReportScreenState extends State<WeightReportScreen> {
               ? _tryAgainWidget('Kunne ikke hente data')
               : RefreshIndicator(
                   onRefresh: _fetchData,
-                  child: _nonReportedList.isEmpty
+                  child: _nonReportedList.isEmpty && _reportedList.isEmpty
                       ? _tryAgainWidget('Ingen uttak funnet')
                       : ListView(
                           padding: EdgeInsets.symmetric(horizontal: 16.0),
@@ -94,10 +95,16 @@ class _WeightReportScreenState extends State<WeightReportScreen> {
       await Future.wait<CustomResponse>([futureEvents, futureResponse],
           eagerError: true, cleanUp: (_) {
         uiHelper.showSnackbar(context, 'Kunne ikke hente vekt rapporter');
-      }).then((value) {
-        _buildLists(value[0].data, value[1].data);
+      }).then((responses) {
+        if (!responses[0].success || !responses[1].success) {
+          print(responses[0]);
+          print(responses[1]);
+          throw Exception();
+        }
+        _buildLists(responses[0].data, responses[1].data);
       });
-    } catch (_e) {
+    } catch (e) {
+      print(e);
       uiHelper.showSnackbar(context, 'Kunne ikke hente vekt rapporter');
     } finally {
       setState(() {
@@ -113,9 +120,9 @@ class _WeightReportScreenState extends State<WeightReportScreen> {
 
     for (CalendarEvent calendarEvent in calendarEvents) {
       WeightReport weightReport = weightReports.firstWhere(
-          (element) => element.event.id == calendarEvent.id,
+          (element) => element.eventID == calendarEvent.id,
           orElse: () => null);
-      if (weightReport != null) {
+      if (weightReport?.weight != null) {
         reportedListTemp.add(_EventWithWeight(calendarEvent, weightReport));
       } else {
         nonReportedListTemp.add(calendarEvent);
@@ -127,40 +134,44 @@ class _WeightReportScreenState extends State<WeightReportScreen> {
     });
   }
 
-  // TODO: pass partnerID instead of 1
   List<Widget> _buildList() {
     List<Widget> list = [];
     list.add(_subtitle('Ikke rapportert'));
     for (CalendarEvent calendarEvent in _nonReportedList) {
-      list.add(ListElementWithoutWeight(calendarEvent,
-          () => _showNewWeightDialog(eventID: calendarEvent.id, partnerID: 1)));
+      list.add(
+        ListElementWithoutWeight(
+          calendarEvent,
+          () => _showNewWeightDialog(calendarEvent.id),
+        ),
+      );
     }
     list.add(_subtitle('Tidligere uttak'));
     for (_EventWithWeight event in _reportedList) {
-      list.add(ListElementWithWeight(
+      list.add(
+        ListElementWithWeight(
           event.calendarEvent,
           event.weightReport,
           () => _showWeightEditDialog(
-              eventID: event.calendarEvent.id,
-              partnerID: 1,
-              initialWeight: event.weightReport.weight)));
+            eventID: event.calendarEvent.id,
+            initialWeight: event.weightReport.weight,
+          ),
+        ),
+      );
     }
     return list;
   }
 
-  Future<void> _showNewWeightDialog(
-      {@required int eventID, @required int partnerID}) async {
-    Future<void> _submitNewWeight(
-        int eventID, int partnerID, int weight) async {
+  Future<void> _showNewWeightDialog(int id) async {
+    Future<void> _submitNewWeight(int weight) async {
       uiHelper.showLoading(context);
       final CustomResponse response =
-          await _weightReportClient.addWeight(eventID, partnerID, weight);
+          await _weightReportClient.addWeight(id, weight);
       uiHelper.hideLoading(context);
 
       if (response.success) {
         final WeightReport weightReport = response.data;
         final CalendarEvent calendarEvent =
-            _nonReportedList.firstWhere((event) => event.id == eventID);
+            _nonReportedList.firstWhere((event) => event.id == id);
 
         Navigator.of(context).pop(); // Pop dialog
         uiHelper.showSnackbar(context, 'OK!');
@@ -170,6 +181,7 @@ class _WeightReportScreenState extends State<WeightReportScreen> {
           _reportedList.add(_EventWithWeight(calendarEvent, weightReport));
         });
       } else {
+        print(response);
         uiHelper.showSnackbar(context, 'Kunne ikke rapportere vekten');
       }
     }
@@ -179,7 +191,7 @@ class _WeightReportScreenState extends State<WeightReportScreen> {
       builder: (_) {
         return WeightReportDialog(
           onSubmit: (int newWeight) {
-            _submitNewWeight(eventID, partnerID, newWeight);
+            _submitNewWeight(newWeight);
           },
         );
       },
@@ -188,14 +200,12 @@ class _WeightReportScreenState extends State<WeightReportScreen> {
 
   Future<void> _showWeightEditDialog({
     @required int eventID,
-    @required int partnerID,
     @required int initialWeight,
   }) async {
-    Future<void> _updateWeight(
-        int eventID, int partnerID, int newWeight) async {
+    Future<void> _updateWeight(int eventID, int newWeight) async {
       uiHelper.showLoading(context);
       final CustomResponse response =
-          await _weightReportClient.addWeight(eventID, partnerID, newWeight);
+          await _weightReportClient.addWeight(eventID, newWeight);
       uiHelper.hideLoading(context);
 
       if (response.success) {
@@ -222,7 +232,7 @@ class _WeightReportScreenState extends State<WeightReportScreen> {
       builder: (_) {
         return WeightReportDialog(
             onSubmit: (int newWeight) {
-              _updateWeight(eventID, partnerID, newWeight);
+              _updateWeight(eventID, newWeight);
             },
             initialWeight: initialWeight);
       },
@@ -241,26 +251,6 @@ class _WeightReportScreenState extends State<WeightReportScreen> {
       ),
     );
   }
-
-  /*List<Widget> _buildListWithSeperators() {
-    Widget _textDivider(String text) {
-      return Padding(
-        padding: EdgeInsets.symmetric(vertical: 8.0),
-        child: Text(text,
-            style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16.0)),
-      );
-    }
-
-    List<Widget> list = [];
-    list.add(_textDivider('Siste uttak'));
-    for (int index = 0; index < _weightReports.length; index++) {
-      if (index == 1) {
-        list.add(_textDivider('Tidligere uttak'));
-      }
-      list.add(_weightElement(_weightReports[index]));
-    }
-    return list;
-  }*/
 }
 
 class _EventWithWeight {
