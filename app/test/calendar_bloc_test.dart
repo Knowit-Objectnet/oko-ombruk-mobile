@@ -35,7 +35,8 @@ void main() {
 
   group('Fetching of events', () {
     test('Successful initial fetch', () {
-      final CustomResponse response = CustomResponse(
+      final CustomResponse<List<CalendarEvent>> response =
+          CustomResponse<List<CalendarEvent>>(
         success: true,
         statusCode: 200,
         data: <CalendarEvent>[],
@@ -57,7 +58,8 @@ void main() {
     });
 
     test('Failed initial fetch', () {
-      final CustomResponse response = CustomResponse(
+      final CustomResponse<List<CalendarEvent>> response =
+          CustomResponse<List<CalendarEvent>>(
         success: false,
         statusCode: 400,
         data: null,

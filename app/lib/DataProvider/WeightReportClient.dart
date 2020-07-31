@@ -12,10 +12,12 @@ class WeightReportClient {
     'Accept': 'application/json'
   };
 
-  /// Returns a list of WeightReports on success
-  Future<CustomResponse> fetchWeightReports() async {
-    final Response response =
-        await get('${globals.weightReportBaseUrl}/reports');
+  /// Returns CustomResponse with a list of WeightReports on success
+  Future<CustomResponse<List<WeightReport>>> fetchWeightReports() async {
+    Uri uri =
+        Uri.https(globals.baseUrlStripped, '${globals.requiredPath}/reports');
+
+    final Response response = await get(uri);
 
     if (response.statusCode == 200) {
       try {
@@ -39,14 +41,17 @@ class WeightReportClient {
       success: false,
       statusCode: response.statusCode,
       data: null,
+      message: response.body,
     );
   }
 
-  /// Returns a WeightReport if it was sucecssfully added
-  Future<CustomResponse> addWeight(
+  /// Returns a CustomResponse with a WeightReport if it was sucecssfully added
+  Future<CustomResponse<WeightReport>> addWeight(
       int eventID, int partnerID, int weight) async {
+    Uri uri =
+        Uri.https(globals.baseUrlStripped, '${globals.requiredPath}/reports');
     final Response response = await post(
-      '${globals.weightReportBaseUrl}/reports',
+      uri,
       headers: _headers,
       body: jsonEncode({
         'event': {'id': eventID},
@@ -77,6 +82,7 @@ class WeightReportClient {
       success: false,
       statusCode: response.statusCode,
       data: null,
+      message: response.body,
     );
   }
 }

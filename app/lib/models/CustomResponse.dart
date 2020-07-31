@@ -1,9 +1,9 @@
 import 'package:meta/meta.dart';
 
-class CustomResponse {
+class CustomResponse<T> {
   final bool success;
   final int statusCode;
-  final dynamic data;
+  final T data;
   final String message;
 
   CustomResponse({

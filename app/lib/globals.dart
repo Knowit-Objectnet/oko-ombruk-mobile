@@ -1,15 +1,10 @@
 final String keycloakBaseUrl =
     'https://keycloak.staging.oko.knowit.no:8443/auth/realms/staging';
 
-final String calendarBaseUrlStripped =
-    'tcuk58u5ge.execute-api.eu-central-1.amazonaws.com';
-
-final String weightReportBaseUrl =
+final String baseUrlStripped =
     'tcuk58u5ge.execute-api.eu-central-1.amazonaws.com';
 
 final String requiredPath = '/staging/backend';
-
-final String weightReportPath = '/staging/backend'; // TODO :make into ONE
 
 final Map<int, String> weekdaysShort = {
   1: 'Man',

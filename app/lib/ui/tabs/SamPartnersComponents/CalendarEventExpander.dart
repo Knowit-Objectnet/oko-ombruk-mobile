@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ombruk/blocs/CalendarBloc.dart';
 
 import 'package:ombruk/models/CalendarEvent.dart';
+import 'package:ombruk/models/CustomResponse.dart';
 
 import 'package:ombruk/DataProvider/CalendarApiClient.dart';
 
@@ -213,18 +214,19 @@ class _CalendarEventExpanderState extends State<CalendarEventExpander> {
   void _updateEvent(
       int id, DateTime date, TimeOfDay startTime, TimeOfDay endTime) async {
     try {
-      bool updateSuccess = await CalendarApiClient(_token)
+      final CustomResponse response = await CalendarApiClient(_token)
           .updateEvent(id, date, startTime, endTime);
-      if (updateSuccess) {
+      if (response.success) {
         setState(() {
           edit = false;
         });
         BlocProvider.of<CalendarBloc>(context).add(CalendarRefreshRequested());
         uiHelper.showSnackbar(context, 'Hendelsen er oppdatert');
       } else {
-        throw Exception();
+        throw Exception(response.toString());
       }
     } catch (e) {
+      print(e.toString());
       uiHelper.showSnackbar(context, 'Intern feil');
     } finally {
       uiHelper.hideLoading(context);
@@ -235,15 +237,16 @@ class _CalendarEventExpanderState extends State<CalendarEventExpander> {
       dynamic recurrenceRuleId) async {
     period ? id = null : recurrenceRuleId = null;
     try {
-      bool deleteSuccess = await CalendarApiClient(_token)
+      final CustomResponse response = await CalendarApiClient(_token)
           .deleteCalendarEvent(id, startDate, endDate, recurrenceRuleId);
-      if (deleteSuccess) {
+      if (response.success) {
         uiHelper.showSnackbar(context, 'Slettet hendelse');
         BlocProvider.of<CalendarBloc>(context).add(CalendarRefreshRequested());
       } else {
-        throw Exception();
+        throw Exception(response.toString());
       }
     } catch (e) {
+      print(e.toString());
       uiHelper.showSnackbar(context, 'Intern feil');
     } finally {
       uiHelper.hideLoading(context);

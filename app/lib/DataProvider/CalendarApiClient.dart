@@ -25,7 +25,8 @@ class CalendarApiClient {
   };
 
   /// Returns a list of CalendarEvents on sucecss
-  Future<CustomResponse> fetchEvents({int stationID, int partnerID}) async {
+  Future<CustomResponse<List<CalendarEvent>>> fetchEvents(
+      {int stationID, int partnerID}) async {
     // TODO: Add time parameter to filter on time
     Map<String, String> parameters = {};
     if (stationID != null) {
@@ -35,8 +36,8 @@ class CalendarApiClient {
       parameters.putIfAbsent('partner-id', () => partnerID.toString());
     }
 
-    Uri uri = Uri.https('${globals.calendarBaseUrlStripped}',
-        '${globals.requiredPath}/events', parameters);
+    Uri uri = Uri.https(
+        globals.baseUrlStripped, '${globals.requiredPath}/events', parameters);
 
     final Response response = await get(uri, headers: _headers);
 
@@ -70,6 +71,7 @@ class CalendarApiClient {
     );
   }
 
+  /// Returns a CustomResponse with null data
   Future<CustomResponse> createCalendarEvent(
       CreateCalendarEventData eventData) async {
     final String startString = globals.getDateString(eventData.startDateTime);
@@ -79,8 +81,8 @@ class CalendarApiClient {
     final List<String> weekdaysString =
         eventData.weekdays.map((e) => describeEnum(e).toUpperCase()).toList();
 
-    Uri uri = Uri.https(
-        '${globals.calendarBaseUrlStripped}', '${globals.requiredPath}/events');
+    Uri uri =
+        Uri.https(globals.baseUrlStripped, '${globals.requiredPath}/events');
 
     String body = jsonEncode({
       'startDateTime': startString,
@@ -104,8 +106,9 @@ class CalendarApiClient {
     );
   }
 
-  Future<bool> deleteCalendarEvent(int id, DateTime startDate, DateTime endDate,
-      dynamic recurrenceRuleID) async {
+  /// Returns a CustomResponse with null data
+  Future<CustomResponse> deleteCalendarEvent(int id, DateTime startDate,
+      DateTime endDate, dynamic recurrenceRuleID) async {
     final String startString = globals.getDateString(startDate);
     final String endString = globals.getDateString(endDate);
     var queryParameters;
@@ -120,15 +123,20 @@ class CalendarApiClient {
       queryParameters = {'event-id': id.toString()};
     }
 
-    Uri uri = Uri.https('${globals.calendarBaseUrlStripped}',
+    Uri uri = Uri.https(globals.baseUrlStripped,
         '${globals.requiredPath}/events', queryParameters);
 
     final Response response = await delete(uri, headers: _headers);
 
-    return response.statusCode == 200; // TODO: return CustomReponse here
+    return CustomResponse(
+      success: response.statusCode == 200,
+      statusCode: response.statusCode,
+      data: null,
+    );
   }
 
-  Future<bool> updateEvent(
+  /// Returns a CustomResponse with null data
+  Future<CustomResponse<bool>> updateEvent(
       int id, DateTime date, TimeOfDay startTime, TimeOfDay endTime) async {
     DateTime startDateTime = DateTime(
         date.year, date.month, date.day, startTime.hour, startTime.minute);
@@ -138,8 +146,8 @@ class CalendarApiClient {
     final String startDateTimeString = globals.getDateString(startDateTime);
     final String endDateTimeString = globals.getDateString(endDateTime);
 
-    Uri uri = Uri.https(
-        '${globals.calendarBaseUrlStripped}', '${globals.requiredPath}/events');
+    Uri uri =
+        Uri.https(globals.baseUrlStripped, '${globals.requiredPath}/events');
 
     String body = jsonEncode({
       'id': id,
@@ -149,6 +157,10 @@ class CalendarApiClient {
 
     final Response response = await patch(uri, headers: _headers, body: body);
 
-    return response.statusCode == 200; // TODO: return CustomReponse here
+    return CustomResponse(
+      success: response.statusCode == 200,
+      statusCode: response.statusCode,
+      data: null,
+    );
   }
 }
