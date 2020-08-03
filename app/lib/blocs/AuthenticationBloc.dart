@@ -59,6 +59,16 @@ class AuthenticationBloc
               exception: Exception('OBS: Du ble ikke logget ut!'));
         }
         break;
+      case AuthenticationRefreshedToken:
+        final bool newTokenSucess = await userRepository.requestRefreshToken();
+        if (newTokenSucess) {
+          yield state;
+        } else {
+          yield AuthenticationError(
+            exception:
+                Exception('Ugyldig innlogging. Vennligst logg inn igjen.'),
+          );
+        }
     }
   }
 
@@ -138,3 +148,5 @@ class AuthenticationLogIn extends AuthenticationEvent {
 }
 
 class AuthenticationLogOut extends AuthenticationEvent {}
+
+class AuthenticationRefreshedToken extends AuthenticationEvent {}
