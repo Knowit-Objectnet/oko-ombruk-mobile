@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:ombruk/DataProvider/CalendarApiClient.dart';
 import 'package:ombruk/DataProvider/WeightReportClient.dart';
+import 'package:ombruk/businessLogic/CalendarViewModel.dart';
 import 'package:ombruk/businessLogic/UserViewModel.dart';
 import 'package:ombruk/models/CalendarEvent.dart';
 import 'package:ombruk/models/CustomResponse.dart';
@@ -15,18 +15,14 @@ import 'package:ombruk/ui/customColors.dart' as customColors;
 import 'package:ombruk/ui/customIcons.dart' as customIcons;
 import 'package:provider/provider.dart';
 
-class WeightReportScreen extends StatefulWidget {
-  @override
-  _WeightReportScreenState createState() => _WeightReportScreenState();
-}
-
-class _WeightReportScreenState extends State<WeightReportScreen> {
+class WeightReportScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Consumer(
-      builder: (context, UserViewModel userViewModel, child) {
+    return Consumer2<UserViewModel, CalendarViewModel>(
+      builder: (context, UserViewModel userViewModel,
+          CalendarViewModel calendarViewModel, child) {
         return _WeightReportScreenConsumed(
-          CalendarApiClient(userViewModel.accessToken),
+          calendarViewModel,
           WeightReportClient(userViewModel.accessToken),
         );
       },
@@ -35,10 +31,10 @@ class _WeightReportScreenState extends State<WeightReportScreen> {
 }
 
 class _WeightReportScreenConsumed extends StatefulWidget {
-  final CalendarApiClient calendarApiClient;
+  final CalendarViewModel calendarViewModel;
   final WeightReportClient weightReportClient;
 
-  _WeightReportScreenConsumed(this.calendarApiClient, this.weightReportClient);
+  _WeightReportScreenConsumed(this.calendarViewModel, this.weightReportClient);
 
   @override
   _WeightReportScreenStateConsumer createState() =>
@@ -109,20 +105,21 @@ class _WeightReportScreenStateConsumer
 
   Future<void> _fetchData() async {
     try {
-      Future<CustomResponse> futureEvents =
-          widget.calendarApiClient.fetchEvents();
+      // Future<CustomResponse> futureEvents =
+      // widget.calendarApiClient.fetchEvents();
+      Future<bool> futureSuccess = widget.calendarViewModel.fetchEvents();
       Future<CustomResponse> futureResponse =
           widget.weightReportClient.fetchWeightReports();
-      await Future.wait<CustomResponse>([futureEvents, futureResponse],
+      await Future.wait<dynamic>([futureSuccess, futureResponse],
           eagerError: true, cleanUp: (_) {
         uiHelper.showSnackbar(context, 'Kunne ikke hente vekt rapporter');
       }).then((responses) {
-        if (!responses[0].success || !responses[1].success) {
+        if (!responses[0] || !responses[1].success) {
           print(responses[0]);
           print(responses[1]);
           throw Exception();
         }
-        _buildLists(responses[0].data, responses[1].data);
+        _buildLists(widget.calendarViewModel.calendarEvents, responses[1].data);
       });
     } catch (e) {
       print(e);

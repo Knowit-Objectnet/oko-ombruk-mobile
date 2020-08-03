@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-import 'package:ombruk/ui/tabs/calendar/CalendarBlocProvider.dart';
 import 'package:ombruk/ui/tabs/SamPartnersComponents/PickupDialogPartners.dart';
 import 'package:ombruk/ui/tabs/MyPage/MyPage.dart';
 import 'package:ombruk/ui/tabs/bottomAppBarComponents/DrawerButton.dart';
 import 'package:ombruk/ui/tabs/bottomAppBarComponents/BottomAppBarButton.dart';
+import 'package:ombruk/ui/tabs/calendar/CalendarScreen.dart';
 import 'package:ombruk/ui/tabs/notifications/NotificationScreen.dart';
 import 'package:ombruk/ui/tabs/partners/PartnerScreen.dart';
 import 'package:ombruk/ui/tabs/weightreport/WeightReportScreen.dart';
@@ -33,7 +33,7 @@ class _TabsScreenPartnerState extends State<TabsScreenPartner> {
         // IndexStack keeps the screen states alive between tab changes
         index: _selectedIndex,
         children: <Widget>[
-          SafeArea(child: CalendarBlocProvider()),
+          SafeArea(child: CalendarScreen()),
           WeightReportScreen(),
           NotificationScreen(),
           // The screens below are in the drawer

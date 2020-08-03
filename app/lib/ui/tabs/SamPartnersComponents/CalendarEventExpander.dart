@@ -1,13 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ombruk/blocs/CalendarBloc.dart';
-import 'package:ombruk/businessLogic/UserViewModel.dart';
+import 'package:ombruk/businessLogic/CalendarViewModel.dart';
 
 import 'package:ombruk/models/CalendarEvent.dart';
-import 'package:ombruk/models/CustomResponse.dart';
-
-import 'package:ombruk/DataProvider/CalendarApiClient.dart';
 
 import 'package:ombruk/ui/tabs/components/DatePicker.dart';
 import 'package:ombruk/ui/tabs/components/TimePicker.dart';
@@ -42,8 +37,8 @@ class _CalendarEventExpanderState extends State<CalendarEventExpander> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer(
-      builder: (context, UserViewModel userViewModel, child) {
+    return Consumer<CalendarViewModel>(
+      builder: (context, CalendarViewModel calendarViewModel, child) {
         return Container(
           color: customColors.osloWhite,
           child: Padding(
@@ -118,7 +113,7 @@ class _CalendarEventExpanderState extends State<CalendarEventExpander> {
                                   updatedDate,
                                   updatedStartTime,
                                   updatedEndTime,
-                                  userViewModel.accessToken,
+                                  calendarViewModel,
                                 ),
                               )
                             ],
@@ -208,7 +203,7 @@ class _CalendarEventExpanderState extends State<CalendarEventExpander> {
                                       widget.event.startDateTime,
                                       endPeriod,
                                       widget.event.recurrenceRule.id,
-                                      userViewModel.accessToken,
+                                      calendarViewModel,
                                     );
                                   },
                                   padding: EdgeInsets.symmetric(
@@ -232,25 +227,20 @@ class _CalendarEventExpanderState extends State<CalendarEventExpander> {
     DateTime date,
     TimeOfDay startTime,
     TimeOfDay endTime,
-    String token,
+    CalendarViewModel calendarViewModel,
   ) async {
-    try {
-      final CustomResponse response = await CalendarApiClient(token)
-          .updateEvent(id, date, startTime, endTime);
-      if (response.success) {
-        setState(() {
-          edit = false;
-        });
-        BlocProvider.of<CalendarBloc>(context).add(CalendarRefreshRequested());
-        uiHelper.showSnackbar(context, 'Hendelsen er oppdatert');
-      } else {
-        throw Exception(response.toString());
-      }
-    } catch (e) {
-      print(e.toString());
+    uiHelper.showLoading(context);
+    final bool success =
+        await calendarViewModel.updateEvent(id, date, startTime, endTime);
+    uiHelper.hideLoading(context);
+
+    if (success) {
+      setState(() {
+        edit = false;
+      });
+      uiHelper.showSnackbar(context, 'Hendelsen er oppdatert');
+    } else {
       uiHelper.showSnackbar(context, 'Intern feil');
-    } finally {
-      uiHelper.hideLoading(context);
     }
   }
 
@@ -259,23 +249,19 @@ class _CalendarEventExpanderState extends State<CalendarEventExpander> {
     DateTime startDate,
     DateTime endDate,
     dynamic recurrenceRuleId,
-    String token,
+    CalendarViewModel calendarViewModel,
   ) async {
     period ? id = null : recurrenceRuleId = null;
-    try {
-      final CustomResponse response = await CalendarApiClient(token)
-          .deleteCalendarEvent(id, startDate, endDate, recurrenceRuleId);
-      if (response.success) {
-        uiHelper.showSnackbar(context, 'Slettet hendelse');
-        BlocProvider.of<CalendarBloc>(context).add(CalendarRefreshRequested());
-      } else {
-        throw Exception(response.toString());
-      }
-    } catch (e) {
-      print(e.toString());
+
+    uiHelper.showLoading(context);
+    final bool success = await calendarViewModel.deleteCalendarEvent(
+        id, startDate, endDate, recurrenceRuleId);
+    uiHelper.hideLoading(context);
+
+    if (success) {
+      uiHelper.showSnackbar(context, 'Slettet hendelse');
+    } else {
       uiHelper.showSnackbar(context, 'Intern feil');
-    } finally {
-      uiHelper.hideLoading(context);
     }
   }
 

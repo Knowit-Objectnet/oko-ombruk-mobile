@@ -2,22 +2,25 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
+import 'package:ombruk/businessLogic/UserViewModel.dart';
 
 import 'package:ombruk/models/CalendarEvent.dart';
 import 'package:ombruk/models/CustomResponse.dart';
+import 'package:ombruk/services/serviceLocator.dart';
 
 import 'package:ombruk/ui/tabs/RegComponents/CreateCalendarEventData.dart';
 
 import 'package:ombruk/globals.dart' as globals;
 
-class CalendarApiClient {
-  final String token;
+class CalendarService {
+  UserViewModel _userViewModel = serviceLocator<UserViewModel>();
 
-  CalendarApiClient(this.token) {
-    if (token != null) {
-      _headers.putIfAbsent('Authorization', () => 'Bearer ' + token);
-    }
-  }
+  // CalendarApiClient(this.token) {
+  // if (token != null) {
+  // _headers.putIfAbsent('Authorization', () => 'Bearer ' + token);
+  // }
+  // _userViewModel = serviceLocator<UserViewModel>();
+  // }
 
   final Map<String, String> _headers = {
     'Content-type': 'application/json',
@@ -97,6 +100,28 @@ class CalendarApiClient {
     });
 
     final Response response = await post(uri, headers: _headers, body: body);
+
+    if (response.statusCode == 401) {
+      final bool gotNewTokens = await _userViewModel.requestRefreshToken();
+      if (gotNewTokens) {
+        final Response newResponse =
+            await post(uri, headers: _headers, body: body);
+        if (newResponse.statusCode == 401) {
+          // Log out due to unathorized even with new tokens
+          await _userViewModel.requestLogOut();
+        } else {
+          return CustomResponse(
+            success: response.statusCode == 200,
+            statusCode: response.statusCode,
+            data: null,
+            message: response.body,
+          );
+        }
+      } else {
+        // Log out due to invalid refesh token
+        await _userViewModel.requestLogOut();
+      }
+    }
 
     return CustomResponse(
       success: response.statusCode == 200,

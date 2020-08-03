@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:ombruk/businessLogic/CalendarViewModel.dart';
 import 'package:provider/provider.dart';
-
-import 'package:ombruk/DataProvider/CalendarApiClient.dart';
-import 'package:ombruk/businessLogic/UserViewModel.dart';
-
-import 'package:ombruk/models/CustomResponse.dart';
 
 import 'package:ombruk/globals.dart' as globals;
 
@@ -17,22 +13,48 @@ import 'package:ombruk/ui/ui.helper.dart';
 import 'package:ombruk/ui/customColors.dart' as customColors;
 import 'package:ombruk/ui/customIcons.dart' as customIcons;
 
-class CreateCalendarEventScreen extends StatefulWidget {
+class CreateCalendarEventScreen extends StatelessWidget {
   final String station;
   final String partner;
 
   CreateCalendarEventScreen({
     @required this.station,
     @required this.partner,
-  })  : assert(station != null),
-        assert(partner != null);
+  });
 
   @override
-  _CreateCalendarEventScreenState createState() =>
-      _CreateCalendarEventScreenState();
+  Widget build(BuildContext context) {
+    return Consumer<CalendarViewModel>(
+        builder: (context, CalendarViewModel calendarViewModel, _) {
+      return _CreateCalendarEventScreenConsumed(
+        station: station,
+        partner: partner,
+        calendarViewModel: calendarViewModel,
+      );
+    });
+  }
 }
 
-class _CreateCalendarEventScreenState extends State<CreateCalendarEventScreen> {
+class _CreateCalendarEventScreenConsumed extends StatefulWidget {
+  final CalendarViewModel calendarViewModel;
+  final String station;
+  final String partner;
+
+  _CreateCalendarEventScreenConsumed({
+    @required this.station,
+    @required this.partner,
+    @required this.calendarViewModel,
+  })  : assert(station != null),
+        assert(partner != null),
+        assert(calendarViewModel != null);
+
+  @override
+  _CreateCalendarEventScreenConsumedState createState() =>
+      _CreateCalendarEventScreenConsumedState();
+}
+
+class _CreateCalendarEventScreenConsumedState
+    extends State<_CreateCalendarEventScreenConsumed> {
   final GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
 
   int _interval = 1;
@@ -51,159 +73,156 @@ class _CreateCalendarEventScreenState extends State<CreateCalendarEventScreen> {
   @override
   Widget build(BuildContext context) {
     // TODO: Add gesture detector to take focus off textfield
-    return Consumer<UserViewModel>(
-      builder: (context, userViewModel, _) {
-        return SafeArea(
-          child: Scaffold(
-            key: _key,
-            body: Container(
-              color: customColors.osloLightBeige,
-              // We create a new context so that the SnackBar knows where to pop up
-              child: ListView(
-                padding: EdgeInsets.symmetric(horizontal: 16.0),
-                children: <Widget>[
-                  ReturnButton(returnValue: false),
-                  Text(
-                    'Opprett hendelse',
-                    style: TextStyle(
-                      fontSize: 20.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Padding(
-                      padding: EdgeInsets.only(top: 16.0, bottom: 8.0),
-                      child: Container(
-                        color: customColors.osloWhite,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            DropdownButton<int>(
-                              value: _interval,
-                              onChanged: (value) {
-                                setState(() {
-                                  _interval = value;
-                                });
-                              },
-                              underline: Container(),
-                              items: _intervalElements.entries
-                                  .map((entry) => DropdownMenuItem(
-                                        value: entry.value,
-                                        child: Text(entry.key),
-                                      ))
-                                  .toList(),
-                            ),
-                          ],
-                        ),
-                      )),
-                  _textWithPadding('Velg ukedager'),
-                  WeekdayPicker(
-                    selectedWeekdays: _selectedWeekdays,
-                    weekdaysChanged: (value) {
-                      if (_selectedWeekdays.contains(value)) {
-                        setState(() {
-                          _selectedWeekdays.remove(value);
-                        });
-                      } else {
-                        setState(() {
-                          _selectedWeekdays.add(value);
-                        });
-                      }
-                    },
-                  ),
-                  _textWithPadding('Velg starttidspunkt'),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: <Widget>[
-                      customIcons.image(customIcons.clock),
-                      Expanded(
-                        child: Center(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: <Widget>[
-                              TimePicker(
-                                selectedTime: _startTime,
-                                timeChanged: (value) {
-                                  setState(() {
-                                    _startTime = value;
-                                  });
-                                },
-                              ),
-                              Text('-'),
-                              DatePicker(
-                                dateTime: _startDate,
-                                dateChanged: (value) {
-                                  setState(() {
-                                    _startDate = value;
-                                  });
-                                },
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  _textWithPadding('Velg slutttidspunkt'),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: <Widget>[
-                      customIcons.image(customIcons.clock),
-                      Expanded(
-                        child: Center(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: <Widget>[
-                              TimePicker(
-                                selectedTime: _endTime,
-                                timeChanged: (value) {
-                                  setState(() {
-                                    _endTime = value;
-                                  });
-                                },
-                              ),
-                              Text('-'),
-                              DatePicker(
-                                dateTime: _endDate,
-                                dateChanged: (value) {
-                                  setState(() {
-                                    _endDate = value;
-                                  });
-                                },
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  _textWithPadding('Alternativt'),
-                  Container(
-                    padding: EdgeInsets.only(left: 8.0),
+
+    return SafeArea(
+      child: Scaffold(
+        key: _key,
+        body: Container(
+          color: customColors.osloLightBeige,
+          // We create a new context so that the SnackBar knows where to pop up
+          child: ListView(
+            padding: EdgeInsets.symmetric(horizontal: 16.0),
+            children: <Widget>[
+              ReturnButton(returnValue: false),
+              Text(
+                'Opprett hendelse',
+                style: TextStyle(
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Padding(
+                  padding: EdgeInsets.only(top: 16.0, bottom: 8.0),
+                  child: Container(
                     color: customColors.osloWhite,
-                    child: TextField(
-                      controller: _merknadController,
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintText: 'Merknad',
-                      ),
-                      textCapitalization: TextCapitalization.sentences,
-                      autofocus: false,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        DropdownButton<int>(
+                          value: _interval,
+                          onChanged: (value) {
+                            setState(() {
+                              _interval = value;
+                            });
+                          },
+                          underline: Container(),
+                          items: _intervalElements.entries
+                              .map((entry) => DropdownMenuItem(
+                                    value: entry.value,
+                                    child: Text(entry.key),
+                                  ))
+                              .toList(),
+                        ),
+                      ],
                     ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(vertical: 16.0),
-                    child: FlatButton(
-                      onPressed: () => _submitForm(userViewModel.accessToken),
-                      color: customColors.osloLightGreen,
-                      child: Text('Opprett'),
+                  )),
+              _textWithPadding('Velg ukedager'),
+              WeekdayPicker(
+                selectedWeekdays: _selectedWeekdays,
+                weekdaysChanged: (value) {
+                  if (_selectedWeekdays.contains(value)) {
+                    setState(() {
+                      _selectedWeekdays.remove(value);
+                    });
+                  } else {
+                    setState(() {
+                      _selectedWeekdays.add(value);
+                    });
+                  }
+                },
+              ),
+              _textWithPadding('Velg starttidspunkt'),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  customIcons.image(customIcons.clock),
+                  Expanded(
+                    child: Center(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          TimePicker(
+                            selectedTime: _startTime,
+                            timeChanged: (value) {
+                              setState(() {
+                                _startTime = value;
+                              });
+                            },
+                          ),
+                          Text('-'),
+                          DatePicker(
+                            dateTime: _startDate,
+                            dateChanged: (value) {
+                              setState(() {
+                                _startDate = value;
+                              });
+                            },
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ],
               ),
-            ),
+              _textWithPadding('Velg slutttidspunkt'),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  customIcons.image(customIcons.clock),
+                  Expanded(
+                    child: Center(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          TimePicker(
+                            selectedTime: _endTime,
+                            timeChanged: (value) {
+                              setState(() {
+                                _endTime = value;
+                              });
+                            },
+                          ),
+                          Text('-'),
+                          DatePicker(
+                            dateTime: _endDate,
+                            dateChanged: (value) {
+                              setState(() {
+                                _endDate = value;
+                              });
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              _textWithPadding('Alternativt'),
+              Container(
+                padding: EdgeInsets.only(left: 8.0),
+                color: customColors.osloWhite,
+                child: TextField(
+                  controller: _merknadController,
+                  decoration: InputDecoration(
+                    border: InputBorder.none,
+                    hintText: 'Merknad',
+                  ),
+                  textCapitalization: TextCapitalization.sentences,
+                  autofocus: false,
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 16.0),
+                child: FlatButton(
+                  onPressed: _submitForm,
+                  color: customColors.osloLightGreen,
+                  child: Text('Opprett'),
+                ),
+              ),
+            ],
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 
@@ -216,7 +235,7 @@ class _CreateCalendarEventScreenState extends State<CreateCalendarEventScreen> {
         ));
   }
 
-  Future<void> _submitForm(String token) async {
+  Future<void> _submitForm() async {
     CreateCalendarEventData eventData;
     try {
       eventData = CreateCalendarEventData.fromData(
@@ -238,21 +257,13 @@ class _CreateCalendarEventScreenState extends State<CreateCalendarEventScreen> {
     }
 
     uiHelper.showLoading(context);
-    try {
-      // TODO use provider.of here instead of passing token
-      CustomResponse response =
-          await CalendarApiClient(token).createCalendarEvent(eventData);
-      if (response.success) {
-        uiHelper.hideLoading(context); // Hide it so that the next .pop works
-        Navigator.pop(context, true);
-      } else {
-        throw Exception(response.toString());
-      }
-    } catch (e) {
-      print(e.toString());
+    final bool success =
+        await widget.calendarViewModel.createCalendarEvent(eventData);
+    uiHelper.hideLoading(context);
+    if (success) {
+      Navigator.pop(context, true);
+    } else {
       uiHelper.showSnackbarUnknownScaffold(_key.currentState, 'Intern feil');
-    } finally {
-      uiHelper.hideLoading(context);
     }
   }
 }

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'package:ombruk/ui/tabs/calendar/CalendarBlocProvider.dart';
 import 'package:ombruk/ui/tabs/bottomAppBarComponents/DrawerButton.dart';
 import 'package:ombruk/ui/tabs/bottomAppBarComponents/BottomAppBarButton.dart';
+import 'package:ombruk/ui/tabs/calendar/CalendarScreen.dart';
 import 'package:ombruk/ui/tabs/myPage/MyPage.dart';
 import 'package:ombruk/ui/tabs/notifications/NotificationScreen.dart';
 import 'package:ombruk/ui/tabs/stasjonComponents/AddExtraPickupScreen.dart';
@@ -31,7 +31,7 @@ class _TabsScreenStasjonState extends State<TabsScreenStasjon> {
         // IndexStack keeps the screen states alive between tab changes
         index: _selectedIndex,
         children: <Widget>[
-          SafeArea(child: CalendarBlocProvider()),
+          SafeArea(child: CalendarScreen()),
           NotificationScreen(),
           // The screens below are in the drawer
           WeightReportScreen(),
