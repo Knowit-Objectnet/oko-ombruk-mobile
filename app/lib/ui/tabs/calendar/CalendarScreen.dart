@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
+import 'package:provider/provider.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ombruk/blocs/AuthenticationBloc.dart';
 import 'package:ombruk/blocs/CalendarBloc.dart';
+import 'package:ombruk/businessLogic/UserViewModel.dart';
 
 import 'package:ombruk/models/CalendarEvent.dart';
 
 import 'package:ombruk/ui/tabs/RegComponents/CreateOccurrenceScreen.dart';
-import 'package:ombruk/ui/tabs/TokenHolder.dart';
 import 'package:ombruk/ui/tabs/calendar/HorizontalCalendar/HorizontalCalendar.dart';
 import 'package:ombruk/ui/tabs/calendar/VerticalCalendar/VerticalCalendar.dart';
 import 'package:ombruk/ui/tabs/stasjonComponents/AddExtraPickupScreen.dart';
@@ -31,11 +31,9 @@ class CalendarScreen extends StatefulWidget {
 class _CalendarScreenState extends State<CalendarScreen>
     with SingleTickerProviderStateMixin {
   AnimationController _rotationController;
-  globals.KeycloakRoles role;
 
   bool _showHorizontalCalendar = true;
   String _selectedStation = globals.stations[0];
-  String _token; // Hacky solution
 
   @override
   void initState() {
@@ -43,7 +41,6 @@ class _CalendarScreenState extends State<CalendarScreen>
     _rotationController =
         AnimationController(vsync: this, duration: const Duration(seconds: 2))
           ..repeat();
-    role = context.bloc<AuthenticationBloc>().userRepository.getRole();
   }
 
   @override
@@ -54,92 +51,95 @@ class _CalendarScreenState extends State<CalendarScreen>
 
   @override
   Widget build(BuildContext context) {
-    _token = TokenHolder.of(context)?.token;
-
-    return Container(
-      color: customColors.osloWhite,
-      child: Column(
-        children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
+    return Consumer(
+      builder: (context, UserViewModel userViewModel, child) {
+        return Container(
+          color: customColors.osloWhite,
+          child: Column(
             children: <Widget>[
-              // Use DropdownButton instead if the design fails
-              PopupMenuButton(
-                child: Row(
-                  children: <Widget>[
-                    Padding(
-                        padding: EdgeInsets.only(left: 8.0),
-                        child: customIcons.image(customIcons.filter, size: 15)),
-                    Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 4.0),
-                        child: Text(
-                          _selectedStation,
-                          style: TextStyle(fontSize: 16),
-                        )),
-                    customIcons.image(customIcons.arrowDownThin, size: 15)
-                  ],
-                ),
-                itemBuilder: (context) => globals.stations
-                    .map((String station) => PopupMenuItem(
-                          child: RadioListTile(
-                            title: Text(station),
-                            value: station,
-                            groupValue: _selectedStation,
-                            onChanged: (String value) {
-                              setState(() {
-                                _selectedStation = value;
-                              });
-                              Navigator.pop(context);
-                            },
-                          ),
-                        ))
-                    .toList(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  // Use DropdownButton instead if the design fails
+                  PopupMenuButton(
+                    child: Row(
+                      children: <Widget>[
+                        Padding(
+                            padding: EdgeInsets.only(left: 8.0),
+                            child: customIcons.image(customIcons.filter,
+                                size: 15)),
+                        Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 4.0),
+                            child: Text(
+                              _selectedStation,
+                              style: TextStyle(fontSize: 16),
+                            )),
+                        customIcons.image(customIcons.arrowDownThin, size: 15)
+                      ],
+                    ),
+                    itemBuilder: (context) => globals.stations
+                        .map((String station) => PopupMenuItem(
+                              child: RadioListTile(
+                                title: Text(station),
+                                value: station,
+                                groupValue: _selectedStation,
+                                onChanged: (String value) {
+                                  setState(() {
+                                    _selectedStation = value;
+                                  });
+                                  Navigator.pop(context);
+                                },
+                              ),
+                            ))
+                        .toList(),
+                  ),
+                  Spacer(),
+                  _headerButton(
+                    icon: _showHorizontalCalendar
+                        ? customIcons.list
+                        : customIcons.calendar,
+                    onPressed: () => setState(() {
+                      _showHorizontalCalendar = !_showHorizontalCalendar;
+                    }),
+                  ),
+                  userViewModel.getRole() == globals.KeycloakRoles.reuse_station
+                      ? _headerButton(
+                          icon: customIcons.add,
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => AddExtraPickupScreen(),
+                                ));
+                          },
+                        )
+                      : Container(),
+                  userViewModel.getRole() == globals.KeycloakRoles.reg_employee
+                      ? _headerButton(
+                          icon: customIcons.add,
+                          onPressed: _puchCreateOccurenceScreen,
+                        )
+                      : Container(),
+                  widget.isLoading
+                      ? _headerButton(
+                          icon: customIcons.refresh,
+                          onPressed: null,
+                          isSpinning: true,
+                        )
+                      : _headerButton(
+                          icon: customIcons.refresh,
+                          onPressed: _refreshCalendar,
+                        )
+                ],
               ),
-              Spacer(),
-              _headerButton(
-                icon: _showHorizontalCalendar
-                    ? customIcons.list
-                    : customIcons.calendar,
-                onPressed: () => setState(() {
-                  _showHorizontalCalendar = !_showHorizontalCalendar;
-                }),
-              ),
-              role == globals.KeycloakRoles.reuse_station
-                  ? _headerButton(
-                      icon: customIcons.add,
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => AddExtraPickupScreen(),
-                            ));
-                      },
-                    )
-                  : Container(),
-              role == globals.KeycloakRoles.reg_employee
-                  ? _headerButton(
-                      icon: customIcons.add,
-                      onPressed: _puchCreateOccurenceScreen,
-                    )
-                  : Container(),
-              widget.isLoading
-                  ? _headerButton(
-                      icon: customIcons.refresh,
-                      onPressed: null,
-                      isSpinning: true,
-                    )
-                  : _headerButton(
-                      icon: customIcons.refresh,
-                      onPressed: _refreshCalendar,
-                    )
+              Expanded(
+                  child: _showHorizontalCalendar
+                      ? HorizontalCalendar(events: _getFilteredList())
+                      : VerticalCalendar(events: _getFilteredList()))
             ],
           ),
-          Expanded(
-              child: _showHorizontalCalendar
-                  ? HorizontalCalendar(events: _getFilteredList())
-                  : VerticalCalendar(events: _getFilteredList()))
-        ],
-      ),
+        );
+      },
     );
   }
 
@@ -178,11 +178,12 @@ class _CalendarScreenState extends State<CalendarScreen>
     BlocProvider.of<CalendarBloc>(context).add(CalendarRefreshRequested());
   }
 
+// Only available to REG employees
   Future<void> _puchCreateOccurenceScreen() async {
     final bool occurrenceAdded = await Navigator.push(
       context,
       MaterialPageRoute<bool>(
-        builder: (context) => CreateOccurrenceScreen(_token),
+        builder: (context) => CreateOccurrenceScreen(),
       ),
     );
     if (occurrenceAdded) {

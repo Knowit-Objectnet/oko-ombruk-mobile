@@ -1,8 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:ombruk/AuthRouter.dart';
+import 'package:ombruk/businessLogic/UserViewModel.dart';
+import 'package:ombruk/services/serviceLocator.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(MyApp());
+  setupServiceLocator();
+  runApp(
+    // Top-level Provider so it is accessible everywhere
+    ChangeNotifierProvider<UserViewModel>(
+      create: (context) => serviceLocator<UserViewModel>(),
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {

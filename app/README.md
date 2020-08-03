@@ -18,6 +18,9 @@ The login/authentication solution is based on [Keycloak](https://www.keycloak.or
 
 ```AuthRouter.dart``` is built with the [Bloc pattern](https://bloclibrary.dev/#/).
 
+## Third-party libraries
+* get_it to make the login credentials available globally
+
 ### Bloc pattern and state management
 
 **Disclaimer**: This project is not completely built with the Bloc pattern, **only some compoents use it**. The compnents that are built with the Bloc pattern are:

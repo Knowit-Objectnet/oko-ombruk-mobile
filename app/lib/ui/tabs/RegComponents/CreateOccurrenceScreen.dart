@@ -9,11 +9,6 @@ import 'package:ombruk/ui/tabs/components/StationPicker.dart';
 import 'package:ombruk/ui/ui.helper.dart';
 
 class CreateOccurrenceScreen extends StatefulWidget {
-  final String token;
-
-  CreateOccurrenceScreen(this.token); // Hacky solution, may fix later
-  // https://stackoverflow.com/questions/63187761/how-to-access-data-of-an-inheritedwidget-with-pushed-routes
-
   @override
   _CreateOccurrenceScreenState createState() => _CreateOccurrenceScreenState();
 }
@@ -98,7 +93,6 @@ class _CreateOccurrenceScreenState extends State<CreateOccurrenceScreen> {
             builder: (_) => CreateCalendarEventScreen(
               partner: _selectedPartner,
               station: _selectedStation,
-              token: widget.token,
             ),
           ),
         );

@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ombruk/blocs/CalendarBloc.dart';
 
 import 'package:ombruk/DataProvider/CalendarApiClient.dart';
+import 'package:ombruk/businessLogic/UserViewModel.dart';
 
 import 'package:ombruk/ui/tabs/RegComponents/CreateOccurrenceScreen.dart';
-import 'package:ombruk/ui/tabs/TokenHolder.dart';
 import 'package:ombruk/ui/tabs/bottomAppBarComponents/DrawerButton.dart';
 import 'package:ombruk/ui/tabs/calendar/CalendarBlocBuilder.dart';
 import 'package:ombruk/ui/tabs/myPage/MyPage.dart';
@@ -23,47 +24,51 @@ class TabsScreenReg extends StatefulWidget {
 }
 
 class _TabsScreenRegState extends State<TabsScreenReg> {
+  // This key is used to display the Snackbar, becuase the context was hard to get from the appbar
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   final List<String> _bottomAppBarItems = [
     customIcons.notification,
     customIcons.calendar,
     customIcons.statistics
   ];
 
-  CalendarApiClient _calendarApiClient;
   int _selectedIndex = 0;
-  String _token;
 
   @override
   Widget build(BuildContext context) {
-    _token = TokenHolder.of(context).token;
-    _calendarApiClient = CalendarApiClient(_token);
-
-    // Calendar Bloc needs to be accessed in both Calendar screen and createCalendarEvent screen
-    return BlocProvider(
-      create: (context) => CalendarBloc(calendarApiClient: _calendarApiClient)
-        ..add(CalendarInitialEventsRequested()),
-      child: Scaffold(
-        body: IndexedStack(
-          // IndexStack keeps the screen states alive between tab changes
-          index: _selectedIndex,
-          children: <Widget>[
-            NotificationScreen(),
-            SafeArea(child: CalendarBlocBuilder()),
-            NotificationScreen(),
-            // The screens below are in the drawer
-            MessageScreen(),
-            SafeArea(child: MyPage()),
-          ],
-        ),
-        bottomNavigationBar: BottomAppBar(
-          color: customColors.osloDarkBlue,
-          child: Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: _bottomAppBarChildren(),
+    return Consumer(
+      builder: (context, UserViewModel userViewModel, _) {
+        // Calendar Bloc needs to be accessed in both Calendar screen and createCalendarEvent screen
+        return BlocProvider(
+          create: (context) => CalendarBloc(
+              calendarApiClient: CalendarApiClient(userViewModel.accessToken))
+            ..add(CalendarInitialEventsRequested()),
+          child: Scaffold(
+            key: _scaffoldKey,
+            body: IndexedStack(
+              // IndexStack keeps the screen states alive between tab changes
+              index: _selectedIndex,
+              children: <Widget>[
+                NotificationScreen(),
+                SafeArea(child: CalendarBlocBuilder()),
+                NotificationScreen(),
+                // The screens below are in the drawer
+                MessageScreen(),
+                SafeArea(child: MyPage()),
+              ],
+            ),
+            bottomNavigationBar: BottomAppBar(
+              color: customColors.osloDarkBlue,
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: _bottomAppBarChildren(),
+              ),
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
@@ -153,11 +158,12 @@ class _TabsScreenRegState extends State<TabsScreenReg> {
     final bool occurrenceAdded = await Navigator.push(
       context,
       MaterialPageRoute<bool>(
-        builder: (context) => CreateOccurrenceScreen(_token),
+        builder: (context) => CreateOccurrenceScreen(),
       ),
     );
     if (occurrenceAdded) {
-      uiHelper.showSnackbar(context, 'Opprettet hendelsen!');
+      uiHelper.showSnackbarUnknownScaffold(
+          _scaffoldKey.currentState, 'Opprettet hendelsen!');
       BlocProvider.of<CalendarBloc>(context).add(CalendarRefreshRequested());
     }
   }

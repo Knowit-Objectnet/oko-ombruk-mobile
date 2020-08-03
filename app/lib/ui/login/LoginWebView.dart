@@ -1,46 +1,60 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ombruk/blocs/AuthenticationBloc.dart';
-import 'package:ombruk/models/UserCredentials.dart';
-import 'package:ombruk/repositories/UserRepository.dart';
-
+import 'dart:io';
 import 'package:openid_client/openid_client.dart';
 import 'package:openid_client/openid_client_io.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-
 import 'package:jose/jose.dart';
+
+import 'package:ombruk/businessLogic/UserViewModel.dart';
+
+import 'package:ombruk/models/UserCredentials.dart';
+
+import 'package:ombruk/ui/ui.helper.dart';
 
 import 'package:ombruk/globals.dart' as globals;
 
 class LoginWebView extends StatelessWidget {
-  final UserRepository userRepository;
-  final storage = FlutterSecureStorage();
-
-  LoginWebView({Key key, @required this.userRepository})
-      : assert(userRepository != null),
-        super(key: key);
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: RaisedButton(
-          child: Text("Logg inn"),
-          onPressed: () => authKeycloak().then((userCredentials) {
-            BlocProvider.of<AuthenticationBloc>(context)
-                .add(AuthenticationLogIn(userCredentials: userCredentials));
-          }),
-        ),
-      ),
+    return Consumer<UserViewModel>(
+      builder: (context, userViewModel, child) {
+        return Scaffold(
+          body: Builder(
+            // Builder() so that .showSnackbar has a correct Scaffold
+            builder: (context) {
+              return Center(
+                child: RaisedButton(
+                  child: Text("Logg inn"),
+                  onPressed: () {
+                    uiHelper.showLoading(context);
+                    _openKeycloakLogin().then(
+                      (userCredentials) {
+                        if (userCredentials.exception != null) {
+                          uiHelper.hideLoading(context);
+                          final String exception =
+                              userCredentials.exception.toString();
+                          uiHelper.showSnackbar(context,
+                              exception.substring(11, exception.length));
+                        } else {
+                          userViewModel
+                              .saveCredentials(userCredentials.credential,
+                                  userCredentials.roles)
+                              .then((value) => uiHelper.hideLoading(context));
+                        }
+                      },
+                    );
+                  },
+                ),
+              );
+            },
+          ),
+        );
+      },
     );
   }
 
-  Future<UserCredentials> authKeycloak() async {
+  Future<UserCredentials> _openKeycloakLogin() async {
     final Uri uri = Uri.parse("${globals.keycloakBaseUrl}");
     final String clientId = "flutter-app";
     final List<String> scopes = ["openid", "profile"];

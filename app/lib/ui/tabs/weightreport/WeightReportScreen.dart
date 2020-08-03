@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:ombruk/DataProvider/CalendarApiClient.dart';
 import 'package:ombruk/DataProvider/WeightReportClient.dart';
+import 'package:ombruk/businessLogic/UserViewModel.dart';
 import 'package:ombruk/models/CalendarEvent.dart';
 import 'package:ombruk/models/CustomResponse.dart';
 import 'package:ombruk/models/WeightReport.dart';
@@ -10,9 +11,9 @@ import 'package:ombruk/ui/tabs/weightreport/ListElementWithoutWeight.dart';
 import 'package:ombruk/ui/tabs/weightreport/ListElementWithWeight.dart';
 import 'package:ombruk/ui/tabs/weightreport/WeightReportDialog.dart';
 import 'package:ombruk/ui/ui.helper.dart';
-import 'package:ombruk/ui/tabs/TokenHolder.dart';
 import 'package:ombruk/ui/customColors.dart' as customColors;
 import 'package:ombruk/ui/customIcons.dart' as customIcons;
+import 'package:provider/provider.dart';
 
 class WeightReportScreen extends StatefulWidget {
   @override
@@ -20,12 +21,35 @@ class WeightReportScreen extends StatefulWidget {
 }
 
 class _WeightReportScreenState extends State<WeightReportScreen> {
-  WeightReportClient _weightReportClient;
-  CalendarApiClient _calendarClient;
+  @override
+  Widget build(BuildContext context) {
+    return Consumer(
+      builder: (context, UserViewModel userViewModel, child) {
+        return _WeightReportScreenConsumed(
+          CalendarApiClient(userViewModel.accessToken),
+          WeightReportClient(userViewModel.accessToken),
+        );
+      },
+    );
+  }
+}
+
+class _WeightReportScreenConsumed extends StatefulWidget {
+  final CalendarApiClient calendarApiClient;
+  final WeightReportClient weightReportClient;
+
+  _WeightReportScreenConsumed(this.calendarApiClient, this.weightReportClient);
+
+  @override
+  _WeightReportScreenStateConsumer createState() =>
+      _WeightReportScreenStateConsumer();
+}
+
+class _WeightReportScreenStateConsumer
+    extends State<_WeightReportScreenConsumed> {
   List<CalendarEvent> _nonReportedList;
   List<_EventWithWeight> _reportedList;
   bool _initialLoaded = false;
-  String _token;
 
   @override
   void initState() {
@@ -39,10 +63,6 @@ class _WeightReportScreenState extends State<WeightReportScreen> {
 
   @override
   Widget build(BuildContext context) {
-    _token = TokenHolder.of(context).token;
-    _weightReportClient = WeightReportClient(_token);
-    _calendarClient = CalendarApiClient(_token);
-
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -89,9 +109,10 @@ class _WeightReportScreenState extends State<WeightReportScreen> {
 
   Future<void> _fetchData() async {
     try {
-      Future<CustomResponse> futureEvents = _calendarClient.fetchEvents();
+      Future<CustomResponse> futureEvents =
+          widget.calendarApiClient.fetchEvents();
       Future<CustomResponse> futureResponse =
-          _weightReportClient.fetchWeightReports();
+          widget.weightReportClient.fetchWeightReports();
       await Future.wait<CustomResponse>([futureEvents, futureResponse],
           eagerError: true, cleanUp: (_) {
         uiHelper.showSnackbar(context, 'Kunne ikke hente vekt rapporter');
@@ -165,7 +186,7 @@ class _WeightReportScreenState extends State<WeightReportScreen> {
     Future<void> _submitNewWeight(int weight) async {
       uiHelper.showLoading(context);
       final CustomResponse response =
-          await _weightReportClient.addWeight(id, weight);
+          await widget.weightReportClient.addWeight(id, weight);
       uiHelper.hideLoading(context);
 
       if (response.success) {
@@ -205,7 +226,7 @@ class _WeightReportScreenState extends State<WeightReportScreen> {
     Future<void> _updateWeight(int eventID, int newWeight) async {
       uiHelper.showLoading(context);
       final CustomResponse response =
-          await _weightReportClient.addWeight(eventID, newWeight);
+          await widget.weightReportClient.addWeight(eventID, newWeight);
       uiHelper.hideLoading(context);
 
       if (response.success) {

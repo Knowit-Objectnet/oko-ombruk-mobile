@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ombruk/blocs/AuthenticationBloc.dart';
+import 'package:ombruk/businessLogic/UserViewModel.dart';
 
 import 'package:ombruk/ui/tabs/RegComponents/NewStationScreen.dart';
 import 'package:ombruk/ui/tabs/RegComponents/NewPartnerScreen.dart';
@@ -10,24 +10,36 @@ import 'package:ombruk/ui/tabs/components/SwitchButton.dart';
 import 'package:ombruk/ui/customColors.dart' as customColors;
 import 'package:ombruk/ui/customIcons.dart' as customIcons;
 import 'package:ombruk/globals.dart' as globals;
+import 'package:ombruk/ui/ui.helper.dart';
 
-class MyPage extends StatefulWidget {
+class MyPage extends StatelessWidget {
   @override
-  _MyPageState createState() => _MyPageState();
+  Widget build(BuildContext context) {
+    return Consumer<UserViewModel>(
+      builder: (context, UserViewModel userViewModel, child) =>
+          _MyPageConsumed(userViewModel),
+    );
+  }
 }
 
-class _MyPageState extends State<MyPage> {
-  // TODO: Take as input a MyPageData class, or call the backend from here to fetch the data
+class _MyPageConsumed extends StatefulWidget {
+  final UserViewModel userViewModel;
 
+  _MyPageConsumed(this.userViewModel);
+
+  @override
+  _MyPageConsumedState createState() => _MyPageConsumedState();
+}
+
+class _MyPageConsumedState extends State<_MyPageConsumed> {
   final EdgeInsets _verticalPadding = EdgeInsets.symmetric(vertical: 8.0);
 
   bool _showContactInfo = false; // TODO: Get this from data
-  globals.KeycloakRoles role;
 
   @override
   void initState() {
     super.initState();
-    role = context.bloc<AuthenticationBloc>().userRepository.getRole();
+    // role = context.bloc<AuthenticationBloc>().userRepository.getRole();
   }
 
   @override
@@ -58,9 +70,13 @@ class _MyPageState extends State<MyPage> {
                   'Logg ut',
                   style: TextStyle(color: customColors.osloWhite),
                 ),
-                onPressed: () {
-                  BlocProvider.of<AuthenticationBloc>(context)
-                      .add(AuthenticationLogOut());
+                onPressed: () async {
+                  final bool result =
+                      await widget.userViewModel.requestLogOut();
+                  if (!result) {
+                    uiHelper.showSnackbar(
+                        context, 'Kunne ikke logge ut, prøv igjen.');
+                  }
                 },
               )
             ],
@@ -137,7 +153,7 @@ class _MyPageState extends State<MyPage> {
 
   /// Only for the Partner role
   Widget _aboutSection() {
-    if (role != globals.KeycloakRoles.partner) {
+    if (widget.userViewModel.getRole() != globals.KeycloakRoles.partner) {
       return Container();
     }
     return Padding(
@@ -155,7 +171,7 @@ class _MyPageState extends State<MyPage> {
 
   /// Only for the Partner role
   Widget _shareContactInfoSection() {
-    if (role != globals.KeycloakRoles.partner) {
+    if (widget.userViewModel.getRole() != globals.KeycloakRoles.partner) {
       return Container();
     }
 
@@ -206,7 +222,7 @@ class _MyPageState extends State<MyPage> {
 
   /// Only for the REG role
   Widget _addPartnerAndStationButtons() {
-    if (role != globals.KeycloakRoles.reg_employee) {
+    if (widget.userViewModel.getRole() != globals.KeycloakRoles.reg_employee) {
       return Container();
     }
 

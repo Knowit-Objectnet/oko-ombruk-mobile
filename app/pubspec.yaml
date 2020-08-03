@@ -33,6 +33,8 @@ dependencies:
   equatable: ^1.0.0
   flutter_secure_storage: ^3.3.3
   intl: ^0.16.1 # Needed for DateFormat
+  get_it: ^4.0.4
+  provider: ^4.3.1
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
