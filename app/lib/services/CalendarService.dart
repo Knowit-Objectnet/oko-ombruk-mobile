@@ -101,6 +101,7 @@ class CalendarService {
 
     final Response response = await post(uri, headers: _headers, body: body);
 
+    // TODO REG AUTH
     if (response.statusCode == 401) {
       final bool gotNewTokens = await _userViewModel.requestRefreshToken();
       if (gotNewTokens) {
@@ -153,6 +154,7 @@ class CalendarService {
 
     final Response response = await delete(uri, headers: _headers);
 
+// TODO all auth
     return CustomResponse(
       success: response.statusCode == 200,
       statusCode: response.statusCode,
@@ -182,10 +184,25 @@ class CalendarService {
 
     final Response response = await patch(uri, headers: _headers, body: body);
 
+// TODO auth
     return CustomResponse(
       success: response.statusCode == 200,
       statusCode: response.statusCode,
       data: null,
     );
   }
+
+  // TODO: RETRY ALL THESE WHEN 401 IS RETURNED
+  ///
+  ///
+  ///
+  /// HERE
+  ///
+  /// Pratner auth
+  /// all get unauth
+  /// rest of partern just REG
+  ///
+  /// station
+  /// all get unauth
+  /// rest is REG auth
 }

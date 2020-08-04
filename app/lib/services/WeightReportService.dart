@@ -6,14 +6,8 @@ import 'package:ombruk/models/WeightReport.dart';
 
 import 'package:ombruk/globals.dart' as globals;
 
-class WeightReportClient {
-  final String token;
-
-  WeightReportClient(this.token) {
-    if (token != null) {
-      _headers.putIfAbsent('Authorization', () => 'Bearer ' + token);
-    }
-  }
+class WeightReportService {
+  // _headers.putIfAbsent('Authorization', () => 'Bearer ' + token); // TODO
 
   final Map<String, String> _headers = {
     'Content-type': 'application/json',
@@ -27,7 +21,7 @@ class WeightReportClient {
 
     final Response response = await get(uri);
 
-    // TODO no auth
+    // No auth
 
     if (response.statusCode == 200) {
       try {
