@@ -77,6 +77,7 @@ class UserViewModel extends ChangeNotifier {
     UserModel newUser = response.data;
     _user.accessToken = newUser.accessToken;
     _user.refreshToken = newUser.refreshToken;
+    notifyListeners();
     return true;
   }
 

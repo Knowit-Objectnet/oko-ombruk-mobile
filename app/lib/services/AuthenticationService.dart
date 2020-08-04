@@ -91,16 +91,17 @@ class AuthenticationService {
     Map<String, String> headers = {};
     headers['Content-Type'] = 'application/x-www-form-urlencoded';
 
-    String body = jsonEncode({
-      'client_id': clientId,
+    // Since we use x-www-form-urlencoded, we don't use jsonEncode()
+    Map<String, String> bodyForm = {
       'grant_type': 'refresh_token',
+      'client_id': clientId,
       'refresh_token': refreshToken,
-    });
+    };
 
     final response = await post(
       url,
       headers: headers,
-      body: body,
+      body: bodyForm,
     );
 
     if (response.statusCode != 200) {

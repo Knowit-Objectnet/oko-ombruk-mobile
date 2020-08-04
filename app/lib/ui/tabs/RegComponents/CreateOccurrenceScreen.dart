@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:ombruk/businessLogic/Partner.dart';
+
 import 'package:ombruk/ui/customIcons.dart' as customIcons;
 import 'package:ombruk/ui/customColors.dart' as customColors;
 import 'package:ombruk/ui/tabs/RegComponents/CreateCalendarEventScreen.dart';
@@ -16,7 +18,7 @@ class CreateOccurrenceScreen extends StatefulWidget {
 class _CreateOccurrenceScreenState extends State<CreateOccurrenceScreen> {
   final GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
 
-  String _selectedPartner;
+  Partner _selectedPartner;
   String _selectedStation;
 
   @override

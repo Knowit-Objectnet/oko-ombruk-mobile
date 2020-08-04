@@ -65,12 +65,6 @@ final List<String> stations = [
   'Ryen'
 ];
 
-final List<String> partners = [
-  'Fretex',
-  'Maritastiftelsen',
-  'Jobben',
-];
-
 enum KeycloakRoles {
   reg_employee,
   offline_access,

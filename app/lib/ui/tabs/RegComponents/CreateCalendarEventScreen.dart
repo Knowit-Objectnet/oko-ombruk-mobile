@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ombruk/businessLogic/CalendarViewModel.dart';
 import 'package:provider/provider.dart';
+import 'package:ombruk/businessLogic/Partner.dart';
 
 import 'package:ombruk/globals.dart' as globals;
 
@@ -15,7 +16,7 @@ import 'package:ombruk/ui/customIcons.dart' as customIcons;
 
 class CreateCalendarEventScreen extends StatelessWidget {
   final String station;
-  final String partner;
+  final Partner partner;
 
   CreateCalendarEventScreen({
     @required this.station,
@@ -38,7 +39,7 @@ class CreateCalendarEventScreen extends StatelessWidget {
 class _CreateCalendarEventScreenConsumed extends StatefulWidget {
   final CalendarViewModel calendarViewModel;
   final String station;
-  final String partner;
+  final Partner partner;
 
   _CreateCalendarEventScreenConsumed({
     @required this.station,

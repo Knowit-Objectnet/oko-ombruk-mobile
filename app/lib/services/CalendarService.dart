@@ -90,7 +90,7 @@ class CalendarService {
       'startDateTime': startString,
       'endDateTime': endString,
       'stationId': eventData.stationID,
-      'partnerId': eventData.partnerID,
+      'partnerId': eventData.partner.id,
       'recurrenceRule': {
         'until': untilString,
         'days': weekdaysString,

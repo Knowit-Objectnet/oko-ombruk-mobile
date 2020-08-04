@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:ombruk/businessLogic/Partner.dart';
+
 import 'package:ombruk/ui/customIcons.dart' as customIcons;
 import 'package:ombruk/ui/customColors.dart' as customColors;
 import 'package:ombruk/ui/tabs/components/DatePicker.dart';
@@ -19,7 +21,7 @@ class _AddExtraPickupScreenState extends State<AddExtraPickupScreen> {
   DateTime _selectedDate = DateTime.now();
   TimeOfDay _startTime = TimeOfDay(hour: 8, minute: 0);
   TimeOfDay _endTime = TimeOfDay(hour: 9, minute: 0);
-  String _selectedPartner;
+  Partner _selectedPartner;
 
   @override
   Widget build(BuildContext context) {

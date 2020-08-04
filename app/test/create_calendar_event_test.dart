@@ -1,10 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+
+import 'package:ombruk/businessLogic/Partner.dart';
+
 import 'package:ombruk/ui/tabs/RegComponents/CreateCalendarEventData.dart';
 import 'package:ombruk/globals.dart' as globals;
 
 void main() {
   group('.fromData() initializer', () {
+    Partner _partner = Partner(
+      1,
+      'Fretex',
+      'Fretex henter møbler',
+      '98234151',
+      'example@example.com',
+    );
+
     List<globals.Weekdays> notEmptyWeekdaysList = [globals.Weekdays.monday];
     test('null station', () {
       expect(
@@ -44,7 +55,7 @@ void main() {
                 startTime: TimeOfDay.now(),
                 endTime: TimeOfDay.now(),
                 station: 'partner',
-                partner: 'station',
+                partner: _partner,
                 weekdays: notEmptyWeekdaysList,
                 interval: 1,
               ),
@@ -60,7 +71,7 @@ void main() {
                 startTime: now,
                 endTime: now,
                 station: 'partner',
-                partner: 'station',
+                partner: _partner,
                 weekdays: notEmptyWeekdaysList,
                 interval: 1,
               ),
@@ -75,7 +86,7 @@ void main() {
                 startTime: TimeOfDay(hour: 13, minute: 11),
                 endTime: TimeOfDay(hour: 12, minute: 11),
                 station: 'partner',
-                partner: 'station',
+                partner: _partner,
                 weekdays: notEmptyWeekdaysList,
                 interval: 1,
               ),
@@ -90,7 +101,7 @@ void main() {
                 startTime: TimeOfDay(hour: 12, minute: 12),
                 endTime: TimeOfDay(hour: 12, minute: 11),
                 station: 'partner',
-                partner: 'station',
+                partner: _partner,
                 weekdays: notEmptyWeekdaysList,
                 interval: 1,
               ),
@@ -105,7 +116,7 @@ void main() {
                 startTime: TimeOfDay(hour: 12, minute: 12),
                 endTime: TimeOfDay(hour: 13, minute: 13),
                 station: 'partner',
-                partner: 'station',
+                partner: _partner,
                 weekdays: notEmptyWeekdaysList,
                 interval: 1,
               ),

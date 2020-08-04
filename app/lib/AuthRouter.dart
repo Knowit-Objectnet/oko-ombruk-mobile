@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:ombruk/businessLogic/CalendarViewModel.dart';
-import 'package:ombruk/services/serviceLocator.dart';
 import 'package:provider/provider.dart';
 
 import 'package:ombruk/businessLogic/UserViewModel.dart';
@@ -25,10 +23,22 @@ class AuthRouter extends StatelessWidget {
             if (snapshot.connectionState == ConnectionState.done) {
               if (snapshot.data) {
                 // Has accessToken => show tabs
-                return ChangeNotifierProvider(
-                  create: (context) => serviceLocator<CalendarViewModel>(),
-                  child: _getChild(userViewModel.getRole()),
-                );
+                switch (userViewModel.getRole()) {
+                  case KeycloakRoles.reg_employee:
+                    return TabsScreenReg();
+                  case KeycloakRoles.partner:
+                    return TabsScreenPartner();
+                  case KeycloakRoles.reuse_station:
+                    return TabsScreenStasjon();
+                  case KeycloakRoles.offline_access:
+                    return ErrorScreen(
+                        exception: Exception('Du har ikke en rolle'));
+                  case KeycloakRoles.uma_authorization:
+                    return ErrorScreen(
+                        exception: Exception('Du har ikke en rolle'));
+                  default:
+                    return ErrorScreen(exception: Exception('Ukjent rolle'));
+                }
               } else {
                 return LoginWebView();
               }
@@ -38,22 +48,5 @@ class AuthRouter extends StatelessWidget {
         );
       },
     );
-  }
-
-  Widget _getChild(KeycloakRoles role) {
-    switch (role) {
-      case KeycloakRoles.reg_employee:
-        return TabsScreenReg();
-      case KeycloakRoles.partner:
-        return TabsScreenPartner();
-      case KeycloakRoles.reuse_station:
-        return TabsScreenStasjon();
-      case KeycloakRoles.offline_access:
-        return ErrorScreen(exception: Exception('Du har ikke en rolle'));
-      case KeycloakRoles.uma_authorization:
-        return ErrorScreen(exception: Exception('Du har ikke en rolle'));
-      default:
-        return ErrorScreen(exception: Exception('Ukjent roollrolle'));
-    }
   }
 }
