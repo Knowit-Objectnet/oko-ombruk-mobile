@@ -84,13 +84,13 @@ class _TabsScreenStasjonState extends State<TabsScreenStasjon> {
                 DrawerButton(
                   icon: customIcons.partners,
                   title: 'Sam. partnere',
-                  onTap: null,
+                  onTap: () => null,
                   isSelected: false,
                 ),
                 DrawerButton(
                   icon: customIcons.map,
                   title: 'Stasjonene',
-                  onTap: null,
+                  onTap: () => null,
                   isSelected: false,
                 ),
                 DrawerButton(
@@ -128,7 +128,7 @@ class _TabsScreenStasjonState extends State<TabsScreenStasjon> {
                 DrawerButton(
                   icon: customIcons.settings,
                   title: 'Innstillinger',
-                  onTap: null,
+                  onTap: () => null,
                   isSelected: false,
                 ),
               ],

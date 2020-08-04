@@ -11,7 +11,11 @@ class CalendarViewModel extends ChangeNotifier {
   final CalendarService _calendarService = serviceLocator<CalendarService>();
 
   CalendarModel _calendarModel;
-  bool _isLoading = false;
+  bool _isLoading = true;
+
+  CalendarViewModel() {
+    fetchEvents();
+  }
 
   List<CalendarEvent> get calendarEvents => _calendarModel?.calendarEvents;
   bool get isLoading => _isLoading;

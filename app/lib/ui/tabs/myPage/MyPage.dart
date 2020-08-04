@@ -37,12 +37,6 @@ class _MyPageConsumedState extends State<_MyPageConsumed> {
   bool _showContactInfo = false; // TODO: Get this from data
 
   @override
-  void initState() {
-    super.initState();
-    // role = context.bloc<AuthenticationBloc>().userRepository.getRole();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return ListView(
       shrinkWrap: true,

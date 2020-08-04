@@ -28,9 +28,6 @@ dependencies:
   grouped_list: ^3.2.0
   openid_client: ^0.2.5
   url_launcher: ^5.4.11
-  bloc: ^4.0.0
-  flutter_bloc: ^4.0.0
-  equatable: ^1.0.0
   flutter_secure_storage: ^3.3.3
   intl: ^0.16.1 # Needed for DateFormat
   get_it: ^4.0.4

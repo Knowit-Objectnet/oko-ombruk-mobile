@@ -25,7 +25,6 @@ class TabsScreenReg extends StatelessWidget {
         CalendarViewModel calendarViewModel,
         _,
       ) {
-        // Calendar Bloc needs to be accessed in both Calendar screen and createCalendarEvent screen
         return _TabsScreenRegConsumed(userViewModel, calendarViewModel);
       },
     );
@@ -116,13 +115,13 @@ class _TabsScreenRegConsumedState extends State<_TabsScreenRegConsumed> {
                 DrawerButton(
                   icon: customIcons.partners,
                   title: 'Sam. partnere',
-                  onTap: null,
+                  onTap: () => null,
                   isSelected: false,
                 ),
                 DrawerButton(
                   icon: customIcons.map,
                   title: 'Stasjonene',
-                  onTap: null,
+                  onTap: () => null,
                   isSelected: false,
                 ),
                 DrawerButton(
@@ -154,7 +153,7 @@ class _TabsScreenRegConsumedState extends State<_TabsScreenRegConsumed> {
                 DrawerButton(
                   icon: customIcons.settings,
                   title: 'Innstillinger',
-                  onTap: null,
+                  onTap: () => null,
                   isSelected: false,
                 ),
               ],
