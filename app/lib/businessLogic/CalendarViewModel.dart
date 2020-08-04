@@ -39,7 +39,7 @@ class CalendarViewModel extends ChangeNotifier {
     final CustomResponse response =
         await _calendarService.createCalendarEvent(eventData);
     if (response.success) {
-      fetchEvents();
+      fetchEvents(); // Lazy stuff
       return true;
     } else {
       print(response);
@@ -52,7 +52,7 @@ class CalendarViewModel extends ChangeNotifier {
     final CustomResponse response = await _calendarService.deleteCalendarEvent(
         id, startDate, endDate, recurrenceRuleID);
     if (response.success) {
-      fetchEvents();
+      fetchEvents(); // Lazy stuff
       return true;
     } else {
       print(response);
@@ -72,6 +72,4 @@ class CalendarViewModel extends ChangeNotifier {
       return false;
     }
   }
-
-  // TODO Add try again 401 auth on many of these
 }

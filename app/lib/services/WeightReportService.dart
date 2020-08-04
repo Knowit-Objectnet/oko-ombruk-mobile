@@ -9,7 +9,6 @@ import 'package:ombruk/globals.dart' as globals;
 import 'package:ombruk/services/serviceLocator.dart';
 
 class WeightReportService {
-  // _headers.putIfAbsent('Authorization', () => 'Bearer ' + token); // TODO
   final UserViewModel _userViewModel = serviceLocator<UserViewModel>();
 
   final Map<String, String> _headers = {

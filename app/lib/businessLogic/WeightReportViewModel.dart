@@ -9,10 +9,10 @@ import 'package:ombruk/services/serviceLocator.dart';
 
 class WeightReportViewModel extends ChangeNotifier {
   final WeightReportService _weightReportService =
-      serviceLocator<WeightReportService>(); // TODO init in screen
+      serviceLocator<WeightReportService>();
   final CalendarService _calendarService = serviceLocator<CalendarService>();
 
-// TODO Make unmodifiable list
+// Use unmodifiable list here maybe
   List<CalendarEvent> _calendarEvents;
   List<CalendarEventWithWeight> _calendarEventsWithWeight;
 
