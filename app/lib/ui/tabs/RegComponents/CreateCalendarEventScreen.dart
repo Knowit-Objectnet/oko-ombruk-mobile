@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:ombruk/businessLogic/CalendarViewModel.dart';
 import 'package:provider/provider.dart';
+
+import 'package:ombruk/businessLogic/CalendarViewModel.dart';
 import 'package:ombruk/businessLogic/Partner.dart';
+import 'package:ombruk/businessLogic/Station.dart';
 
 import 'package:ombruk/globals.dart' as globals;
 
@@ -14,40 +16,15 @@ import 'package:ombruk/ui/ui.helper.dart';
 import 'package:ombruk/ui/customColors.dart' as customColors;
 import 'package:ombruk/ui/customIcons.dart' as customIcons;
 
-class CreateCalendarEventScreen extends StatelessWidget {
-  final String station;
+class CreateCalendarEventScreen extends StatefulWidget {
+  final Station station;
   final Partner partner;
 
   CreateCalendarEventScreen({
     @required this.station,
     @required this.partner,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Consumer<CalendarViewModel>(
-        builder: (context, CalendarViewModel calendarViewModel, _) {
-      return _CreateCalendarEventScreenConsumed(
-        station: station,
-        partner: partner,
-        calendarViewModel: calendarViewModel,
-      );
-    });
-  }
-}
-
-class _CreateCalendarEventScreenConsumed extends StatefulWidget {
-  final CalendarViewModel calendarViewModel;
-  final String station;
-  final Partner partner;
-
-  _CreateCalendarEventScreenConsumed({
-    @required this.station,
-    @required this.partner,
-    @required this.calendarViewModel,
   })  : assert(station != null),
-        assert(partner != null),
-        assert(calendarViewModel != null);
+        assert(partner != null);
 
   @override
   _CreateCalendarEventScreenConsumedState createState() =>
@@ -55,7 +32,7 @@ class _CreateCalendarEventScreenConsumed extends StatefulWidget {
 }
 
 class _CreateCalendarEventScreenConsumedState
-    extends State<_CreateCalendarEventScreenConsumed> {
+    extends State<CreateCalendarEventScreen> {
   final GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
 
   int _interval = 1;
@@ -259,7 +236,8 @@ class _CreateCalendarEventScreenConsumedState
 
     uiHelper.showLoading(context);
     final bool success =
-        await widget.calendarViewModel.createCalendarEvent(eventData);
+        await Provider.of<CalendarViewModel>(context, listen: false)
+            .createCalendarEvent(eventData);
     uiHelper.hideLoading(context);
     if (success) {
       Navigator.pop(context, true);

@@ -56,15 +56,6 @@ final Map<int, String> monthsShort = {
   12: 'DES',
 };
 
-// The order of the lists are important to match the ID index
-final List<String> stations = [
-  'Haraldrud',
-  'Smestad',
-  'Grefsen',
-  'Grønmo',
-  'Ryen'
-];
-
 enum KeycloakRoles {
   reg_employee,
   offline_access,

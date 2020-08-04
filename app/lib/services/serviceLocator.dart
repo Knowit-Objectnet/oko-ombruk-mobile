@@ -4,11 +4,13 @@ import 'package:ombruk/services/AuthenticationService.dart';
 import 'package:ombruk/services/CalendarService.dart';
 import 'package:ombruk/services/WeightReportService.dart';
 import 'package:ombruk/services/PartnerService.dart';
+import 'package:ombruk/services/StationService.dart';
 
 import 'package:ombruk/businessLogic/CalendarViewModel.dart';
 import 'package:ombruk/businessLogic/UserViewModel.dart';
 import 'package:ombruk/businessLogic/WeightReportViewModel.dart';
 import 'package:ombruk/businessLogic/PartnerViewModel.dart';
+import 'package:ombruk/businessLogic/StationViewModel.dart';
 
 GetIt serviceLocator = GetIt.instance;
 
@@ -21,6 +23,7 @@ void setupServiceLocator() {
   serviceLocator
       .registerLazySingleton<WeightReportService>(() => WeightReportService());
   serviceLocator.registerLazySingleton<PartnerService>(() => PartnerService());
+  serviceLocator.registerLazySingleton<StationService>(() => StationService());
 
 // ViewModels
   serviceLocator.registerFactory<UserViewModel>(() => UserViewModel());
@@ -28,4 +31,5 @@ void setupServiceLocator() {
   serviceLocator
       .registerFactory<WeightReportViewModel>(() => WeightReportViewModel());
   serviceLocator.registerFactory<PartnerViewModel>(() => PartnerViewModel());
+  serviceLocator.registerFactory<StationViewModel>(() => StationViewModel());
 }

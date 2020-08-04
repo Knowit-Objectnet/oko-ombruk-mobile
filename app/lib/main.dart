@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:ombruk/AuthRouter.dart';
+
+import 'package:ombruk/services/serviceLocator.dart';
 import 'package:ombruk/businessLogic/UserViewModel.dart';
 import 'package:ombruk/businessLogic/CalendarViewModel.dart';
 import 'package:ombruk/businessLogic/PartnerViewModel.dart';
-import 'package:ombruk/services/serviceLocator.dart';
+import 'package:ombruk/businessLogic/StationViewModel.dart';
 
 void main() {
   setupServiceLocator();
@@ -25,6 +27,9 @@ void main() {
         ),
         ChangeNotifierProvider<PartnerViewModel>(
           create: (context) => serviceLocator<PartnerViewModel>(),
+        ),
+        ChangeNotifierProvider<StationViewModel>(
+          create: (context) => serviceLocator<StationViewModel>(),
         ),
       ],
       child: MyApp(),

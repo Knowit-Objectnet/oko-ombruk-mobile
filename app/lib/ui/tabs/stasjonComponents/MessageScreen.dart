@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:ombruk/businessLogic/Partner.dart';
+import 'package:ombruk/businessLogic/Station.dart';
 
 import 'package:ombruk/ui/tabs/components/PartnerPicker.dart';
 import 'package:ombruk/ui/tabs/components/StationPicker.dart';
@@ -19,7 +20,7 @@ class _MessageScreenState extends State<MessageScreen> {
   final TextEditingController _emneController = TextEditingController();
   final TextEditingController _messageController = TextEditingController();
   Partner _selectedPartner;
-  String _selectedStation;
+  Station _selectedStation;
   TimeOfDay _startTime = TimeOfDay(hour: 8, minute: 0);
   TimeOfDay _endTime = TimeOfDay(hour: 9, minute: 0);
   DateTime _startDate = DateTime.now();

@@ -89,7 +89,7 @@ class CalendarService {
     String body = jsonEncode({
       'startDateTime': startString,
       'endDateTime': endString,
-      'stationId': eventData.stationID,
+      'stationId': eventData.station.id,
       'partnerId': eventData.partner.id,
       'recurrenceRule': {
         'until': untilString,
@@ -99,6 +99,9 @@ class CalendarService {
     });
 
     Response response = await post(uri, headers: _headers, body: body);
+
+    print('role');
+    print(_userViewModel.getRole().toString());
 
     // REG authorization
     if (response.statusCode == 401) {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:ombruk/businessLogic/Partner.dart';
+import 'package:ombruk/businessLogic/Station.dart';
 
 import 'package:ombruk/ui/customIcons.dart' as customIcons;
 import 'package:ombruk/ui/customColors.dart' as customColors;
@@ -19,7 +20,7 @@ class _CreateOccurrenceScreenState extends State<CreateOccurrenceScreen> {
   final GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
 
   Partner _selectedPartner;
-  String _selectedStation;
+  Station _selectedStation;
 
   @override
   Widget build(BuildContext context) {

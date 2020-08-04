@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 
 import 'package:ombruk/businessLogic/CalendarViewModel.dart';
 import 'package:ombruk/businessLogic/UserViewModel.dart';
+import 'package:ombruk/businessLogic/StationViewModel.dart';
+import 'package:ombruk/businessLogic/Station.dart';
 
 import 'package:ombruk/models/CalendarEvent.dart';
 
@@ -19,16 +21,18 @@ import 'package:ombruk/globals.dart' as globals;
 class CalendarScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Consumer2<UserViewModel, CalendarViewModel>(
+    return Consumer3<UserViewModel, CalendarViewModel, StationViewModel>(
       builder: (
         context,
         UserViewModel userViewModel,
         CalendarViewModel calendarViewModel,
-        _,
+        StationViewModel stationViewModel,
+        child, // Not the most optimal way of doing things... should have a child
       ) {
         return _CalendarScreenConsumed(
           userViewModel: userViewModel,
           calendarViewModel: calendarViewModel,
+          stationViewModel: stationViewModel,
         );
       },
     );
@@ -38,11 +42,15 @@ class CalendarScreen extends StatelessWidget {
 class _CalendarScreenConsumed extends StatefulWidget {
   final UserViewModel userViewModel;
   final CalendarViewModel calendarViewModel;
+  final StationViewModel stationViewModel;
 
-  _CalendarScreenConsumed(
-      {@required this.userViewModel, @required this.calendarViewModel})
-      : assert(userViewModel != null),
-        assert(calendarViewModel != null);
+  _CalendarScreenConsumed({
+    @required this.userViewModel,
+    @required this.calendarViewModel,
+    this.stationViewModel,
+  })  : assert(userViewModel != null),
+        assert(calendarViewModel != null),
+        assert(stationViewModel != null);
 
   @override
   _CalendarScreenConsumedState createState() => _CalendarScreenConsumedState();
@@ -52,8 +60,9 @@ class _CalendarScreenConsumedState extends State<_CalendarScreenConsumed>
     with SingleTickerProviderStateMixin {
   AnimationController _rotationController;
 
+  bool _initialized = false;
   bool _showHorizontalCalendar = true;
-  String _selectedStation = globals.stations[0];
+  Station _selectedStation;
 
   @override
   void initState() {
@@ -71,6 +80,13 @@ class _CalendarScreenConsumedState extends State<_CalendarScreenConsumed>
 
   @override
   Widget build(BuildContext context) {
+    if (widget.stationViewModel.stations.isNotEmpty && !_initialized) {
+      // Hotfix to get the dropdown to have a first time value
+      setState(() {
+        _initialized = true;
+        _selectedStation = widget.stationViewModel.stations[0];
+      });
+    }
     return Container(
       color: customColors.osloWhite,
       child: Column(
@@ -79,37 +95,40 @@ class _CalendarScreenConsumedState extends State<_CalendarScreenConsumed>
             mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
               // Use DropdownButton instead if the design fails
-              PopupMenuButton(
-                child: Row(
-                  children: <Widget>[
-                    Padding(
-                        padding: EdgeInsets.only(left: 8.0),
-                        child: customIcons.image(customIcons.filter, size: 15)),
-                    Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 4.0),
-                        child: Text(
-                          _selectedStation,
-                          style: TextStyle(fontSize: 16),
-                        )),
-                    customIcons.image(customIcons.arrowDownThin, size: 15)
-                  ],
-                ),
-                itemBuilder: (context) => globals.stations
-                    .map((String station) => PopupMenuItem(
-                          child: RadioListTile(
-                            title: Text(station),
-                            value: station,
-                            groupValue: _selectedStation,
-                            onChanged: (String value) {
-                              setState(() {
-                                _selectedStation = value;
-                              });
-                              Navigator.pop(context);
-                            },
-                          ),
-                        ))
-                    .toList(),
-              ),
+              widget.stationViewModel == null
+                  ? Container()
+                  : PopupMenuButton(
+                      child: Row(
+                        children: <Widget>[
+                          Padding(
+                              padding: EdgeInsets.only(left: 8.0),
+                              child: customIcons.image(customIcons.filter,
+                                  size: 15)),
+                          Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 4.0),
+                              child: Text(
+                                _selectedStation?.name ?? '',
+                                style: TextStyle(fontSize: 16),
+                              )),
+                          customIcons.image(customIcons.arrowDownThin, size: 15)
+                        ],
+                      ),
+                      itemBuilder: (context) => widget.stationViewModel.stations
+                          .map((Station station) => PopupMenuItem(
+                                child: RadioListTile<Station>(
+                                  title: Text(station.name ?? ''),
+                                  value: station,
+                                  groupValue: _selectedStation,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      _selectedStation = value;
+                                    });
+                                    Navigator.pop(context);
+                                  },
+                                ),
+                              ))
+                          .toList(),
+                    ),
               Spacer(),
               _headerButton(
                 icon: _showHorizontalCalendar
@@ -189,8 +208,11 @@ class _CalendarScreenConsumedState extends State<_CalendarScreenConsumed>
     if (widget.calendarViewModel.calendarEvents == null) {
       return [];
     }
+    if (_selectedStation == null) {
+      return [];
+    }
     return widget.calendarViewModel.calendarEvents
-        .where((element) => element.station.name == _selectedStation)
+        .where((element) => element.station.name == _selectedStation.name)
         .toList();
   }
 

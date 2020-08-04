@@ -83,6 +83,9 @@ class UserViewModel extends ChangeNotifier {
 
   /// returns a value from [globals.KeycloakRoles] or null if no match
   globals.KeycloakRoles getRole() {
+    if (_user.roles == null) {
+      return null;
+    }
     if (_user.roles.contains(describeEnum(globals.KeycloakRoles.partner))) {
       return globals.KeycloakRoles.partner;
     }
