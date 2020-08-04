@@ -128,7 +128,7 @@ class _TabsScreenRegConsumedState extends State<_TabsScreenRegConsumed> {
                   icon: customIcons.add,
                   title: 'Opprett hendelse',
                   onTap: _puchCreateOccurenceScreen,
-                  isSelected: _selectedIndex == 3,
+                  isSelected: false,
                 ),
                 DrawerButton(
                   icon: customIcons.addDiscrepancy,
@@ -141,7 +141,7 @@ class _TabsScreenRegConsumedState extends State<_TabsScreenRegConsumed> {
                   isSelected: _selectedIndex == 3,
                 ),
                 DrawerButton(
-                  icon: customIcons.person,
+                  icon: customIcons.myPage,
                   title: 'Min side',
                   onTap: () {
                     setState(() {
@@ -149,12 +149,6 @@ class _TabsScreenRegConsumedState extends State<_TabsScreenRegConsumed> {
                     });
                   },
                   isSelected: _selectedIndex == 4,
-                ),
-                DrawerButton(
-                  icon: customIcons.settings,
-                  title: 'Innstillinger',
-                  onTap: () => null,
-                  isSelected: false,
                 ),
               ],
             ),

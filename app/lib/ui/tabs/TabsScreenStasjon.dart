@@ -6,6 +6,7 @@ import 'package:ombruk/ui/tabs/calendar/CalendarScreen.dart';
 import 'package:ombruk/ui/tabs/myPage/MyPage.dart';
 import 'package:ombruk/ui/tabs/notifications/NotificationScreen.dart';
 import 'package:ombruk/ui/tabs/stasjonComponents/AddExtraPickupScreen.dart';
+import 'package:ombruk/ui/tabs/stasjonComponents/MessageScreen.dart';
 import 'package:ombruk/ui/tabs/weightreport/WeightReportScreen.dart';
 
 import 'package:ombruk/ui/customColors.dart' as customColors;
@@ -35,6 +36,7 @@ class _TabsScreenStasjonState extends State<TabsScreenStasjon> {
           NotificationScreen(),
           // The screens below are in the drawer
           WeightReportScreen(),
+          SafeArea(child: MessageScreen()),
           SafeArea(child: MyPage()),
         ],
       ),
@@ -95,7 +97,7 @@ class _TabsScreenStasjonState extends State<TabsScreenStasjon> {
                 ),
                 DrawerButton(
                   icon: customIcons.add,
-                  title: 'Søk om ekstrauttak',
+                  title: 'Utlys ekstrauttak',
                   onTap: () {
                     Navigator.push(
                         context,
@@ -116,8 +118,8 @@ class _TabsScreenStasjonState extends State<TabsScreenStasjon> {
                   isSelected: _selectedIndex == 2,
                 ),
                 DrawerButton(
-                  icon: customIcons.person,
-                  title: 'Min side',
+                  icon: customIcons.addDiscrepancy,
+                  title: 'Send beskjed',
                   onTap: () {
                     setState(() {
                       _selectedIndex = 3;
@@ -126,10 +128,14 @@ class _TabsScreenStasjonState extends State<TabsScreenStasjon> {
                   isSelected: _selectedIndex == 3,
                 ),
                 DrawerButton(
-                  icon: customIcons.settings,
-                  title: 'Innstillinger',
-                  onTap: () => null,
-                  isSelected: false,
+                  icon: customIcons.myPage,
+                  title: 'Min side',
+                  onTap: () {
+                    setState(() {
+                      _selectedIndex = 4;
+                    });
+                  },
+                  isSelected: _selectedIndex == 4,
                 ),
               ],
             ),
