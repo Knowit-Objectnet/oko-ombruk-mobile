@@ -84,13 +84,16 @@ class AuthenticationService {
   /// Makes an API call to get new tokens. Returns a [UserModel] with ONLY accessToken and refreshToken
   Future<CustomResponse<UserModel>> requestRefreshToken(
       String clientId, String refreshToken) async {
+    assert(clientId != null);
+    assert(refreshToken != null);
+
     String url = '${globals.keycloakBaseUrl}/protocol/openid-connect/token';
     Map<String, String> headers = {};
     headers['Content-Type'] = 'application/x-www-form-urlencoded';
 
     String body = jsonEncode({
       'client_id': clientId,
-      'grant-type': 'refresh-token',
+      'grant_type': 'refresh_token',
       'refresh_token': refreshToken,
     });
 

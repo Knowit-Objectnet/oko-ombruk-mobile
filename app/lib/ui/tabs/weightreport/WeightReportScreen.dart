@@ -12,7 +12,6 @@ import 'package:ombruk/ui/tabs/weightreport/ListElementWithWeight.dart';
 import 'package:ombruk/ui/tabs/weightreport/WeightReportDialog.dart';
 import 'package:ombruk/ui/ui.helper.dart';
 import 'package:ombruk/ui/customColors.dart' as customColors;
-import 'package:ombruk/ui/customIcons.dart' as customIcons;
 
 class WeightReportScreen extends StatelessWidget {
   @override
@@ -64,35 +63,32 @@ class _WeightReportScreenStateConsumer
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: customIcons.image(customIcons.arrowLeft),
-          onPressed: () => null,
-        ),
-        title: Text(
-          'Vektuttak',
-          style: TextStyle(color: customColors.osloBlack),
-        ),
+    return SafeArea(
+      child: Scaffold(
         backgroundColor: customColors.osloWhite,
+        body: _body(),
       ),
-      backgroundColor: customColors.osloWhite,
-      body: _initialLoaded
-          ? widget.weightReportViewModel.calendarEvents == null ||
-                  widget.weightReportViewModel.calendarEventsWithWeight == null
-              ? _tryAgainWidget('Kunne ikke hente data')
-              : RefreshIndicator(
-                  onRefresh: _fetchData,
-                  child: widget.weightReportViewModel.calendarEvents.isEmpty &&
-                          widget.weightReportViewModel.calendarEventsWithWeight
-                              .isEmpty
-                      ? _tryAgainWidget('Ingen uttak funnet')
-                      : ListView(
-                          padding: EdgeInsets.symmetric(horizontal: 16.0),
-                          children: _buildList(),
-                        ),
-                )
-          : Center(child: CircularProgressIndicator()),
+    );
+  }
+
+  Widget _body() {
+    if (!_initialLoaded) {
+      return Center(child: CircularProgressIndicator());
+    }
+    if (widget.weightReportViewModel.calendarEvents == null ||
+        widget.weightReportViewModel.calendarEventsWithWeight == null) {
+      return _tryAgainWidget('Kunne ikke hente data');
+    }
+    if (widget.weightReportViewModel.calendarEvents.isEmpty &&
+        widget.weightReportViewModel.calendarEventsWithWeight.isEmpty) {
+      return _tryAgainWidget('Ingen uttak funnet');
+    }
+    return RefreshIndicator(
+      onRefresh: _fetchData,
+      child: ListView(
+        padding: EdgeInsets.symmetric(horizontal: 16.0),
+        children: _buildList(),
+      ),
     );
   }
 
@@ -112,7 +108,6 @@ class _WeightReportScreenStateConsumer
   }
 
   Future<void> _fetchData() async {
-    print('fetch');
     final bool success =
         await widget.weightReportViewModel.fetchWeightReports();
     if (!success) {
@@ -125,6 +120,16 @@ class _WeightReportScreenStateConsumer
 
   List<Widget> _buildList() {
     List<Widget> list = [];
+    list.add(Padding(
+      padding: EdgeInsets.symmetric(vertical: 8.0),
+      child: Text(
+        'Vektuttak',
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 16.0,
+        ),
+      ),
+    ));
     list.add(_subtitle('Ikke rapportert'));
     for (CalendarEvent calendarEvent
         in widget.weightReportViewModel.calendarEvents) {
@@ -158,8 +163,10 @@ class _WeightReportScreenStateConsumer
       final bool success =
           await widget.weightReportViewModel.addWeight(id, weight);
       uiHelper.hideLoading(context);
-
-      if (!success) {
+      if (success) {
+        Navigator.pop(context); // Close popup
+        uiHelper.showSnackbar(context, 'OK!');
+      } else {
         uiHelper.showSnackbar(context, 'Kunne ikke rapportere vekten');
       }
     }
@@ -186,7 +193,10 @@ class _WeightReportScreenStateConsumer
           await widget.weightReportViewModel.updateWeight(eventID, newWeight);
       uiHelper.hideLoading(context);
 
-      if (!success) {
+      if (success) {
+        Navigator.pop(context); // Close popup
+        uiHelper.showSnackbar(context, 'OK!');
+      } else {
         uiHelper.showSnackbar(context, 'Kunne ikke rapportere vekten');
       }
     }

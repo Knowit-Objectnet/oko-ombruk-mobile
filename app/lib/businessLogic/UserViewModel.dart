@@ -15,6 +15,10 @@ class UserViewModel extends ChangeNotifier {
 
   UserModel _user;
 
+  UserViewModel() {
+    loadFromStorage();
+  }
+
   String get accessToken => _user?.accessToken;
 
   // String get accessToken => _accessToken;
@@ -54,10 +58,8 @@ class UserViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+// TODO: remove this function, call loadFromStorage on app start instead.
   Future<bool> hasCredentials() async {
-    if (_user?.accessToken != null) {
-      return true;
-    }
     _user = await _authenticationService.loadFromStorage();
     return _user.accessToken != null;
   }
@@ -66,9 +68,10 @@ class UserViewModel extends ChangeNotifier {
     final CustomResponse<UserModel> response =
         await _authenticationService.requestRefreshToken(
       _user?.refreshToken,
-      _user.clientId,
+      _user?.clientId,
     );
     if (!response.success) {
+      print(response);
       return false;
     }
     UserModel newUser = response.data;

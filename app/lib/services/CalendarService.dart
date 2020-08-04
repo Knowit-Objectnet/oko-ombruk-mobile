@@ -15,17 +15,15 @@ import 'package:ombruk/globals.dart' as globals;
 class CalendarService {
   UserViewModel _userViewModel = serviceLocator<UserViewModel>();
 
-  // CalendarApiClient(this.token) {
-  // if (token != null) {
-  // _headers.putIfAbsent('Authorization', () => 'Bearer ' + token);
-  // }
-  // _userViewModel = serviceLocator<UserViewModel>();
-  // }
-
   final Map<String, String> _headers = {
     'Content-type': 'application/json',
     'Accept': 'application/json'
   };
+
+  void _updateTokenInHeader() {
+    _headers.putIfAbsent(
+        'Authorization', () => 'Bearer ' + (_userViewModel?.accessToken ?? ''));
+  }
 
   /// Returns a list of CalendarEvents on sucecss
   Future<CustomResponse<List<CalendarEvent>>> fetchEvents(
@@ -84,6 +82,7 @@ class CalendarService {
     final List<String> weekdaysString =
         eventData.weekdays.map((e) => describeEnum(e).toUpperCase()).toList();
 
+    _updateTokenInHeader();
     Uri uri =
         Uri.https(globals.baseUrlStripped, '${globals.requiredPath}/events');
 
@@ -99,25 +98,13 @@ class CalendarService {
       },
     });
 
-    final Response response = await post(uri, headers: _headers, body: body);
+    Response response = await post(uri, headers: _headers, body: body);
 
-    // TODO REG AUTH
+    // REG authorization
     if (response.statusCode == 401) {
       final bool gotNewTokens = await _userViewModel.requestRefreshToken();
       if (gotNewTokens) {
-        final Response newResponse =
-            await post(uri, headers: _headers, body: body);
-        if (newResponse.statusCode == 401) {
-          // Log out due to unathorized even with new tokens
-          await _userViewModel.requestLogOut();
-        } else {
-          return CustomResponse(
-            success: response.statusCode == 200,
-            statusCode: response.statusCode,
-            data: null,
-            message: response.body,
-          );
-        }
+        response = await post(uri, headers: _headers, body: body);
       } else {
         // Log out due to invalid refesh token
         await _userViewModel.requestLogOut();
@@ -149,12 +136,23 @@ class CalendarService {
       queryParameters = {'event-id': id.toString()};
     }
 
+    _updateTokenInHeader();
     Uri uri = Uri.https(globals.baseUrlStripped,
         '${globals.requiredPath}/events', queryParameters);
 
-    final Response response = await delete(uri, headers: _headers);
+    Response response = await delete(uri, headers: _headers);
 
-// TODO all auth
+    // All roles authorization
+    if (response.statusCode == 401) {
+      final bool gotNewTokens = await _userViewModel.requestRefreshToken();
+      if (gotNewTokens) {
+        response = await delete(uri, headers: _headers);
+      } else {
+        // Log out due to invalid refesh token
+        await _userViewModel.requestLogOut();
+      }
+    }
+
     return CustomResponse(
       success: response.statusCode == 200,
       statusCode: response.statusCode,
@@ -173,6 +171,7 @@ class CalendarService {
     final String startDateTimeString = globals.getDateString(startDateTime);
     final String endDateTimeString = globals.getDateString(endDateTime);
 
+    _updateTokenInHeader();
     Uri uri =
         Uri.https(globals.baseUrlStripped, '${globals.requiredPath}/events');
 
@@ -182,9 +181,19 @@ class CalendarService {
       'endDateTime': endDateTimeString,
     });
 
-    final Response response = await patch(uri, headers: _headers, body: body);
+    Response response = await patch(uri, headers: _headers, body: body);
 
-// TODO auth
+    // All roles authorization
+    if (response.statusCode == 401) {
+      final bool gotNewTokens = await _userViewModel.requestRefreshToken();
+      if (gotNewTokens) {
+        response = await patch(uri, headers: _headers, body: body);
+      } else {
+        // Log out due to invalid refesh token
+        await _userViewModel.requestLogOut();
+      }
+    }
+
     return CustomResponse(
       success: response.statusCode == 200,
       statusCode: response.statusCode,
@@ -192,12 +201,7 @@ class CalendarService {
     );
   }
 
-  // TODO: RETRY ALL THESE WHEN 401 IS RETURNED
-  ///
-  ///
-  ///
-  /// HERE
-  ///
+  /// TODO
   /// Pratner auth
   /// all get unauth
   /// rest of partern just REG
@@ -205,4 +209,6 @@ class CalendarService {
   /// station
   /// all get unauth
   /// rest is REG auth
+  ///
+  ///
 }
