@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:meta/meta.dart';
 import 'package:ombruk/businessLogic/UserModel.dart';
 import 'package:openid_client/openid_client.dart';
 import 'package:openid_client/openid_client_io.dart';
@@ -82,8 +83,10 @@ class AuthenticationService {
   }
 
   /// Makes an API call to get new tokens. Returns a [UserModel] with ONLY accessToken and refreshToken
-  Future<CustomResponse<UserModel>> requestRefreshToken(
-      String clientId, String refreshToken) async {
+  Future<CustomResponse<UserModel>> requestRefreshToken({
+    @required String clientId,
+    @required String refreshToken,
+  }) async {
     assert(clientId != null);
     assert(refreshToken != null);
 

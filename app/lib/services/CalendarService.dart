@@ -21,8 +21,12 @@ class CalendarService {
   };
 
   void _updateTokenInHeader() {
-    _headers.putIfAbsent(
-        'Authorization', () => 'Bearer ' + (_userViewModel?.accessToken ?? ''));
+    final String token = 'Bearer ' + (_userViewModel?.accessToken ?? '');
+    if (_headers.containsKey('Authorization')) {
+      _headers.update('Authorization', (value) => token);
+    } else {
+      _headers.putIfAbsent('Authorization', () => token);
+    }
   }
 
   /// Returns a list of CalendarEvents on sucecss
@@ -100,17 +104,20 @@ class CalendarService {
 
     Response response = await post(uri, headers: _headers, body: body);
 
-    print('role');
-    print(_userViewModel.getRole().toString());
-
     // REG authorization
     if (response.statusCode == 401) {
       final bool gotNewTokens = await _userViewModel.requestRefreshToken();
       if (gotNewTokens) {
+        _updateTokenInHeader();
         response = await post(uri, headers: _headers, body: body);
       } else {
-        // Log out due to invalid refesh token
-        await _userViewModel.requestLogOut();
+        // TODO: Should maybe force a re-login here
+        // await _userViewModel.requestLogOut();
+        return CustomResponse(
+          success: false,
+          statusCode: response.statusCode,
+          data: null,
+        );
       }
     }
 
@@ -149,6 +156,7 @@ class CalendarService {
     if (response.statusCode == 401) {
       final bool gotNewTokens = await _userViewModel.requestRefreshToken();
       if (gotNewTokens) {
+        _updateTokenInHeader();
         response = await delete(uri, headers: _headers);
       } else {
         // Log out due to invalid refesh token
@@ -190,6 +198,7 @@ class CalendarService {
     if (response.statusCode == 401) {
       final bool gotNewTokens = await _userViewModel.requestRefreshToken();
       if (gotNewTokens) {
+        _updateTokenInHeader();
         response = await patch(uri, headers: _headers, body: body);
       } else {
         // Log out due to invalid refesh token

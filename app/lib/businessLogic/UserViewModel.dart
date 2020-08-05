@@ -67,13 +67,14 @@ class UserViewModel extends ChangeNotifier {
   Future<bool> requestRefreshToken() async {
     final CustomResponse<UserModel> response =
         await _authenticationService.requestRefreshToken(
-      _user?.refreshToken,
-      _user?.clientId,
+      clientId: _user?.clientId,
+      refreshToken: _user?.refreshToken,
     );
     if (!response.success) {
       print(response);
       return false;
     }
+
     UserModel newUser = response.data;
     _user.accessToken = newUser.accessToken;
     _user.refreshToken = newUser.refreshToken;
@@ -83,7 +84,7 @@ class UserViewModel extends ChangeNotifier {
 
   /// returns a value from [globals.KeycloakRoles] or null if no match
   globals.KeycloakRoles getRole() {
-    if (_user.roles == null) {
+    if (_user?.roles == null) {
       return null;
     }
     if (_user.roles.contains(describeEnum(globals.KeycloakRoles.partner))) {

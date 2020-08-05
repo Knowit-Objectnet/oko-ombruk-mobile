@@ -17,8 +17,12 @@ class StationService {
   };
 
   void _updateTokenInHeader() {
-    _headers.putIfAbsent(
-        'Authorization', () => 'Bearer ' + (_userViewModel?.accessToken ?? ''));
+    final String token = 'Bearer ' + (_userViewModel?.accessToken ?? '');
+    if (_headers.containsKey('Authorization')) {
+      _headers.update('Authorization', (value) => token);
+    } else {
+      _headers.putIfAbsent('Authorization', () => token);
+    }
   }
 
   Future<CustomResponse<List<Station>>> fetchStations({int id}) async {
@@ -90,6 +94,7 @@ class StationService {
     if (response.statusCode == 401) {
       final bool gotNewTokens = await _userViewModel.requestRefreshToken();
       if (gotNewTokens) {
+        _updateTokenInHeader();
         response = await post(uri, headers: _headers, body: body);
       } else {
         // Log out due to invalid refesh token
@@ -153,6 +158,7 @@ class StationService {
     if (response.statusCode == 401) {
       final bool gotNewTokens = await _userViewModel.requestRefreshToken();
       if (gotNewTokens) {
+        _updateTokenInHeader();
         response = await post(uri, headers: _headers, body: body);
       } else {
         // Log out due to invalid refesh token

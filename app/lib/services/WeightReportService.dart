@@ -17,8 +17,12 @@ class WeightReportService {
   };
 
   void _updateTokenInHeader() {
-    _headers.putIfAbsent(
-        'Authorization', () => 'Bearer ' + (_userViewModel?.accessToken ?? ''));
+    final String token = 'Bearer ' + (_userViewModel?.accessToken ?? '');
+    if (_headers.containsKey('Authorization')) {
+      _headers.update('Authorization', (value) => token);
+    } else {
+      _headers.putIfAbsent('Authorization', () => token);
+    }
   }
 
   /// Returns CustomResponse with a list of WeightReports on success
@@ -74,6 +78,7 @@ class WeightReportService {
     if (response.statusCode == 401) {
       final bool gotNewTokens = await _userViewModel.requestRefreshToken();
       if (gotNewTokens) {
+        _updateTokenInHeader();
         response = await patch(
           uri,
           headers: _headers,
