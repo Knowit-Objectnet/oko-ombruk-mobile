@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:ombruk/ui/ui.helper.dart';
+import 'package:provider/provider.dart';
 
-import 'package:ombruk/businessLogic/Partner.dart';
+import 'package:ombruk/businessLogic/Station.dart';
+import 'package:ombruk/businessLogic/PickupViewModel.dart';
 
 import 'package:ombruk/ui/customIcons.dart' as customIcons;
 import 'package:ombruk/ui/customColors.dart' as customColors;
 import 'package:ombruk/ui/tabs/components/DatePicker.dart';
-import 'package:ombruk/ui/tabs/components/PartnerPicker.dart';
 import 'package:ombruk/ui/tabs/components/ReturnButton.dart';
+import 'package:ombruk/ui/tabs/components/StationPicker.dart';
 import 'package:ombruk/ui/tabs/components/TextFormInput.dart';
 import 'package:ombruk/ui/tabs/components/TimePicker.dart';
 
@@ -16,17 +19,20 @@ class AddExtraPickupScreen extends StatefulWidget {
 }
 
 class _AddExtraPickupScreenState extends State<AddExtraPickupScreen> {
+  final GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
+
   final TextEditingController _merknadControler = TextEditingController();
 
   DateTime _selectedDate = DateTime.now();
   TimeOfDay _startTime = TimeOfDay(hour: 8, minute: 0);
   TimeOfDay _endTime = TimeOfDay(hour: 9, minute: 0);
-  Partner _selectedPartner;
+  Station _selectedStation;
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        key: _key,
         backgroundColor: customColors.osloLightBeige,
         body: GestureDetector(
           /// .unfocus() fixes a problem where the TextFormField isn't unfocused
@@ -36,7 +42,7 @@ class _AddExtraPickupScreenState extends State<AddExtraPickupScreen> {
           child: ListView(
             padding: EdgeInsets.symmetric(horizontal: 16.0),
             children: <Widget>[
-              ReturnButton(),
+              ReturnButton(returnValue: false),
               Text(
                 'Utlys ekstrauttak',
                 style: TextStyle(
@@ -48,12 +54,14 @@ class _AddExtraPickupScreenState extends State<AddExtraPickupScreen> {
               _dateRow(),
               _subtitle('Velg tidspunkt'),
               _timePickersRow(),
-              _subtitle('Sam. partner'),
-              PartnerPicker(
-                selectedPartner: _selectedPartner,
-                partnerChanged: (value) {
+              _subtitle('Stasjon (hvem er du?)'),
+              // This picker is to be removed. It is only temporary because we
+              // cannot get which station we are logged in as from backend yet.
+              StationPicker(
+                selectedStation: _selectedStation,
+                stationChanged: (value) {
                   setState(() {
-                    _selectedPartner = value;
+                    _selectedStation = value;
                   });
                 },
               ),
@@ -147,7 +155,53 @@ class _AddExtraPickupScreenState extends State<AddExtraPickupScreen> {
   }
 
   Future<void> _submit() async {
-    // TODO
-    return;
+    // TODO: Make the timecheck a globally available function
+    if (_startTime.hour > _endTime.hour) {
+      uiHelper.showSnackbarUnknownScaffold(
+          _key.currentState, 'Start tid kan ikke være før slutt tid');
+      return;
+    }
+    if (_startTime.hour == _endTime.hour &&
+        _startTime.minute >= _endTime.minute) {
+      uiHelper.showSnackbarUnknownScaffold(
+          _key.currentState, 'Start tid kan ikke være før eller lik slutt tid');
+      return;
+    }
+
+    if (_selectedStation == null) {
+      uiHelper.showSnackbarUnknownScaffold(
+          _key.currentState, 'Vennligst velg en stasjon');
+      return;
+    }
+
+    final DateTime startDateTime = DateTime(
+      _selectedDate.year,
+      _selectedDate.month,
+      _selectedDate.day,
+      _startTime.hour,
+      _startTime.minute,
+    );
+
+    final DateTime endDateTime = DateTime(
+      _selectedDate.year,
+      _selectedDate.month,
+      _selectedDate.day,
+      _endTime.hour,
+      _endTime.minute,
+    );
+
+    final bool success =
+        await Provider.of<PickupViewModel>(context, listen: false).addPickup(
+      startDateTime: startDateTime,
+      endDateTime: endDateTime,
+      description: _merknadControler.text,
+      stationId: _selectedStation.id,
+    );
+
+    if (success) {
+      Navigator.pop(context, true);
+    } else {
+      uiHelper.showSnackbarUnknownScaffold(_key.currentState, 'Intern feil');
+    }
   }
 }

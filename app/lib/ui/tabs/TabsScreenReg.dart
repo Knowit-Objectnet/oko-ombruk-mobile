@@ -127,7 +127,7 @@ class _TabsScreenRegConsumedState extends State<_TabsScreenRegConsumed> {
                 DrawerButton(
                   icon: customIcons.add,
                   title: 'Opprett hendelse',
-                  onTap: _puchCreateOccurenceScreen,
+                  onTap: _puchCreateOccurrenceScreen,
                   isSelected: false,
                 ),
                 DrawerButton(
@@ -156,14 +156,14 @@ class _TabsScreenRegConsumedState extends State<_TabsScreenRegConsumed> {
         });
   }
 
-  Future<void> _puchCreateOccurenceScreen() async {
-    final bool occurrenceAdded = await Navigator.push(
+  Future<void> _puchCreateOccurrenceScreen() async {
+    final occurrenceAdded = await Navigator.push(
       context,
       MaterialPageRoute<bool>(
         builder: (context) => CreateOccurrenceScreen(),
       ),
     );
-    if (occurrenceAdded) {
+    if (occurrenceAdded != null && occurrenceAdded) {
       uiHelper.showSnackbarUnknownScaffold(
           _scaffoldKey.currentState, 'Opprettet hendelsen!');
       widget.calendarViewModel.fetchEvents();

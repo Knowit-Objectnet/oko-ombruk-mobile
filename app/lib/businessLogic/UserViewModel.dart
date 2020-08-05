@@ -13,33 +13,45 @@ class UserViewModel extends ChangeNotifier {
   final AuthenticationService _authenticationService =
       serviceLocator<AuthenticationService>();
 
-  UserModel _user;
+  // We don't use UserModel as the data here, because there is some funny
+  // business with notifyListeners() on an object.
+  String _accessToken;
+  String _refreshToken;
+  String _clientId;
+  List<String> _roles;
+  bool _isLoaded = false;
 
   UserViewModel() {
-    loadFromStorage();
+    initLoadFromStorage();
   }
 
-  String get accessToken => _user?.accessToken;
+  String get accessToken => _accessToken;
+  bool get isLoaded => _isLoaded;
 
-  // String get accessToken => _accessToken;
-
-  Future<void> loadFromStorage() async {
+  Future<void> initLoadFromStorage() async {
     final UserModel user = await _authenticationService.loadFromStorage();
-    _user = user;
+    _accessToken = user.accessToken;
+    _refreshToken = user.refreshToken;
+    _clientId = user.clientId;
+    _roles = user.roles;
+    _isLoaded = true;
     notifyListeners();
   }
 
   Future<void> deleteCredentials() async {
     await _authenticationService.deleteCredentials();
-    _user = null;
+    _accessToken = null;
+    _refreshToken = null;
+    _clientId = null;
+    _roles = null;
     notifyListeners();
   }
 
   Future<bool> requestLogOut() async {
     final CustomResponse response = await _authenticationService.requestLogOut(
-      _user.accessToken,
-      _user.refreshToken,
-      _user.clientId,
+      _accessToken,
+      _refreshToken,
+      _clientId,
     );
     if (response.success) {
       await deleteCredentials();
@@ -54,21 +66,18 @@ class UserViewModel extends ChangeNotifier {
       Credential credential, List<String> roles) async {
     final UserModel user =
         await _authenticationService.saveCredentials(credential, roles);
-    _user = user;
+    _accessToken = user.accessToken;
+    _refreshToken = user.refreshToken;
+    _clientId = user.clientId;
+    _roles = user.roles;
     notifyListeners();
-  }
-
-// TODO: remove this function, call loadFromStorage on app start instead.
-  Future<bool> hasCredentials() async {
-    _user = await _authenticationService.loadFromStorage();
-    return _user.accessToken != null;
   }
 
   Future<bool> requestRefreshToken() async {
     final CustomResponse<UserModel> response =
         await _authenticationService.requestRefreshToken(
-      clientId: _user?.clientId,
-      refreshToken: _user?.refreshToken,
+      clientId: _clientId,
+      refreshToken: _refreshToken,
     );
     if (!response.success) {
       print(response);
@@ -76,26 +85,24 @@ class UserViewModel extends ChangeNotifier {
     }
 
     UserModel newUser = response.data;
-    _user.accessToken = newUser.accessToken;
-    _user.refreshToken = newUser.refreshToken;
+    _accessToken = newUser.accessToken;
+    _refreshToken = newUser.refreshToken;
     notifyListeners();
     return true;
   }
 
   /// returns a value from [globals.KeycloakRoles] or null if no match
   globals.KeycloakRoles getRole() {
-    if (_user?.roles == null) {
+    if (_roles == null) {
       return null;
     }
-    if (_user.roles.contains(describeEnum(globals.KeycloakRoles.partner))) {
+    if (_roles.contains(describeEnum(globals.KeycloakRoles.partner))) {
       return globals.KeycloakRoles.partner;
     }
-    if (_user.roles
-        .contains(describeEnum(globals.KeycloakRoles.reg_employee))) {
+    if (_roles.contains(describeEnum(globals.KeycloakRoles.reg_employee))) {
       return globals.KeycloakRoles.reg_employee;
     }
-    if (_user.roles
-        .contains(describeEnum(globals.KeycloakRoles.reuse_station))) {
+    if (_roles.contains(describeEnum(globals.KeycloakRoles.reuse_station))) {
       return globals.KeycloakRoles.reuse_station;
     }
     return null;

@@ -8,6 +8,7 @@ import 'package:ombruk/businessLogic/UserViewModel.dart';
 import 'package:ombruk/businessLogic/CalendarViewModel.dart';
 import 'package:ombruk/businessLogic/PartnerViewModel.dart';
 import 'package:ombruk/businessLogic/StationViewModel.dart';
+import 'package:ombruk/businessLogic/PickupViewModel.dart';
 
 void main() {
   setupServiceLocator();
@@ -30,6 +31,9 @@ void main() {
         ),
         ChangeNotifierProvider<StationViewModel>(
           create: (context) => serviceLocator<StationViewModel>(),
+        ),
+        ChangeNotifierProvider<PickupViewModel>(
+          create: (context) => serviceLocator<PickupViewModel>(),
         ),
       ],
       child: MyApp(),

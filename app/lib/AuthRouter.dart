@@ -17,35 +17,27 @@ class AuthRouter extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer(
       builder: (context, UserViewModel userViewModel, widget) {
-        return FutureBuilder(
-          future: userViewModel.hasCredentials(),
-          builder: (context, AsyncSnapshot<bool> snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              if (snapshot.data) {
-                // Has accessToken => show tabs
-                switch (userViewModel.getRole()) {
-                  case KeycloakRoles.reg_employee:
-                    return TabsScreenReg();
-                  case KeycloakRoles.partner:
-                    return TabsScreenPartner();
-                  case KeycloakRoles.reuse_station:
-                    return TabsScreenStasjon();
-                  case KeycloakRoles.offline_access:
-                    return ErrorScreen(
-                        exception: Exception('Du har ikke en rolle'));
-                  case KeycloakRoles.uma_authorization:
-                    return ErrorScreen(
-                        exception: Exception('Du har ikke en rolle'));
-                  default:
-                    return ErrorScreen(exception: Exception('Ukjent rolle'));
-                }
-              } else {
-                return LoginWebView();
-              }
-            }
-            return SplashScreen();
-          },
-        );
+        if (!userViewModel.isLoaded) {
+          return SplashScreen();
+        }
+        if (userViewModel.accessToken == null) {
+          return LoginWebView();
+        }
+        // Has accessToken => show tabs
+        switch (userViewModel.getRole()) {
+          case KeycloakRoles.reg_employee:
+            return TabsScreenReg();
+          case KeycloakRoles.partner:
+            return TabsScreenPartner();
+          case KeycloakRoles.reuse_station:
+            return TabsScreenStasjon();
+          case KeycloakRoles.offline_access:
+            return ErrorScreen(exception: Exception('Du har ikke en rolle'));
+          case KeycloakRoles.uma_authorization:
+            return ErrorScreen(exception: Exception('Du har ikke en rolle'));
+          default:
+            return ErrorScreen(exception: Exception('Ukjent rolle'));
+        }
       },
     );
   }

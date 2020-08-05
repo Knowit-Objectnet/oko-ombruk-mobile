@@ -11,6 +11,7 @@ import 'package:ombruk/ui/tabs/weightreport/WeightReportScreen.dart';
 
 import 'package:ombruk/ui/customColors.dart' as customColors;
 import 'package:ombruk/ui/customIcons.dart' as customIcons;
+import 'package:ombruk/ui/ui.helper.dart';
 
 class TabsScreenStasjon extends StatefulWidget {
   @override
@@ -18,6 +19,9 @@ class TabsScreenStasjon extends StatefulWidget {
 }
 
 class _TabsScreenStasjonState extends State<TabsScreenStasjon> {
+  // This key is used to display the Snackbar, becuase the context was hard to get from the appbar
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   final List<String> _bottomAppBarItems = [
     customIcons.calendar,
     customIcons.notification
@@ -28,6 +32,7 @@ class _TabsScreenStasjonState extends State<TabsScreenStasjon> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       body: IndexedStack(
         // IndexStack keeps the screen states alive between tab changes
         index: _selectedIndex,
@@ -98,12 +103,16 @@ class _TabsScreenStasjonState extends State<TabsScreenStasjon> {
                 DrawerButton(
                   icon: customIcons.add,
                   title: 'Utlys ekstrauttak',
-                  onTap: () {
-                    Navigator.push(
+                  onTap: () async {
+                    final pickupCreated = await Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) => AddExtraPickupScreen(),
                         ));
+                    if (pickupCreated != null && pickupCreated) {
+                      uiHelper.showSnackbarUnknownScaffold(
+                          _scaffoldKey.currentState, 'Uttaket ble registrert');
+                    }
                   },
                   isSelected: false,
                 ),

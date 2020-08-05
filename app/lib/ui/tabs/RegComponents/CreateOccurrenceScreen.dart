@@ -90,7 +90,7 @@ class _CreateOccurrenceScreenState extends State<CreateOccurrenceScreen> {
               _key.currentState, 'Vennligst velg en stasjon');
           return;
         }
-        bool occurenceAdded = await Navigator.push(
+        final occurrenceAdded = await Navigator.push(
           context,
           MaterialPageRoute<bool>(
             builder: (_) => CreateCalendarEventScreen(
@@ -99,7 +99,7 @@ class _CreateOccurrenceScreenState extends State<CreateOccurrenceScreen> {
             ),
           ),
         );
-        if (occurenceAdded) {
+        if (occurrenceAdded != null && occurrenceAdded) {
           Navigator.pop(context, true);
         }
       },

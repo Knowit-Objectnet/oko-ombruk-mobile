@@ -142,12 +142,16 @@ class _CalendarScreenConsumedState extends State<_CalendarScreenConsumed>
                       globals.KeycloakRoles.reuse_station
                   ? _headerButton(
                       icon: customIcons.add,
-                      onPressed: () {
-                        Navigator.push(
+                      onPressed: () async {
+                        final pickupCreated = await Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) => AddExtraPickupScreen(),
                             ));
+                        if (pickupCreated != null && pickupCreated) {
+                          uiHelper.showSnackbar(
+                              context, 'Uttaket ble registrert');
+                        }
                       },
                     )
                   : Container(),
@@ -155,7 +159,7 @@ class _CalendarScreenConsumedState extends State<_CalendarScreenConsumed>
                       globals.KeycloakRoles.reg_employee
                   ? _headerButton(
                       icon: customIcons.add,
-                      onPressed: _puchCreateOccurenceScreen,
+                      onPressed: _puchCreateOccurrenceScreen,
                     )
                   : Container(),
               widget.calendarViewModel.isLoading
@@ -221,7 +225,7 @@ class _CalendarScreenConsumedState extends State<_CalendarScreenConsumed>
   }
 
 // Only available to REG employees
-  Future<void> _puchCreateOccurenceScreen() async {
+  Future<void> _puchCreateOccurrenceScreen() async {
     final bool occurrenceAdded = await Navigator.push(
       context,
       MaterialPageRoute<bool>(
