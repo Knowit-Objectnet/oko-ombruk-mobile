@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:ombruk/models/CalendarEvent.dart';
+import 'package:ombruk/models/WeightReport.dart';
 
 import 'package:ombruk/ui/tabs/weightreport/DateTimeBox.dart';
 import 'package:ombruk/ui/tabs/weightreport/NameBox.dart';
@@ -8,11 +8,11 @@ import 'package:ombruk/ui/tabs/weightreport/NameBox.dart';
 import 'package:ombruk/ui/customColors.dart' as customColors;
 
 class ListElementWithoutWeight extends StatelessWidget {
-  final CalendarEvent calendarEvent;
+  final WeightReport weightReport;
   final Function() onEditPress;
 
-  ListElementWithoutWeight(this.calendarEvent, this.onEditPress)
-      : assert(calendarEvent != null);
+  ListElementWithoutWeight(this.weightReport, this.onEditPress)
+      : assert(weightReport != null);
 
   @override
   Widget build(BuildContext context) {
@@ -28,10 +28,12 @@ class ListElementWithoutWeight extends StatelessWidget {
                 children: <Widget>[
                   Expanded(
                     child: DateTimeBox(
-                        calendarEvent: calendarEvent, isReported: false),
+                      weightReport: weightReport,
+                      isReported: false,
+                    ),
                   ),
                   NameBox(
-                    name: calendarEvent.partner?.name,
+                    name: weightReport.station?.name,
                     isReported: false,
                   ),
                 ],

@@ -17,6 +17,7 @@ class AuthenticationService {
     final String accessToken = await storage.read(key: "accessToken");
     final String refreshToken = await storage.read(key: 'refreshToken');
     final String clientId = await storage.read(key: 'clientId');
+    final String groupIDString = await storage.read(key: 'groupID');
 
     final String roleString = await storage.read(key: 'roles');
     List<String> roles;
@@ -25,7 +26,12 @@ class AuthenticationService {
       roles = list.map((e) => e.toString()).toList();
     }
 
-    return UserModel(accessToken, refreshToken, clientId, roles);
+    int groupID;
+    if (groupIDString != null) {
+      groupID = int.parse(groupIDString);
+    }
+
+    return UserModel(accessToken, refreshToken, clientId, roles, groupID);
   }
 
   Future<void> deleteCredentials() async {
@@ -67,8 +73,11 @@ class AuthenticationService {
     }
   }
 
-  Future<UserModel> saveCredentials(
-      Credential credential, List<String> roles) async {
+  Future<UserModel> saveCredentials({
+    @required Credential credential,
+    List<String> roles,
+    int groupID,
+  }) async {
     Map<String, dynamic> map = credential.response;
     final String accessToken = map['access_token'].toString();
     final String refreshToken = credential.refreshToken;
@@ -78,8 +87,9 @@ class AuthenticationService {
     await storage.write(key: "refreshToken", value: refreshToken);
     await storage.write(key: "clientId", value: clientId);
     await storage.write(key: 'roles', value: jsonEncode(roles));
+    await storage.write(key: 'groupID', value: groupID?.toString());
 
-    return UserModel(accessToken, refreshToken, clientId, roles);
+    return UserModel(accessToken, refreshToken, clientId, roles, groupID);
   }
 
   /// Makes an API call to get new tokens. Returns a [UserModel] with ONLY accessToken and refreshToken
@@ -126,7 +136,7 @@ class AuthenticationService {
     return CustomResponse(
       success: true,
       statusCode: response.statusCode,
-      data: UserModel(newAccessToken, newRefreshToken, null, null),
+      data: UserModel(newAccessToken, newRefreshToken, null, null, null),
     );
   }
 }

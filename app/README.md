@@ -1,6 +1,6 @@
 #  Prosjekt Ombruk mobile app
 
-This is a project for [Renovasjons- og gjenvinningsetaten (*REG*)](https://www.oslo.kommune.no/etater-foretak-og-ombud/renovasjons-og-gjenvinningsetaten/) in Oslo kommune.
+This is a Flutter project for [Renovasjons- og gjenvinningsetaten (*REG*)](https://www.oslo.kommune.no/etater-foretak-og-ombud/renovasjons-og-gjenvinningsetaten/) in Oslo kommune.
 
 ## Getting Started
 If you are unfamiliar with Flutter, then go to [the Flutter website](https://flutter.dev) for information on how to get started.
@@ -22,7 +22,7 @@ The login/authentication solution is based on [Keycloak](https://www.keycloak.or
 * ```TabsScreenStasjon.dart```
 * ```TabsScreenReg.dart```
 
-The login credentials are stored in `UserViewModel.dart`.
+The login credentials are stored in `UserViewModel.dart`, and all authorization goes through that file and `AuthorizationService.dart`, as well as `LoginWebView.dart` for Keycloak login.
 
 
 
@@ -43,5 +43,6 @@ This app uses the [Provider](https://pub.dev/packages/provider) library to make 
 ## Further development
 * Weight reporting should only show the logged in station/partners events.
 * All custom icons should be added as .ttf files instead of .png files.
-
-### Known bugs
+* The login page should be styled and the splash screen is pretty basic right now.
+* The user should be able to swipe the vetical day scroller (`DayScroller.dart`) on the entire screen, and not only in its row.
+* The user should be asked to login again if the access token and refresh token is not valid anymore. At the moment, this is not handled properly.

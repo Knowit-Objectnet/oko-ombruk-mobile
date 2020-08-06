@@ -6,7 +6,10 @@ void main() {
     "reportID": 1,
     "eventID": 1,
     "partnerID": 2,
-    "stationID": 1,
+    "station": {
+      "id": 3,
+      "name": "Smestad",
+    },
     "startDateTime": "2020-07-31T08:00:00",
     "endDateTime": "2020-07-31T09:00:00",
     "weight": null,
@@ -17,7 +20,10 @@ void main() {
     "reportID": 1,
     "eventID": 1,
     "partnerID": 2,
-    "stationID": 1,
+    "station": {
+      "id": 3,
+      "name": "Smestad",
+    },
     "startDateTime": "2020-07-31T08:00:00Z",
     "endDateTime": "2020-07-31T09:00:00Z",
     "weight": null,
@@ -32,7 +38,10 @@ void main() {
     "partnerID": 2,
     "endDateTime": "2020-07-31T09:00:00Z",
     "weight": null,
-    "stationID": 1,
+    "station": {
+      "id": 3,
+      "name": "Smestad",
+    },
   };
 
   final invalidJsonFromApi = {
@@ -43,7 +52,9 @@ void main() {
     "partnerID": 2,
     "endDateTime": "20-07-31T09:00:00Z",
     "weight": null,
-    "stationID": 1,
+    "station": {
+      "id": 3,
+    },
   };
 
   test('Test correct JSON parsing', () {

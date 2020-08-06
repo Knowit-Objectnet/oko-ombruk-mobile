@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 
-import 'package:ombruk/models/CalendarEvent.dart';
+import 'package:ombruk/models/WeightReport.dart';
 
 import 'package:ombruk/globals.dart' as globals;
 import 'package:ombruk/ui/customColors.dart' as customColors;
 
 class DateTimeBox extends StatelessWidget {
-  final CalendarEvent calendarEvent;
+  final WeightReport weightReport;
   final bool isReported;
 
-  DateTimeBox(
-      {Key key, @required this.calendarEvent, @required this.isReported})
+  DateTimeBox({Key key, @required this.weightReport, @required this.isReported})
       : super(key: key);
 
   @override
@@ -21,9 +20,9 @@ class DateTimeBox extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            Text(_getDate(calendarEvent.startDateTime)),
-            Text(_getTime(
-                calendarEvent.startDateTime, calendarEvent.endDateTime)),
+            Text(_getDate(weightReport.startDateTime)),
+            Text(
+                _getTime(weightReport.startDateTime, weightReport.endDateTime)),
           ],
         ));
   }

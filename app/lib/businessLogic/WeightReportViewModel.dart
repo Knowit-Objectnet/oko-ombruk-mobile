@@ -1,75 +1,55 @@
 import 'package:flutter/cupertino.dart';
-import 'package:ombruk/businessLogic/CalendarEventWithWeight.dart';
-import 'package:ombruk/models/CalendarEvent.dart';
 import 'package:ombruk/models/CustomResponse.dart';
 import 'package:ombruk/models/WeightReport.dart';
-import 'package:ombruk/services/CalendarService.dart';
 import 'package:ombruk/services/WeightReportService.dart';
 import 'package:ombruk/services/serviceLocator.dart';
 
 class WeightReportViewModel extends ChangeNotifier {
   final WeightReportService _weightReportService =
       serviceLocator<WeightReportService>();
-  final CalendarService _calendarService = serviceLocator<CalendarService>();
+
+  List<WeightReport> _nonReportedList;
+  List<WeightReport> _reportedList;
 
 // Use unmodifiable list here maybe
-  List<CalendarEvent> _calendarEvents;
-  List<CalendarEventWithWeight> _calendarEventsWithWeight;
-
-  List<CalendarEvent> get calendarEvents => _calendarEvents;
-  List<CalendarEventWithWeight> get calendarEventsWithWeight =>
-      _calendarEventsWithWeight;
+  List<WeightReport> get nonReportedList => _nonReportedList;
+  List<WeightReport> get reportedList => _reportedList;
 
   Future<bool> fetchWeightReports() async {
-    final Future<CustomResponse<List<WeightReport>>> futureWeightResponse =
-        _weightReportService.fetchWeightReports();
-
-    final Future<CustomResponse<List<CalendarEvent>>> futureCalendarResponse =
-        _calendarService.fetchEvents();
-
     final CustomResponse<List<WeightReport>> weightResponse =
-        await futureWeightResponse;
-    final CustomResponse<List<CalendarEvent>> calendarResponse =
-        await futureCalendarResponse;
+        await _weightReportService.fetchWeightReports();
 
-    if (weightResponse.success && calendarResponse.success) {
-      List<CalendarEvent> tempCalendarEvents = [];
-      List<CalendarEventWithWeight> tempCalendarEventsWithWeight = [];
+    if (weightResponse.success) {
+      List<WeightReport> tempNonReported = [];
+      List<WeightReport> tempReported = [];
 
-      for (CalendarEvent calendarEvent in calendarResponse.data) {
-        WeightReport weightReport = weightResponse.data
-            .firstWhere((element) => element.eventID == calendarEvent.id);
-        if (weightReport?.weight != null) {
-          tempCalendarEventsWithWeight
-              .add(CalendarEventWithWeight(calendarEvent, weightReport));
+      for (WeightReport weightReport in weightResponse.data) {
+        if (weightReport.weight != null) {
+          tempReported.add(weightReport);
         } else {
-          tempCalendarEvents.add(calendarEvent);
+          tempNonReported.add(weightReport);
         }
       }
-      _calendarEvents = tempCalendarEvents;
-      _calendarEventsWithWeight = tempCalendarEventsWithWeight;
+
+      _nonReportedList = tempNonReported;
+      _reportedList = tempReported;
 
       notifyListeners();
       return true;
     } else {
       print(weightResponse);
-      print(calendarResponse);
       return false;
     }
   }
 
-  Future<bool> addWeight(int id, int weight) async {
+  Future<bool> addWeight(WeightReport weightReport, int newWeight) async {
     final CustomResponse<WeightReport> response =
-        await _weightReportService.addWeight(id, weight);
+        await _weightReportService.patchWeight(weightReport.eventID, newWeight);
 
     if (response.success) {
-      final WeightReport weightReport = response.data;
-      final CalendarEvent calendarEvent =
-          _calendarEvents.firstWhere((event) => event.id == id);
-
-      _calendarEvents.remove(calendarEvent);
-      _calendarEventsWithWeight
-          .add(CalendarEventWithWeight(calendarEvent, weightReport));
+      _nonReportedList.remove(weightReport);
+      weightReport.weight = newWeight;
+      _reportedList.add(weightReport);
 
       notifyListeners();
       return true;
@@ -79,19 +59,14 @@ class WeightReportViewModel extends ChangeNotifier {
     }
   }
 
-  Future<bool> updateWeight(int id, int weight) async {
+  Future<bool> updateWeight(WeightReport weightReport, int newWeight) async {
     final CustomResponse<WeightReport> response =
-        await _weightReportService.addWeight(id, weight);
+        await _weightReportService.patchWeight(weightReport.eventID, newWeight);
 
     if (response.success) {
-      final WeightReport weightReport = response.data;
-      final CalendarEventWithWeight eventWithWeight = _calendarEventsWithWeight
-          .firstWhere((element) => element.calendarEvent.id == id);
-      final int index = _calendarEventsWithWeight.indexOf(eventWithWeight);
-
-      _calendarEventsWithWeight.removeAt(index);
-      _calendarEventsWithWeight.insert(index,
-          CalendarEventWithWeight(eventWithWeight.calendarEvent, weightReport));
+      final int index = _reportedList
+          .indexWhere((element) => element.eventID == weightReport.eventID);
+      _reportedList[index].weight = newWeight;
 
       notifyListeners();
       return true;

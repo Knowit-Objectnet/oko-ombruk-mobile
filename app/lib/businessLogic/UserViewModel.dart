@@ -19,6 +19,7 @@ class UserViewModel extends ChangeNotifier {
   String _refreshToken;
   String _clientId;
   List<String> _roles;
+  int _groupID;
   bool _isLoaded = false;
 
   UserViewModel() {
@@ -27,6 +28,7 @@ class UserViewModel extends ChangeNotifier {
 
   String get accessToken => _accessToken;
   bool get isLoaded => _isLoaded;
+  int get groupID => _groupID;
 
   Future<void> initLoadFromStorage() async {
     final UserModel user = await _authenticationService.loadFromStorage();
@@ -34,6 +36,7 @@ class UserViewModel extends ChangeNotifier {
     _refreshToken = user.refreshToken;
     _clientId = user.clientId;
     _roles = user.roles;
+    _groupID = user.groupID;
     _isLoaded = true;
     notifyListeners();
   }
@@ -44,6 +47,7 @@ class UserViewModel extends ChangeNotifier {
     _refreshToken = null;
     _clientId = null;
     _roles = null;
+    _groupID = null;
     notifyListeners();
   }
 
@@ -62,14 +66,21 @@ class UserViewModel extends ChangeNotifier {
     }
   }
 
-  Future<void> saveCredentials(
-      Credential credential, List<String> roles) async {
-    final UserModel user =
-        await _authenticationService.saveCredentials(credential, roles);
+  Future<void> saveCredentials({
+    @required Credential credential,
+    @required List<String> roles,
+    @required int groupID,
+  }) async {
+    final UserModel user = await _authenticationService.saveCredentials(
+      credential: credential,
+      roles: roles,
+      groupID: groupID,
+    );
     _accessToken = user.accessToken;
     _refreshToken = user.refreshToken;
     _clientId = user.clientId;
     _roles = user.roles;
+    _groupID = user.groupID;
     notifyListeners();
   }
 

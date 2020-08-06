@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:ombruk/services/serviceLocator.dart';
 import 'package:provider/provider.dart';
 
-import 'package:ombruk/businessLogic/CalendarEventWithWeight.dart';
-import 'package:ombruk/businessLogic/CalendarViewModel.dart';
+import 'package:ombruk/models/WeightReport.dart';
+import 'package:ombruk/services/serviceLocator.dart';
+
 import 'package:ombruk/businessLogic/WeightReportViewModel.dart';
-import 'package:ombruk/models/CalendarEvent.dart';
 
 import 'package:ombruk/ui/tabs/weightreport/ListElementWithoutWeight.dart';
 import 'package:ombruk/ui/tabs/weightreport/ListElementWithWeight.dart';
@@ -18,16 +17,14 @@ class WeightReportScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (context) => serviceLocator<WeightReportViewModel>(),
-      child: Consumer2<CalendarViewModel, WeightReportViewModel>(
+      child: Consumer<WeightReportViewModel>(
         builder: (
           context,
-          CalendarViewModel calendarViewModel,
           WeightReportViewModel weightReportViewModel,
           child,
         ) {
           return _WeightReportScreenConsumed(
-            calendarViewModel,
-            weightReportViewModel,
+            weightReportViewModel: weightReportViewModel,
           );
         },
       ),
@@ -36,11 +33,9 @@ class WeightReportScreen extends StatelessWidget {
 }
 
 class _WeightReportScreenConsumed extends StatefulWidget {
-  final CalendarViewModel calendarViewModel;
   final WeightReportViewModel weightReportViewModel;
 
-  _WeightReportScreenConsumed(
-      this.calendarViewModel, this.weightReportViewModel);
+  _WeightReportScreenConsumed({@required this.weightReportViewModel});
 
   @override
   _WeightReportScreenStateConsumer createState() =>
@@ -75,12 +70,12 @@ class _WeightReportScreenStateConsumer
     if (!_initialLoaded) {
       return Center(child: CircularProgressIndicator());
     }
-    if (widget.weightReportViewModel.calendarEvents == null ||
-        widget.weightReportViewModel.calendarEventsWithWeight == null) {
+    if (widget.weightReportViewModel.nonReportedList == null ||
+        widget.weightReportViewModel.reportedList == null) {
       return _tryAgainWidget('Kunne ikke hente data');
     }
-    if (widget.weightReportViewModel.calendarEvents.isEmpty &&
-        widget.weightReportViewModel.calendarEventsWithWeight.isEmpty) {
+    if (widget.weightReportViewModel.nonReportedList.isEmpty &&
+        widget.weightReportViewModel.reportedList.isEmpty) {
       return _tryAgainWidget('Ingen uttak funnet');
     }
     return RefreshIndicator(
@@ -131,37 +126,35 @@ class _WeightReportScreenStateConsumer
       ),
     ));
     list.add(_subtitle('Ikke rapportert'));
-    for (CalendarEvent calendarEvent
-        in widget.weightReportViewModel.calendarEvents) {
+    for (WeightReport weightReport
+        in widget.weightReportViewModel.nonReportedList) {
       list.add(
         ListElementWithoutWeight(
-          calendarEvent,
-          () => _showNewWeightDialog(calendarEvent.id),
+          weightReport,
+          () => _showNewWeightDialog(weightReport: weightReport),
         ),
       );
     }
     list.add(_subtitle('Tidligere uttak'));
-    for (CalendarEventWithWeight event
-        in widget.weightReportViewModel.calendarEventsWithWeight) {
+    for (WeightReport weightReport
+        in widget.weightReportViewModel.reportedList) {
       list.add(
         ListElementWithWeight(
-          event.calendarEvent,
-          event.weightReport,
-          () => _showWeightEditDialog(
-            eventID: event.calendarEvent.id,
-            initialWeight: event.weightReport.weight,
-          ),
+          weightReport,
+          () => _showWeightEditDialog(weightReport: weightReport),
         ),
       );
     }
     return list;
   }
 
-  Future<void> _showNewWeightDialog(int id) async {
-    Future<void> _submitNewWeight(int weight) async {
+  Future<void> _showNewWeightDialog({
+    @required WeightReport weightReport,
+  }) async {
+    Future<void> _submitNewWeight(int newWeight) async {
       uiHelper.showLoading(context);
       final bool success =
-          await widget.weightReportViewModel.addWeight(id, weight);
+          await widget.weightReportViewModel.addWeight(weightReport, newWeight);
       uiHelper.hideLoading(context);
       if (success) {
         Navigator.pop(context); // Close popup
@@ -184,13 +177,12 @@ class _WeightReportScreenStateConsumer
   }
 
   Future<void> _showWeightEditDialog({
-    @required int eventID,
-    @required int initialWeight,
+    @required WeightReport weightReport,
   }) async {
     Future<void> _updateWeight(int eventID, int newWeight) async {
       uiHelper.showLoading(context);
-      final bool success =
-          await widget.weightReportViewModel.updateWeight(eventID, newWeight);
+      final bool success = await widget.weightReportViewModel
+          .updateWeight(weightReport, newWeight);
       uiHelper.hideLoading(context);
 
       if (success) {
@@ -206,9 +198,9 @@ class _WeightReportScreenStateConsumer
       builder: (_) {
         return WeightReportDialog(
             onSubmit: (int newWeight) {
-              _updateWeight(eventID, newWeight);
+              _updateWeight(weightReport.eventID, newWeight);
             },
-            initialWeight: initialWeight);
+            initialWeight: weightReport.weight);
       },
     );
   }

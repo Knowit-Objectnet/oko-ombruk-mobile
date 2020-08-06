@@ -212,15 +212,4 @@ class CalendarService {
       data: null,
     );
   }
-
-  /// TODO
-  /// Pratner auth
-  /// all get unauth
-  /// rest of partern just REG
-  ///
-  /// station
-  /// all get unauth
-  /// rest is REG auth
-  ///
-  ///
 }

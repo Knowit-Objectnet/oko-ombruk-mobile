@@ -27,8 +27,15 @@ class WeightReportService {
 
   /// Returns CustomResponse with a list of WeightReports on success
   Future<CustomResponse<List<WeightReport>>> fetchWeightReports() async {
-    Uri uri =
-        Uri.https(globals.baseUrlStripped, '${globals.requiredPath}/reports');
+    Map<String, String> parameters = {};
+    if (_userViewModel.groupID != null) {
+      print('put partner-id: ${_userViewModel.groupID}');
+      parameters.putIfAbsent(
+          'partnerId', () => _userViewModel.groupID.toString());
+    }
+
+    Uri uri = Uri.https(
+        globals.baseUrlStripped, '${globals.requiredPath}/reports', parameters);
 
     final Response response = await get(uri);
 
@@ -61,8 +68,11 @@ class WeightReportService {
   }
 
   /// Returns a CustomResponse with a WeightReport if it was sucecssfully added
-  Future<CustomResponse<WeightReport>> addWeight(int id, int weight) async {
+  Future<CustomResponse<WeightReport>> patchWeight(int id, int weight) async {
+    print(_userViewModel.accessToken?.substring(0, 10));
     _updateTokenInHeader();
+    print(_userViewModel.accessToken?.substring(0, 10));
+
     Uri uri =
         Uri.https(globals.baseUrlStripped, '${globals.requiredPath}/reports');
 
@@ -76,6 +86,9 @@ class WeightReportService {
 
     // All roles authorization
     if (response.statusCode == 401) {
+      print('add weight response:');
+      print(response.statusCode);
+      print(response.body);
       final bool gotNewTokens = await _userViewModel.requestRefreshToken();
       if (gotNewTokens) {
         _updateTokenInHeader();
