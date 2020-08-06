@@ -42,5 +42,6 @@ This app uses the [Provider](https://pub.dev/packages/provider) library to make 
 
 ## Further development
 * Weight reporting should only show the logged in station/partners events.
+* All custom icons should be added as .ttf files instead of .png files.
 
 ### Known bugs

@@ -57,7 +57,7 @@ class LoginWebView extends StatelessWidget {
   Future<UserCredentials> _openKeycloakLogin() async {
     final Uri uri = Uri.parse("${globals.keycloakBaseUrl}");
     final String clientId = "flutter-app";
-    final List<String> scopes = ["openid", "profile"];
+    final List<String> scopes = ["openid", "profile", 'offline_access'];
 
     try {
       Issuer issuer = await Issuer.discover(uri);
