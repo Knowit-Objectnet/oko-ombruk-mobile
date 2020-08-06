@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:ombruk/models/CalendarEvent.dart';
 import 'package:grouped_list/grouped_list.dart';
-import 'package:ombruk/ui/tabs/SamPartnersComponents/CalendarEventExpander.dart';
+import 'package:ombruk/ui/tabs/calendar/CalendarEventExpander.dart';
 
 import 'package:ombruk/globals.dart' as globals;
 import 'package:ombruk/ui/customColors.dart' as customColors;

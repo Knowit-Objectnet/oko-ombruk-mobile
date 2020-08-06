@@ -122,9 +122,9 @@ class _MyPageConsumedState extends State<_MyPageConsumed> {
             ),
           ],
         ),
-        _withColor(_textWithIcon(customIcons.person, 'name')),
+        _withColor(_textWithIcon(customIcons.person, 'Fretex')),
         _withColor(_textWithIcon(customIcons.mobile, '91289312')),
-        _withColor(_textWithIcon(customIcons.mail, 'bla@bla.com')),
+        _withColor(_textWithIcon(customIcons.mail, 'fretex@gmail.com')),
         _withColor(Text('Ombrukskoordinator')),
       ],
     );
