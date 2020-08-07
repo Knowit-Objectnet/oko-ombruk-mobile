@@ -97,8 +97,8 @@ class StationService {
         _updateTokenInHeader();
         response = await post(uri, headers: _headers, body: body);
       } else {
-        // Log out due to invalid refesh token
-        await _userViewModel.requestLogOut();
+        // Should maybe force a re-login here
+        // await _userViewModel.requestLogOut();
       }
     }
 
@@ -161,8 +161,8 @@ class StationService {
         _updateTokenInHeader();
         response = await post(uri, headers: _headers, body: body);
       } else {
-        // Log out due to invalid refesh token
-        await _userViewModel.requestLogOut();
+        // Should maybe force a re-login here
+        // await _userViewModel.requestLogOut();
       }
     }
 

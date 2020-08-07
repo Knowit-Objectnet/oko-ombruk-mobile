@@ -23,7 +23,7 @@ class AuthenticationService {
     List<String> roles;
     if (roleString != null) {
       List<dynamic> list = jsonDecode(roleString);
-      roles = list.map((e) => e.toString()).toList();
+      roles = list.map((role) => role.toString()).toList();
     }
 
     int groupID;

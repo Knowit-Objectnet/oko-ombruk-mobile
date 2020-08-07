@@ -51,7 +51,7 @@ class PickupService {
         _updateTokenInHeader();
         response = await post(uri, headers: _headers, body: body);
       } else {
-        // TODO: Should maybe force a re-login here
+        // Should maybe force a re-login here
         // await _userViewModel.requestLogOut();
         return CustomResponse(
           success: false,

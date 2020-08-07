@@ -111,7 +111,7 @@ class CalendarService {
         _updateTokenInHeader();
         response = await post(uri, headers: _headers, body: body);
       } else {
-        // TODO: Should maybe force a re-login here
+        // Should maybe force a re-login here
         // await _userViewModel.requestLogOut();
         return CustomResponse(
           success: false,
@@ -159,8 +159,8 @@ class CalendarService {
         _updateTokenInHeader();
         response = await delete(uri, headers: _headers);
       } else {
-        // Log out due to invalid refesh token
-        await _userViewModel.requestLogOut();
+        // Should maybe force a re-login here
+        // await _userViewModel.requestLogOut();
       }
     }
 
@@ -201,8 +201,8 @@ class CalendarService {
         _updateTokenInHeader();
         response = await patch(uri, headers: _headers, body: body);
       } else {
-        // Log out due to invalid refesh token
-        await _userViewModel.requestLogOut();
+        // Should maybe force a re-login here
+        // await _userViewModel.requestLogOut();
       }
     }
 
