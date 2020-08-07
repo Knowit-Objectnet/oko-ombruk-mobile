@@ -29,7 +29,7 @@ class StationService {
     Map<String, String> parameters = {};
 
     if (id != null) {
-      parameters.putIfAbsent('station-id', () => id.toString());
+      parameters.putIfAbsent('stationId', () => id.toString());
     }
 
     Uri uri =

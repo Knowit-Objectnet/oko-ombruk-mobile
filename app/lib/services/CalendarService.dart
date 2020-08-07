@@ -138,12 +138,12 @@ class CalendarService {
 
     if (id == null) {
       queryParameters = {
-        'recurrence-rule-id': recurrenceRuleID.toString(),
-        'from-date': startString,
-        'to-date': endString
+        'recurrenceRuleId': recurrenceRuleID.toString(),
+        'fromDate': startString,
+        'toDate': endString
       };
     } else {
-      queryParameters = {'event-id': id.toString()};
+      queryParameters = {'eventId': id.toString()};
     }
 
     _updateTokenInHeader();

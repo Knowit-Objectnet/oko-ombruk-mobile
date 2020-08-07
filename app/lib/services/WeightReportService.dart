@@ -29,7 +29,6 @@ class WeightReportService {
   Future<CustomResponse<List<WeightReport>>> fetchWeightReports() async {
     Map<String, String> parameters = {};
     if (_userViewModel.groupID != null) {
-      print('put partner-id: ${_userViewModel.groupID}');
       parameters.putIfAbsent(
           'partnerId', () => _userViewModel.groupID.toString());
     }

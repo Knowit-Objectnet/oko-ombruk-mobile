@@ -41,6 +41,10 @@ The login credentials are stored in `UserViewModel.dart`, and all authorization 
 This app uses the [Provider](https://pub.dev/packages/provider) library to make the API services and some of the app states available globally or where it is needed. For example, we want our Authentication API and logged-in user information to be available everywhere in the app. If you are unfamiliar with the pattern, then you can read about it in the [official docs](https://flutter.dev/docs/development/data-and-backend/state-mgmt/simple) or in [this tutorial](https://www.raywenderlich.com/6373413-state-management-with-provider). The tutorial also covers some MVVM architecture in which the app is built upon.
 
 ## Further development
+First of all, there is a bug in the service/view model scheme. When app is loaded for the first time, the services aren't correctly getting the desired `UserViewModel`, so the Authorization header's token is not correctly set. The cause for this is that the `UserViewModel` is not registered as a singleton in `serviceLocator.dart`. Furthermore, when this bug is fixes, the `_updateTokenInHeader()` function in most services should be removed. This bug was discovered pretty late, so we did not have time to fix it :( but good luck!
+
+### Further development keypoints:
+
 * Weight reporting should only show the logged in station/partners events.
 * All custom icons should be added as .ttf files instead of .png files.
 * The login page should be styled and the splash screen is pretty basic right now.
