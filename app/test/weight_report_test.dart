@@ -2,47 +2,70 @@ import 'package:test/test.dart';
 import 'package:ombruk/models/WeightReport.dart';
 
 void main() {
-  final correctJson = {
+  final parsedJson = {
     "reportID": 1,
-    "event": {"id": 8},
-    "partner": {"id": 1, "name": ""},
-    "weight": 5,
-    "createdDateTime": "2020-07-27T10:17:14"
+    "eventID": 1,
+    "partnerID": 2,
+    "station": {
+      "id": 3,
+      "name": "Smestad",
+    },
+    "startDateTime": "2020-07-31T08:00:00",
+    "endDateTime": "2020-07-31T09:00:00",
+    "weight": null,
+    "reportedDateTime": null
   };
 
-  final validJsonLongTime = {
+  final jsonFromApi = {
     "reportID": 1,
-    "event": {"id": 8},
-    "partner": {"id": 1, "name": ""},
-    "weight": 5,
-    "createdDateTime": "2020-07-27T10:17:14.53"
+    "eventID": 1,
+    "partnerID": 2,
+    "station": {
+      "id": 3,
+      "name": "Smestad",
+    },
+    "startDateTime": "2020-07-31T08:00:00Z",
+    "endDateTime": "2020-07-31T09:00:00Z",
+    "weight": null,
+    "reportedDateTime": null
   };
 
-  final validJsonScrambled = {
-    "partner": {"id": 1, "name": ""},
+  final jsonFromApiScrambled = {
+    "reportedDateTime": null,
     "reportID": 1,
-    "weight": 5,
-    "createdDateTime": "2020-07-27T10:17:14.53",
-    "event": {"id": 8}
+    "eventID": 1,
+    "startDateTime": "2020-07-31T08:00:00Z",
+    "partnerID": 2,
+    "endDateTime": "2020-07-31T09:00:00Z",
+    "weight": null,
+    "station": {
+      "id": 3,
+      "name": "Smestad",
+    },
   };
 
-  final invalidJson = {
-    "reportId": 1,
-    "event": {"id": 8},
-    "partner": {"id": 1, "name": ""},
-    "weight": 5.1,
-    "createdDateTime": "2020-07-2 T10:17:14.53"
+  final invalidJsonFromApi = {
+    "reportedDateTime": null,
+    "reportID": 2,
+    "eventID": 1,
+    "startDateTime": "20-07-31 08:00Z",
+    "partnerID": 2,
+    "endDateTime": "20-07-31T09:00:00Z",
+    "weight": null,
+    "station": {
+      "id": 3,
+    },
   };
 
   test('Test correct JSON parsing', () {
-    expect(WeightReport.fromJson(validJsonLongTime).toJson(), correctJson);
+    expect(WeightReport.fromJson(jsonFromApi).toJson(), parsedJson);
   });
 
   test('Test correct JSON parsing', () {
-    expect(WeightReport.fromJson(validJsonScrambled).toJson(), correctJson);
+    expect(WeightReport.fromJson(jsonFromApiScrambled).toJson(), parsedJson);
   });
 
   test('Test invalid JSON parsing', () {
-    expect(() => WeightReport.fromJson(invalidJson), throwsException);
+    expect(() => WeightReport.fromJson(invalidJsonFromApi), throwsException);
   });
 }

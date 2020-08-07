@@ -1,24 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 
+import 'package:ombruk/businessLogic/Partner.dart';
+import 'package:ombruk/businessLogic/Station.dart';
+
 import 'package:ombruk/globals.dart' as globals;
 
 class CreateCalendarEventData {
   DateTime startDateTime;
   DateTime endDateTime;
   DateTime untilDateTime;
-  int stationID;
-  int partnerID;
+  final Station station;
+  final Partner partner;
   final List<globals.Weekdays> weekdays;
+  final int interval;
 
   CreateCalendarEventData.fromData(
       {@required DateTime startDate,
       @required DateTime endDate,
       @required TimeOfDay startTime,
       @required TimeOfDay endTime,
-      @required String station,
-      @required String partner,
-      @required this.weekdays})
+      @required this.station,
+      @required this.partner,
+      @required this.weekdays,
+      @required this.interval})
       : assert(startDate != null),
         assert(endDate != null),
         assert(startTime != null),
@@ -50,11 +55,5 @@ class CreateCalendarEventData {
         endTime.hour, endTime.minute);
     untilDateTime = DateTime(
         endDate.year, endDate.month, endDate.day, endTime.hour, endTime.minute);
-
-    stationID = globals.stations.indexOf(station) + 1;
-    partnerID = globals.partners.indexOf(partner) + 23;
-    if (partnerID == -1 || stationID == -1) {
-      throw Exception('Intern feil');
-    }
   }
 }

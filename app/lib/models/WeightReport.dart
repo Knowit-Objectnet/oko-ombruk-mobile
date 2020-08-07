@@ -2,52 +2,85 @@ import 'package:ombruk/globals.dart' as globals;
 
 class WeightReport {
   final int reportID;
-  final _Event event;
-  final _Partner partner;
-  final int weight;
-  final DateTime createdDateTime;
+  final int eventID;
+  final int partnerID;
+  final _Station station;
+  final DateTime startDateTime;
+  final DateTime endDateTime;
+  final DateTime reportedDateTime;
+  int weight;
 
-  WeightReport(this.reportID, this.event, this.partner, this.weight,
-      this.createdDateTime);
+  WeightReport(
+    this.reportID,
+    this.eventID,
+    this.partnerID,
+    this.station,
+    this.startDateTime,
+    this.endDateTime,
+    this.weight,
+    this.reportedDateTime,
+  );
 
   factory WeightReport.fromJson(Map<String, dynamic> json) {
-    DateTime createdDateTime;
-    try {
-      createdDateTime = DateTime.parse(json['createdDateTime']);
-    } catch (_) {
-      throw Exception("Invalid DateTime format in WeightReport");
+    DateTime startDateTime;
+    DateTime endDateTime;
+    DateTime reportedDateTime;
+    if (json['startDateTime'] != null) {
+      try {
+        startDateTime = DateTime.parse(json['startDateTime']);
+      } catch (e) {
+        throw Exception("Invalid startDateTime format in WeightReport");
+      }
     }
+    if (json['endDateTime'] != null) {
+      try {
+        endDateTime = DateTime.parse(json['endDateTime']);
+      } catch (e) {
+        throw Exception("Invalid endDateTime format in WeightReport");
+      }
+    }
+    if (json['reportedDateTime'] != null) {
+      try {
+        reportedDateTime = DateTime.parse(json['reportedDateTime']);
+      } catch (e) {
+        throw Exception("Invalid reportedDateTime format in WeightReport");
+      }
+    }
+
     return WeightReport(
       json['reportID'],
-      _Event.fromJson(json['event']),
-      _Partner.fromJson(json['partner']),
+      json['eventID'],
+      json['partnerID'],
+      _Station.fromJson(json['station']),
+      startDateTime,
+      endDateTime,
       json['weight'],
-      createdDateTime,
+      reportedDateTime,
     );
   }
 
   Map<String, dynamic> toJson() => {
         'reportID': reportID,
-        'event': event.toJson(),
-        'partner': partner.toJson(),
+        'eventID': eventID,
+        'partnerID': partnerID,
+        'station': station.toJson(),
+        'startDateTime': globals.getDateString(startDateTime),
+        'endDateTime': globals.getDateString(endDateTime),
         'weight': weight,
-        'createdDateTime': globals.getDateString(createdDateTime)
+        'reportedDateTime': globals.getDateString(reportedDateTime),
       };
+
+  @override
+  String toString() {
+    return toJson().toString();
+  }
 }
 
-class _Event {
-  final int id;
-
-  _Event.fromJson(Map<String, dynamic> json) : id = json['id'];
-
-  Map<String, dynamic> toJson() => {'id': id};
-}
-
-class _Partner {
+class _Station {
   final int id;
   final String name;
 
-  _Partner.fromJson(Map<String, dynamic> json)
+  _Station.fromJson(Map<String, dynamic> json)
       : id = json['id'],
         name = json['name'];
 

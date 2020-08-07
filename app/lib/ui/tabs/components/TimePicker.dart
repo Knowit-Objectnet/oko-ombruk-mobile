@@ -49,9 +49,27 @@ class TimePicker extends StatelessWidget {
 
   List<TimeOfDay> _timeList() {
     List<TimeOfDay> list = [];
+    // The if statements adds an abnormal time (e.g. 12:37) to the list
+    // an abnormal time has minutes != 0 minutes != 30
+    if (selectedTime.hour < minTime) {
+      list.add(selectedTime);
+    }
     for (int i = minTime; i < maxTime; i++) {
       list.add(TimeOfDay(hour: i, minute: 0));
+      if (selectedTime.hour == i &&
+          selectedTime.minute > 0 &&
+          selectedTime.minute < 30) {
+        list.add(selectedTime);
+      }
       list.add(TimeOfDay(hour: i, minute: 30));
+      if (selectedTime.hour == i &&
+          selectedTime.minute > 30 &&
+          selectedTime.minute < 60) {
+        list.add(selectedTime);
+      }
+    }
+    if (selectedTime.hour >= maxTime) {
+      list.add(selectedTime);
     }
     return list;
   }

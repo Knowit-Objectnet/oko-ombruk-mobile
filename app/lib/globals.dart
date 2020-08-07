@@ -1,15 +1,10 @@
 final String keycloakBaseUrl =
     'https://keycloak.staging.oko.knowit.no:8443/auth/realms/staging';
 
-final String calendarBaseUrlStripped =
+final String baseUrlStripped =
     'tcuk58u5ge.execute-api.eu-central-1.amazonaws.com';
 
-final String weightReportBaseUrl =
-    'tcuk58u5ge.execute-api.eu-central-1.amazonaws.com';
-
-final String calendarPath = '/staging/calendar';
-
-final String weightReportPath = '/staging/weight-reporting';
+final String requiredPath = '/staging/backend';
 
 final Map<int, String> weekdaysShort = {
   1: 'Man',
@@ -61,21 +56,6 @@ final Map<int, String> monthsShort = {
   12: 'DES',
 };
 
-// The order of the lists are important to match the ID index
-final List<String> stations = [
-  'Haraldrud',
-  'Smestad',
-  'Grefsen',
-  'Grønmo',
-  'Ryen'
-];
-
-final List<String> partners = [
-  'Fretex',
-  'Maritastiftelsen',
-  'Jobben',
-];
-
 enum KeycloakRoles {
   reg_employee,
   offline_access,
@@ -88,7 +68,5 @@ enum Weekdays { monday, tuesday, wednesday, thursday, friday }
 
 /// Removes the microseconds from [DateTime] so that the backend don't whine
 String getDateString(DateTime dateTime) {
-  return dateTime
-      .toIso8601String()
-      .substring(0, dateTime.toString().length - 4);
+  return dateTime?.toIso8601String()?.substring(0, 19);
 }

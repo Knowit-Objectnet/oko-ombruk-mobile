@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ombruk/blocs/AuthenticationBloc.dart';
+import 'package:ombruk/businessLogic/UserViewModel.dart';
+import 'package:provider/provider.dart';
 
 class ErrorScreen extends StatelessWidget {
   final Exception exception;
@@ -19,8 +19,9 @@ class ErrorScreen extends StatelessWidget {
           Text(errorText),
           RaisedButton(
             child: Text("OK"),
-            onPressed: () => BlocProvider.of<AuthenticationBloc>(context)
-                .add(AuthenticationStarted()),
+            onPressed: () =>
+                // Wipe credentials on error, could be done better
+                Provider.of<UserViewModel>(context).requestLogOut(),
           )
         ],
       )),

@@ -1,74 +1,44 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-import 'package:ombruk/ui/LoadingScreen.dart';
+import 'package:ombruk/businessLogic/UserViewModel.dart';
+
 import 'package:ombruk/ui/SplashScreen.dart';
 import 'package:ombruk/ui/login/ErrorScreen.dart';
 import 'package:ombruk/ui/login/LoginWebView.dart';
-import 'package:ombruk/repositories/UserRepository.dart';
 import 'package:ombruk/ui/tabs/TabsScreenPartner.dart';
 import 'package:ombruk/ui/tabs/TabsScreenReg.dart';
 import 'package:ombruk/ui/tabs/TabsScreenStasjon.dart';
 
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ombruk/blocs/AuthenticationBloc.dart';
-import 'package:ombruk/ui/ui.helper.dart';
+import 'package:ombruk/globals.dart';
 
 class AuthRouter extends StatelessWidget {
-  final UserRepository userRepository = UserRepository();
-
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<AuthenticationBloc>(
-      create: (context) => AuthenticationBloc(userRepository: userRepository)
-        ..add(AuthenticationStarted()),
-      child: Scaffold(
-        body: BlocListener<AuthenticationBloc, AuthenticationState>(
-          listener: (BuildContext context, AuthenticationState newState) {
-            if (newState is AuthenticationInProgressLoggingOut) {
-              uiHelper.showLoading(context);
-            } else {
-              uiHelper.hideLoading(context);
-            }
-          },
-          child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
-            builder: (BuildContext context, AuthenticationState state) {
-              switch (state.runtimeType) {
-                case AuthenticationInitial:
-                  return SplashScreen();
-                case AuthenticationInProgressLoggingOut:
-                  AuthenticationState previousState =
-                      (state as AuthenticationInProgressLoggingOut)
-                          .previousState;
-                  if (previousState is AuthenticationSuccessPartner) {
-                    return TabsScreenPartner();
-                  }
-                  if (previousState is AuthenticationSuccessReg) {
-                    return TabsScreenReg();
-                  }
-                  if (previousState is AuthenticationSuccessStasjoner) {
-                    return TabsScreenStasjon();
-                  }
-                  throw Exception();
-                case AuthenticationSuccessPartner:
-                  return TabsScreenPartner();
-                case AuthenticationSuccessReg:
-                  return TabsScreenReg();
-                case AuthenticationSuccessStasjoner:
-                  return TabsScreenStasjon();
-                case AuthenticationNoToken:
-                  return LoginWebView(userRepository: userRepository);
-                case AuthenticationInProgress:
-                  return LoadingScreen();
-                case AuthenticationError:
-                  return ErrorScreen(
-                      exception: (state as AuthenticationError).exception);
-                default:
-                  return Container();
-              }
-            },
-          ),
-        ),
-      ),
+    return Consumer(
+      builder: (context, UserViewModel userViewModel, widget) {
+        if (!userViewModel.isLoaded) {
+          return SplashScreen();
+        }
+        if (userViewModel.accessToken == null) {
+          return LoginWebView();
+        }
+        // Has accessToken => show tabs
+        switch (userViewModel.getRole()) {
+          case KeycloakRoles.reg_employee:
+            return TabsScreenReg();
+          case KeycloakRoles.partner:
+            return TabsScreenPartner();
+          case KeycloakRoles.reuse_station:
+            return TabsScreenStasjon();
+          case KeycloakRoles.offline_access:
+            return ErrorScreen(exception: Exception('Du har ikke en rolle'));
+          case KeycloakRoles.uma_authorization:
+            return ErrorScreen(exception: Exception('Du har ikke en rolle'));
+          default:
+            return ErrorScreen(exception: Exception('Ukjent rolle'));
+        }
+      },
     );
   }
 }

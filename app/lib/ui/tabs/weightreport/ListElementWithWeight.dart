@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:ombruk/models/CalendarEvent.dart';
 import 'package:ombruk/models/WeightReport.dart';
 
 import 'package:ombruk/ui/tabs/weightreport/DateTimeBox.dart';
@@ -10,15 +9,13 @@ import 'package:ombruk/ui/customIcons.dart' as customIcons;
 import 'package:ombruk/ui/customColors.dart' as customColors;
 
 class ListElementWithWeight extends StatelessWidget {
-  final CalendarEvent calendarEvent;
   final WeightReport weightReport;
   final Function() onEditPress;
 
   final TextEditingController _inputController = TextEditingController();
 
-  ListElementWithWeight(this.calendarEvent, this.weightReport, this.onEditPress)
-      : assert(calendarEvent != null),
-        assert(weightReport != null) {
+  ListElementWithWeight(this.weightReport, this.onEditPress)
+      : assert(weightReport != null) {
     _inputController.text = weightReport?.weight?.toString() ?? '';
   }
 
@@ -37,9 +34,9 @@ class ListElementWithWeight extends StatelessWidget {
                 children: <Widget>[
                   Expanded(
                     child: DateTimeBox(
-                        calendarEvent: calendarEvent, isReported: true),
+                        weightReport: weightReport, isReported: true),
                   ),
-                  NameBox(name: calendarEvent.partner?.name, isReported: true),
+                  NameBox(name: weightReport.station?.name, isReported: true),
                 ],
               ),
             ),

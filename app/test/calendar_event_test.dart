@@ -6,8 +6,6 @@ void main() {
     "id": 1,
     "startDateTime": "2020-07-02T12:17:39",
     "endDateTime": "2020-07-02T13:17:39",
-    "stationID": 1,
-    "partnerID": 2,
     "station": {"id": 1, "name": ""},
     "partner": {"id": 2, "name": ""},
     "recurrenceRule": null
@@ -17,8 +15,6 @@ void main() {
     "id": 1,
     "startDateTime": "20-07-02T12:17:39",
     "endDateTime": "20-07-02T13:17:39",
-    "stationID": 1,
-    "partnerID": 2,
     "station": {"id": 1, "name": ""},
     "partner": {"id": 2, "name": ""}
   };

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:ombruk/ui/tabs/ExtraHentingPopup/DateField.dart';
 import 'package:ombruk/ui/tabs/ExtraHentingPopup/TimeField.dart';
 
-import 'package:ombruk/globals.dart' as globals;
 import 'package:ombruk/ui/customColors.dart' as customColors;
 
 ///! This components is deprecated
@@ -17,7 +16,7 @@ class _ExtraHentingDialogState extends State<ExtraHentingDialog> {
   DateTime _selectedDate;
   TimeOfDay _selectedTime;
   TimeOfDay _selectedDur;
-  String _selectedStation = globals.stations[0];
+  // String _selectedStation = globals.stations[0];
 
   @override
   void initState() {
@@ -92,24 +91,24 @@ class _ExtraHentingDialogState extends State<ExtraHentingDialog> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Image.asset('assets/icons/kart.png', height: 20, width: 20),
-              Container(
-                // color: , // TODO
-                child: DropdownButton<String>(
-                  value: _selectedStation,
-                  onChanged: (value) {
-                    setState(() {
-                      _selectedStation = value;
-                    });
-                  },
-                  underline: Container(),
-                  items: globals.stations
-                      .map((station) => DropdownMenuItem(
-                            value: station,
-                            child: Text(station),
-                          ))
-                      .toList(),
-                ),
-              )
+              // Container(
+              //   // color: , // TODO
+              //   child: DropdownButton<String>(
+              //     value: _selectedStation,
+              //     onChanged: (value) {
+              //       setState(() {
+              //         _selectedStation = value;
+              //       });
+              //     },
+              //     underline: Container(),
+              //     items: globals.stations
+              //         .map((station) => DropdownMenuItem(
+              //               value: station,
+              //               child: Text(station),
+              //             ))
+              //         .toList(),
+              //   ),
+              // )
             ],
           ),
           Row(

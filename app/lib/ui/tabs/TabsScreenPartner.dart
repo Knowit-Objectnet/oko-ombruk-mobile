@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 
-import 'package:ombruk/ui/tabs/calendar/CalendarBlocProvider.dart';
 import 'package:ombruk/ui/tabs/SamPartnersComponents/PickupDialogPartners.dart';
 import 'package:ombruk/ui/tabs/MyPage/MyPage.dart';
 import 'package:ombruk/ui/tabs/bottomAppBarComponents/DrawerButton.dart';
 import 'package:ombruk/ui/tabs/bottomAppBarComponents/BottomAppBarButton.dart';
+import 'package:ombruk/ui/tabs/calendar/CalendarScreen.dart';
 import 'package:ombruk/ui/tabs/notifications/NotificationScreen.dart';
 import 'package:ombruk/ui/tabs/partners/PartnerScreen.dart';
+import 'package:ombruk/ui/tabs/stasjonComponents/MessageScreen.dart';
 import 'package:ombruk/ui/tabs/weightreport/WeightReportScreen.dart';
 
 import 'package:ombruk/ui/customColors.dart' as customColors;
@@ -33,10 +34,11 @@ class _TabsScreenPartnerState extends State<TabsScreenPartner> {
         // IndexStack keeps the screen states alive between tab changes
         index: _selectedIndex,
         children: <Widget>[
-          SafeArea(child: CalendarBlocProvider()),
+          SafeArea(child: CalendarScreen()),
           WeightReportScreen(),
           NotificationScreen(),
           // The screens below are in the drawer
+          SafeArea(child: MessageScreen()),
           SafeArea(child: PartnerScreen()),
           SafeArea(child: MyPage()),
         ],
@@ -97,7 +99,7 @@ class _TabsScreenPartnerState extends State<TabsScreenPartner> {
                 DrawerButton(
                   icon: customIcons.map,
                   title: 'Stasjonene',
-                  onTap: null,
+                  onTap: () => null,
                   isSelected: false,
                 ),
                 DrawerButton(
@@ -112,12 +114,6 @@ class _TabsScreenPartnerState extends State<TabsScreenPartner> {
                 DrawerButton(
                   icon: customIcons.addDiscrepancy,
                   title: 'Send beskjed',
-                  onTap: null,
-                  isSelected: false,
-                ),
-                DrawerButton(
-                  icon: customIcons.person,
-                  title: 'Min side',
                   onTap: () {
                     setState(() {
                       _selectedIndex = 4;
@@ -126,10 +122,14 @@ class _TabsScreenPartnerState extends State<TabsScreenPartner> {
                   isSelected: _selectedIndex == 4,
                 ),
                 DrawerButton(
-                  icon: customIcons.settings,
-                  title: 'Innstillinger',
-                  onTap: null,
-                  isSelected: false,
+                  icon: customIcons.myPage,
+                  title: 'Min side',
+                  onTap: () {
+                    setState(() {
+                      _selectedIndex = 5;
+                    });
+                  },
+                  isSelected: _selectedIndex == 5,
                 ),
               ],
             ),

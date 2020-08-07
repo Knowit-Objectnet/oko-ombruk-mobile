@@ -1,9 +1,9 @@
 import 'package:meta/meta.dart';
 
-class CustomResponse {
+class CustomResponse<T> {
   final bool success;
   final int statusCode;
-  final dynamic data;
+  final T data;
   final String message;
 
   CustomResponse({
@@ -12,4 +12,16 @@ class CustomResponse {
     @required this.data,
     this.message,
   });
+
+  @override
+  String toString() {
+    return toJson().toString();
+  }
+
+  Map<String, dynamic> toJson() => {
+        'success': success,
+        'statusCode': statusCode,
+        'data': data,
+        'message': message
+      };
 }

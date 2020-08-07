@@ -4,14 +4,18 @@ class CalendarEvent {
   final int id;
   final DateTime startDateTime;
   final DateTime endDateTime;
-  final int stationID;
-  final int partnerID;
   final _Station station;
   final _Partner partner;
   final _RecurrenceRule recurrenceRule;
 
-  CalendarEvent(this.id, this.startDateTime, this.endDateTime, this.stationID,
-      this.partnerID, this.station, this.partner, this.recurrenceRule);
+  CalendarEvent(
+    this.id,
+    this.startDateTime,
+    this.endDateTime,
+    this.station,
+    this.partner,
+    this.recurrenceRule,
+  );
 
   factory CalendarEvent.fromJson(Map<String, dynamic> json) {
     DateTime startDate;
@@ -32,8 +36,6 @@ class CalendarEvent {
       json['id'],
       startDate,
       endDate,
-      json['stationID'],
-      json['partnerID'],
       _Station.fromJson(json['station']),
       _Partner.fromJson(json['partner']),
       recurrenceRule,
@@ -45,13 +47,16 @@ class CalendarEvent {
         // substring removes milliseconds
         'startDateTime': globals.getDateString(startDateTime),
         'endDateTime': globals.getDateString(endDateTime),
-        'stationID': stationID,
-        'partnerID': partnerID,
         'station': station.toJson(),
         'partner': partner.toJson(),
         'recurrenceRule':
             recurrenceRule != null ? recurrenceRule.toJson() : null
       };
+
+  @override
+  String toString() {
+    return toJson().toString();
+  }
 }
 
 class _Station {
