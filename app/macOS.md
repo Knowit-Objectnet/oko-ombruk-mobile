@@ -2,6 +2,7 @@
 
 # Environment setup on macOS
 
+<br>
 
 ## Flutter SDK
 
@@ -81,14 +82,14 @@ sudo gem install cocoapods
 
 TBA. Please refer to the [documentation for Android Studio and IntelliJ](https://flutter.dev/docs/development/tools/android-studio).
 
-<br>
+<br><br>
 
 ## Android SDK
 
 Required to build and run for Android.
 TBA.
 
-<br>
+<br><br>
 
 ## IDE
 
@@ -131,7 +132,7 @@ Should already be installed.
 TBA.
 
 
-<br>
+<br><br>
 
 ## Build and run without IDE
 

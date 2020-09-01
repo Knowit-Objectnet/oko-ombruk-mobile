@@ -3,7 +3,8 @@
 This is a Flutter project for [Renovasjons- og gjenvinningsetaten (*REG*)](https://www.oslo.kommune.no/etater-foretak-og-ombud/renovasjons-og-gjenvinningsetaten/) in Oslo kommune.
 
 ## Getting Started
-If you are unfamiliar with Flutter, then go to [the Flutter website](https://flutter.dev) for information on how to get started.
+If you are unfamiliar with Flutter, then go to [the Flutter website](https://flutter.dev) for information on how to get started.    
+For environment setup on macOS, see `macOS.md`.
 
 ## Project structure
 The application works as three different applications on its own, one for each role/person who uses the app:
