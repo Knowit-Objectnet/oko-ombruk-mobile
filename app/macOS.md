@@ -1,5 +1,7 @@
 
+
 # Environment setup on macOS
+
 
 ## Flutter SDK
 
@@ -31,6 +33,8 @@ If the file doesn't exists, create it.
 export PATH="$PATH:/usr/local/bin/flutter/bin"
 ```
 
+
+<br><br>
 
 ## iOS SDK
 
@@ -64,7 +68,8 @@ sudo xcodebuild -runFirstLaunch
 ```
 (note the Xcode directory is the default one if you installed it through the App Store)
 
-#### CocoaPods
+
+### CocoaPods
 
 Flutter depends on CocoaPods for its plugins on iOS or macOS.
 
@@ -72,20 +77,35 @@ Flutter depends on CocoaPods for its plugins on iOS or macOS.
 sudo gem install cocoapods
 ```
 
-
 ### Android Studio / IntelliJ IDEA Community Edition
 
 TBA. Please refer to the [documentation for Android Studio and IntelliJ](https://flutter.dev/docs/development/tools/android-studio).
 
+<br>
 
 ## Android SDK
 
 Required to build and run for Android.
 TBA.
 
-
+<br>
 
 ## IDE
+
+
+### Xcode
+
+#### Download
+
+Should already be installed.
+
+#### Build and run
+
+##### iOS simulator
+
+- Open the Xcode workspace project `OKO/ombruk-mobile/app/ios/Runner.xcworkspace`.
+- Choose the target scheme and simulator device.
+- Run the project (`⌘R`).
 
 ### VSCode
 
@@ -95,22 +115,31 @@ TBA.
 
 #### Extensions
 
-[Flutter](https://open-vsx.org/extension/Dart-Code/flutter).
+- [Flutter](https://open-vsx.org/extension/Dart-Code/flutter).
+- [Dart](https://open-vsx.org/extension/Dart-Code/dart-code).
+    - (Dart should auto-install when installing the Flutter extension)
 
-[Dart](https://open-vsx.org/extension/Dart-Code/dart-code) (should auto-install when installing the Flutter extension).
+#### Build and run
+
+##### iOS simulator
+
+- Start the IDE and open `main.dart`.
+- Run and debug (`F5`) from VSCode.
+
+##### Android emulator
+
+TBA.
 
 
+<br>
 
-## Build and run
+## Build and run without IDE
 
 ### iOS simulator
 
-Run the `iOS-simulator.sh` script in the `OKO/ombruk-mobile/app` folder and choose the desired device.
-
-Start the IDE and open `main.dart`.
-
-Run and debug (`F5`) from VSCode.
-
+- Change current directory to `OKO/ombruk-mobile/app`.
+- Run the `iOS-simulator.sh` script and choose the desired device.
+- Run `flutter run`.
 
 ### Android emulator
 
