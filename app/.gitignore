@@ -9,6 +9,7 @@
 .history
 .svn/
 ../node_modules
+iOS-simulator.config
 
 # IntelliJ related
 *.iml
