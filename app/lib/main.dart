@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:ombruk/AuthRouter.dart';
+import 'package:ombruk/ui/app/App.dart';
 
 import 'package:ombruk/services/serviceLocator.dart';
 import 'package:ombruk/businessLogic/UserViewModel.dart';
@@ -36,12 +37,12 @@ void main() {
           create: (context) => serviceLocator<PickupViewModel>(),
         ),
       ],
-      child: MyApp(),
+      child: Reir(),
     ),
   );
 }
 
-class MyApp extends StatelessWidget {
+class Reir extends StatelessWidget {
   // This widget is the root of your application.
 
   @override
@@ -56,7 +57,7 @@ class MyApp extends StatelessWidget {
         // closer together (more dense) than on mobile platforms.
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: AuthRouter(),
+      home: App(),
     );
   }
 }

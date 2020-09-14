@@ -38,7 +38,10 @@ class _MyPageConsumedState extends State<_MyPageConsumed> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
+    return Scaffold(
+      body:
+      SafeArea(
+      child: ListView(
       shrinkWrap: true,
       padding: EdgeInsets.symmetric(horizontal: 16.0),
       children: <Widget>[
@@ -81,7 +84,7 @@ class _MyPageConsumedState extends State<_MyPageConsumed> {
         _shareContactInfoSection(),
         _addPartnerAndStationButtons(),
       ],
-    );
+    )));
   }
 
   Text _subtitle(String text) {
