@@ -16,7 +16,6 @@ import 'package:ombruk/ui/customColors.dart' as customColors;
 import 'package:ombruk/ui/customIcons.dart' as customIcons;
 import 'package:ombruk/ui/ui.helper.dart';
 
-
 class CalendarScreen extends StatelessWidget {
   // State key
   final Key globalKey;
@@ -102,50 +101,50 @@ class CalendarScreenConsumedState extends State<_CalendarScreenConsumed>
       });
     }
     return Scaffold(
-      body: Container(
-        color: customColors.osloWhite,
-        child: Column(
-          children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: <Widget>[
-                // Use DropdownButton instead if the design fails
-                widget.stationViewModel == null
-                    ? Container()
-                    : PopupMenuButton(
-                        child: Row(
-                          children: <Widget>[
-                            Padding(
-                                padding: EdgeInsets.only(left: 8.0),
-                                child: customIcons.image(customIcons.filter,
-                                    size: 15)),
-                            Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 4.0),
-                                child: Text(
-                                  _selectedStation?.name ?? '',
-                                  style: TextStyle(fontSize: 16),
-                                )),
-                            customIcons.image(customIcons.arrowDownThin, size: 15)
-                          ],
-                        ),
-                        itemBuilder: (context) => widget.stationViewModel.stations
-                            .map((Station station) => PopupMenuItem(
-                                  child: RadioListTile<Station>(
-                                    title: Text(station.name ?? ''),
-                                    value: station,
-                                    groupValue: _selectedStation,
-                                    onChanged: (value) {
-                                      setState(() {
-                                        _selectedStation = value;
-                                      });
-                                      Navigator.pop(context);
-                                    },
-                                  ),
-                                ))
-                            .toList(),
+        body: Container(
+      color: customColors.osloWhite,
+      child: Column(
+        children: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget>[
+              // Use DropdownButton instead if the design fails
+              widget.stationViewModel == null
+                  ? Container()
+                  : PopupMenuButton(
+                      child: Row(
+                        children: <Widget>[
+                          Padding(
+                              padding: EdgeInsets.only(left: 8.0),
+                              child: customIcons.image(customIcons.filter,
+                                  size: 15)),
+                          Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 4.0),
+                              child: Text(
+                                _selectedStation?.name ?? '',
+                                style: TextStyle(fontSize: 16),
+                              )),
+                          customIcons.image(customIcons.arrowDownThin, size: 15)
+                        ],
                       ),
-                Spacer(),
-                /*_headerButton(
+                      itemBuilder: (context) => widget.stationViewModel.stations
+                          .map((Station station) => PopupMenuItem(
+                                child: RadioListTile<Station>(
+                                  title: Text(station.name ?? ''),
+                                  value: station,
+                                  groupValue: _selectedStation,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      _selectedStation = value;
+                                    });
+                                    Navigator.pop(context);
+                                  },
+                                ),
+                              ))
+                          .toList(),
+                    ),
+              Spacer(),
+              /*_headerButton(
                   icon: _showHorizontalCalendar
                       ? customIcons.list
                       : customIcons.calendar,
@@ -187,15 +186,15 @@ class CalendarScreenConsumedState extends State<_CalendarScreenConsumed>
                         icon: customIcons.refresh,
                         onPressed: _refreshCalendar,
                       )*/
-              ],
-            ),
-            Expanded(
-                  child: (_showHorizontalCalendar) ? HorizontalCalendar(events: _getFilteredList()) : VerticalCalendar(events: _getFilteredList())
-            ),
-          ],
-        ),
-      )
-    );
+            ],
+          ),
+          Expanded(
+              child: (_showHorizontalCalendar)
+                  ? HorizontalCalendar(events: _getFilteredList())
+                  : VerticalCalendar(events: _getFilteredList())),
+        ],
+      ),
+    ));
   }
 
   Widget _headerButton({

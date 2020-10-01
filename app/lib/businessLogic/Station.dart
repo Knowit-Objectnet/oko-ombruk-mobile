@@ -13,7 +13,17 @@ class Station {
     this.closingTime,
   );
 
+  /**
+   * TODO
+   * This is VERY temporary. It acts as a quick fix due to changes in the backend.
+   * We used to only support a shared opening/closing time for each station,
+   * but it has been changed to be on a day-to-day basis. Will be fixed later.
+   */
   factory Station.fromJson(Map<String, dynamic> json) {
+    List<String> tempTime = List<String>.from(json['hours']['MONDAY']);
+    String first = tempTime[0];
+    String second = tempTime[1];
+
     /// Takes a String input, for example '11:23:20Z', and returns a [TimeOfDay]
     TimeOfDay _toTime(String value) {
       List<String> timeSplitted = value.split(':');
@@ -29,8 +39,8 @@ class Station {
     return Station(
       json['id'],
       json['name'],
-      _toTime(json['openingTime']),
-      _toTime(json['closingTime']),
+      _toTime(first),
+      _toTime(second),
     );
   }
 
