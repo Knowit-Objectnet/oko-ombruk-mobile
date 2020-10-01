@@ -4,7 +4,7 @@ final String keycloakBaseUrl =
 final String baseUrlStripped =
     'tcuk58u5ge.execute-api.eu-central-1.amazonaws.com';
 
-final String requiredPath = '/staging/backend';
+final String requiredPath = '/staging';
 
 final Map<int, String> weekdaysShort = {
   1: 'Man',
