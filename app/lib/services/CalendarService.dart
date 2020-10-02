@@ -35,15 +35,14 @@ class CalendarService {
     // TODO: Add time parameter to filter on time
     Map<String, String> parameters = {};
     if (stationID != null) {
-      parameters.putIfAbsent('station-id', () => stationID.toString());
+      parameters.putIfAbsent('stationId', () => stationID.toString());
     }
     if (partnerID != null) {
-      parameters.putIfAbsent('partner-id', () => partnerID.toString());
+      parameters.putIfAbsent('partnerId', () => partnerID.toString());
     }
 
     Uri uri = Uri.https(
         globals.baseUrlStripped, '${globals.requiredPath}/events', parameters);
-
     final Response response = await get(uri, headers: _headers);
 
     if (response.statusCode != 200) {
