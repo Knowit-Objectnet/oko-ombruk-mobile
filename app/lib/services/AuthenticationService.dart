@@ -1,10 +1,11 @@
 import 'dart:convert';
 import 'package:meta/meta.dart';
 import 'package:ombruk/businessLogic/UserModel.dart';
+import 'package:ombruk/services/LocalStorageService.dart';
 import 'package:ombruk/services/interfaces/IAuthenticationService.dart';
+import 'package:ombruk/services/interfaces/ILocalStorageService.dart';
 import 'package:openid_client/openid_client.dart';
 import 'package:openid_client/openid_client_io.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart';
 
 import 'package:ombruk/models/CustomResponse.dart';
@@ -12,15 +13,15 @@ import 'package:ombruk/models/CustomResponse.dart';
 import 'package:ombruk/globals.dart' as globals;
 
 class AuthenticationService implements IAuthenticationService {
-  final storage = FlutterSecureStorage();
+  final ILocalStorageService _localStorageService = LocalStorageService();
 
   Future<UserModel> loadFromStorage() async {
-    final String accessToken = await storage.read(key: "accessToken");
-    final String refreshToken = await storage.read(key: 'refreshToken');
-    final String clientId = await storage.read(key: 'clientId');
-    final String groupIDString = await storage.read(key: 'groupID');
+    final String accessToken = await _localStorageService.getValue(key: "accessToken");
+    final String refreshToken = await _localStorageService.getValue(key: 'refreshToken');
+    final String clientId = await _localStorageService.getValue(key: 'clientId');
+    final String groupIDString = await _localStorageService.getValue(key: 'groupID');
 
-    final String roleString = await storage.read(key: 'roles');
+    final String roleString = await _localStorageService.getValue(key: 'roles');
     List<String> roles;
     if (roleString != null) {
       List<dynamic> list = jsonDecode(roleString);
@@ -36,7 +37,7 @@ class AuthenticationService implements IAuthenticationService {
   }
 
   Future<void> deleteCredentials() async {
-    await storage.deleteAll();
+    await _localStorageService.deleteAll();
   }
 
   /// Makes an API call to log out.
@@ -84,11 +85,11 @@ class AuthenticationService implements IAuthenticationService {
     final String refreshToken = credential.refreshToken;
     final String clientId = credential.client.clientId;
 
-    await storage.write(key: "accessToken", value: accessToken);
-    await storage.write(key: "refreshToken", value: refreshToken);
-    await storage.write(key: "clientId", value: clientId);
-    await storage.write(key: 'roles', value: jsonEncode(roles));
-    await storage.write(key: 'groupID', value: groupID?.toString());
+    await _localStorageService.setValue(key: "accessToken", value: accessToken);
+    await _localStorageService.setValue(key: "refreshToken", value: refreshToken);
+    await _localStorageService.setValue(key: "clientId", value: clientId);
+    await _localStorageService.setValue(key: 'roles', value: jsonEncode(roles));
+    await _localStorageService.setValue(key: 'groupID', value: groupID?.toString());
 
     return UserModel(accessToken, refreshToken, clientId, roles, groupID);
   }
@@ -131,8 +132,8 @@ class AuthenticationService implements IAuthenticationService {
     String newAccessToken = map['access_token'];
     String newRefreshToken = map['refresh_token'];
 
-    await storage.write(key: "accessToken", value: newAccessToken);
-    await storage.write(key: "refreshToken", value: newRefreshToken);
+    await _localStorageService.setValue(key: "accessToken", value: newAccessToken);
+    await _localStorageService.setValue(key: "refreshToken", value: newRefreshToken);
 
     return CustomResponse(
       success: true,
