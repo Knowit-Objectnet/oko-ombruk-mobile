@@ -15,18 +15,9 @@ class CalendarService {
   Api _api = Api();
 
   Future<CustomResponse<List<CalendarEvent>>> fetchEvents(
-      {int stationID, int partnerID}) async {
-    // TODO: Add time parameter to filter on time
-    Map<String, String> parameters = {};
-    if (stationID != null) {
-      parameters.putIfAbsent('stationId', () => stationID.toString());
-    }
-    if (partnerID != null) {
-      parameters.putIfAbsent('partnerId', () => partnerID.toString());
-    }
-
+      EventGetForm form) async {
     final CustomResponse response =
-        await _api.getRequest(ApiEndpoint.events, parameters);
+        await _api.getRequest(ApiEndpoint.events, form.toJson());
 
     if (!response.success) {
       return response;
