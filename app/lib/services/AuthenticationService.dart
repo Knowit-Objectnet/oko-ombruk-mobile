@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:meta/meta.dart';
 import 'package:ombruk/businessLogic/UserModel.dart';
+import 'package:ombruk/services/interfaces/IAuthenticationService.dart';
 import 'package:openid_client/openid_client.dart';
 import 'package:openid_client/openid_client_io.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -10,7 +11,7 @@ import 'package:ombruk/models/CustomResponse.dart';
 
 import 'package:ombruk/globals.dart' as globals;
 
-class AuthenticationService {
+class AuthenticationService implements IAuthenticationService {
   final storage = FlutterSecureStorage();
 
   Future<UserModel> loadFromStorage() async {
