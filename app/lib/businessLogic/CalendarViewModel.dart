@@ -4,6 +4,7 @@ import 'package:ombruk/businessLogic/CalendarModel.dart';
 import 'package:ombruk/models/CalendarEvent.dart';
 import 'package:ombruk/models/CustomResponse.dart';
 import 'package:ombruk/services/CalendarService.dart';
+import 'package:ombruk/services/forms/Event/EventGetForm.dart';
 import 'package:ombruk/services/serviceLocator.dart';
 import 'package:ombruk/ui/tabs/RegComponents/CreateCalendarEventData.dart';
 
@@ -23,11 +24,10 @@ class CalendarViewModel extends ChangeNotifier {
   Future<void> fetchEvents({int stationID, int partnerID}) async {
     _isLoading = true;
     notifyListeners();
+    EventGetForm form =
+        EventGetForm(stationId: stationID, partnerId: partnerID);
     final CustomResponse<List<CalendarEvent>> response =
-        await _calendarService.fetchEvents(
-      stationID: stationID,
-      partnerID: partnerID,
-    );
+        await _calendarService.fetchEvents(form);
 
     _isLoading = false;
     if (response.success) {

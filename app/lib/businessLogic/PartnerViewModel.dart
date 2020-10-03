@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:ombruk/businessLogic/Partner.dart';
 import 'package:ombruk/services/PartnerService.dart';
 import 'package:ombruk/models/CustomResponse.dart';
+import 'package:ombruk/services/forms/Partner/PartnerGetForm.dart';
+import 'package:ombruk/services/forms/Partner/PartnerPostForm.dart';
 import 'package:ombruk/services/serviceLocator.dart';
 
 class PartnerViewModel extends ChangeNotifier {
@@ -16,8 +18,10 @@ class PartnerViewModel extends ChangeNotifier {
   List<Partner> get partners => _partners;
 
   Future<bool> fetchPartners({int id}) async {
+    //Partners were fetched based on station id before, not sure why..
+    PartnerGetForm form = PartnerGetForm(stationId: id);
     final CustomResponse<List<Partner>> response =
-        await _partnerService.fetchPartners(id: id);
+        await _partnerService.fetchPartners(form);
 
     if (response.success) {
       _partners = response.data;
@@ -35,12 +39,9 @@ class PartnerViewModel extends ChangeNotifier {
     String phone,
     String email,
   }) async {
-    final CustomResponse<Partner> response = await _partnerService.addPartner(
-      name: name,
-      description: description,
-      phone: phone,
-      email: email,
-    );
+    PartnerPostForm form = PartnerPostForm(name, description, phone, email);
+    final CustomResponse<Partner> response =
+        await _partnerService.addPartner(form);
 
     if (response.success) {
       _partners.add(response.data);

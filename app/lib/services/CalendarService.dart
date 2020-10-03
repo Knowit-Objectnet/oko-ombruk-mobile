@@ -6,6 +6,7 @@ import 'package:ombruk/const/ApiEndpoint.dart';
 import 'package:ombruk/models/CalendarEvent.dart';
 import 'package:ombruk/models/CustomResponse.dart';
 import 'package:ombruk/services/Api.dart';
+import 'package:ombruk/services/forms/Event/EventGetForm.dart';
 
 import 'package:ombruk/ui/tabs/RegComponents/CreateCalendarEventData.dart';
 
@@ -15,9 +16,10 @@ class CalendarService {
   Api _api = Api();
 
   Future<CustomResponse<List<CalendarEvent>>> fetchEvents(
-      EventGetForm form) async {
+    EventGetForm form,
+  ) async {
     final CustomResponse response =
-        await _api.getRequest(ApiEndpoint.events, form.toJson());
+        await _api.getRequest(ApiEndpoint.events, form);
 
     if (!response.success) {
       return response;
@@ -63,7 +65,7 @@ class CalendarService {
       },
     });
 
-    return await _api.postRequest(ApiEndpoint.events, body);
+    return await _api.postRequest(ApiEndpoint.events, null);
   }
 
   /// Returns a CustomResponse with null data
@@ -88,7 +90,11 @@ class CalendarService {
 
   /// Returns a CustomResponse with null data
   Future<CustomResponse<String>> updateEvent(
-      int id, DateTime date, TimeOfDay startTime, TimeOfDay endTime) async {
+    int id,
+    DateTime date,
+    TimeOfDay startTime,
+    TimeOfDay endTime,
+  ) async {
     DateTime startDateTime = DateTime(
         date.year, date.month, date.day, startTime.hour, startTime.minute);
     DateTime endDateTime =

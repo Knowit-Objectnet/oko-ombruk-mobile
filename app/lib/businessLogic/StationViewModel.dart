@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:ombruk/businessLogic/Station.dart';
 import 'package:ombruk/services/StationService.dart';
 import 'package:ombruk/models/CustomResponse.dart';
+import 'package:ombruk/services/forms/station/StationGetForm.dart';
+import 'package:ombruk/services/forms/station/StationPostForm.dart';
 import 'package:ombruk/services/serviceLocator.dart';
 
 class StationViewModel extends ChangeNotifier {
@@ -16,8 +18,9 @@ class StationViewModel extends ChangeNotifier {
   List<Station> get stations => _stations;
 
   Future<bool> fetchStations({int id}) async {
+    StationGetForm form = StationGetForm(stationId: id);
     final CustomResponse<List<Station>> response =
-        await _stationService.fetchStations(id: id);
+        await _stationService.fetchStations(form);
 
     if (response.success) {
       _stations = response.data;
@@ -34,11 +37,9 @@ class StationViewModel extends ChangeNotifier {
     TimeOfDay openingTime,
     TimeOfDay closingTime,
   }) async {
-    final CustomResponse<Station> response = await _stationService.addStation(
-      name: name,
-      openingTime: openingTime,
-      closingTime: closingTime,
-    );
+    StationPostForm form = StationPostForm(name, openingTime, closingTime);
+    final CustomResponse<Station> response =
+        await _stationService.addStation(form);
 
     if (response.success) {
       _stations.add(response.data);

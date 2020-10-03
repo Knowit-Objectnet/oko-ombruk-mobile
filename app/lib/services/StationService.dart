@@ -5,19 +5,16 @@ import 'package:ombruk/businessLogic/Station.dart';
 import 'package:ombruk/const/ApiEndpoint.dart';
 import 'package:ombruk/models/CustomResponse.dart';
 import 'package:ombruk/services/Api.dart';
+import 'package:ombruk/services/forms/station/StationGetForm.dart';
+import 'package:ombruk/services/forms/station/StationPostForm.dart';
 
 class StationService {
   final Api _api = Api();
 
-  Future<CustomResponse<List<Station>>> fetchStations({int id}) async {
-    Map<String, String> parameters = {};
-
-    if (id != null) {
-      parameters.putIfAbsent('stationId', () => id.toString());
-    }
-
-    CustomResponse response =
-        await _api.getRequest(ApiEndpoint.stations, parameters);
+  Future<CustomResponse<List<Station>>> fetchStations(
+    StationGetForm form,
+  ) async {
+    CustomResponse response = await _api.getRequest(ApiEndpoint.stations, form);
 
     if (response.statusCode != 200) {
       return response;
@@ -42,25 +39,9 @@ class StationService {
     }
   }
 
-  Future<CustomResponse<Station>> addStation({
-    @required String name,
-    TimeOfDay openingTime,
-    TimeOfDay closingTime,
-  }) async {
-    assert(name != null);
-
-    Map<String, dynamic> bodyParameters = {'name': name};
-
-    if (openingTime != null) {
-      bodyParameters.putIfAbsent('openingTime', () => openingTime.toString());
-    }
-    if (closingTime != null) {
-      bodyParameters.putIfAbsent('closingTime', () => closingTime.toString());
-    }
-    String body = jsonEncode(bodyParameters);
-
+  Future<CustomResponse<Station>> addStation(StationPostForm form) async {
     CustomResponse response =
-        await _api.postRequest(ApiEndpoint.stations, body);
+        await _api.postRequest(ApiEndpoint.stations, form);
 
     if (response.statusCode == 200) {
       try {

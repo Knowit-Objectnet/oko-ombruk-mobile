@@ -5,19 +5,16 @@ import 'package:ombruk/businessLogic/Partner.dart';
 import 'package:ombruk/const/ApiEndpoint.dart';
 import 'package:ombruk/models/CustomResponse.dart';
 import 'package:ombruk/services/Api.dart';
+import 'package:ombruk/services/forms/Partner/PartnerGetForm.dart';
+import 'package:ombruk/services/forms/Partner/PartnerPostForm.dart';
 
 class PartnerService {
   Api _api = Api();
 
-  Future<CustomResponse<List<Partner>>> fetchPartners({int id}) async {
-    Map<String, String> parameters = {};
-
-    if (id != null) {
-      parameters.putIfAbsent('stationId', () => id.toString());
-    }
-
-    CustomResponse response =
-        await _api.getRequest(ApiEndpoint.partners, parameters);
+  Future<CustomResponse<List<Partner>>> fetchPartners(
+    PartnerGetForm form,
+  ) async {
+    CustomResponse response = await _api.getRequest(ApiEndpoint.partners, form);
 
     if (!response.success) {
       return response;
@@ -41,29 +38,9 @@ class PartnerService {
     }
   }
 
-  Future<CustomResponse<Partner>> addPartner({
-    @required String name,
-    String description,
-    String phone,
-    String email,
-  }) async {
-    assert(name != null);
-
-    Map<String, dynamic> bodyParameters = {'name': name};
-
-    if (description != null) {
-      bodyParameters.putIfAbsent('description', () => description);
-    }
-    if (phone != null) {
-      bodyParameters.putIfAbsent('phone', () => phone);
-    }
-    if (email != null) {
-      bodyParameters.putIfAbsent('email', () => email);
-    }
-    String body = jsonEncode(bodyParameters);
-
+  Future<CustomResponse<Partner>> addPartner(PartnerPostForm form) async {
     CustomResponse response =
-        await _api.postRequest(ApiEndpoint.partners, body);
+        await _api.postRequest(ApiEndpoint.partners, form);
 
     if (response.statusCode == 200) {
       try {

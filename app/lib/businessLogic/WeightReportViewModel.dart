@@ -1,12 +1,15 @@
 import 'package:flutter/cupertino.dart';
+import 'package:ombruk/businessLogic/UserViewModel.dart';
 import 'package:ombruk/models/CustomResponse.dart';
 import 'package:ombruk/models/WeightReport.dart';
 import 'package:ombruk/services/WeightReportService.dart';
+import 'package:ombruk/services/forms/report/ReportGetForm.dart';
 import 'package:ombruk/services/serviceLocator.dart';
 
 class WeightReportViewModel extends ChangeNotifier {
   final WeightReportService _weightReportService =
       serviceLocator<WeightReportService>();
+  final UserViewModel _userViewModel = serviceLocator<UserViewModel>();
 
   List<WeightReport> _nonReportedList;
   List<WeightReport> _reportedList;
@@ -16,8 +19,11 @@ class WeightReportViewModel extends ChangeNotifier {
   List<WeightReport> get reportedList => _reportedList;
 
   Future<bool> fetchWeightReports() async {
+    //I'd love to remove the userviewmodel dependency but not sure if possible.
+    ReportGetForm form = ReportGetForm(partnerId: _userViewModel.groupID);
+
     final CustomResponse<List<WeightReport>> weightResponse =
-        await _weightReportService.fetchWeightReports();
+        await _weightReportService.fetchWeightReports(form);
 
     if (weightResponse.success) {
       List<WeightReport> tempNonReported = [];
