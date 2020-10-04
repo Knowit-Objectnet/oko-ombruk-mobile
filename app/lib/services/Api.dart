@@ -49,22 +49,20 @@ class Api implements IApi {
 
   Future<CustomResponse<String>> deleteRequest(
     String path,
-    Map<String, String> parameters,
+    IForm form,
   ) async {
-    Uri uri = Uri.https(
-        globals.baseUrlStripped, '${globals.requiredPath}/$path', parameters);
+    Uri uri = Uri.https(globals.baseUrlStripped,
+        '${globals.requiredPath}/$path', form.encode());
 
     return await _authorizedRequest(delete, [uri], {#headers: _headers});
   }
 
-  Future<CustomResponse<String>> patchRequest(
-    String path,
-    String body,
-  ) async {
+  Future<CustomResponse<String>> patchRequest(String path, IForm form) async {
     Uri uri =
         Uri.https(globals.baseUrlStripped, '${globals.requiredPath}/$path');
 
-    return await _authorizedRequest(patch, [uri], {#body: body});
+    return await _authorizedRequest(
+        patch, [uri], {#body: jsonEncode(form.encode())});
   }
 
   Future<CustomResponse<String>> _authorizedRequest(

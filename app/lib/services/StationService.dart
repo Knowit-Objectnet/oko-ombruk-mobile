@@ -1,11 +1,12 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 
-import 'package:ombruk/businessLogic/Station.dart';
 import 'package:ombruk/const/ApiEndpoint.dart';
 import 'package:ombruk/models/CustomResponse.dart';
+import 'package:ombruk/models/Station.dart';
 import 'package:ombruk/services/Api.dart';
 import 'package:ombruk/services/forms/station/StationGetForm.dart';
+import 'package:ombruk/services/forms/station/StationPatchForm.dart';
 import 'package:ombruk/services/forms/station/StationPostForm.dart';
 
 class StationService {
@@ -63,29 +64,9 @@ class StationService {
     return response;
   }
 
-  Future<CustomResponse<Station>> updateStation({
-    @required int id,
-    String name,
-    TimeOfDay openingTime,
-    TimeOfDay closingTime,
-  }) async {
-    assert(id != null);
-
-    Map<String, dynamic> bodyParameters = {'id': id};
-    if (name != null) {
-      bodyParameters.putIfAbsent('name', () => name);
-    }
-    if (openingTime != null) {
-      bodyParameters.putIfAbsent('openingTime', () => openingTime.toString());
-    }
-    if (closingTime != null) {
-      bodyParameters.putIfAbsent('closingTime', () => closingTime.toString());
-    }
-
-    String body = jsonEncode(bodyParameters);
-
+  Future<CustomResponse<Station>> updateStation(StationPatchForm form) async {
     CustomResponse response =
-        await _api.patchRequest(ApiEndpoint.stations, body);
+        await _api.patchRequest(ApiEndpoint.stations, form);
 
     if (response.statusCode == 200) {
       try {

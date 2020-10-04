@@ -5,6 +5,7 @@ import 'package:ombruk/models/CustomResponse.dart';
 import 'package:ombruk/models/WeightReport.dart';
 import 'package:ombruk/services/Api.dart';
 import 'package:ombruk/services/forms/report/ReportGetForm.dart';
+import 'package:ombruk/services/forms/report/ReportPatchForm.dart';
 
 class WeightReportService {
   final Api _api = Api();
@@ -37,11 +38,9 @@ class WeightReportService {
   }
 
   /// Returns a CustomResponse with a WeightReport if it was sucecssfully added
-  Future<CustomResponse<WeightReport>> patchWeight(int id, int weight) async {
-    final String body = jsonEncode({'id': id, 'weight': weight});
-
+  Future<CustomResponse<WeightReport>> patchWeight(ReportPatchForm form) async {
     CustomResponse response =
-        await _api.patchRequest(ApiEndpoint.weightReports, body);
+        await _api.patchRequest(ApiEndpoint.weightReports, form);
 
     if (!response.success) {
       return response;

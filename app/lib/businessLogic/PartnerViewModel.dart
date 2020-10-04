@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:ombruk/businessLogic/Partner.dart';
+import 'package:ombruk/models/Partner.dart';
 import 'package:ombruk/services/PartnerService.dart';
 import 'package:ombruk/models/CustomResponse.dart';
 import 'package:ombruk/services/forms/Partner/PartnerGetForm.dart';
+import 'package:ombruk/services/forms/Partner/PartnerPatchForm.dart';
 import 'package:ombruk/services/forms/Partner/PartnerPostForm.dart';
 import 'package:ombruk/services/serviceLocator.dart';
 
@@ -60,14 +61,15 @@ class PartnerViewModel extends ChangeNotifier {
     String phone,
     String email,
   }) async {
-    final CustomResponse<Partner> response =
-        await _partnerService.updatePartner(
-      id: id,
+    PartnerPatchForm form = PartnerPatchForm(
+      partnerId: id,
       name: name,
       description: description,
       phone: phone,
       email: email,
     );
+    final CustomResponse<Partner> response =
+        await _partnerService.updatePartner(form);
     if (response.success) {
       final int index = partners.indexWhere((element) => element.id == id);
       _partners[index] = response.data;

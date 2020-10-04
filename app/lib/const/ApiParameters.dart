@@ -17,13 +17,29 @@ abstract class ApiParameters {
   static const String openingTime = "openingTime";
   static const String closingTime = "closingTime";
 
+  static const String stationPatchId = "id";
+  static const String stationPatchName = "name";
+  static const String stationPatchOpeningTime = "openingTime";
+  static const String stationPatchClosingTime = "closingTime";
+
   static const String eventStartDateTime = "startDateTime";
   static const String eventEndDateTime = "endDateTime";
   static const String eventStationId = "stationId";
   static const String eventPartnerId = "partnerId";
+  static const String eventRecurrenceRule = "recurrenceRule";
+
+  static const String eventUpdateId = "id";
+
+  static const String eventDeleteUntil = "to";
+  static const String eventDeleteFrom = "from";
+  static const String eventDeleteEventId = "eventId";
+  static const String recurrenceRuleId = "recurrenceRuleId";
 
   static const String recurrenceRule = "recurrenceRule";
   static const String recurrenceRuleUntil = "until";
   static const String recurrenceRuleDays = "days";
   static const String recurrenceRuleInterval = "interval";
+
+  static const String reportId = "id";
+  static const String reportWeight = "weight";
 }

@@ -1,6 +1,6 @@
 import 'package:ombruk/const/ApiParameters.dart';
 import 'package:ombruk/services/forms/IForm.dart';
-import 'package:ombruk/globals.dart' as globals;
+import 'package:ombruk/utils/DateUtils.dart';
 
 class PickupPostForm implements IForm {
   final DateTime startDateTime;
@@ -15,8 +15,9 @@ class PickupPostForm implements IForm {
   }
   @override
   Map<String, dynamic> encode() => {
-        ApiParameters.pickupStartDateTime: globals.getDateString(startDateTime),
-        ApiParameters.pickupEndDateTime: globals.getDateString(endDateTime),
+        ApiParameters.pickupStartDateTime:
+            DateUtils.getDateString(startDateTime),
+        ApiParameters.pickupEndDateTime: DateUtils.getDateString(endDateTime),
         ApiParameters.pickupDescription: description,
         ApiParameters.pickupStationId: stationId,
       };

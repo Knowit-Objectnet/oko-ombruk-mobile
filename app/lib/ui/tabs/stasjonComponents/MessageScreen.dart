@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-
-import 'package:ombruk/businessLogic/Partner.dart';
-import 'package:ombruk/businessLogic/Station.dart';
+import 'package:ombruk/models/Partner.dart';
+import 'package:ombruk/models/Station.dart';
 
 import 'package:ombruk/ui/tabs/components/PartnerPicker.dart';
 import 'package:ombruk/ui/tabs/components/StationPicker.dart';

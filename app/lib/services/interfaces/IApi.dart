@@ -14,11 +14,11 @@ abstract class IApi {
 
   Future<CustomResponse<String>> deleteRequest(
     String path,
-    Map<String, String> parameters,
+    IForm form,
   );
 
   Future<CustomResponse<String>> patchRequest(
     String path,
-    String body,
+    IForm form,
   );
 }

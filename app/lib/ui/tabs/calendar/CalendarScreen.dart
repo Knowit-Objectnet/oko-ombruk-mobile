@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:ombruk/models/Station.dart';
 import 'package:provider/provider.dart';
 
 import 'package:ombruk/businessLogic/CalendarViewModel.dart';
 import 'package:ombruk/businessLogic/UserViewModel.dart';
 import 'package:ombruk/businessLogic/StationViewModel.dart';
-import 'package:ombruk/businessLogic/Station.dart';
 
 import 'package:ombruk/models/CalendarEvent.dart';
 
