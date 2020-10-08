@@ -42,7 +42,16 @@ class _AppState extends State<App> {
       }
 
       // Main view
-      return _appView();
+      else {
+        print("Login finished");
+        print(userViewModel.getRole());
+        print(router == null);
+        print(router.route == null);
+        router.route = router.routes[userViewModel.getRole()];
+        print(router.key);
+        print(router.route.title);
+        return _appView();
+      }
     });
   }
 
