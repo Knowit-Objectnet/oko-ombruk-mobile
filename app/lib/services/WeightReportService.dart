@@ -1,29 +1,21 @@
 import 'dart:convert';
 
-import 'package:ombruk/businessLogic/UserViewModel.dart';
 import 'package:ombruk/const/ApiEndpoint.dart';
 import 'package:ombruk/models/CustomResponse.dart';
 import 'package:ombruk/models/WeightReport.dart';
 import 'package:ombruk/services/Api.dart';
-import 'package:ombruk/services/serviceLocator.dart';
+import 'package:ombruk/services/forms/report/ReportGetForm.dart';
+import 'package:ombruk/services/forms/report/ReportPatchForm.dart';
 
 class WeightReportService {
-  final UserViewModel _userViewModel = serviceLocator<UserViewModel>();
-
   final Api _api = Api();
 
   /// Returns CustomResponse with a list of WeightReports on success
-  Future<CustomResponse<List<WeightReport>>> fetchWeightReports() async {
-    Map<String, String> parameters = {};
-
-    //I'd love to remove this but I don't know if it's possible at the moment.
-    if (_userViewModel.groupID != null) {
-      parameters.putIfAbsent(
-          'partnerId', () => _userViewModel.groupID.toString());
-    }
-
+  Future<CustomResponse<List<WeightReport>>> fetchWeightReports(
+    ReportGetForm form,
+  ) async {
     CustomResponse response =
-        await _api.getRequest(ApiEndpoint.weightReports, parameters);
+        await _api.getRequest(ApiEndpoint.weightReports, form);
 
     if (!response.success) {
       return response;
@@ -46,11 +38,9 @@ class WeightReportService {
   }
 
   /// Returns a CustomResponse with a WeightReport if it was sucecssfully added
-  Future<CustomResponse<WeightReport>> patchWeight(int id, int weight) async {
-    final String body = jsonEncode({'id': id, 'weight': weight});
-
+  Future<CustomResponse<WeightReport>> patchWeight(ReportPatchForm form) async {
     CustomResponse response =
-        await _api.patchRequest(ApiEndpoint.weightReports, body);
+        await _api.patchRequest(ApiEndpoint.weightReports, form);
 
     if (!response.success) {
       return response;

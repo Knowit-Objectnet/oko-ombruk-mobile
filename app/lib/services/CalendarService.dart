@@ -1,23 +1,22 @@
 import 'dart:convert';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:ombruk/const/ApiEndpoint.dart';
 
 import 'package:ombruk/models/CalendarEvent.dart';
 import 'package:ombruk/models/CustomResponse.dart';
 import 'package:ombruk/services/Api.dart';
-
-import 'package:ombruk/ui/tabs/RegComponents/CreateCalendarEventData.dart';
-
-import 'package:ombruk/globals.dart' as globals;
+import 'package:ombruk/services/forms/Event/EventDeleteForm.dart';
+import 'package:ombruk/services/forms/Event/EventGetForm.dart';
+import 'package:ombruk/services/forms/Event/EventPostForm.dart';
+import 'package:ombruk/services/forms/Event/EventUpdateForm.dart';
 
 class CalendarService {
   Api _api = Api();
 
   Future<CustomResponse<List<CalendarEvent>>> fetchEvents(
-      EventGetForm form) async {
+    EventGetForm form,
+  ) async {
     final CustomResponse response =
-        await _api.getRequest(ApiEndpoint.events, form.toJson());
+        await _api.getRequest(ApiEndpoint.events, form);
 
     if (!response.success) {
       return response;
@@ -42,67 +41,33 @@ class CalendarService {
   }
 
   /// Returns a CustomResponse with null data
-  Future<CustomResponse> createCalendarEvent(
-      CreateCalendarEventData eventData) async {
-    final String startString = globals.getDateString(eventData.startDateTime);
-    final String endString = globals.getDateString(eventData.endDateTime);
-    final String untilString = globals.getDateString(eventData.untilDateTime);
+  Future<CustomResponse> createCalendarEvent(EventPostForm form) async =>
+      // final String startString = DateUtils.getDateString(eventData.startDateTime);
+      // final String endString = DateUtils.getDateString(eventData.endDateTime);
+      // final String untilString = DateUtils.getDateString(eventData.untilDateTime);
 
-    final List<String> weekdaysString =
-        eventData.weekdays.map((e) => describeEnum(e).toUpperCase()).toList();
+      // final List<String> weekdaysString =
+      //     eventData.weekdays.map((e) => describeEnum(e).toUpperCase()).toList();
 
-    String body = jsonEncode({
-      'startDateTime': startString,
-      'endDateTime': endString,
-      'stationId': eventData.station.id,
-      'partnerId': eventData.partner.id,
-      'recurrenceRule': {
-        'until': untilString,
-        'days': weekdaysString,
-        'interval': eventData.interval,
-      },
-    });
+      // String body = jsonEncode({
+      //   'startDateTime': startString,
+      //   'endDateTime': endString,
+      //   'stationId': eventData.station.id,
+      //   'partnerId': eventData.partner.id,
+      //   'recurrenceRule': {
+      //     'until': untilString,
+      //     'days': weekdaysString,
+      //     'interval': eventData.interval,
+      //   },
+      // });
 
-    return await _api.postRequest(ApiEndpoint.events, body);
-  }
+      await _api.postRequest(ApiEndpoint.events, form);
 
   /// Returns a CustomResponse with null data
-  Future<CustomResponse> deleteCalendarEvent(int id, DateTime startDate,
-      DateTime endDate, dynamic recurrenceRuleID) async {
-    final String startString = globals.getDateString(startDate);
-    final String endString = globals.getDateString(endDate);
-    var queryParameters;
-
-    if (id == null) {
-      queryParameters = {
-        'recurrenceRuleId': recurrenceRuleID.toString(),
-        'fromDate': startString,
-        'toDate': endString
-      };
-    } else {
-      queryParameters = {'eventId': id.toString()};
-    }
-
-    return _api.deleteRequest(ApiEndpoint.events, queryParameters);
-  }
+  Future<CustomResponse> deleteCalendarEvent(EventDeleteForm form) async =>
+      _api.deleteRequest(ApiEndpoint.events, form);
 
   /// Returns a CustomResponse with null data
-  Future<CustomResponse<String>> updateEvent(
-      int id, DateTime date, TimeOfDay startTime, TimeOfDay endTime) async {
-    DateTime startDateTime = DateTime(
-        date.year, date.month, date.day, startTime.hour, startTime.minute);
-    DateTime endDateTime =
-        DateTime(date.year, date.month, date.day, endTime.hour, endTime.minute);
-
-    final String startDateTimeString = globals.getDateString(startDateTime);
-    final String endDateTimeString = globals.getDateString(endDateTime);
-
-    String body = jsonEncode({
-      'id': id,
-      'startDateTime': startDateTimeString,
-      'endDateTime': endDateTimeString,
-    });
-
-    return await _api.patchRequest(ApiEndpoint.events, body);
-  }
+  Future<CustomResponse<String>> updateEvent(EventUpdateForm form) async =>
+      await _api.patchRequest(ApiEndpoint.events, form);
 }

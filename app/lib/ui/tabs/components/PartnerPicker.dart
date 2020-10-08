@@ -1,8 +1,8 @@
 import 'package:meta/meta.dart';
 import 'package:flutter/material.dart';
+import 'package:ombruk/models/Partner.dart';
 import 'package:provider/provider.dart';
 
-import 'package:ombruk/businessLogic/Partner.dart';
 import 'package:ombruk/businessLogic/PartnerViewModel.dart';
 
 import 'package:ombruk/ui/customColors.dart' as customColors;
