@@ -16,18 +16,19 @@ class AppRouter {
   // Current route
   AppView route = partnerView;
 
-  // Retains the scaffold key state 
+  // Retains the scaffold key state
   GlobalKey<ScaffoldState> key = GlobalKey<ScaffoldState>();
 
   // Auth
   UserViewModel _userViewModel = serviceLocator<UserViewModel>();
+  Map<globals.KeycloakRoles, AppView> routes;
 
   AppRouter() {
 
     print("user view model");
     print(_userViewModel);
     // Authentication routes
-    final routes = {
+    routes = {
       globals.KeycloakRoles.partner: partnerView,
       globals.KeycloakRoles.reg_employee: employeeView,
       globals.KeycloakRoles.reuse_station: stationView,
@@ -36,7 +37,7 @@ class AppRouter {
     // Listen for authentication change to change app route
     _userViewModel.addListener(() {
       var role = _userViewModel.getRole(); // Get updated role
-      route = routes[role];                // Set route
+      route = routes[role]; // Set route
     });
   }
 
