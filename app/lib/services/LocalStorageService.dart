@@ -1,7 +1,7 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:ombruk/services/interfaces/ILocalStorageService.dart';
+import 'package:ombruk/services/interfaces/ISecureStorageService.dart';
 
-class LocalStorageService implements ILocalStorageService {
+class SecureStorageService implements ISecureStorageService {
   final storage = FlutterSecureStorage();
 
   @override

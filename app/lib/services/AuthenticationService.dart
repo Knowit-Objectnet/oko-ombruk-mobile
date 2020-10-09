@@ -3,7 +3,7 @@ import 'package:meta/meta.dart';
 import 'package:ombruk/businessLogic/UserModel.dart';
 import 'package:ombruk/services/LocalStorageService.dart';
 import 'package:ombruk/services/interfaces/IAuthenticationService.dart';
-import 'package:ombruk/services/interfaces/ILocalStorageService.dart';
+import 'package:ombruk/services/interfaces/ISecureStorageService.dart';
 import 'package:openid_client/openid_client.dart';
 import 'package:openid_client/openid_client_io.dart';
 import 'package:http/http.dart';
@@ -13,7 +13,7 @@ import 'package:ombruk/models/CustomResponse.dart';
 import 'package:ombruk/globals.dart' as globals;
 
 class AuthenticationService implements IAuthenticationService {
-  final ILocalStorageService _localStorageService = LocalStorageService();
+  final ISecureStorageService _localStorageService = SecureStorageService();
 
   Future<UserModel> loadFromStorage() async {
     final String accessToken = await _localStorageService.getValue(key: "accessToken");

@@ -28,9 +28,13 @@ class _AppState extends State<App> {
   // App router
   AppRouter router = serviceLocator<AppRouter>();
 
+
+
   @override
   Widget build(BuildContext context) {
-    return Consumer(builder: (context, UserViewModel userViewModel, widget) {
+    print("this is the router");
+    print(router);
+    return Consumer<UserViewModel>(builder: (context, UserViewModel userViewModel, widget) {
       // TODO support.knowit.no/browse/OKO-405
       if (!userViewModel.isLoaded) {
         return SplashScreen();
@@ -47,21 +51,25 @@ class _AppState extends State<App> {
   }
 
   // App view
-  Widget _appView() => Scaffold(
-      key: router.key,
-      // App bar
-      appBar: TitleBar(),
-      // Body with safe area
-      body: SafeArea(
+  Widget _appView() {
+    print("this is the router");
+    print(router);
+    return Scaffold(
+        key: router.key,
+        // App bar
+        appBar: TitleBar(),
+        // Body with safe area
+        body: SafeArea(
           // Indexed stack to retain view state after navigation
-          child: IndexedStack(
-        index: router.route.index,
-        children: router.route.widgets,
-      )),
-      // Side menu drawer
-      drawer: AppDrawer(),
-      // Navigation bar
-      bottomNavigationBar: _navigationBar());
+            child: IndexedStack(
+              index: router.route.index,
+              children: router.route.widgets,
+            )),
+        // Side menu drawer
+        drawer: AppDrawer(),
+        // Navigation bar
+        bottomNavigationBar: _navigationBar());
+  }
 
   // Navigation bar
   Widget _navigationBar() {

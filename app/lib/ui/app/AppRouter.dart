@@ -23,6 +23,9 @@ class AppRouter {
   UserViewModel _userViewModel = serviceLocator<UserViewModel>();
 
   AppRouter() {
+
+    print("user view model");
+    print(_userViewModel);
     // Authentication routes
     final routes = {
       globals.KeycloakRoles.partner: partnerView,

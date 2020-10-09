@@ -1,4 +1,4 @@
-abstract class ILocalStorageService {
+abstract class ISecureStorageService {
 
   Future<String> getValue({String key});
 
