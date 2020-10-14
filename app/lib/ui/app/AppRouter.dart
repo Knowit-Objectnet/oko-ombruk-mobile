@@ -24,6 +24,9 @@ class AppRouter {
   Map<globals.KeycloakRoles, AppView> routes;
 
   AppRouter() {
+
+    print("user view model");
+    print(_userViewModel);
     // Authentication routes
     routes = {
       globals.KeycloakRoles.partner: partnerView,
