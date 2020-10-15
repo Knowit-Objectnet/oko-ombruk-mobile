@@ -10,6 +10,7 @@
 .svn/
 ../node_modules
 iOS-simulator.config
+ios/Flutter/.last_build_id
 
 # IntelliJ related
 *.iml
