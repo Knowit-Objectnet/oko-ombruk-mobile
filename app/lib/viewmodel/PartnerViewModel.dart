@@ -5,14 +5,14 @@ import 'package:ombruk/models/CustomResponse.dart';
 import 'package:ombruk/services/forms/Partner/PartnerGetForm.dart';
 import 'package:ombruk/services/forms/Partner/PartnerPatchForm.dart';
 import 'package:ombruk/services/forms/Partner/PartnerPostForm.dart';
-import 'package:ombruk/services/serviceLocator.dart';
+import 'package:ombruk/viewmodel/BaseViewModel.dart';
 
-class PartnerViewModel extends ChangeNotifier {
-  final PartnerService _partnerService = serviceLocator<PartnerService>();
+class PartnerViewModel extends BaseViewModel {
+  final PartnerService _partnerService;
 
   List<Partner> _partners = [];
 
-  PartnerViewModel() {
+  PartnerViewModel(this._partnerService) {
     fetchPartners();
   }
 

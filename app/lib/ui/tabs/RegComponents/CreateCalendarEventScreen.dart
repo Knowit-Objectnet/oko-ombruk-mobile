@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:ombruk/models/Partner.dart';
 import 'package:ombruk/models/Station.dart';
+import 'package:ombruk/viewmodel/CalendarViewModel.dart';
 import 'package:provider/provider.dart';
-
-import 'package:ombruk/businessLogic/CalendarViewModel.dart';
 
 import 'package:ombruk/globals.dart' as globals;
 

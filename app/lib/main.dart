@@ -1,18 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:ombruk/di/GlobalProviders.dart';
+import 'package:ombruk/services/interfaces/INavigatorService.dart';
 import 'package:provider/provider.dart';
 
-import 'package:ombruk/AuthRouter.dart';
 import 'package:ombruk/ui/app/App.dart';
 
-import 'package:ombruk/services/serviceLocator.dart';
-import 'package:ombruk/businessLogic/UserViewModel.dart';
-import 'package:ombruk/businessLogic/CalendarViewModel.dart';
-import 'package:ombruk/businessLogic/PartnerViewModel.dart';
-import 'package:ombruk/businessLogic/StationViewModel.dart';
-import 'package:ombruk/businessLogic/PickupViewModel.dart';
-
 void main() {
-  setupServiceLocator();
   runApp(
     // Top-level Provider so it is accessible everywhere
     // Why do you ask? Because if we try to access them in a new route, for exmaple with
@@ -20,23 +13,7 @@ void main() {
     // error of the type 'Error: Could not find the correct Provider<..> above this Consumer<..>'
     // They can be moved futher down the tree if you find a solution to this issue.
     MultiProvider(
-      providers: [
-        ChangeNotifierProvider<UserViewModel>(
-          create: (context) => serviceLocator<UserViewModel>(),
-        ),
-        ChangeNotifierProvider<CalendarViewModel>(
-          create: (context) => serviceLocator<CalendarViewModel>(),
-        ),
-        ChangeNotifierProvider<PartnerViewModel>(
-          create: (context) => serviceLocator<PartnerViewModel>(),
-        ),
-        ChangeNotifierProvider<StationViewModel>(
-          create: (context) => serviceLocator<StationViewModel>(),
-        ),
-        ChangeNotifierProvider<PickupViewModel>(
-          create: (context) => serviceLocator<PickupViewModel>(),
-        ),
-      ],
+      providers: globalProviders,
       child: Reir(),
     ),
   );
@@ -47,8 +24,11 @@ class Reir extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    GlobalKey<NavigatorState> initialKey = GlobalKey();
+    Provider.of<INavigatorService>(context).initialKey = initialKey;
     return MaterialApp(
       title: 'REIR',
+      navigatorKey: initialKey,
       theme: ThemeData(
         fontFamily: 'OsloSansOffice',
         primarySwatch: Colors.blue,

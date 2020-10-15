@@ -4,13 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:ombruk/const/ApiEndpoint.dart';
 import 'package:ombruk/models/CustomResponse.dart';
 import 'package:ombruk/models/Station.dart';
-import 'package:ombruk/services/Api.dart';
 import 'package:ombruk/services/forms/station/StationGetForm.dart';
 import 'package:ombruk/services/forms/station/StationPatchForm.dart';
 import 'package:ombruk/services/forms/station/StationPostForm.dart';
+import 'package:ombruk/services/interfaces/IApi.dart';
 
 class StationService {
-  final Api _api = Api();
+  final IApi _api;
+  StationService(this._api);
 
   Future<CustomResponse<List<Station>>> fetchStations(
     StationGetForm form,

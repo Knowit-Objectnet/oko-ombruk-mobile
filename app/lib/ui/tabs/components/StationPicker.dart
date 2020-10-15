@@ -1,9 +1,8 @@
 import 'package:meta/meta.dart';
 import 'package:flutter/material.dart';
 import 'package:ombruk/models/Station.dart';
+import 'package:ombruk/viewmodel/StationViewModel.dart';
 import 'package:provider/provider.dart';
-
-import 'package:ombruk/businessLogic/StationViewModel.dart';
 
 import 'package:ombruk/ui/customColors.dart' as customColors;
 import 'package:ombruk/ui/customIcons.dart' as customIcons;

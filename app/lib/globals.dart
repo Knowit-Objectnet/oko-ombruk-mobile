@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 final String keycloakBaseUrl =
     'https://keycloak.staging.oko.knowit.no:8443/auth/realms/staging';
 
@@ -62,6 +64,18 @@ enum KeycloakRoles {
   uma_authorization,
   partner,
   reuse_station
+}
+
+/// returns a value from [globals.KeycloakRoles] or null if no match
+KeycloakRoles getRole(String role) {
+  if (role == describeEnum(KeycloakRoles.partner)) {
+    return KeycloakRoles.partner;
+  } else if (role == describeEnum(KeycloakRoles.reg_employee)) {
+    return KeycloakRoles.reg_employee;
+  } else if (role == describeEnum(KeycloakRoles.reuse_station)) {
+    return KeycloakRoles.reuse_station;
+  }
+  return null;
 }
 
 enum Weekdays { monday, tuesday, wednesday, thursday, friday }

@@ -8,9 +8,11 @@ import 'package:ombruk/services/forms/Event/EventDeleteForm.dart';
 import 'package:ombruk/services/forms/Event/EventGetForm.dart';
 import 'package:ombruk/services/forms/Event/EventPostForm.dart';
 import 'package:ombruk/services/forms/Event/EventUpdateForm.dart';
+import 'package:ombruk/services/interfaces/IApi.dart';
 
 class CalendarService {
-  Api _api = Api();
+  final IApi _api;
+  CalendarService(this._api);
 
   Future<CustomResponse<List<CalendarEvent>>> fetchEvents(
     EventGetForm form,

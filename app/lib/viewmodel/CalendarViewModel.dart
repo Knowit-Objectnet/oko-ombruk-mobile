@@ -3,21 +3,40 @@ import 'package:flutter/material.dart';
 import 'package:ombruk/globals.dart';
 import 'package:ombruk/models/CalendarEvent.dart';
 import 'package:ombruk/models/CustomResponse.dart';
+import 'package:ombruk/models/Station.dart';
 import 'package:ombruk/services/CalendarService.dart';
+import 'package:ombruk/services/StationService.dart';
 import 'package:ombruk/services/forms/Event/EventDeleteForm.dart';
 import 'package:ombruk/services/forms/Event/EventGetForm.dart';
 import 'package:ombruk/services/forms/Event/EventPostForm.dart';
 import 'package:ombruk/services/forms/Event/EventUpdateForm.dart';
-import 'package:ombruk/services/serviceLocator.dart';
+import 'package:ombruk/services/forms/station/StationGetForm.dart';
+import 'package:ombruk/viewmodel/BaseViewModel.dart';
 
-class CalendarViewModel extends ChangeNotifier {
-  final CalendarService _calendarService = serviceLocator<CalendarService>();
+class CalendarViewModel extends BaseViewModel {
+  final CalendarService _calendarService;
+  StationService _stationService;
 
   List<CalendarEvent> _calendarEvents;
   bool _isLoading = true;
+  Station _selectedStation;
+  Station get selectedStation => _selectedStation;
 
-  CalendarViewModel() {
+  List<Station> _stations;
+  List<Station> get stations => _stations;
+
+  CalendarViewModel(this._calendarService, this._stationService) {
     fetchEvents();
+  }
+
+  Future<void> start() async {
+    await fetchEvents();
+    CustomResponse response =
+        await _stationService.fetchStations(StationGetForm());
+    if (!response.success) throw Exception("Failed to get stations");
+    _stations = response.data;
+    _selectedStation = _stations.first;
+    setState(ViewState.Idle);
   }
 
   List<CalendarEvent> get calendarEvents => _calendarEvents;
@@ -75,6 +94,11 @@ class CalendarViewModel extends ChangeNotifier {
       print(response);
       return false;
     }
+  }
+
+  void onStationChanged(Station value) {
+    _selectedStation = value;
+    notifyListeners();
   }
 
   Future<bool> deleteCalendarEvent(int id, DateTime startDate, DateTime endDate,

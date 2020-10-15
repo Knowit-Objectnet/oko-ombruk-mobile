@@ -8,9 +8,11 @@ import 'package:ombruk/services/Api.dart';
 import 'package:ombruk/services/forms/Partner/PartnerGetForm.dart';
 import 'package:ombruk/services/forms/Partner/PartnerPatchForm.dart';
 import 'package:ombruk/services/forms/Partner/PartnerPostForm.dart';
+import 'package:ombruk/services/interfaces/IApi.dart';
 
 class PartnerService {
-  Api _api = Api();
+  final IApi _api;
+  PartnerService(this._api);
 
   Future<CustomResponse<List<Partner>>> fetchPartners(
     PartnerGetForm form,

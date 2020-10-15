@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:ombruk/ui/views/BaseWidget.dart';
+import 'package:ombruk/viewmodel/MyPageViewModel.dart';
 import 'package:provider/provider.dart';
-
-import 'package:ombruk/businessLogic/UserViewModel.dart';
 
 import 'package:ombruk/ui/tabs/RegComponents/NewStationScreen.dart';
 import 'package:ombruk/ui/tabs/RegComponents/NewPartnerScreen.dart';
@@ -15,76 +15,58 @@ import 'package:ombruk/ui/ui.helper.dart';
 class MyPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Consumer<UserViewModel>(
-      builder: (context, UserViewModel userViewModel, child) =>
-          _MyPageConsumed(userViewModel),
-    );
-  }
-}
-
-class _MyPageConsumed extends StatefulWidget {
-  final UserViewModel userViewModel;
-
-  _MyPageConsumed(this.userViewModel);
-
-  @override
-  _MyPageConsumedState createState() => _MyPageConsumedState();
-}
-
-class _MyPageConsumedState extends State<_MyPageConsumed> {
-  final EdgeInsets _verticalPadding = EdgeInsets.symmetric(vertical: 8.0);
-
-  bool _showContactInfo = false; // TODO: Get this from data
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body:
-      SafeArea(
-      child: ListView(
-      shrinkWrap: true,
-      padding: EdgeInsets.symmetric(horizontal: 16.0),
-      children: <Widget>[
-        Padding(
-          padding: _verticalPadding,
-          child: Row(
+    return BaseWidget(
+      model: MyPageViewModel(Provider.of(context), Provider.of(context)),
+      builder: (context, model, _) => Scaffold(
+        body: SafeArea(
+          child: ListView(
+            shrinkWrap: true,
+            padding: EdgeInsets.symmetric(horizontal: 16.0),
             children: <Widget>[
               Padding(
-                padding: EdgeInsets.only(right: 8.0),
-                child: customIcons.image(customIcons.myPage),
-              ),
-              Text(
-                'Min side',
-                style: TextStyle(
-                  fontSize: 20.0,
-                  fontWeight: FontWeight.bold,
+                padding: EdgeInsets.symmetric(vertical: 8.0),
+                child: Row(
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.only(right: 8.0),
+                      child: customIcons.image(customIcons.myPage),
+                    ),
+                    Text(
+                      'Min side',
+                      style: TextStyle(
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Spacer(),
+                    RaisedButton(
+                      color: customColors.osloDarkBlue,
+                      child: Text(
+                        'Logg ut',
+                        style: TextStyle(color: customColors.osloWhite),
+                      ),
+                      onPressed: () async {
+                        final bool result = await model.requestLogOut();
+                        if (!result) {
+                          uiHelper.showSnackbar(
+                              context, 'Kunne ikke logge ut, prøv igjen.');
+                        }
+                      },
+                    )
+                  ],
                 ),
               ),
-              Spacer(),
-              RaisedButton(
-                color: customColors.osloDarkBlue,
-                child: Text(
-                  'Logg ut',
-                  style: TextStyle(color: customColors.osloWhite),
-                ),
-                onPressed: () async {
-                  final bool result =
-                      await widget.userViewModel.requestLogOut();
-                  if (!result) {
-                    uiHelper.showSnackbar(
-                        context, 'Kunne ikke logge ut, prøv igjen.');
-                  }
-                },
-              )
+              _aboutSection(model),
+              Padding(
+                  padding: EdgeInsets.symmetric(vertical: 8.0),
+                  child: _contactInfo()),
+              _shareContactInfoSection(model),
+              _addPartnerAndStationButtons(model, context),
             ],
           ),
         ),
-        _aboutSection(),
-        Padding(padding: _verticalPadding, child: _contactInfo()),
-        _shareContactInfoSection(),
-        _addPartnerAndStationButtons(),
-      ],
-    )));
+      ),
+    );
   }
 
   Text _subtitle(String text) {
@@ -93,6 +75,21 @@ class _MyPageConsumedState extends State<_MyPageConsumed> {
       style: TextStyle(
         fontSize: 16.0,
         fontWeight: FontWeight.bold,
+      ),
+    );
+  }
+
+  Widget _textWithIcon(String icon, String title) {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 4.0),
+      child: Row(
+        children: <Widget>[
+          customIcons.image(customIcons.person),
+          Padding(
+            padding: EdgeInsets.only(left: 8.0),
+            child: Text(title ?? 'N/A'),
+          ),
+        ],
       ),
     );
   }
@@ -133,28 +130,13 @@ class _MyPageConsumedState extends State<_MyPageConsumed> {
     );
   }
 
-  Widget _textWithIcon(String icon, String title) {
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: 4.0),
-      child: Row(
-        children: <Widget>[
-          customIcons.image(customIcons.person),
-          Padding(
-            padding: EdgeInsets.only(left: 8.0),
-            child: Text(title ?? 'N/A'),
-          ),
-        ],
-      ),
-    );
-  }
-
   /// Only for the Partner role
-  Widget _aboutSection() {
-    if (widget.userViewModel.getRole() != globals.KeycloakRoles.partner) {
+  Widget _aboutSection(MyPageViewModel model) {
+    if (model.role != globals.KeycloakRoles.partner) {
       return Container();
     }
     return Padding(
-      padding: _verticalPadding,
+      padding: EdgeInsets.symmetric(vertical: 8.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -167,15 +149,15 @@ class _MyPageConsumedState extends State<_MyPageConsumed> {
   }
 
   /// Only for the Partner role
-  Widget _shareContactInfoSection() {
-    if (widget.userViewModel.getRole() != globals.KeycloakRoles.partner) {
+  Widget _shareContactInfoSection(MyPageViewModel model) {
+    if (model.role != globals.KeycloakRoles.partner) {
       return Container();
     }
 
     return Column(
       children: <Widget>[
         Padding(
-          padding: _verticalPadding,
+          padding: EdgeInsets.symmetric(vertical: 8.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
@@ -186,7 +168,7 @@ class _MyPageConsumedState extends State<_MyPageConsumed> {
           ),
         ),
         Padding(
-          padding: _verticalPadding,
+          padding: EdgeInsets.symmetric(vertical: 8.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
@@ -201,14 +183,10 @@ class _MyPageConsumedState extends State<_MyPageConsumed> {
                 ),
               ),
               SwitchButton(
-                activated: _showContactInfo,
+                activated: model.showContactInfo,
                 textOn: 'På',
                 textOff: 'Av',
-                buttonPressed: () {
-                  setState(() {
-                    _showContactInfo = !_showContactInfo;
-                  });
-                },
+                buttonPressed: model.onShowContactInfoChanged,
               ),
             ],
           ),
@@ -218,8 +196,9 @@ class _MyPageConsumedState extends State<_MyPageConsumed> {
   }
 
   /// Only for the REG role
-  Widget _addPartnerAndStationButtons() {
-    if (widget.userViewModel.getRole() != globals.KeycloakRoles.reg_employee) {
+  Widget _addPartnerAndStationButtons(
+      MyPageViewModel model, BuildContext context) {
+    if (model.role != globals.KeycloakRoles.reg_employee) {
       return Container();
     }
 

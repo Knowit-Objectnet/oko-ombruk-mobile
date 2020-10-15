@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:ombruk/businessLogic/CalendarViewModel.dart';
-
 import 'package:ombruk/models/CalendarEvent.dart';
 
 import 'package:ombruk/ui/tabs/components/DatePicker.dart';
@@ -11,6 +9,7 @@ import 'package:ombruk/ui/customIcons.dart' as customIcons;
 import 'package:ombruk/ui/customColors.dart' as customColors;
 
 import 'package:ombruk/globals.dart' as globals;
+import 'package:ombruk/viewmodel/CalendarViewModel.dart';
 import 'package:provider/provider.dart';
 
 class CalendarEventExpander extends StatefulWidget {

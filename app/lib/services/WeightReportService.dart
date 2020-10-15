@@ -3,12 +3,13 @@ import 'dart:convert';
 import 'package:ombruk/const/ApiEndpoint.dart';
 import 'package:ombruk/models/CustomResponse.dart';
 import 'package:ombruk/models/WeightReport.dart';
-import 'package:ombruk/services/Api.dart';
 import 'package:ombruk/services/forms/report/ReportGetForm.dart';
 import 'package:ombruk/services/forms/report/ReportPatchForm.dart';
+import 'package:ombruk/services/interfaces/IApi.dart';
 
 class WeightReportService {
-  final Api _api = Api();
+  final IApi _api;
+  WeightReportService(this._api);
 
   /// Returns CustomResponse with a list of WeightReports on success
   Future<CustomResponse<List<WeightReport>>> fetchWeightReports(

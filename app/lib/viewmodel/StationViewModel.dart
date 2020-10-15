@@ -6,13 +6,14 @@ import 'package:ombruk/services/forms/station/StationGetForm.dart';
 import 'package:ombruk/services/forms/station/StationPatchForm.dart';
 import 'package:ombruk/services/forms/station/StationPostForm.dart';
 import 'package:ombruk/services/serviceLocator.dart';
+import 'package:ombruk/viewmodel/BaseViewModel.dart';
 
-class StationViewModel extends ChangeNotifier {
-  final StationService _stationService = serviceLocator<StationService>();
+class StationViewModel extends BaseViewModel {
+  final StationService _stationService;
 
   List<Station> _stations = [];
 
-  StationViewModel() {
+  StationViewModel(this._stationService) {
     fetchStations();
   }
 

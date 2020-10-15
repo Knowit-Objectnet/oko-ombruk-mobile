@@ -13,6 +13,10 @@ abstract class IAuthenticationService {
     String clientID,
   );
 
+  Future<CustomResponse> requestLogOut1();
+
+  UserModel get userModel;
+
   Future<UserModel> saveCredentials({
     Credential credential,
     List<String> roles,

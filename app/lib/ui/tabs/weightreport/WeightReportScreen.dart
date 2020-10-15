@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:ombruk/viewmodel/WeightReportViewModel.dart';
 import 'package:provider/provider.dart';
 
 import 'package:ombruk/models/WeightReport.dart';
 import 'package:ombruk/services/serviceLocator.dart';
-
-import 'package:ombruk/businessLogic/WeightReportViewModel.dart';
 
 import 'package:ombruk/ui/tabs/weightreport/ListElementWithoutWeight.dart';
 import 'package:ombruk/ui/tabs/weightreport/ListElementWithWeight.dart';
