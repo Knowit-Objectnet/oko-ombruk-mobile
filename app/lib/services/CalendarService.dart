@@ -9,8 +9,9 @@ import 'package:ombruk/services/forms/Event/EventGetForm.dart';
 import 'package:ombruk/services/forms/Event/EventPostForm.dart';
 import 'package:ombruk/services/forms/Event/EventUpdateForm.dart';
 import 'package:ombruk/services/interfaces/IApi.dart';
+import 'package:ombruk/services/interfaces/ICalendarService.dart';
 
-class CalendarService {
+class CalendarService extends ICalendarService {
   final IApi _api;
   CalendarService(this._api);
 

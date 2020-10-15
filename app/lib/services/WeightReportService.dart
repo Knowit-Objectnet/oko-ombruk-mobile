@@ -6,8 +6,9 @@ import 'package:ombruk/models/WeightReport.dart';
 import 'package:ombruk/services/forms/report/ReportGetForm.dart';
 import 'package:ombruk/services/forms/report/ReportPatchForm.dart';
 import 'package:ombruk/services/interfaces/IApi.dart';
+import 'package:ombruk/services/interfaces/IWeightReportService.dart';
 
-class WeightReportService {
+class WeightReportService implements IWeightReportService{
   final IApi _api;
   WeightReportService(this._api);
 
