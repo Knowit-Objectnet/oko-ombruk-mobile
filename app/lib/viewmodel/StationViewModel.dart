@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:ombruk/models/Station.dart';
-import 'package:ombruk/services/StationService.dart';
 import 'package:ombruk/models/CustomResponse.dart';
 import 'package:ombruk/services/forms/station/StationGetForm.dart';
 import 'package:ombruk/services/forms/station/StationPatchForm.dart';
 import 'package:ombruk/services/forms/station/StationPostForm.dart';
-import 'package:ombruk/services/serviceLocator.dart';
+import 'package:ombruk/services/interfaces/IStationService.dart';
 import 'package:ombruk/viewmodel/BaseViewModel.dart';
 
 class StationViewModel extends BaseViewModel {
-  final StationService _stationService;
+  final IStationService _stationService;
 
   List<Station> _stations = [];
 

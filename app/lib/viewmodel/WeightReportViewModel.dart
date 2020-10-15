@@ -1,14 +1,13 @@
-import 'package:flutter/cupertino.dart';
 import 'package:ombruk/models/CustomResponse.dart';
 import 'package:ombruk/models/WeightReport.dart';
-import 'package:ombruk/services/WeightReportService.dart';
 import 'package:ombruk/services/forms/report/ReportGetForm.dart';
 import 'package:ombruk/services/forms/report/ReportPatchForm.dart';
 import 'package:ombruk/services/interfaces/ISecureStorageService.dart';
+import 'package:ombruk/services/interfaces/IWeightReportService.dart';
 import 'package:ombruk/viewmodel/BaseViewModel.dart';
 
 class WeightReportViewModel extends BaseViewModel {
-  final WeightReportService _weightReportService;
+  final IWeightReportService _weightReportService;
   ISecureStorageService _secureStorageService;
   WeightReportViewModel(this._weightReportService, this._secureStorageService);
 

@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:ombruk/models/Partner.dart';
-import 'package:ombruk/services/PartnerService.dart';
 import 'package:ombruk/models/CustomResponse.dart';
 import 'package:ombruk/services/forms/Partner/PartnerGetForm.dart';
 import 'package:ombruk/services/forms/Partner/PartnerPatchForm.dart';
 import 'package:ombruk/services/forms/Partner/PartnerPostForm.dart';
+import 'package:ombruk/services/interfaces/IPartnerService.dart';
 import 'package:ombruk/viewmodel/BaseViewModel.dart';
 
 class PartnerViewModel extends BaseViewModel {
-  final PartnerService _partnerService;
+  final IPartnerService _partnerService;
 
   List<Partner> _partners = [];
 
