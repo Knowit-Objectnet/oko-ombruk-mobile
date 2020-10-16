@@ -3,6 +3,7 @@ import 'package:ombruk/Routes.dart';
 import 'package:ombruk/ui/app/TabView.dart';
 import 'package:ombruk/ui/tabs/calendar/CalendarScreen.dart';
 import 'package:ombruk/ui/tabs/notifications/NotificationScreen.dart';
+import 'package:ombruk/ui/tabs/weightreport/WeightReportScreen.dart';
 
 class AppRouter {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -20,6 +21,8 @@ class AppRouter {
             child: Text("Statistikk"),
           ),
         );
+      case Routes.WeightReportView:
+        return MaterialPageRoute(builder: (_) => WeightReportScreen());
       default:
         return MaterialPageRoute(
           builder: (_) => Scaffold(

@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
-
-import 'package:ombruk/services/PickupService.dart';
 import 'package:ombruk/services/forms/pickup/PickupPostForm.dart';
-import 'package:ombruk/services/serviceLocator.dart';
+import 'package:ombruk/services/interfaces/IPickupService.dart';
 import 'package:ombruk/models/CustomResponse.dart';
 import 'package:ombruk/viewmodel/BaseViewModel.dart';
 
 class PickupViewModel extends BaseViewModel {
-  final PickupService _pickupService;
+  final IPickupService _pickupService;
   PickupViewModel(this._pickupService);
 
   Future<bool> addPickup({

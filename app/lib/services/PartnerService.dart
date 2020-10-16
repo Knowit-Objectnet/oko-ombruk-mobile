@@ -9,8 +9,9 @@ import 'package:ombruk/services/forms/Partner/PartnerGetForm.dart';
 import 'package:ombruk/services/forms/Partner/PartnerPatchForm.dart';
 import 'package:ombruk/services/forms/Partner/PartnerPostForm.dart';
 import 'package:ombruk/services/interfaces/IApi.dart';
+import 'package:ombruk/services/interfaces/IPartnerService.dart';
 
-class PartnerService {
+class PartnerService implements IPartnerService {
   final IApi _api;
   PartnerService(this._api);
 

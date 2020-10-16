@@ -9,8 +9,13 @@ import 'package:ombruk/services/StationService.dart';
 import 'package:ombruk/services/WeightReportService.dart';
 import 'package:ombruk/services/interfaces/IApi.dart';
 import 'package:ombruk/services/interfaces/IAuthenticationService.dart';
+import 'package:ombruk/services/interfaces/ICalendarService.dart';
 import 'package:ombruk/services/interfaces/INavigatorService.dart';
+import 'package:ombruk/services/interfaces/IPartnerService.dart';
+import 'package:ombruk/services/interfaces/IPickupService.dart';
 import 'package:ombruk/services/interfaces/ISecureStorageService.dart';
+import 'package:ombruk/services/interfaces/IStationService.dart';
+import 'package:ombruk/services/interfaces/IWeightReportService.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 
@@ -33,19 +38,19 @@ List<SingleChildWidget> dependantServices = [
   ProxyProvider2<ISecureStorageService, IAuthenticationService, IApi>(
     update: (context, secureStorage, auth, api) => Api(secureStorage, auth),
   ),
-  ProxyProvider<IApi, CalendarService>(
+  ProxyProvider<IApi, ICalendarService>(
     update: (context, api, _) => CalendarService(api),
   ),
-  ProxyProvider<IApi, PartnerService>(
+  ProxyProvider<IApi, IPartnerService>(
     update: (context, api, _) => PartnerService(api),
   ),
-  ProxyProvider<IApi, PickupService>(
+  ProxyProvider<IApi,IPickupService>(
     update: (context, api, _) => PickupService(api),
   ),
-  ProxyProvider<IApi, StationService>(
+  ProxyProvider<IApi, IStationService>(
     update: (context, api, _) => StationService(api),
   ),
-  ProxyProvider<IApi, WeightReportService>(
+  ProxyProvider<IApi, IWeightReportService>(
     update: (context, api, _) => WeightReportService(api),
   ),
 ];

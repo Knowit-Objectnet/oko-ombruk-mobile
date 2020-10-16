@@ -8,8 +8,9 @@ import 'package:ombruk/services/forms/station/StationGetForm.dart';
 import 'package:ombruk/services/forms/station/StationPatchForm.dart';
 import 'package:ombruk/services/forms/station/StationPostForm.dart';
 import 'package:ombruk/services/interfaces/IApi.dart';
+import 'package:ombruk/services/interfaces/IStationService.dart';
 
-class StationService {
+class StationService implements IStationService {
   final IApi _api;
   StationService(this._api);
 
