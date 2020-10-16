@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ombruk/ui/views/BaseWidget.dart';
+import 'package:ombruk/ui/shared/widgets/BaseWidget.dart';
 import 'package:ombruk/viewmodel/BaseViewModel.dart';
 import 'package:ombruk/viewmodel/LoginWebViewModel.dart';
 import 'package:provider/provider.dart';

@@ -9,5 +9,5 @@ abstract class INavigatorService {
 
   void onTabChanged(GlobalKey<NavigatorState> key);
 
-  set initialKey(GlobalKey<NavigatorState> key);
+  GlobalKey<NavigatorState> get initialKey;
 }

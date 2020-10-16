@@ -5,7 +5,7 @@
 import "package:flutter/material.dart";
 import 'package:flutter/cupertino.dart';
 import 'package:ombruk/ui/app/TabView.dart';
-import 'package:ombruk/ui/views/BaseWidget.dart';
+import 'package:ombruk/ui/shared/widgets/BaseWidget.dart';
 import 'package:ombruk/viewmodel/AppViewModel.dart';
 import 'package:ombruk/viewmodel/BaseViewModel.dart';
 import 'package:provider/provider.dart';
@@ -23,11 +23,9 @@ class App extends StatelessWidget {
           return SplashScreen();
         }
         if (model.role == null) {
-          print("hello login");
           return LoginWebView();
         } else {
-          print("hello tab");
-          return TabView(model.role);
+          return TabView();
         }
       },
     );

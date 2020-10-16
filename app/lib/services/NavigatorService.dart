@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:ombruk/const/Routes.dart';
 import 'package:ombruk/services/interfaces/INavigatorService.dart';
-import 'package:ombruk/ui/app/TabView.dart';
+import 'package:ombruk/ui/app/App.dart';
 
 class NavigatorService implements INavigatorService {
-  GlobalKey<NavigatorState> _initialKey;
+  static GlobalKey<NavigatorState> _initialKey = GlobalKey<NavigatorState>();
   GlobalKey<NavigatorState> _navigatorKey;
 
   @override
@@ -17,9 +18,7 @@ class NavigatorService implements INavigatorService {
     if (_navigatorKey != null) {
       _navigatorKey.currentState.pushNamed(routeName, arguments: arguments);
     } else {
-      assert(arguments != null);
-      _initialKey.currentState
-          .push(MaterialPageRoute(builder: (_) => TabView(arguments)));
+      _initialKey.currentState.pushReplacementNamed(Routes.TabView);
     }
   }
 
@@ -29,14 +28,12 @@ class NavigatorService implements INavigatorService {
   }
 
   @override
-  set initialKey(GlobalKey<NavigatorState> key) {
-    if (_initialKey == null) {
-      _initialKey = key;
-    }
+  void toInitial() {
+    _navigatorKey = null;
+    _initialKey.currentState.pushAndRemoveUntil(
+        MaterialPageRoute(builder: (_) => App()), (route) => route == null);
   }
 
   @override
-  void toInitial() {
-    _initialKey.currentState.pop();
-  }
+  GlobalKey<NavigatorState> get initialKey => _initialKey;
 }

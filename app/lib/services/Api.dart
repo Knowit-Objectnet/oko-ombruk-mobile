@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:http/http.dart';
+import 'package:ombruk/const/ApiEndpoint.dart';
 import 'package:ombruk/models/CustomResponse.dart';
 import 'package:ombruk/globals.dart' as globals;
 import 'package:ombruk/services/forms/IForm.dart';
@@ -30,8 +31,8 @@ class Api implements IApi {
   }
 
   Future<CustomResponse<String>> getRequest(String path, IForm form) async {
-    Uri uri = Uri.https(globals.baseUrlStripped,
-        '${globals.requiredPath}/$path', form.encode());
+    Uri uri = Uri.https(ApiEndpoint.baseUrlStripped,
+        '${ApiEndpoint.requiredPath}/$path', form.encode());
     final Response response = await get(uri, headers: _headers);
 
     // This should probably be done differently, but I'm improving this incrementally.
@@ -44,8 +45,8 @@ class Api implements IApi {
   }
 
   Future<CustomResponse<String>> postRequest(String path, IForm form) async {
-    Uri uri =
-        Uri.https(globals.baseUrlStripped, '${globals.requiredPath}/$path');
+    Uri uri = Uri.https(
+        ApiEndpoint.baseUrlStripped, '${ApiEndpoint.requiredPath}/$path');
 
     return await _authorizedRequest(
         post, [uri], {#headers: _headers, #body: jsonEncode(form.encode())});
@@ -55,15 +56,15 @@ class Api implements IApi {
     String path,
     IForm form,
   ) async {
-    Uri uri = Uri.https(globals.baseUrlStripped,
-        '${globals.requiredPath}/$path', form.encode());
+    Uri uri = Uri.https(ApiEndpoint.baseUrlStripped,
+        '${ApiEndpoint.requiredPath}/$path', form.encode());
 
     return await _authorizedRequest(delete, [uri], {#headers: _headers});
   }
 
   Future<CustomResponse<String>> patchRequest(String path, IForm form) async {
-    Uri uri =
-        Uri.https(globals.baseUrlStripped, '${globals.requiredPath}/$path');
+    Uri uri = Uri.https(
+        ApiEndpoint.baseUrlStripped, '${ApiEndpoint.requiredPath}/$path');
 
     return await _authorizedRequest(
         patch, [uri], {#body: jsonEncode(form.encode())});

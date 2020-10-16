@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:ombruk/models/Station.dart';
+import 'package:ombruk/ui/shared/const/CustomColors.dart';
+import 'package:ombruk/ui/shared/const/CustomIcons.dart';
+import 'package:ombruk/ui/shared/widgets/DatePicker.dart';
+import 'package:ombruk/ui/shared/widgets/ReturnButton.dart';
+import 'package:ombruk/ui/shared/widgets/StationPicker.dart';
+import 'package:ombruk/ui/shared/widgets/TextFormInput.dart';
+import 'package:ombruk/ui/shared/widgets/TimePicker.dart';
 import 'package:ombruk/ui/ui.helper.dart';
 import 'package:ombruk/viewmodel/PickupViewModel.dart';
 import 'package:provider/provider.dart';
-
-import 'package:ombruk/ui/customIcons.dart' as customIcons;
-import 'package:ombruk/ui/customColors.dart' as customColors;
-import 'package:ombruk/ui/tabs/components/DatePicker.dart';
-import 'package:ombruk/ui/tabs/components/ReturnButton.dart';
-import 'package:ombruk/ui/tabs/components/StationPicker.dart';
-import 'package:ombruk/ui/tabs/components/TextFormInput.dart';
-import 'package:ombruk/ui/tabs/components/TimePicker.dart';
 
 class AddExtraPickupScreen extends StatefulWidget {
   @override
@@ -32,7 +31,7 @@ class _AddExtraPickupScreenState extends State<AddExtraPickupScreen> {
     return SafeArea(
       child: Scaffold(
         key: _key,
-        backgroundColor: customColors.osloLightBeige,
+        backgroundColor: CustomColors.osloLightBeige,
         body: GestureDetector(
           /// .unfocus() fixes a problem where the TextFormField isn't unfocused
           /// when the user taps outside the TextFormField.
@@ -75,7 +74,7 @@ class _AddExtraPickupScreenState extends State<AddExtraPickupScreen> {
                 padding: EdgeInsets.symmetric(vertical: 16.0),
                 child: RaisedButton(
                   onPressed: _submit,
-                  color: customColors.osloGreen,
+                  color: CustomColors.osloGreen,
                   child: Text('Send'),
                 ),
               ),
@@ -101,7 +100,7 @@ class _AddExtraPickupScreenState extends State<AddExtraPickupScreen> {
       children: <Widget>[
         Padding(
           padding: EdgeInsets.only(right: 8.0),
-          child: customIcons.image(customIcons.calendar),
+          child: CustomIcons.image(CustomIcons.calendar),
         ),
         Expanded(
           child: DatePicker(
@@ -123,7 +122,7 @@ class _AddExtraPickupScreenState extends State<AddExtraPickupScreen> {
       children: <Widget>[
         Padding(
           padding: EdgeInsets.only(right: 8.0),
-          child: customIcons.image(customIcons.clock),
+          child: CustomIcons.image(CustomIcons.clock),
         ),
         Expanded(
           child: Row(

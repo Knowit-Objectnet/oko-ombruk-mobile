@@ -1,20 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:ombruk/models/Partner.dart';
 import 'package:ombruk/models/Station.dart';
+import 'package:ombruk/ui/shared/const/CustomColors.dart';
+import 'package:ombruk/ui/shared/const/CustomIcons.dart';
+import 'package:ombruk/ui/shared/widgets/DatePicker.dart';
+import 'package:ombruk/ui/shared/widgets/PartnerPicker.dart';
+import 'package:ombruk/ui/shared/widgets/StationPicker.dart';
+import 'package:ombruk/ui/shared/widgets/TimePicker.dart';
 
-import 'package:ombruk/ui/tabs/components/PartnerPicker.dart';
-import 'package:ombruk/ui/tabs/components/StationPicker.dart';
-import 'package:ombruk/ui/tabs/components/TimePicker.dart';
-import 'package:ombruk/ui/tabs/components/DatePicker.dart';
-
-import 'package:ombruk/ui/customIcons.dart' as customIcons;
-import 'package:ombruk/ui/customColors.dart' as customColors;
-
-class MessageScreen extends StatefulWidget {
+class MessageView extends StatefulWidget {
   _MessageScreenState createState() => _MessageScreenState();
 }
 
-class _MessageScreenState extends State<MessageScreen> {
+class _MessageScreenState extends State<MessageView> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _emneController = TextEditingController();
   final TextEditingController _messageController = TextEditingController();
@@ -34,7 +32,7 @@ class _MessageScreenState extends State<MessageScreen> {
         onTap: () => FocusScope.of(context).unfocus(),
         onVerticalDragDown: (_) => FocusScope.of(context).unfocus(),
         child: Container(
-          color: customColors.osloLightBeige,
+          color: CustomColors.osloLightBeige,
           padding: EdgeInsets.all(16.0),
           child: Form(
             key: _formKey,
@@ -44,7 +42,7 @@ class _MessageScreenState extends State<MessageScreen> {
                 _subtitle('Emne'),
                 Container(
                   padding: EdgeInsets.only(left: 4.0),
-                  color: customColors.osloWhite,
+                  color: CustomColors.osloWhite,
                   child: TextFormField(
                     controller: _emneController,
                     decoration: InputDecoration(
@@ -82,7 +80,7 @@ class _MessageScreenState extends State<MessageScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
-                    customIcons.image(customIcons.clock),
+                    CustomIcons.image(CustomIcons.clock),
                     Expanded(
                       child: Center(
                         child: Row(
@@ -115,7 +113,7 @@ class _MessageScreenState extends State<MessageScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: <Widget>[
-                    customIcons.image(customIcons.clock),
+                    CustomIcons.image(CustomIcons.clock),
                     Expanded(
                       child: Center(
                         child: Row(
@@ -147,7 +145,7 @@ class _MessageScreenState extends State<MessageScreen> {
                 _subtitle('Melding'),
                 Container(
                   padding: EdgeInsets.only(left: 4.0),
-                  color: customColors.osloWhite,
+                  color: CustomColors.osloWhite,
                   child: TextFormField(
                     controller: _messageController,
                     decoration: InputDecoration(
@@ -168,7 +166,7 @@ class _MessageScreenState extends State<MessageScreen> {
                   padding: EdgeInsets.symmetric(vertical: 16.0),
                   child: FlatButton(
                     onPressed: _submitForm,
-                    color: customColors.osloLightGreen,
+                    color: CustomColors.osloLightGreen,
                     child: Text('Send'),
                   ),
                 ),
