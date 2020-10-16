@@ -8,7 +8,7 @@ import 'package:ombruk/services/forms/report/ReportPatchForm.dart';
 import 'package:ombruk/services/interfaces/IApi.dart';
 import 'package:ombruk/services/interfaces/IWeightReportService.dart';
 
-class WeightReportService implements IWeightReportService{
+class WeightReportService implements IWeightReportService {
   final IApi _api;
   WeightReportService(this._api);
 
@@ -18,6 +18,7 @@ class WeightReportService implements IWeightReportService{
   ) async {
     CustomResponse response =
         await _api.getRequest(ApiEndpoint.weightReports, form);
+    print(response.statusCode);
 
     if (!response.success) {
       return response;

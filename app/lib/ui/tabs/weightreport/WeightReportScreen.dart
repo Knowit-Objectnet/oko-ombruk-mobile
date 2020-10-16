@@ -12,10 +12,26 @@ import 'package:ombruk/ui/tabs/weightreport/WeightReportDialog.dart';
 import 'package:ombruk/ui/ui.helper.dart';
 import 'package:ombruk/ui/customColors.dart' as customColors;
 
+class _Subtitle extends StatelessWidget {
+  final String text;
+  _Subtitle({@required this.text});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 4.0),
+      child: Text(
+        text,
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 16.0,
+        ),
+      ),
+    );
+  }
+}
+
 class WeightReportScreen extends StatelessWidget {
-
-
-
   Widget _subtitle(String text) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 4.0),
@@ -38,68 +54,132 @@ class WeightReportScreen extends StatelessWidget {
         child: model.state == ViewState.Busy
             ? CircularProgressIndicator()
             : Column(
-          children: [
-          RefreshIndicator(
-          onRefresh: () async {
-            final bool success = await model.fetchWeightReports();
-            if (!success) {
-              uiHelper.showSnackbar(context, 'Kunne ikke hente vekt rapporter');
-            }
-          },
-          child: ListView(
-            padding: EdgeInsets.symmetric(horizontal: 16.0),
-            children: _buildList(),
-          ),
-        )
-        ],
-        ),
-      )
+                children: [
+                  RefreshIndicator(
+                    onRefresh: () async {
+                      final bool success = await model.fetchWeightReports();
+                      if (!success) {
+                        uiHelper.showSnackbar(
+                            context, 'Kunne ikke hente vekt rapporter');
+                      }
+                    },
+                    child: ListView(
+                      shrinkWrap: true,
+                      padding: EdgeInsets.symmetric(horizontal: 16.0),
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.symmetric(vertical: 8.0),
+                          child: Text(
+                            'Vektuttak',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16.0,
+                            ),
+                          ),
+                        ),
+                        _Subtitle(text: 'Ikke rapportert'),
+                        if (model.nonReportedList.isEmpty)
+                          ...model.nonReportedList
+                              .map((report) => ListElementWithoutWeight(
+                                    report,
+                                    () => _showNewWeightDialog(context, model,
+                                        weightReport: report),
+                                  ))
+                              .toList(),
+                        _Subtitle(text: 'Tidligere uttak'),
+                        if (model.reportedList.isEmpty)
+                          ...model.reportedList
+                              .map((report) => ListElementWithWeight(
+                                    report,
+                                    () => _showWeightEditDialog(
+                                      context,
+                                      model,
+                                      weightReport: report,
+                                    ),
+                                  ))
+                              .toList(),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+      ),
     );
   }
 
+  // List<Widget> _buildList() {
+  //   List<Widget> list = [];
+  //   list.add(Padding(
+  //     padding: EdgeInsets.symmetric(vertical: 8.0),
+  //     child: Text(
+  //       'Vektuttak',
+  //       style: TextStyle(
+  //         fontWeight: FontWeight.bold,
+  //         fontSize: 16.0,
+  //       ),
+  //     ),
+  //   ));
+  //   list.add(_subtitle('Ikke rapportert'));
+  //   for (WeightReport weightReport
+  //       in widget.weightReportViewModel.nonReportedList) {
+  //     list.add(
+  //       ListElementWithoutWeight(
+  //         weightReport,
+  //         () => _showNewWeightDialog(weightReport: weightReport),
+  //       ),
+  //     );
+  //   }
+  //   list.add(_subtitle('Tidligere uttak'));
+  //   for (WeightReport weightReport
+  //       in widget.weightReportViewModel.reportedList) {
+  //     list.add(
+  //       ListElementWithWeight(
+  //         weightReport,
+  //         () => _showWeightEditDialog(weightReport: weightReport),
+  //       ),
+  //     );
+  //   }
+  //   return list;
+  // }
 
-  List<Widget> _buildList() {
-    List<Widget> list = [];
-    list.add(Padding(
-      padding: EdgeInsets.symmetric(vertical: 8.0),
-      child: Text(
-        'Vektuttak',
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 16.0,
-        ),
-      ),
-    ));
-    list.add(_subtitle('Ikke rapportert'));
-    for (WeightReport weightReport
-    in widget.weightReportViewModel.nonReportedList) {
-      list.add(
-        ListElementWithoutWeight(
-          weightReport,
-              () => _showNewWeightDialog(weightReport: weightReport),
-        ),
-      );
+  Future<void> _showWeightEditDialog(
+    BuildContext context,
+    WeightReportViewModel model, {
+    @required WeightReport weightReport,
+  }) async {
+    Future<void> _updateWeight(int eventID, int newWeight) async {
+      uiHelper.showLoading(context);
+      final bool success = await model.updateWeight(weightReport, newWeight);
+      uiHelper.hideLoading(context);
+
+      if (success) {
+        Navigator.pop(context); // Close popup
+        uiHelper.showSnackbar(context, 'OK!');
+      } else {
+        uiHelper.showSnackbar(context, 'Kunne ikke rapportere vekten');
+      }
     }
-    list.add(_subtitle('Tidligere uttak'));
-    for (WeightReport weightReport
-    in widget.weightReportViewModel.reportedList) {
-      list.add(
-        ListElementWithWeight(
-          weightReport,
-              () => _showWeightEditDialog(weightReport: weightReport),
-        ),
-      );
-    }
-    return list;
+
+    showDialog(
+      context: context,
+      builder: (_) {
+        return WeightReportDialog(
+            onSubmit: (int newWeight) {
+              _updateWeight(weightReport.eventID, newWeight);
+            },
+            initialWeight: weightReport.weight);
+      },
+    );
   }
 
-  Future<void> _showNewWeightDialog({
+  Future<void> _showNewWeightDialog(
+    BuildContext context,
+    WeightReportViewModel model, {
     @required WeightReport weightReport,
   }) async {
     Future<void> _submitNewWeight(int newWeight) async {
       uiHelper.showLoading(context);
-      final bool success =
-      await widget.weightReportViewModel.addWeight(weightReport, newWeight);
+      final bool success = await model.addWeight(weightReport, newWeight);
       uiHelper.hideLoading(context);
       if (success) {
         Navigator.pop(context); // Close popup
@@ -120,7 +200,6 @@ class WeightReportScreen extends StatelessWidget {
       },
     );
   }
-
 
 /*
     @override
@@ -193,7 +272,7 @@ class _WeightReportScreenStateConsumer
       onRefresh: _fetchData,
       child: ListView(
         padding: EdgeInsets.symmetric(horizontal: 16.0),
-        children: _buildList(),
+        children: [],
       ),
     );
   }
@@ -222,41 +301,6 @@ class _WeightReportScreenStateConsumer
     setState(() {
       _initialLoaded = true;
     });
-  }
-
-  List<Widget> _buildList() {
-    List<Widget> list = [];
-    list.add(Padding(
-      padding: EdgeInsets.symmetric(vertical: 8.0),
-      child: Text(
-        'Vektuttak',
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 16.0,
-        ),
-      ),
-    ));
-    list.add(_subtitle('Ikke rapportert'));
-    for (WeightReport weightReport
-        in widget.weightReportViewModel.nonReportedList) {
-      list.add(
-        ListElementWithoutWeight(
-          weightReport,
-          () => _showNewWeightDialog(weightReport: weightReport),
-        ),
-      );
-    }
-    list.add(_subtitle('Tidligere uttak'));
-    for (WeightReport weightReport
-        in widget.weightReportViewModel.reportedList) {
-      list.add(
-        ListElementWithWeight(
-          weightReport,
-          () => _showWeightEditDialog(weightReport: weightReport),
-        ),
-      );
-    }
-    return list;
   }
 
   Future<void> _showNewWeightDialog({
@@ -313,19 +357,6 @@ class _WeightReportScreenStateConsumer
             },
             initialWeight: weightReport.weight);
       },
-    );
-  }
-
-  Widget _subtitle(String text) {
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: 4.0),
-      child: Text(
-        text,
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 16.0,
-        ),
-      ),
     );
   }
 }
