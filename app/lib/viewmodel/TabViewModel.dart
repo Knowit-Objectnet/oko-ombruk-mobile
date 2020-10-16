@@ -35,6 +35,11 @@ class TabViewModel extends BaseViewModel {
             Icons.insert_chart,
             GlobalKey<NavigatorState>(debugLabel: "partnerStatistikk"),
             "/statistikk"),
+        NavItem(
+          "Weight",
+          Icons.emoji_transportation,
+          GlobalKey<NavigatorState>(debugLabel: "partnerWeight"),
+          "/weight")
       ],
     ),
     KeycloakRoles.reg_employee: AppView2(
@@ -66,6 +71,11 @@ class TabViewModel extends BaseViewModel {
             "/kalender"),
         NavItem("Varsler", Icons.notifications, GlobalKey<NavigatorState>(),
             "/varsler"),
+        NavItem(
+            "Weight",
+            Icons.emoji_transportation,
+            GlobalKey<NavigatorState>(debugLabel: "partnerWeight"),
+            "/weight")
       ],
     ),
   };

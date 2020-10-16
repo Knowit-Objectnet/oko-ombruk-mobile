@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:ombruk/ui/views/BaseWidget.dart';
+import 'package:ombruk/viewmodel/BaseViewModel.dart';
 import 'package:ombruk/viewmodel/WeightReportViewModel.dart';
 import 'package:provider/provider.dart';
 
 import 'package:ombruk/models/WeightReport.dart';
-import 'package:ombruk/services/serviceLocator.dart';
 
 import 'package:ombruk/ui/tabs/weightreport/ListElementWithoutWeight.dart';
 import 'package:ombruk/ui/tabs/weightreport/ListElementWithWeight.dart';
@@ -12,10 +13,120 @@ import 'package:ombruk/ui/ui.helper.dart';
 import 'package:ombruk/ui/customColors.dart' as customColors;
 
 class WeightReportScreen extends StatelessWidget {
+
+
+
+  Widget _subtitle(String text) {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 4.0),
+      child: Text(
+        text,
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 16.0,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    return BaseWidget(
+      model: WeightReportViewModel(Provider.of(context), Provider.of(context)),
+      onModelReady: (WeightReportViewModel model) => model.fetchWeightReports(),
+      builder: (context, WeightReportViewModel model, _) => Container(
+        child: model.state == ViewState.Busy
+            ? CircularProgressIndicator()
+            : Column(
+          children: [
+          RefreshIndicator(
+          onRefresh: () async {
+            final bool success = await model.fetchWeightReports();
+            if (!success) {
+              uiHelper.showSnackbar(context, 'Kunne ikke hente vekt rapporter');
+            }
+          },
+          child: ListView(
+            padding: EdgeInsets.symmetric(horizontal: 16.0),
+            children: _buildList(),
+          ),
+        )
+        ],
+        ),
+      )
+    );
+  }
+
+
+  List<Widget> _buildList() {
+    List<Widget> list = [];
+    list.add(Padding(
+      padding: EdgeInsets.symmetric(vertical: 8.0),
+      child: Text(
+        'Vektuttak',
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 16.0,
+        ),
+      ),
+    ));
+    list.add(_subtitle('Ikke rapportert'));
+    for (WeightReport weightReport
+    in widget.weightReportViewModel.nonReportedList) {
+      list.add(
+        ListElementWithoutWeight(
+          weightReport,
+              () => _showNewWeightDialog(weightReport: weightReport),
+        ),
+      );
+    }
+    list.add(_subtitle('Tidligere uttak'));
+    for (WeightReport weightReport
+    in widget.weightReportViewModel.reportedList) {
+      list.add(
+        ListElementWithWeight(
+          weightReport,
+              () => _showWeightEditDialog(weightReport: weightReport),
+        ),
+      );
+    }
+    return list;
+  }
+
+  Future<void> _showNewWeightDialog({
+    @required WeightReport weightReport,
+  }) async {
+    Future<void> _submitNewWeight(int newWeight) async {
+      uiHelper.showLoading(context);
+      final bool success =
+      await widget.weightReportViewModel.addWeight(weightReport, newWeight);
+      uiHelper.hideLoading(context);
+      if (success) {
+        Navigator.pop(context); // Close popup
+        uiHelper.showSnackbar(context, 'OK!');
+      } else {
+        uiHelper.showSnackbar(context, 'Kunne ikke rapportere vekten');
+      }
+    }
+
+    showDialog(
+      context: context,
+      builder: (_) {
+        return WeightReportDialog(
+          onSubmit: (int newWeight) {
+            _submitNewWeight(newWeight);
+          },
+        );
+      },
+    );
+  }
+
+
+/*
+    @override
+  Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context) => serviceLocator<WeightReportViewModel>(),
+      create: (context) => WeightReportViewModel(Provider.of(context), Provider.of(context)),
       child: Consumer<WeightReportViewModel>(
         builder: (
           context,
@@ -29,6 +140,7 @@ class WeightReportScreen extends StatelessWidget {
       ),
     );
   }
+ */
 }
 
 class _WeightReportScreenConsumed extends StatefulWidget {

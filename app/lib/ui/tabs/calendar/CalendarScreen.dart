@@ -17,6 +17,7 @@ import 'package:ombruk/ui/ui.helper.dart';
 class CalendarScreen extends StatelessWidget {
   bool _showHorizontalCalendar = true;
   get verticalCalendar => _showHorizontalCalendar;
+
   List<CalendarEvent> _getFilteredList(CalendarViewModel model) {
     if (model.calendarEvents == null) {
       return [];

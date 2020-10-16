@@ -19,7 +19,6 @@ class WeightReportViewModel extends BaseViewModel {
   List<WeightReport> get reportedList => _reportedList;
 
   Future<bool> fetchWeightReports() async {
-    //I'd love to remove the userviewmodel dependency but not sure if possible.
     int groupId =
         int.parse(await _secureStorageService.getValue(key: "groupID"));
     ReportGetForm form = ReportGetForm(partnerId: groupId);

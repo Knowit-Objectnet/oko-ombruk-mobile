@@ -4,4 +4,5 @@ class Routes {
   static const String KalenderView = "/kalender";
   static const String VarslerView = "/varsler";
   static const String StatistikkView = "/statistikk";
+  static const String WeightReportView = "/weight";
 }
