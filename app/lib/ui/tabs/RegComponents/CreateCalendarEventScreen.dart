@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:ombruk/models/Partner.dart';
+import 'package:ombruk/models/Station.dart';
+import 'package:ombruk/viewmodel/CalendarViewModel.dart';
 import 'package:provider/provider.dart';
-
-import 'package:ombruk/businessLogic/CalendarViewModel.dart';
-import 'package:ombruk/businessLogic/Partner.dart';
-import 'package:ombruk/businessLogic/Station.dart';
 
 import 'package:ombruk/globals.dart' as globals;
 
@@ -11,7 +10,6 @@ import 'package:ombruk/ui/tabs/components/DatePicker.dart';
 import 'package:ombruk/ui/tabs/components/ReturnButton.dart';
 import 'package:ombruk/ui/tabs/components/TimePicker.dart';
 import 'package:ombruk/ui/tabs/components/WeekdayPicker.dart';
-import 'package:ombruk/ui/tabs/RegComponents/CreateCalendarEventData.dart';
 import 'package:ombruk/ui/ui.helper.dart';
 import 'package:ombruk/ui/customColors.dart' as customColors;
 import 'package:ombruk/ui/customIcons.dart' as customIcons;
@@ -35,8 +33,8 @@ class _CreateCalendarEventScreenConsumedState
     extends State<CreateCalendarEventScreen> {
   final GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
 
-  int _interval = 1;
-  List<globals.Weekdays> _selectedWeekdays = [];
+  int _interval;
+  List<globals.Weekdays> _selectedWeekdays;
   TimeOfDay _startTime = TimeOfDay(hour: 8, minute: 0);
   TimeOfDay _endTime = TimeOfDay(hour: 9, minute: 0);
   DateTime _startDate = DateTime.now();
@@ -214,30 +212,38 @@ class _CreateCalendarEventScreenConsumedState
   }
 
   Future<void> _submitForm() async {
-    CreateCalendarEventData eventData;
-    try {
-      eventData = CreateCalendarEventData.fromData(
-        startDate: _startDate,
-        endDate: _endDate,
-        startTime: _startTime,
-        endTime: _endTime,
-        station: widget.station,
-        partner: widget.partner,
-        weekdays: _selectedWeekdays,
-        interval: _interval,
-      );
-    } catch (e) {
-      uiHelper.showSnackbarUnknownScaffold(
-          _key.currentState,
-          e.toString().substring(
-              11, e.toString().length)); // substring removes 'Exception: '
-      return;
-    }
+    // CreateCalendarEventData eventData;
+    // try {
+    //   eventData = CreateCalendarEventData.fromData(
+    //     startDate: _startDate,
+    //     endDate: _endDate,
+    //     startTime: _startTime,
+    //     endTime: _endTime,
+    //     station: widget.station,
+    //     partner: widget.partner,
+    //     weekdays: _selectedWeekdays,
+    //     interval: _interval,
+    //   );
+    // } catch (e) {
+    //   uiHelper.showSnackbarUnknownScaffold(
+    //       _key.currentState,
+    //       e.toString().substring(
+    //           11, e.toString().length)); // substring removes 'Exception: '
+    //   return;
+    // }
 
     uiHelper.showLoading(context);
     final bool success =
         await Provider.of<CalendarViewModel>(context, listen: false)
-            .createCalendarEvent(eventData);
+            .createCalendarEvent(
+                _startDate,
+                _endDate,
+                _startTime,
+                _endTime,
+                widget.station.id,
+                widget.partner.id,
+                _selectedWeekdays,
+                _interval);
     uiHelper.hideLoading(context);
     if (success) {
       Navigator.pop(context, true);

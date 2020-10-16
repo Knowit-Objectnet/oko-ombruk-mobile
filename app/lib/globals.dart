@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 final String keycloakBaseUrl =
     'https://keycloak.staging.oko.knowit.no:8443/auth/realms/staging';
 
@@ -64,9 +66,16 @@ enum KeycloakRoles {
   reuse_station
 }
 
-enum Weekdays { monday, tuesday, wednesday, thursday, friday }
-
-/// Removes the microseconds from [DateTime] so that the backend don't whine
-String getDateString(DateTime dateTime) {
-  return dateTime?.toIso8601String()?.substring(0, 19);
+/// returns a value from [globals.KeycloakRoles] or null if no match
+KeycloakRoles getRole(String role) {
+  if (role == describeEnum(KeycloakRoles.partner)) {
+    return KeycloakRoles.partner;
+  } else if (role == describeEnum(KeycloakRoles.reg_employee)) {
+    return KeycloakRoles.reg_employee;
+  } else if (role == describeEnum(KeycloakRoles.reuse_station)) {
+    return KeycloakRoles.reuse_station;
+  }
+  return null;
 }
+
+enum Weekdays { monday, tuesday, wednesday, thursday, friday }

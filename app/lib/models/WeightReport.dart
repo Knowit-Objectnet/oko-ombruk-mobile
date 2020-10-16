@@ -1,4 +1,4 @@
-import 'package:ombruk/globals.dart' as globals;
+import 'package:ombruk/utils/DateUtils.dart';
 
 class WeightReport {
   final int reportID;
@@ -64,10 +64,10 @@ class WeightReport {
         'eventID': eventID,
         'partnerID': partnerID,
         'station': station.toJson(),
-        'startDateTime': globals.getDateString(startDateTime),
-        'endDateTime': globals.getDateString(endDateTime),
+        'startDateTime': DateUtils.getDateString(startDateTime),
+        'endDateTime': DateUtils.getDateString(endDateTime),
         'weight': weight,
-        'reportedDateTime': globals.getDateString(reportedDateTime),
+        'reportedDateTime': DateUtils.getDateString(reportedDateTime),
       };
 
   @override

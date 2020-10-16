@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:ombruk/models/Station.dart';
 import 'package:ombruk/ui/ui.helper.dart';
+import 'package:ombruk/viewmodel/PickupViewModel.dart';
 import 'package:provider/provider.dart';
-
-import 'package:ombruk/businessLogic/Station.dart';
-import 'package:ombruk/businessLogic/PickupViewModel.dart';
 
 import 'package:ombruk/ui/customIcons.dart' as customIcons;
 import 'package:ombruk/ui/customColors.dart' as customColors;
