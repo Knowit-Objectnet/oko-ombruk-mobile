@@ -1,23 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:ombruk/globals.dart';
+import 'package:ombruk/services/interfaces/IAuthenticationService.dart';
 import 'package:ombruk/services/interfaces/INavigatorService.dart';
-import 'package:ombruk/ui/app/AppView2.dart';
+import 'package:ombruk/ui/app/AppView.dart';
 import 'package:ombruk/ui/app/NavItem.dart';
 import 'package:ombruk/viewmodel/BaseViewModel.dart';
-import 'package:ombruk/globals.dart' as globals;
 
 class TabViewModel extends BaseViewModel {
   INavigatorService _navigatorService;
-  final globals.KeycloakRoles _role;
+  IAuthenticationService _authenticationService;
   int _index;
-  TabViewModel(this._role, this._navigatorService) {
-    print("Model $_role");
+  KeycloakRoles _role;
+  TabViewModel(this._navigatorService, this._authenticationService) {
+    this._role = getRole(_authenticationService.userModel.roles
+        .firstWhere((role) => getRole(role) != null, orElse: () => null));
     _index = tabItems[_role].defaultIndex;
     _navigatorService
         .onTabChanged(tabItems[_role].navItems[_index].navigatorKey);
   }
-  static final Map<KeycloakRoles, AppView2> tabItems = {
-    KeycloakRoles.partner: AppView2(
+  static final Map<KeycloakRoles, AppView> tabItems = {
+    KeycloakRoles.partner: AppView(
       defaultIndex: 1,
       navItems: [
         NavItem(
@@ -43,7 +45,7 @@ class TabViewModel extends BaseViewModel {
         // )
       ],
     ),
-    KeycloakRoles.reg_employee: AppView2(
+    KeycloakRoles.reg_employee: AppView(
       defaultIndex: 1,
       navItems: [
         NavItem(
@@ -65,7 +67,7 @@ class TabViewModel extends BaseViewModel {
             "/statistikk"),
       ],
     ),
-    KeycloakRoles.reuse_station: AppView2(
+    KeycloakRoles.reuse_station: AppView(
       defaultIndex: 1,
       navItems: [
         NavItem("Kalender", Icons.calendar_today, GlobalKey<NavigatorState>(),
@@ -77,7 +79,7 @@ class TabViewModel extends BaseViewModel {
       ],
     ),
   };
-  AppView2 get view => tabItems[_role];
+  AppView get view => tabItems[_role];
   // Map<globals.KeycloakRoles, AppView> _routes = Map.from({
   //   globals.KeycloakRoles.partner: partnerView,
   //   globals.KeycloakRoles.reg_employee: employeeView,

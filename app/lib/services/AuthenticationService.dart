@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:meta/meta.dart';
-import 'package:ombruk/businessLogic/UserModel.dart';
+import 'package:ombruk/const/ApiEndpoint.dart';
+import 'package:ombruk/models/UserModel.dart';
 import 'package:ombruk/services/SecureStorageService.dart';
 import 'package:ombruk/services/interfaces/IAuthenticationService.dart';
 import 'package:ombruk/services/interfaces/ISecureStorageService.dart';
@@ -20,7 +21,6 @@ class AuthenticationService implements IAuthenticationService {
   UserModel _userModel;
 
   Future<UserModel> loadFromStorage() async {
-    print("HELLO");
     final String accessToken =
         await _localStorageService.getValue(key: "accessToken");
     final String refreshToken =
@@ -56,7 +56,8 @@ class AuthenticationService implements IAuthenticationService {
     assert(refreshToken != null);
     assert(clientID != null);
 
-    String url = '${globals.keycloakBaseUrl}/protocol/openid-connect/logout';
+    String url =
+        '${ApiEndpoint.keycloakBaseUrl}/protocol/openid-connect/logout';
     Map<String, String> headers = {};
     if (accessToken != null) {
       headers['Authorization'] = 'Bearer ' + accessToken;
@@ -115,7 +116,7 @@ class AuthenticationService implements IAuthenticationService {
     assert(clientId != null);
     assert(refreshToken != null);
 
-    String url = '${globals.keycloakBaseUrl}/protocol/openid-connect/token';
+    String url = '${ApiEndpoint.keycloakBaseUrl}/protocol/openid-connect/token';
     Map<String, String> headers = {};
     headers['Content-Type'] = 'application/x-www-form-urlencoded';
 
@@ -161,7 +162,8 @@ class AuthenticationService implements IAuthenticationService {
 
   @override
   Future<CustomResponse> requestLogOut1() async {
-    String url = '${globals.keycloakBaseUrl}/protocol/openid-connect/logout';
+    String url =
+        '${ApiEndpoint.keycloakBaseUrl}/protocol/openid-connect/logout';
     Map<String, String> headers = {};
     if (userModel.accessToken != null) {
       headers['Authorization'] = 'Bearer ' + userModel.accessToken;
@@ -177,6 +179,7 @@ class AuthenticationService implements IAuthenticationService {
           'refresh_token': userModel.refreshToken
         },
       );
+      _userModel = null;
       return CustomResponse(
         success: response.statusCode == 204,
         statusCode: response.statusCode,

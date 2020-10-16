@@ -1,25 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:ombruk/ClassRouter.dart';
-import 'package:ombruk/globals.dart';
-import 'package:ombruk/ui/tabs/bottomAppBarComponents/DrawerButton.dart';
-import 'package:ombruk/ui/tabs/myPage/MyPage.dart';
-import 'package:ombruk/ui/views/BaseWidget.dart';
+import 'package:ombruk/AppRouter.dart';
+import 'package:ombruk/ui/app/DrawerButton.dart';
+import 'package:ombruk/ui/myPage/MyPageView.dart';
+import 'package:ombruk/ui/shared/const/CustomColors.dart';
+import 'package:ombruk/ui/shared/const/CustomIcons.dart';
+import 'package:ombruk/ui/shared/widgets/BaseWidget.dart';
 import 'package:ombruk/viewmodel/TabViewModel.dart';
-import 'package:ombruk/ui/customColors.dart' as customColors;
-import 'package:ombruk/ui/customIcons.dart' as customIcons;
 import 'package:provider/provider.dart';
 
 class TabView extends StatelessWidget {
-  final KeycloakRoles role;
-  TabView(this.role) {
-    print("View $role");
-  }
-
   @override
   Widget build(BuildContext context) {
     GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
     return BaseWidget(
-      model: TabViewModel(role, Provider.of(context)),
+      model: TabViewModel(Provider.of(context), Provider.of(context)),
       builder: (context, TabViewModel model, _) => Scaffold(
           // App bar
           key: _scaffoldKey,
@@ -32,7 +26,7 @@ class TabView extends StatelessWidget {
               ),
             ),
             centerTitle: false,
-            backgroundColor: customColors.osloWhite,
+            backgroundColor: CustomColors.osloWhite,
             elevation: 0,
 
             // Menu item
@@ -69,39 +63,41 @@ class TabView extends StatelessWidget {
           // Side menu drawer
           drawer: Drawer(
             child: Container(
-              color: customColors.osloDarkBlue,
+              color: CustomColors.osloDarkBlue,
               child: ListView(
                 children: <Widget>[
                   DrawerButton(
-                    icon: customIcons.partners,
+                    icon: CustomIcons.partners,
                     title: 'Sam. partnere',
                     onTap: () => null,
                     isSelected: false,
                   ),
                   DrawerButton(
-                    icon: customIcons.map,
+                    icon: CustomIcons.map,
                     title: 'Stasjonene',
                     onTap: () => null,
                     isSelected: false,
                   ),
                   DrawerButton(
-                    icon: customIcons.add,
+                    icon: CustomIcons.add,
                     title: 'Opprett hendelse',
                     onTap: null, //_puchCreateOccurrenceScreen,
                     isSelected: false,
                   ),
                   DrawerButton(
-                      icon: customIcons.addDiscrepancy,
+                      icon: CustomIcons.addDiscrepancy,
                       title: 'Send beskjed',
                       onTap: () {},
                       isSelected: false //_selectedIndex == 3,
                       ),
                   DrawerButton(
-                      icon: customIcons.myPage,
+                      icon: CustomIcons.myPage,
                       title: 'Min side',
                       onTap: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => MyPage()));
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => MyPageView()));
                       },
                       isSelected: false //_selectedIndex == 4,
                       ),
@@ -111,7 +107,7 @@ class TabView extends StatelessWidget {
           ),
           // Navigation bar
           bottomNavigationBar: BottomNavigationBar(
-            backgroundColor: customColors.osloDarkBlue,
+            backgroundColor: CustomColors.osloDarkBlue,
             selectedItemColor: Colors.white,
             unselectedItemColor: Colors.grey,
             // Change current index on tap

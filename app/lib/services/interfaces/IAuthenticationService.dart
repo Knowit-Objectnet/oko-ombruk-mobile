@@ -1,5 +1,5 @@
-import 'package:ombruk/businessLogic/UserModel.dart';
 import 'package:ombruk/models/CustomResponse.dart';
+import 'package:ombruk/models/UserModel.dart';
 import 'package:openid_client/openid_client.dart';
 
 abstract class IAuthenticationService {

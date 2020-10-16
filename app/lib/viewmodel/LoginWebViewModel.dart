@@ -1,4 +1,5 @@
-import 'package:ombruk/Routes.dart';
+import 'package:ombruk/const/ApiEndpoint.dart';
+import 'package:ombruk/const/Routes.dart';
 import 'package:ombruk/services/interfaces/IAuthenticationService.dart';
 import 'package:ombruk/services/interfaces/INavigatorService.dart';
 import 'package:ombruk/viewmodel/BaseViewModel.dart';
@@ -15,7 +16,7 @@ class LoginWebViewModel extends BaseViewModel {
     this._authenticationService,
     this._navigatorService,
   ) : super();
-  final Uri uri = Uri.parse('${globals.keycloakBaseUrl}');
+  final Uri uri = Uri.parse('${ApiEndpoint.keycloakBaseUrl}');
   final String clientId = 'flutter-app';
   final List<String> scopes = ['openid', 'profile', 'offline_access'];
   void login() async {

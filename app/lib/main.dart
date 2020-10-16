@@ -24,11 +24,10 @@ class Reir extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    GlobalKey<NavigatorState> initialKey = GlobalKey();
-    Provider.of<INavigatorService>(context).initialKey = initialKey;
+    INavigatorService _navigatorService = Provider.of(context);
     return MaterialApp(
       title: 'REIR',
-      navigatorKey: initialKey,
+      navigatorKey: _navigatorService.initialKey,
       theme: ThemeData(
         fontFamily: 'OsloSansOffice',
         primarySwatch: Colors.blue,
