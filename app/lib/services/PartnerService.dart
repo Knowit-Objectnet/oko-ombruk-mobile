@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:ombruk/const/ApiEndpoint.dart';
 import 'package:ombruk/models/CustomResponse.dart';
 import 'package:ombruk/models/Partner.dart';
-import 'package:ombruk/services/Api.dart';
 import 'package:ombruk/services/forms/Partner/PartnerGetForm.dart';
 import 'package:ombruk/services/forms/Partner/PartnerPatchForm.dart';
 import 'package:ombruk/services/forms/Partner/PartnerPostForm.dart';
@@ -26,7 +25,8 @@ class PartnerService implements IPartnerService {
 
     try {
       List<Partner> partners = List<dynamic>.from(jsonDecode(response.data))
-          .map((partner) => Partner.fromJson(partner));
+          .map((partner) => Partner.fromJson(partner))
+          .toList();
       return CustomResponse(
         success: true,
         statusCode: response.statusCode,

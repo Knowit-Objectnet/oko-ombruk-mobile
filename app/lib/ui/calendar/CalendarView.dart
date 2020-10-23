@@ -3,30 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:ombruk/models/Station.dart';
 import 'package:ombruk/ui/calendar/widgets/HorizontalCalendar/HorizontalCalendar.dart';
 import 'package:ombruk/ui/calendar/widgets/VerticalCalendar/VerticalCalendar.dart';
+import 'package:ombruk/ui/shared/const/CustomColors.dart';
 import 'package:ombruk/ui/shared/widgets/BaseWidget.dart';
 import 'package:ombruk/viewmodel/BaseViewModel.dart';
 import 'package:ombruk/viewmodel/CalendarViewModel.dart';
 import 'package:provider/provider.dart';
-
-import 'package:ombruk/models/CalendarEvent.dart';
 import 'package:ombruk/ui/shared/const/CustomIcons.dart';
 
 class CalendarView extends StatelessWidget {
-  bool _showHorizontalCalendar = true;
-  get verticalCalendar => _showHorizontalCalendar;
-
-  List<CalendarEvent> _getFilteredList(CalendarViewModel model) {
-    if (model.calendarEvents == null) {
-      return [];
-    }
-    if (model.selectedStation == null) {
-      return [];
-    }
-    return model.calendarEvents
-        .where((element) => element.station.name == model.selectedStation.name)
-        .toList();
-  }
-
   @override
   Widget build(BuildContext context) {
     return BaseWidget(
@@ -37,6 +21,19 @@ class CalendarView extends StatelessWidget {
             ? CircularProgressIndicator()
             : Column(
                 children: [
+                  AppBar(
+                    iconTheme: IconThemeData(color: Colors.black),
+                    title: Text(
+                      "Kalender",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 25,
+                      ),
+                    ),
+                    centerTitle: false,
+                    backgroundColor: CustomColors.osloWhite,
+                    elevation: 0,
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
@@ -76,9 +73,10 @@ class CalendarView extends StatelessWidget {
                     ],
                   ),
                   Expanded(
-                      child: (_showHorizontalCalendar)
-                          ? HorizontalCalendar(events: _getFilteredList(model))
-                          : VerticalCalendar(events: _getFilteredList(model))),
+                    child: model.showHorizontalCalendar
+                        ? HorizontalCalendar(events: model.currentStationEvents)
+                        : VerticalCalendar(events: model.currentStationEvents),
+                  ),
                 ],
               ),
       ),

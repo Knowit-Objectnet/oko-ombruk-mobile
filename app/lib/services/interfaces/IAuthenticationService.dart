@@ -23,8 +23,5 @@ abstract class IAuthenticationService {
     int groupID,
   });
 
-  Future<CustomResponse<UserModel>> requestRefreshToken({
-    String clientId,
-    String refreshToken,
-  });
+  Future<CustomResponse<UserModel>> requestRefreshToken();
 }

@@ -1,15 +1,27 @@
 import 'package:ombruk/models/CustomResponse.dart';
 import 'package:ombruk/models/WeightReport.dart';
+import 'package:ombruk/services/DialogService.dart';
+import 'package:ombruk/services/SnackbarService.dart';
 import 'package:ombruk/services/forms/report/ReportGetForm.dart';
 import 'package:ombruk/services/forms/report/ReportPatchForm.dart';
 import 'package:ombruk/services/interfaces/IAuthenticationService.dart';
+import 'package:ombruk/services/interfaces/INavigatorService.dart';
 import 'package:ombruk/services/interfaces/IWeightReportService.dart';
 import 'package:ombruk/viewmodel/BaseViewModel.dart';
 
 class WeightReportViewModel extends BaseViewModel {
   final IWeightReportService _weightReportService;
   final IAuthenticationService _authenticationService;
-  WeightReportViewModel(this._weightReportService, this._authenticationService);
+  final INavigatorService _navigatorService;
+  final SnackbarService _snackbarService;
+  final DialogService _dialogService;
+  WeightReportViewModel(
+    this._weightReportService,
+    this._authenticationService,
+    this._navigatorService,
+    this._snackbarService,
+    this._dialogService,
+  );
 
   List<WeightReport> _nonReportedList = List();
   List<WeightReport> _reportedList = List();
@@ -26,63 +38,61 @@ class WeightReportViewModel extends BaseViewModel {
         await _weightReportService.fetchWeightReports(form);
 
     if (weightResponse.success) {
-      List<WeightReport> tempNonReported = [];
-      List<WeightReport> tempReported = [];
-
-      for (WeightReport weightReport in weightResponse.data) {
-        if (weightReport.weight != null) {
-          tempReported.add(weightReport);
+      weightResponse.data.map((report) {
+        if (report.weight == null) {
+          _nonReportedList.add(report);
         } else {
-          tempNonReported.add(weightReport);
+          _reportedList.add(report);
         }
-      }
-
-      _nonReportedList = tempNonReported;
-      _reportedList = tempReported;
+      }).toList();
 
       notifyListeners();
       return true;
     } else {
-      print(weightResponse);
+      print("hi1 $weightResponse");
+      _snackbarService.showSimpleSnackbar("Kunne ikke hente vektrapporter.");
       return false;
     }
   }
 
-  Future<bool> addWeight(WeightReport weightReport, int newWeight) async {
+  Future<void> addWeight(WeightReport weightReport, int newWeight) async {
     ReportPatchForm form =
-        ReportPatchForm(reportId: weightReport.reportID, weight: newWeight);
+        ReportPatchForm(reportId: weightReport.reportId, weight: newWeight);
     final CustomResponse<WeightReport> response =
         await _weightReportService.patchWeight(form);
+    //_navigatorService.goBack();
 
     if (response.success) {
       _nonReportedList.remove(weightReport);
       weightReport.weight = newWeight;
       _reportedList.add(weightReport);
-
       notifyListeners();
-      return true;
+      _snackbarService.showSimpleSnackbar("OK!");
     } else {
-      print(response);
-      return false;
+      _snackbarService.showSimpleSnackbar("Kunne ikke rapportere vekten.");
+      print("hi2 $response");
     }
   }
 
-  Future<bool> updateWeight(WeightReport weightReport, int newWeight) async {
+  Future<void> updateWeight(WeightReport weightReport, int newWeight) async {
     ReportPatchForm form =
-        ReportPatchForm(reportId: weightReport.reportID, weight: newWeight);
+        ReportPatchForm(reportId: weightReport.reportId, weight: newWeight);
+    _dialogService.showLoading();
     final CustomResponse<WeightReport> response =
         await _weightReportService.patchWeight(form);
+    _dialogService.hideLoading();
 
     if (response.success) {
-      final int index = _reportedList
-          .indexWhere((element) => element.eventID == weightReport.eventID);
-      _reportedList[index].weight = newWeight;
-
+      weightReport.weight = response.data.weight;
+      _snackbarService.showSimpleSnackbar("OK!");
       notifyListeners();
-      return true;
     } else {
-      print(response);
-      return false;
+      _snackbarService.showSimpleSnackbar("Kunne ikke rapportere vekten.");
+      print("hi3 $response");
     }
+  }
+
+  void goBack() {
+    _navigatorService.goBack();
   }
 }

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:ombruk/ui/app/DrawerButton.dart';
 import 'package:ombruk/ui/calendar/CalendarView.dart';
 import 'package:ombruk/ui/myPage/MyPageView.dart';
 import 'package:ombruk/ui/notifications/NotificationView.dart';
@@ -12,6 +11,7 @@ import 'package:ombruk/ui/tabs/stasjonComponents/MessageScreen.dart';
 import 'package:ombruk/ui/ui.helper.dart';
 import 'package:ombruk/ui/weightreport/WeightReportView.dart';
 import 'package:ombruk/zUnused/BottomAppBarButton.dart';
+import 'package:ombruk/zUnused/DrawerButton.dart';
 
 class TabsScreenStasjon extends StatefulWidget {
   @override

@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:ombruk/ui/app/DrawerButton.dart';
 import 'package:ombruk/ui/calendar/CalendarView.dart';
+import 'package:ombruk/ui/myPage/MyPageView.dart';
 import 'package:ombruk/ui/notifications/NotificationView.dart';
 import 'package:ombruk/ui/shared/const/CustomColors.dart';
 import 'package:ombruk/ui/shared/const/CustomIcons.dart';
 
-import 'package:ombruk/ui/tabs/MyPage/MyPage.dart';
 import 'package:ombruk/ui/tabs/partners/PartnerView.dart';
 import 'package:ombruk/ui/tabs/stasjonComponents/MessageScreen.dart';
 import 'package:ombruk/ui/weightreport/WeightReportView.dart';
 import 'package:ombruk/ui/zUnused/PickupDialogPartners.dart';
 import 'package:ombruk/zUnused/BottomAppBarButton.dart';
+import 'package:ombruk/zUnused/DrawerButton.dart';
 
 class TabsScreenPartner extends StatefulWidget {
   @override
@@ -39,7 +39,7 @@ class _TabsScreenPartnerState extends State<TabsScreenPartner> {
           // The screens below are in the drawer
           SafeArea(child: MessageView()),
           SafeArea(child: PartnerView()),
-          SafeArea(child: MyPage()),
+          SafeArea(child: MyPageView()),
         ],
       ),
       bottomNavigationBar: BottomAppBar(

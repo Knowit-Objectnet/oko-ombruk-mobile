@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ombruk/di/GlobalProviders.dart';
+import 'package:ombruk/services/DialogService.dart';
 import 'package:ombruk/services/interfaces/INavigatorService.dart';
 import 'package:provider/provider.dart';
 
@@ -25,6 +26,7 @@ class Reir extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     INavigatorService _navigatorService = Provider.of(context);
+    Provider.of<DialogService>(context).rootKey = _navigatorService.initialKey;
     return MaterialApp(
       title: 'REIR',
       navigatorKey: _navigatorService.initialKey,

@@ -36,7 +36,7 @@ class _WeightReportDialogState extends State<WeightReportDialog> {
             // WhitelistingTextInputFormatter(
             // RegExp(r"^\d+\.?\d*$"))
             // ],
-            WhitelistingTextInputFormatter.digitsOnly
+            FilteringTextInputFormatter.digitsOnly,
           ],
           validator: (value) {
             if (value.isEmpty) {
@@ -61,6 +61,7 @@ class _WeightReportDialogState extends State<WeightReportDialog> {
             if (_formKey.currentState.validate()) {
               final int newWeight = int.parse(_inputController.text.trim());
               widget.onSubmit(newWeight);
+              Navigator.of(context).pop();
             }
           },
         ),

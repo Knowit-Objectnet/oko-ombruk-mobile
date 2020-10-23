@@ -8,8 +8,14 @@ class MyPageViewModel extends BaseViewModel {
   final IAuthenticationService _authenticationService;
   final INavigatorService _navigatorService;
   MyPageViewModel(this._authenticationService, this._navigatorService) {
-    _role = getRole(_authenticationService.userModel.roles
-        .firstWhere((role) => getRole(role) != null));
+    _authenticationService
+        .loadFromStorage()
+        .then((value) =>
+            getRole(value.roles.firstWhere((role) => getRole(role) != null)))
+        .then((value) {
+      _role = value;
+      notifyListeners();
+    });
   }
   KeycloakRoles _role;
   KeycloakRoles get role => _role;

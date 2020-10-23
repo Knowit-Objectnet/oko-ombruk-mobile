@@ -1,7 +1,7 @@
 import 'package:ombruk/utils/DateUtils.dart';
 
 class WeightReport {
-  final int reportID;
+  final int reportId;
   final int eventID;
   final int partnerID;
   final _Station station;
@@ -11,7 +11,7 @@ class WeightReport {
   int weight;
 
   WeightReport(
-    this.reportID,
+    this.reportId,
     this.eventID,
     this.partnerID,
     this.station,
@@ -48,7 +48,7 @@ class WeightReport {
     }
 
     return WeightReport(
-      json['reportID'],
+      json['reportId'],
       json['eventID'],
       json['partnerID'],
       _Station.fromJson(json['station']),
@@ -60,7 +60,7 @@ class WeightReport {
   }
 
   Map<String, dynamic> toJson() => {
-        'reportID': reportID,
+        'reportID': reportId,
         'eventID': eventID,
         'partnerID': partnerID,
         'station': station.toJson(),

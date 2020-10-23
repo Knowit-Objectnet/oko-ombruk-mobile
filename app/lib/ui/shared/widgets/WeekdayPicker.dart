@@ -20,13 +20,15 @@ class WeekdayPicker extends StatelessWidget {
             (e) => Container(
               decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  border: Border.all(
-                      width: 2.0, color: CustomColors.osloLightBlue)),
+                  border: Border.all(width: 2.0, color: CustomColors.osloBlue)),
               child: GestureDetector(
                 child: CircleAvatar(
-                  child: Text(_stringFromEnum(e)),
+                  child: Text(
+                    _stringFromEnum(e),
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
                   backgroundColor: selectedWeekdays.contains(e)
-                      ? CustomColors.osloLightBlue
+                      ? CustomColors.osloBlue
                       : CustomColors.osloWhite,
                   foregroundColor: CustomColors.osloBlack,
                 ),

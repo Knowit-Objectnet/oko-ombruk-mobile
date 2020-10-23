@@ -27,6 +27,7 @@ class DateTimeBox extends StatelessWidget {
         ));
   }
 
+  //TODO: I'd like to move these into DateUtils when I know how they can be generalized.
   String _getDate(DateTime dateTime) {
     return dateTime.day.toString() +
         '. ' +

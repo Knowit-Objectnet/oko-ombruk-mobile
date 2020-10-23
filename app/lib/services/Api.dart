@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:http/http.dart';
 import 'package:ombruk/const/ApiEndpoint.dart';
 import 'package:ombruk/models/CustomResponse.dart';
-import 'package:ombruk/globals.dart' as globals;
 import 'package:ombruk/services/forms/IForm.dart';
 import 'package:ombruk/services/interfaces/IApi.dart';
 import 'package:ombruk/services/interfaces/IAuthenticationService.dart';
@@ -21,8 +20,8 @@ class Api implements IApi {
   Api(this._secureStorageService, this._authenticationService);
 
   void _updateTokenInHeader() async {
-    final String token = 'Bearer ' +
-        (await _secureStorageService.getValue(key: "accessToken") ?? '');
+    final String token =
+        'Bearer ' + _authenticationService.userModel.accessToken;
     if (_headers.containsKey('Authorization')) {
       _headers.update('Authorization', (value) => token);
     } else {
@@ -67,7 +66,7 @@ class Api implements IApi {
         ApiEndpoint.baseUrlStripped, '${ApiEndpoint.requiredPath}/$path');
 
     return await _authorizedRequest(
-        patch, [uri], {#body: jsonEncode(form.encode())});
+        patch, [uri], {#headers: _headers, #body: jsonEncode(form.encode())});
   }
 
   Future<CustomResponse<String>> _authorizedRequest(
@@ -82,6 +81,7 @@ class Api implements IApi {
           await _authenticationService.requestRefreshToken() != null;
       if (gotNewTokens) {
         _updateTokenInHeader();
+        print(_headers);
         response =
             await Function.apply(request, positionalArgs, optionalArguments);
       } else {
