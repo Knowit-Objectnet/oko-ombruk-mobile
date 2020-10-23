@@ -7,9 +7,11 @@ import 'package:ombruk/ui/app/App.dart';
 class NavigatorService implements INavigatorService {
   static GlobalKey<NavigatorState> _initialKey = GlobalKey<NavigatorState>();
   GlobalKey<NavigatorState> _navigatorKey;
+  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void goBack() {
+    print(_navigatorKey);
     _navigatorKey.currentState.pop();
   }
 
@@ -36,4 +38,29 @@ class NavigatorService implements INavigatorService {
 
   @override
   GlobalKey<NavigatorState> get initialKey => _initialKey;
+
+  void popUntilEquals(String routeName) {
+    print(routeName);
+    _navigatorKey.currentState.popUntil((route) {
+      print(route);
+      print(route.settings.name);
+      return route.settings.name == routeName;
+    });
+  }
+
+  void popStack() {
+    _navigatorKey.currentState.popUntil((route) => route.isFirst);
+  }
+
+  @override
+  void closeScaffold() {
+    _initialKey.currentState.pop();
+  }
+
+  @override
+  void openScaffold() {
+    _scaffoldKey.currentState.openDrawer();
+  }
+
+  GlobalKey<ScaffoldState> get scaffoldKey => _scaffoldKey;
 }

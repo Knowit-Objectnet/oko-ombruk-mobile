@@ -39,12 +39,15 @@ abstract class CustomIcons {
 
   /// Returns the icon as an Image.asset. If the icon is not found, it returns an empty Container().
   static Widget image(String icon,
-      {double size = 20.0, Color color = CustomColors.osloBlack}) {
+      {double size = 20.0,
+      Color color = CustomColors.osloBlack,
+      double scale}) {
     return Image.asset(
       'assets/icons/$icon',
       height: size,
       width: size,
       color: color,
+      scale: scale,
       errorBuilder: (context, object, stackTrace) {
         // Called if the icon path is not found in assets
         print('Icon $icon is not included in assets');

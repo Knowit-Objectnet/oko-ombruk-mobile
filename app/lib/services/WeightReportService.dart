@@ -18,7 +18,6 @@ class WeightReportService implements IWeightReportService {
   ) async {
     CustomResponse response =
         await _api.getRequest(ApiEndpoint.weightReports, form);
-    print(response.statusCode);
 
     if (!response.success) {
       return response;

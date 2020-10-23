@@ -17,12 +17,15 @@ class CalendarViewModel extends BaseViewModel {
   final ICalendarService _calendarService;
   IStationService _stationService;
 
-  List<CalendarEvent> _calendarEvents;
+  bool _showHorizontal = true;
+  bool get showHorizontalCalendar => _showHorizontal;
+
+  List<CalendarEvent> _calendarEvents = [];
   bool _isLoading = true;
   Station _selectedStation;
   Station get selectedStation => _selectedStation;
 
-  List<Station> _stations;
+  List<Station> _stations = [];
   List<Station> get stations => _stations;
 
   CalendarViewModel(this._calendarService, this._stationService) {
@@ -94,6 +97,18 @@ class CalendarViewModel extends BaseViewModel {
       print(response);
       return false;
     }
+  }
+
+  List<CalendarEvent> get currentStationEvents {
+    if (calendarEvents == null) {
+      return [];
+    }
+    if (selectedStation == null) {
+      return [];
+    }
+    return calendarEvents
+        .where((element) => element.station.name == selectedStation.name)
+        .toList();
   }
 
   void onStationChanged(Station value) {

@@ -16,53 +16,51 @@ class MyPageView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BaseWidget(
       model: MyPageViewModel(Provider.of(context), Provider.of(context)),
-      builder: (context, model, _) => Scaffold(
-        body: SafeArea(
-          child: ListView(
-            shrinkWrap: true,
-            padding: EdgeInsets.symmetric(horizontal: 16.0),
-            children: <Widget>[
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 8.0),
-                child: Row(
-                  children: <Widget>[
-                    Padding(
-                      padding: EdgeInsets.only(right: 8.0),
-                      child: CustomIcons.image(CustomIcons.myPage),
+      builder: (context, model, _) => SafeArea(
+        child: ListView(
+          shrinkWrap: true,
+          padding: EdgeInsets.symmetric(horizontal: 16.0),
+          children: <Widget>[
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 8.0),
+              child: Row(
+                children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.only(right: 8.0),
+                    child: CustomIcons.image(CustomIcons.myPage),
+                  ),
+                  Text(
+                    'Min side',
+                    style: TextStyle(
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.bold,
                     ),
-                    Text(
-                      'Min side',
-                      style: TextStyle(
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.bold,
-                      ),
+                  ),
+                  Spacer(),
+                  RaisedButton(
+                    color: CustomColors.osloDarkBlue,
+                    child: Text(
+                      'Logg ut',
+                      style: TextStyle(color: CustomColors.osloWhite),
                     ),
-                    Spacer(),
-                    RaisedButton(
-                      color: CustomColors.osloDarkBlue,
-                      child: Text(
-                        'Logg ut',
-                        style: TextStyle(color: CustomColors.osloWhite),
-                      ),
-                      onPressed: () async {
-                        final bool result = await model.requestLogOut();
-                        if (!result) {
-                          uiHelper.showSnackbar(
-                              context, 'Kunne ikke logge ut, prøv igjen.');
-                        }
-                      },
-                    )
-                  ],
-                ),
+                    onPressed: () async {
+                      final bool result = await model.requestLogOut();
+                      if (!result) {
+                        uiHelper.showSnackbar(
+                            context, 'Kunne ikke logge ut, prøv igjen.');
+                      }
+                    },
+                  )
+                ],
               ),
-              _aboutSection(model),
-              Padding(
-                  padding: EdgeInsets.symmetric(vertical: 8.0),
-                  child: _contactInfo()),
-              _shareContactInfoSection(model),
-              _addPartnerAndStationButtons(model, context),
-            ],
-          ),
+            ),
+            _aboutSection(model),
+            Padding(
+                padding: EdgeInsets.symmetric(vertical: 8.0),
+                child: _contactInfo()),
+            _shareContactInfoSection(model),
+            _addPartnerAndStationButtons(model, context),
+          ],
         ),
       ),
     );

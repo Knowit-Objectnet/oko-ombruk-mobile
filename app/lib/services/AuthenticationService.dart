@@ -11,8 +11,6 @@ import 'package:http/http.dart';
 
 import 'package:ombruk/models/CustomResponse.dart';
 
-import 'package:ombruk/globals.dart' as globals;
-
 class AuthenticationService implements IAuthenticationService {
   ISecureStorageService _localStorageService = SecureStorageService();
   AuthenticationService();
@@ -109,13 +107,7 @@ class AuthenticationService implements IAuthenticationService {
   }
 
   /// Makes an API call to get new tokens. Returns a [UserModel] with ONLY accessToken and refreshToken
-  Future<CustomResponse<UserModel>> requestRefreshToken({
-    @required String clientId,
-    @required String refreshToken,
-  }) async {
-    assert(clientId != null);
-    assert(refreshToken != null);
-
+  Future<CustomResponse<UserModel>> requestRefreshToken() async {
     String url = '${ApiEndpoint.keycloakBaseUrl}/protocol/openid-connect/token';
     Map<String, String> headers = {};
     headers['Content-Type'] = 'application/x-www-form-urlencoded';
@@ -123,8 +115,8 @@ class AuthenticationService implements IAuthenticationService {
     // Since we use x-www-form-urlencoded, we don't use jsonEncode()
     Map<String, String> bodyForm = {
       'grant_type': 'refresh_token',
-      'client_id': clientId,
-      'refresh_token': refreshToken,
+      'client_id': _userModel.clientId,
+      'refresh_token': _userModel.refreshToken,
     };
 
     final response = await post(
