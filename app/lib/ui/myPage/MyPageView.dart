@@ -229,7 +229,7 @@ class MyPageView extends StatelessWidget {
           Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => NewPartneScreen(),
+                builder: (context) => NewPartnerView(),
               ));
         }),
         _buttonWithText('Legg til ny stasjon', () {
