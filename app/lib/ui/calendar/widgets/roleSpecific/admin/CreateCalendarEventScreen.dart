@@ -55,10 +55,12 @@ class CreateCalendarEvent extends StatelessWidget {
                 padding: EdgeInsets.only(top: 16),
                 child: Subtitle(text: station.name),
               ),
-              CustomPicker(
+              CustomPicker<String>(
                 selectedValue: model.chosenInterval,
                 valueChanged: model.onIntervalChanged,
-                values: model.intervals.keys.toList(),
+                items: model.intervals.keys.toList(),
+                itemBuilder: (context, item) =>
+                    DropdownMenuItem(value: item, child: Text(item)),
               ),
               Padding(
                 padding: EdgeInsets.only(top: 48.0, bottom: 16.0),
@@ -79,27 +81,27 @@ class CreateCalendarEvent extends StatelessWidget {
                 ),
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  CustomIcons.image(CustomIcons.clock),
-                  Expanded(
-                    child: Center(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: <Widget>[
-                          TimePicker(
-                            selectedTime: model.startTime,
-                            timeChanged: (t) =>
-                                model.onTimeChanged(TimeType.Start, t),
-                          ),
-                          Text("til"),
-                          TimePicker(
-                            selectedTime: model.endTime,
-                            timeChanged: (t) =>
-                                model.onTimeChanged(TimeType.End, t),
-                          ),
-                        ],
-                      ),
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(right: 10),
+                    child: CustomIcons.image(CustomIcons.clock, size: 35),
+                  ),
+                  Flexible(
+                    child: TimePicker(
+                      selectedTime: model.startTime,
+                      timeChanged: (t) =>
+                          model.onTimeChanged(TimeType.Start, t),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10),
+                    child: Text("til"),
+                  ),
+                  Flexible(
+                    child: TimePicker(
+                      selectedTime: model.startTime,
+                      timeChanged: (t) => model.onTimeChanged(TimeType.End, t),
                     ),
                   ),
                 ],
@@ -114,7 +116,7 @@ class CreateCalendarEvent extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
-                  CustomIcons.image(CustomIcons.calendar),
+                  CustomIcons.image(CustomIcons.calendar, size: 35),
                   Expanded(
                     child: Center(
                       child: Row(

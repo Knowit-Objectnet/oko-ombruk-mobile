@@ -12,6 +12,5 @@ abstract class ICalendarService {
 
   Future<CustomResponse> deleteCalendarEvent(EventDeleteForm form);
 
-  Future<CustomResponse<String>> updateEvent(EventUpdateForm form);
-
+  Future<CustomResponse<CalendarEvent>> updateEvent(EventUpdateForm form);
 }

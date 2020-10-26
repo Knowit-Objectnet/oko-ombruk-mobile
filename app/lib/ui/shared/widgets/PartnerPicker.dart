@@ -6,6 +6,7 @@ import 'package:ombruk/ui/shared/const/CustomIcons.dart';
 import 'package:ombruk/viewmodel/PartnerViewModel.dart';
 import 'package:provider/provider.dart';
 
+// DEPRECATED
 class PartnerPicker extends StatelessWidget {
   final Partner selectedPartner;
   final ValueChanged<Partner> partnerChanged;

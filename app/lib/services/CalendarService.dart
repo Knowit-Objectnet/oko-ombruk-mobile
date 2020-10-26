@@ -3,7 +3,6 @@ import 'package:ombruk/const/ApiEndpoint.dart';
 
 import 'package:ombruk/models/CalendarEvent.dart';
 import 'package:ombruk/models/CustomResponse.dart';
-import 'package:ombruk/services/Api.dart';
 import 'package:ombruk/services/forms/Event/EventDeleteForm.dart';
 import 'package:ombruk/services/forms/Event/EventGetForm.dart';
 import 'package:ombruk/services/forms/Event/EventPostForm.dart';
@@ -71,6 +70,22 @@ class CalendarService extends ICalendarService {
       _api.deleteRequest(ApiEndpoint.events, form);
 
   /// Returns a CustomResponse with null data
-  Future<CustomResponse<String>> updateEvent(EventUpdateForm form) async =>
-      await _api.patchRequest(ApiEndpoint.events, form);
+  Future<CustomResponse<CalendarEvent>> updateEvent(
+      EventUpdateForm form) async {
+    CustomResponse response = await _api.patchRequest(ApiEndpoint.events, form);
+    if (!response.success) {
+      return response;
+    }
+    try {
+      CalendarEvent event = CalendarEvent.fromJson(jsonDecode(response.data));
+      return CustomResponse(
+          success: true, statusCode: response.statusCode, data: event);
+    } catch (e) {
+      return CustomResponse(
+          success: false,
+          statusCode: response.statusCode,
+          data: null,
+          message: e.toString());
+    }
+  }
 }

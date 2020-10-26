@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 abstract class DateUtils {
   static final Map<int, String> weekdaysShort = {
     1: 'Man',
@@ -55,4 +57,8 @@ abstract class DateUtils {
   /// Removes the microseconds from [DateTime] so that the backend don't whine
   static String getDateString(DateTime dateTime) =>
       dateTime?.toIso8601String()?.substring(0, 19);
+
+  static DateTime fromTimeOfDay(DateTime date, TimeOfDay timeOfDay) =>
+      DateTime.utc(
+          date.year, date.month, date.day, timeOfDay.hour, timeOfDay.minute);
 }

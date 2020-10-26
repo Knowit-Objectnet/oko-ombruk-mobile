@@ -9,31 +9,35 @@ class DatePicker extends StatelessWidget {
   final ValueChanged<DateTime> dateChanged;
   final Color backgroundColor;
   final Color borderColor;
+  final bool disabled;
 
-  DatePicker(
-      {@required this.dateTime,
-      @required this.dateChanged,
-      this.backgroundColor = CustomColors.osloWhite,
-      this.borderColor = CustomColors.osloLightBlue})
-      : assert(dateTime != null),
+  DatePicker({
+    @required this.dateTime,
+    @required this.dateChanged,
+    this.backgroundColor = CustomColors.osloWhite,
+    this.borderColor = CustomColors.osloLightBlue,
+    this.disabled = false,
+  })  : assert(dateTime != null),
         assert(dateChanged != null);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => _selectDate(context),
+      onTap: () => disabled ? null : _selectDate(context),
       child: Container(
-        padding: EdgeInsets.all(8.0),
         decoration: BoxDecoration(
             color: backgroundColor,
-            border: borderColor != null
+            border: borderColor != null && !disabled
                 ? Border.all(width: 2.0, color: borderColor)
                 : null),
-        child: Text(DateUtils.months[dateTime.month].substring(0, 3) +
-            ' ' +
-            dateTime.day.toString() +
-            ', ' +
-            dateTime.year.toString()),
+        child: Text(
+          DateUtils.months[dateTime.month].substring(0, 3) +
+              ' ' +
+              dateTime.day.toString() +
+              ', ' +
+              dateTime.year.toString(),
+          style: TextStyle(fontSize: 18.0),
+        ),
       ),
     );
   }

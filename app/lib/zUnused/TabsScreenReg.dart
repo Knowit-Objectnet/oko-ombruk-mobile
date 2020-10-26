@@ -5,7 +5,6 @@ import 'package:ombruk/ui/notifications/NotificationView.dart';
 import 'package:ombruk/ui/shared/const/CustomColors.dart';
 import 'package:ombruk/ui/shared/const/CustomIcons.dart';
 import 'package:ombruk/ui/tabs/stasjonComponents/MessageScreen.dart';
-import 'package:ombruk/ui/zUnused/CreateOccurrenceScreen.dart';
 import 'package:ombruk/viewmodel/CalendarViewModel.dart';
 import 'package:ombruk/zUnused/BottomAppBarButton.dart';
 import 'package:ombruk/zUnused/DrawerButton.dart';
@@ -155,16 +154,16 @@ class _TabsScreenRegConsumedState extends State<_TabsScreenRegConsumed> {
   }
 
   Future<void> _puchCreateOccurrenceScreen() async {
-    final occurrenceAdded = await Navigator.push(
-      context,
-      MaterialPageRoute<bool>(
-        builder: (context) => CreateOccurrenceScreen(),
-      ),
-    );
-    if (occurrenceAdded != null && occurrenceAdded) {
-      uiHelper.showSnackbarUnknownScaffold(
-          _scaffoldKey.currentState, 'Opprettet hendelsen!');
-      widget.calendarViewModel.fetchEvents();
-    }
+    // final occurrenceAdded = await Navigator.push(
+    //   context,
+    //   MaterialPageRoute<bool>(
+    //     builder: (context) => CreateOccurrenceScreen(),
+    //   ),
+    // );
+    // if (occurrenceAdded != null && occurrenceAdded) {
+    //   uiHelper.showSnackbarUnknownScaffold(
+    //       _scaffoldKey.currentState, 'Opprettet hendelsen!');
+    //   widget.calendarViewModel.fetchEvents();
+    // }
   }
 }
