@@ -24,22 +24,40 @@ class DialogService {
   // }
 
   GlobalKey<NavigatorState> _rootKey;
-  bool _isLoading = false;
+  bool _isShowing = false;
 
   set rootKey(GlobalKey<NavigatorState> rootKey) => _rootKey = rootKey;
 
   void showLoading() {
-    showDialog(
-        context: _rootKey.currentContext,
-        builder: (context) => DialogFactory.create(DialogType.Loading),
-        barrierDismissible: false);
-    _isLoading = true;
-  }
-
-  void hideLoading() {
-    if (_isLoading) {
-      _rootKey.currentState.pop();
-      _isLoading = false;
+    if (!_isShowing) {
+      showDialog(
+          context: _rootKey.currentContext,
+          builder: (context) => DialogFactory.create(DialogType.Loading),
+          barrierDismissible: false);
+      _isShowing = true;
     }
   }
+
+  void showCustomDialog(dynamic dialog) {
+    showDialog(
+      context: _rootKey.currentContext,
+      builder: (context) => dialog,
+    );
+  }
+
+  void openDialog(DialogType type) {
+    showDialog(
+      context: _rootKey.currentContext,
+      builder: (context) => DialogFactory.create(type),
+    );
+  }
+
+  void hideDialog() {
+    if (_isShowing) {
+      _rootKey.currentState.pop();
+      _isShowing = false;
+    }
+  }
+
+  void hideLoading() => hideDialog();
 }

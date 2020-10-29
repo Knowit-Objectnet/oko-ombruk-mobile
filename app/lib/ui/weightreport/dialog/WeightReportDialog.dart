@@ -60,8 +60,8 @@ class _WeightReportDialogState extends State<WeightReportDialog> {
           onPressed: () {
             if (_formKey.currentState.validate()) {
               final int newWeight = int.parse(_inputController.text.trim());
-              widget.onSubmit(newWeight);
               Navigator.of(context).pop();
+              widget.onSubmit(newWeight);
             }
           },
         ),

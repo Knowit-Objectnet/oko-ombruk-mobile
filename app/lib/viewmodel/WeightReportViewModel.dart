@@ -95,4 +95,8 @@ class WeightReportViewModel extends BaseViewModel {
   void goBack() {
     _navigatorService.goBack();
   }
+
+  void onDialog(dynamic dialog) {
+    _dialogService.showCustomDialog(dialog);
+  }
 }

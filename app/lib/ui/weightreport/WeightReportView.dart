@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:ombruk/models/WeightReport.dart';
 import 'package:ombruk/ui/app/widgets/AppDrawer.dart';
 import 'package:ombruk/ui/app/widgets/OkoAppBar.dart';
 import 'package:ombruk/ui/shared/widgets/BaseWidget.dart';
@@ -50,21 +49,28 @@ class WeightReportView extends StatelessWidget {
                             ...model.nonReportedList.map((report) {
                               return ReportWithoutWeight(
                                 weightReport: report,
-                                onPressedCallback: () => _showNewWeightDialog(
-                                    context, model, report),
+                                onPressedCallback: () => model.onDialog(
+                                  WeightReportDialog(
+                                    onSubmit: (newWeight) =>
+                                        model.addWeight(report, newWeight),
+                                  ),
+                                ),
                               );
                             }).toList(),
                           Subtitle(text: 'Tidligere uttak'),
                           if (model.reportedList.isNotEmpty)
                             ...model.reportedList
-                                .map((report) => ReportWithWeight(
-                                      report: report,
-                                      onTap: () => _showWeightEditDialog(
-                                        context,
-                                        model,
-                                        report,
+                                .map(
+                                  (report) => ReportWithWeight(
+                                    report: report,
+                                    onTap: () => model.onDialog(
+                                      WeightReportDialog(
+                                        onSubmit: (newWeight) => model
+                                            .updateWeight(report, newWeight),
                                       ),
-                                    ))
+                                    ),
+                                  ),
+                                )
                                 .toList(),
                         ],
                       ),
@@ -74,31 +80,5 @@ class WeightReportView extends StatelessWidget {
               ),
       ),
     );
-  }
-
-  Future<void> _showWeightEditDialog(
-    BuildContext context,
-    WeightReportViewModel model,
-    WeightReport report,
-  ) async {
-    showDialog(
-        context: context,
-        builder: (_) {
-          return WeightReportDialog(
-              onSubmit: (newWeight) => model.updateWeight(report, newWeight));
-        });
-  }
-
-  Future<void> _showNewWeightDialog(
-    BuildContext context,
-    WeightReportViewModel model,
-    WeightReport report,
-  ) async {
-    showDialog(
-        context: context,
-        builder: (_) {
-          return WeightReportDialog(
-              onSubmit: (newWeight) => model.addWeight(report, newWeight));
-        });
   }
 }
