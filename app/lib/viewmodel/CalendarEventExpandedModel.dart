@@ -11,8 +11,6 @@ import 'package:ombruk/viewmodel/BaseViewModel.dart';
 
 enum CancellationType { Once, Until }
 
-enum TimeType { Start, End }
-
 class CalendarEventExpandedModel extends BaseViewModel {
   final ICalendarService _calendarService;
   final SnackbarService _snackbarService;

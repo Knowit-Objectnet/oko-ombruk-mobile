@@ -5,10 +5,12 @@ import 'package:ombruk/ui/app/TabView.dart';
 import 'package:ombruk/ui/calendar/CalendarView.dart';
 import 'package:ombruk/ui/calendar/widgets/roleSpecific/admin/CreateCalendarEventScreen.dart';
 import 'package:ombruk/ui/calendar/widgets/roleSpecific/admin/CreateOccurrenceScreen.dart';
+import 'package:ombruk/ui/message/MessageScreen.dart';
 import 'package:ombruk/ui/myPage/view/MyPageView.dart';
 import 'package:ombruk/ui/myPage/view/roleSpecific/admin/NewPartnerView.dart';
 import 'package:ombruk/ui/myPage/view/roleSpecific/admin/NewStationView.dart';
 import 'package:ombruk/ui/notifications/NotificationView.dart';
+import 'package:ombruk/ui/pickup/AddExtraPickupView.dart';
 import 'package:ombruk/ui/weightreport/WeightReportView.dart';
 
 class AppRouter {
@@ -21,7 +23,7 @@ class AppRouter {
             settings: settings, builder: (_) => CalendarView());
       case Routes.VarslerView:
         return MaterialPageRoute(
-            settings: settings, builder: (_) => NotificationView());
+            settings: settings, builder: (_) => AddExtraPickupView());
       case Routes.CreateOccurenceView:
         return MaterialPageRoute(
             settings: settings, builder: (_) => CreateOccurenceView());
@@ -36,6 +38,18 @@ class AppRouter {
         return MaterialPageRoute(
           settings: settings,
           builder: (_) => MyPageView(),
+        );
+
+      case Routes.AddExtraPickupView:
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => AddExtraPickupView(),
+        );
+
+      case Routes.MessageView:
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => MessageView(),
         );
       case Routes.NewPartnerView:
         return MaterialPageRoute(

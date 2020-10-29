@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+enum TimeType { Start, End }
+
 abstract class DateUtils {
   static final Map<String, int> jsonWeekdays = {
     "MONDAY": 1,

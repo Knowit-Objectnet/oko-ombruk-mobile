@@ -7,6 +7,7 @@ class OkoTextField extends StatelessWidget {
   final String Function(String) validator;
   final EdgeInsets padding;
   final Function(String) onSaved;
+  final TextCapitalization textCapitalization;
 
   OkoTextField({
     this.icon,
@@ -14,6 +15,7 @@ class OkoTextField extends StatelessWidget {
     this.validator,
     this.onSaved,
     this.padding = const EdgeInsets.symmetric(vertical: 8.0),
+    this.textCapitalization = TextCapitalization.sentences,
   });
 
   @override
@@ -39,7 +41,7 @@ class OkoTextField extends StatelessWidget {
                   hintText: hint,
                 ),
                 onSaved: onSaved,
-                textCapitalization: TextCapitalization.sentences,
+                textCapitalization: textCapitalization,
                 autofocus: false,
                 validator: validator,
               ),

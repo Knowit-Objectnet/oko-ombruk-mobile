@@ -6,17 +6,17 @@ import 'package:ombruk/ui/shared/widgets/DatePicker.dart';
 import 'package:ombruk/ui/shared/widgets/ReturnButton.dart';
 import 'package:ombruk/ui/shared/widgets/StationPicker.dart';
 import 'package:ombruk/ui/shared/widgets/TextFormInput.dart';
-import 'package:ombruk/ui/shared/widgets/TimePicker.dart';
+import 'package:ombruk/ui/shared/widgets/form/TimePicker.dart';
 import 'package:ombruk/ui/ui.helper.dart';
 import 'package:ombruk/viewmodel/PickupViewModel.dart';
 import 'package:provider/provider.dart';
 
-class AddExtraPickupScreen extends StatefulWidget {
-  @override
-  _AddExtraPickupScreenState createState() => _AddExtraPickupScreenState();
-}
+class AddExtraPickupScreen extends StatelessWidget {
+  // @override
+  // _AddExtraPickupScreenState createState() => _AddExtraPickupScreenState();
+// }
 
-class _AddExtraPickupScreenState extends State<AddExtraPickupScreen> {
+// class _AddExtraPickupScreenState extends State<AddExtraPickupScreen> {
   final GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
 
   final TextEditingController _merknadControler = TextEditingController();
@@ -55,14 +55,14 @@ class _AddExtraPickupScreenState extends State<AddExtraPickupScreen> {
               _subtitle('Stasjon (hvem er du?)'),
               // This picker is to be removed. It is only temporary because we
               // cannot get which station we are logged in as from backend yet.
-              StationPicker(
-                selectedStation: _selectedStation,
-                stationChanged: (value) {
-                  setState(() {
-                    _selectedStation = value;
-                  });
-                },
-              ),
+              // StationPicker(
+              //   selectedStation: _selectedStation,
+              //   stationChanged: (value) {
+              //     setState(() {
+              //       _selectedStation = value;
+              //     });
+              //   },
+              // ),
               _subtitle('Alternativt'),
               TextFormInput(
                 hint: 'Merknad (max 100 tegn)',
@@ -102,17 +102,17 @@ class _AddExtraPickupScreenState extends State<AddExtraPickupScreen> {
           padding: EdgeInsets.only(right: 8.0),
           child: CustomIcons.image(CustomIcons.calendar),
         ),
-        Expanded(
-          child: DatePicker(
-            dateTime: _selectedDate,
-            dateChanged: (value) {
-              setState(() {
-                _selectedDate = value;
-              });
-            },
-            borderColor: null,
-          ),
-        )
+        // Expanded(
+        //   child: DatePicker(
+        //     dateTime: _selectedDate,
+        //     dateChanged: (value) {
+        //       setState(() {
+        //         _selectedDate = value;
+        //       });
+        //     },
+        //     borderColor: null,
+        //   ),
+        // )
       ],
     );
   }
@@ -124,30 +124,30 @@ class _AddExtraPickupScreenState extends State<AddExtraPickupScreen> {
           padding: EdgeInsets.only(right: 8.0),
           child: CustomIcons.image(CustomIcons.clock),
         ),
-        Expanded(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              TimePicker(
-                selectedTime: _startTime,
-                timeChanged: (value) {
-                  setState(() {
-                    _startTime = value;
-                  });
-                },
-              ),
-              Text('-'),
-              TimePicker(
-                selectedTime: _endTime,
-                timeChanged: (value) {
-                  setState(() {
-                    _endTime = value;
-                  });
-                },
-              ),
-            ],
-          ),
-        )
+        // Expanded(
+        //   child: Row(
+        //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        //     children: <Widget>[
+        //       TimePicker(
+        //         selectedTime: _startTime,
+        //         timeChanged: (value) {
+        //           setState(() {
+        //             _startTime = value;
+        //           });
+        //         },
+        //       ),
+        //       Text('-'),
+        //       TimePicker(
+        //         selectedTime: _endTime,
+        //         timeChanged: (value) {
+        //           setState(() {
+        //             _endTime = value;
+        //           });
+        //         },
+        //       ),
+        //     ],
+        //   ),
+        // )
       ],
     );
   }
@@ -188,16 +188,17 @@ class _AddExtraPickupScreenState extends State<AddExtraPickupScreen> {
       _endTime.minute,
     );
 
-    final bool success =
-        await Provider.of<PickupViewModel>(context, listen: false).addPickup(
-      startDateTime: startDateTime,
-      endDateTime: endDateTime,
-      description: _merknadControler.text,
-      stationId: _selectedStation.id,
-    );
+    // final bool success =
+    //     await Provider.of<PickupViewModel>(context, listen: false).addPickup(
+    //   startDateTime: startDateTime,
+    //   endDateTime: endDateTime,
+    //   description: _merknadControler.text,
+    //   stationId: _selectedStation.id,
+    // );
+    final bool success = false;
 
     if (success) {
-      Navigator.pop(context, true);
+      // Navigator.pop(context, true);
     } else {
       uiHelper.showSnackbarUnknownScaffold(_key.currentState, 'Intern feil');
     }
