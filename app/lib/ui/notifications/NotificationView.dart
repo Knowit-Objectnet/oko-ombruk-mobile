@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:ombruk/ui/app/OkoAppBar.dart';
 
 class NotificationView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Text('Varsler kommer her'),
+    return Scaffold(
+      appBar: OkoAppBar(
+        title: "Varsler",
+      ),
+      body: Center(
+        child: Text('Varsler kommer her'),
+      ),
     );
   }
 }

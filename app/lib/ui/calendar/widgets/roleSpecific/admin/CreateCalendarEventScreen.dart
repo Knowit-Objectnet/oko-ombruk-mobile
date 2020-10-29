@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ombruk/models/Partner.dart';
 import 'package:ombruk/models/Station.dart';
+import 'package:ombruk/ui/app/OkoAppBar.dart';
 import 'package:ombruk/ui/shared/const/CustomColors.dart';
 import 'package:ombruk/ui/shared/const/CustomIcons.dart';
 import 'package:ombruk/ui/shared/widgets/BaseWidget.dart';
@@ -34,16 +35,9 @@ class CreateCalendarEvent extends StatelessWidget {
         Provider.of(context),
       ),
       builder: (context, CreateCalendarEventModel model, child) => Scaffold(
-        appBar: AppBar(
-          title: Text(
-            "Opprett hendelse",
-            style: TextStyle(
-                color: CustomColors.osloDarkBlue, fontWeight: FontWeight.bold),
-          ),
+        appBar: OkoAppBar(
+          title: "Opprett hendelse",
           backgroundColor: CustomColors.osloLightBeige,
-          leading: Padding(
-              padding: EdgeInsets.only(left: 5),
-              child: ReturnButton(returnValue: false)),
         ),
         backgroundColor: CustomColors.osloLightBeige,
         body: Form(

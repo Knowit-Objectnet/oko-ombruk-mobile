@@ -39,8 +39,4 @@ class TabViewModel extends BaseViewModel {
     _index = index;
     notifyListeners();
   }
-
-  void onDrawerPressed() {
-    _navigatorService.openScaffold();
-  }
 }

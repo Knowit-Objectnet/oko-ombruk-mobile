@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ombruk/models/Station.dart';
+import 'package:ombruk/ui/app/AppDrawer.dart';
+import 'package:ombruk/ui/app/OkoAppBar.dart';
 import 'package:ombruk/ui/calendar/widgets/HorizontalCalendar/HorizontalCalendar.dart';
 import 'package:ombruk/ui/calendar/widgets/VerticalCalendar/VerticalCalendar.dart';
 import 'package:ombruk/ui/shared/const/CustomColors.dart';
@@ -16,24 +18,13 @@ class CalendarView extends StatelessWidget {
     return BaseWidget(
       model: CalendarViewModel(Provider.of(context), Provider.of(context)),
       onModelReady: (CalendarViewModel model) => model.start(),
-      builder: (context, CalendarViewModel model, _) => Container(
-        child: model.state == ViewState.Busy
+      builder: (context, CalendarViewModel model, _) => Scaffold(
+        appBar: OkoAppBar(title: "Kalender"),
+        drawer: AppDrawer(),
+        body: model.state == ViewState.Busy
             ? CircularProgressIndicator()
             : Column(
                 children: [
-                  AppBar(
-                    iconTheme: IconThemeData(color: Colors.black),
-                    title: Text(
-                      "Kalender",
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 25,
-                      ),
-                    ),
-                    centerTitle: false,
-                    backgroundColor: CustomColors.osloWhite,
-                    elevation: 0,
-                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[

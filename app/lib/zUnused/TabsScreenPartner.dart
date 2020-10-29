@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ombruk/ui/calendar/CalendarView.dart';
-import 'package:ombruk/ui/myPage/MyPageView.dart';
+import 'package:ombruk/ui/myPage/view/MyPageView.dart';
 import 'package:ombruk/ui/notifications/NotificationView.dart';
 import 'package:ombruk/ui/shared/const/CustomColors.dart';
 import 'package:ombruk/ui/shared/const/CustomIcons.dart';
