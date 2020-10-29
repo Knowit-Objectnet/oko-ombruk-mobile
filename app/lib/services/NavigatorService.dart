@@ -52,15 +52,10 @@ class NavigatorService implements INavigatorService {
     _navigatorKey.currentState.popUntil((route) => route.isFirst);
   }
 
-  @override
-  void closeScaffold() {
-    _initialKey.currentState.pop();
-  }
-
-  @override
-  void openScaffold() {
-    _scaffoldKey.currentState.openDrawer();
-  }
-
   GlobalKey<ScaffoldState> get scaffoldKey => _scaffoldKey;
+
+  @override
+  void navigateAndReplace(String path, {Object arguments}) {
+    _navigatorKey.currentState.popAndPushNamed(path, arguments: arguments);
+  }
 }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:ombruk/AppRouter.dart';
-import 'package:ombruk/ui/app/AppDrawer.dart';
 import 'package:ombruk/ui/shared/const/CustomColors.dart';
 import 'package:ombruk/ui/shared/widgets/BaseWidget.dart';
 import 'package:ombruk/viewmodel/TabViewModel.dart';
@@ -31,8 +30,6 @@ class TabView extends StatelessWidget {
               )
               .toList(),
         ),
-        // Side menu drawer
-        drawer: AppDrawer(),
         // Navigation bar
         bottomNavigationBar: BottomNavigationBar(
           backgroundColor: CustomColors.osloDarkBlue,

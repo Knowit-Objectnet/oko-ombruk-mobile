@@ -18,33 +18,28 @@ class DrawerViewModel extends BaseViewModel {
       DrawerItem(
         icon: CustomIcons.map,
         title: 'Stasjonene',
-        onTap: () => _navigatorService.closeScaffold(),
+        onTap: () => null,
         isSelected: false,
       ),
       DrawerItem(
         icon: CustomIcons.add,
         title: 'Opprett hendelse',
-        onTap: () {
-          _navigatorService.closeScaffold();
-          _navigatorService.navigateTo(Routes.CreateOccurenceView);
-        },
+        onTap: () =>
+            _navigatorService.navigateAndReplace(Routes.CreateOccurenceView),
         isSelected: false,
       ),
       DrawerItem(
           icon: CustomIcons.addDiscrepancy,
           title: 'Send beskjed',
           onTap: () {
-            _navigatorService.closeScaffold();
+            _navigatorService.goBack();
           },
           isSelected: false //_selectedIndex == 3,
           ),
       DrawerItem(
           icon: CustomIcons.myPage,
           title: 'Min side',
-          onTap: () {
-            _navigatorService.closeScaffold();
-            _navigatorService.navigateTo(Routes.MinSideView);
-          },
+          onTap: () => _navigatorService.navigateAndReplace(Routes.MinSideView),
           isSelected: false //_selectedIndex == 4,
           ),
     ];

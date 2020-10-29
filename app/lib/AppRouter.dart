@@ -5,7 +5,9 @@ import 'package:ombruk/ui/app/TabView.dart';
 import 'package:ombruk/ui/calendar/CalendarView.dart';
 import 'package:ombruk/ui/calendar/widgets/roleSpecific/admin/CreateCalendarEventScreen.dart';
 import 'package:ombruk/ui/calendar/widgets/roleSpecific/admin/CreateOccurrenceScreen.dart';
-import 'package:ombruk/ui/myPage/MyPageView.dart';
+import 'package:ombruk/ui/myPage/view/MyPageView.dart';
+import 'package:ombruk/ui/myPage/view/roleSpecific/admin/NewPartnerView.dart';
+import 'package:ombruk/ui/myPage/view/roleSpecific/admin/NewStationView.dart';
 import 'package:ombruk/ui/notifications/NotificationView.dart';
 import 'package:ombruk/ui/weightreport/WeightReportView.dart';
 
@@ -32,7 +34,21 @@ class AppRouter {
                 station: args.station, partner: args.partner));
       case Routes.MinSideView:
         return MaterialPageRoute(
-            settings: settings, builder: (_) => MyPageView());
+          settings: settings,
+          builder: (_) => MyPageView(),
+        );
+      case Routes.NewPartnerView:
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => NewPartnerView(),
+        );
+
+      case Routes.NewStationView:
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => NewStationView(),
+        );
+
       case Routes.StatistikkView:
         return MaterialPageRoute(
           settings: settings,

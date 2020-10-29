@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:ombruk/ui/myPage/roleSpecific/NewPartnerViewModel.dart';
 import 'package:ombruk/ui/shared/const/CustomColors.dart';
 import 'package:ombruk/ui/shared/widgets/BaseWidget.dart';
 import 'package:ombruk/ui/shared/widgets/ReturnButton.dart';
 import 'package:ombruk/ui/shared/widgets/ReturnButtonTitle.dart';
+import 'package:ombruk/viewmodel/NewPartnerViewModel.dart';
 
 class NewPartnerView extends StatelessWidget {
   @override

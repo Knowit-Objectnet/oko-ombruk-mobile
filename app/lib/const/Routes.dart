@@ -7,4 +7,6 @@ class Routes {
   static const String CreateOccurenceView = "/create_occurence";
   static const String CreateCalendarEventView = "/create_calendar_event";
   static const String MinSideView = "/min_side";
+  static const String NewPartnerView = "/new_partner_view";
+  static const String NewStationView = "/new_station_view";
 }

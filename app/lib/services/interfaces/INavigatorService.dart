@@ -14,9 +14,7 @@ abstract class INavigatorService {
 
   void popUntilEquals(String routeName);
 
-  void openScaffold();
-
-  void closeScaffold();
+  void navigateAndReplace(String path, {Object arguments});
 
   GlobalKey<NavigatorState> get initialKey;
   GlobalKey<ScaffoldState> get scaffoldKey;
