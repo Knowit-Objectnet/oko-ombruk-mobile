@@ -70,6 +70,16 @@ class CalendarView extends StatelessWidget {
                             .toList(),
                       ),
                       Spacer(),
+                      Padding(
+                          padding: EdgeInsets.only(
+                              left: 0, right: 8.0, top: 8.0, bottom: 8.0),
+                          child: CircleAvatar(
+                            backgroundColor: CustomColors.osloGreen,
+                            child: IconButton(
+                              icon: CustomIcons.image(CustomIcons.list),
+                              onPressed: () => model.onCalendarChange(),
+                            ),
+                          )),
                     ],
                   ),
                   Expanded(

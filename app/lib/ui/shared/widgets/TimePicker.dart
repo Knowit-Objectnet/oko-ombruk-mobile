@@ -1,22 +1,23 @@
 import 'package:meta/meta.dart';
 import 'package:flutter/material.dart';
 import 'package:ombruk/ui/shared/const/CustomColors.dart';
+import 'package:ombruk/ui/shared/widgets/CustomPicker.dart';
 
 class TimePicker extends StatelessWidget {
   final TimeOfDay selectedTime;
   final ValueChanged<TimeOfDay> timeChanged;
-  final Color backgroundColor;
-  final Color borderColor;
   final int minTime;
   final int maxTime;
+  final bool disabled;
+  final Color iconBackgroundColor;
 
   TimePicker({
     @required this.selectedTime,
     @required this.timeChanged,
-    this.backgroundColor = CustomColors.osloWhite,
-    this.borderColor = CustomColors.osloLightBlue,
     this.minTime = 7,
     this.maxTime = 16,
+    this.iconBackgroundColor = CustomColors.osloLightBeige,
+    this.disabled = false,
   })  : assert(selectedTime != null),
         assert(timeChanged != null),
         assert(selectedTime.hour >= minTime),
@@ -24,27 +25,57 @@ class TimePicker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(6.0),
-      decoration: BoxDecoration(
-        color: backgroundColor,
-        border: Border.all(width: 2.0, color: borderColor),
-      ),
-      child: DropdownButton<TimeOfDay>(
-        value: selectedTime,
-        onChanged: timeChanged,
-        underline: Container(),
-        isDense: true,
-        items: _timeList()
-            .map((e) => DropdownMenuItem(
-                  value: e,
-                  child: Text(e.hour.toString().padLeft(2, '0') +
-                      ':' +
-                      e.minute.toString().padLeft(2, '0')),
-                ))
-            .toList(),
+    return CustomPicker<TimeOfDay>(
+      disabled: disabled,
+      disabledWidget: Text(
+          selectedTime.hour.toString().padLeft(2, '0') +
+              ':' +
+              selectedTime.minute.toString().padLeft(2, '0'),
+          style: TextStyle(fontSize: 18.0)),
+      iconBackgroundColor: iconBackgroundColor,
+      selectedValue: selectedTime,
+      valueChanged: timeChanged,
+      items: _timeList(),
+      itemBuilder: (context, item) => DropdownMenuItem(
+        value: item,
+        child: Text(
+          item.hour.toString().padLeft(2, '0') +
+              ':' +
+              item.minute.toString().padLeft(2, '0'),
+          style: TextStyle(fontSize: 18.0),
+        ),
       ),
     );
+    // return Container(
+    //   padding: EdgeInsets.all(6.0),
+    //   decoration: disabled
+    //       ? null
+    //       : BoxDecoration(
+    //           color: backgroundColor,
+    //           border: Border.all(width: 2.0, color: borderColor),
+    //         ),
+    //   child: disabled
+    //       ? Text(
+    //           selectedTime.hour.toString().padLeft(2, '0') +
+    //               ':' +
+    //               selectedTime.minute.toString().padLeft(2, '0'),
+    //           style: TextStyle(fontSize: 16.0),
+    //         )
+    //       : DropdownButton<TimeOfDay>(
+    //           value: selectedTime,
+    //           onChanged: (time) => timeChanged(time),
+    //           underline: Container(),
+    //           isDense: true,
+    //           items: _timeList()
+    //               .map((e) => DropdownMenuItem(
+    //                     value: e,
+    //                     child: Text(e.hour.toString().padLeft(2, '0') +
+    //                         ':' +
+    //                         e.minute.toString().padLeft(2, '0')),
+    //                   ))
+    //               .toList(),
+    //         ),
+    // );
   }
 
   List<TimeOfDay> _timeList() {

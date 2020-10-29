@@ -24,7 +24,7 @@ class _EventInfoDialogState extends State<EventInfoDialog> {
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Container(
-            color: CustomColors.osloLightBlue,
+            color: CustomColors.osloLightBeige,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[

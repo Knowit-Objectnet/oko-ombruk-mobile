@@ -6,6 +6,7 @@ import 'package:ombruk/ui/shared/const/CustomIcons.dart';
 import 'package:ombruk/viewmodel/StationViewModel.dart';
 import 'package:provider/provider.dart';
 
+// DEPRECATED
 class StationPicker extends StatelessWidget {
   final Station selectedStation;
   final ValueChanged<Station> stationChanged;

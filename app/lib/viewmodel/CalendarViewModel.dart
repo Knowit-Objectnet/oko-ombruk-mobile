@@ -45,6 +45,11 @@ class CalendarViewModel extends BaseViewModel {
   List<CalendarEvent> get calendarEvents => _calendarEvents;
   bool get isLoading => _isLoading;
 
+  void onCalendarChange() {
+    _showHorizontal = !_showHorizontal;
+    notifyListeners();
+  }
+
   Future<void> fetchEvents({int stationID, int partnerID}) async {
     _isLoading = true;
     notifyListeners();

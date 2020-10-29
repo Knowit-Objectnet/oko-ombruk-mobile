@@ -54,7 +54,7 @@ class CreateOccurenceViewModel extends BaseViewModel {
     });
   }
 
-  String pickerValidator(String value) {
+  String pickerValidator(dynamic value) {
     if (value == null) return "Du må velge en verdi!";
     return null;
   }
@@ -80,15 +80,13 @@ class CreateOccurenceViewModel extends BaseViewModel {
     }
   }
 
-  void onPartnerChanged(String value) {
-    _selectedPartner =
-        _partners.firstWhere((p) => p.name == value, orElse: () => null);
+  void onPartnerChanged(Partner partner) {
+    _selectedPartner = partner;
     notifyListeners();
   }
 
-  void onStationChanged(String value) {
-    _selectedStation =
-        _stations.firstWhere((s) => s.name == value, orElse: () => null);
+  void onStationChanged(Station station) {
+    _selectedStation = station;
     notifyListeners();
   }
 }

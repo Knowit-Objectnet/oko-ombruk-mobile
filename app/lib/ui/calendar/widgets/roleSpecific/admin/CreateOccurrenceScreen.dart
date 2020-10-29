@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:ombruk/models/Partner.dart';
+import 'package:ombruk/models/Station.dart';
 import 'package:ombruk/ui/shared/const/CustomColors.dart';
 import 'package:ombruk/ui/shared/const/CustomIcons.dart';
 import 'package:ombruk/ui/shared/widgets/BaseWidget.dart';
@@ -47,23 +49,49 @@ class CreateOccurenceView extends StatelessWidget {
                         padding: EdgeInsets.only(top: 24.0, bottom: 4.0),
                         child: Subtitle(text: 'Samarbeidspartner'),
                       ),
-                      CustomPicker(
+                      CustomPicker<Partner>(
                         hintText: "Velg partner",
-                        values: model.partners.map((e) => e.name).toList(),
-                        selectedValue: model.selectedPartner?.name,
+                        selectedValue: model.selectedPartner,
                         valueChanged: model.onPartnerChanged,
                         validator: model.pickerValidator,
+                        items: model.partners,
+                        itemBuilder: (context, partner) => DropdownMenuItem(
+                          value: partner,
+                          child: Center(
+                            child: Text(
+                              partner.name,
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ),
                       ),
                       Padding(
                         padding: EdgeInsets.only(top: 24.0, bottom: 4.0),
                         child: Subtitle(text: 'Stasjon(er)'),
                       ),
-                      CustomPicker(
+                      CustomPicker<Station>(
                         hintText: "Velg Stasjon",
-                        values: model.stations.map((e) => e.name).toList(),
-                        selectedValue: model.selectedStation?.name,
+                        selectedValue: model.selectedStation,
                         valueChanged: model.onStationChanged,
                         validator: model.pickerValidator,
+                        items: model.stations,
+                        itemBuilder: (context, station) => DropdownMenuItem(
+                          value: station,
+                          child: Container(
+                            // decoration: BoxDecoration(
+                            //   border: Border.all(
+                            //     color: CustomColors.osloBlue,
+                            //     width: 2.0,
+                            //   ),
+                            // ),
+                            child: Center(
+                              child: Text(
+                                station.name,
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ),
+                        ),
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(vertical: 24),
