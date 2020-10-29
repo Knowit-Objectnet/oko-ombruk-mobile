@@ -1,6 +1,16 @@
 import 'package:flutter/material.dart';
 
 abstract class DateUtils {
+  static final Map<String, int> jsonWeekdays = {
+    "MONDAY": 1,
+    "TUESDAY": 2,
+    "WEDNESDAY": 3,
+    "THURSDAY": 4,
+    "FRIDAY": 5,
+    "SATURDAY": 6,
+    "SUNDAY": 7,
+  };
+
   static final Map<int, String> weekdaysShort = {
     1: 'Man',
     2: 'Tir',
@@ -61,4 +71,7 @@ abstract class DateUtils {
   static DateTime fromTimeOfDay(DateTime date, TimeOfDay timeOfDay) =>
       DateTime.utc(
           date.year, date.month, date.day, timeOfDay.hour, timeOfDay.minute);
+
+  static String timeOfDayToString(TimeOfDay time) =>
+      "${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}";
 }

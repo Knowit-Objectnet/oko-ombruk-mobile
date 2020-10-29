@@ -74,9 +74,15 @@ class CalendarView extends StatelessWidget {
                     ],
                   ),
                   Expanded(
-                    child: model.showHorizontalCalendar
-                        ? HorizontalCalendar(events: model.currentStationEvents)
-                        : VerticalCalendar(events: model.currentStationEvents),
+                    child: RefreshIndicator(
+                      displacement: 200,
+                      onRefresh: () async => await model.fetchEvents(),
+                      child: model.showHorizontalCalendar
+                          ? HorizontalCalendar(
+                              events: model.currentStationEvents)
+                          : VerticalCalendar(
+                              events: model.currentStationEvents),
+                    ),
                   ),
                 ],
               ),

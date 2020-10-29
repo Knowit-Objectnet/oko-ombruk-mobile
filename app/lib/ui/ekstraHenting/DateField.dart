@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:ombruk/globals.dart' as globals;
 import 'package:ombruk/utils/DateUtils.dart';
 
 class DateField extends StatelessWidget {
