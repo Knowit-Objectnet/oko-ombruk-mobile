@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:ombruk/ui/app/NavItem.dart';
+import 'package:ombruk/ui/shared/model/NavItem.dart';
 
 class AppView {
   final int defaultIndex;

@@ -1,7 +1,7 @@
 import 'package:ombruk/const/Routes.dart';
 import 'package:ombruk/services/interfaces/INavigatorService.dart';
-import 'package:ombruk/ui/app/DrawerItem.dart';
 import 'package:ombruk/ui/shared/const/CustomIcons.dart';
+import 'package:ombruk/ui/shared/model/DrawerItem.dart';
 import 'package:ombruk/viewmodel/BaseViewModel.dart';
 
 class DrawerViewModel extends BaseViewModel {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ombruk/models/Partner.dart';
 import 'package:ombruk/models/Station.dart';
-import 'package:ombruk/ui/app/OkoAppBar.dart';
+import 'package:ombruk/ui/app/widgets/OkoAppBar.dart';
 import 'package:ombruk/ui/calendar/widgets/WeekdayPicker.dart';
 import 'package:ombruk/ui/shared/const/CustomColors.dart';
 import 'package:ombruk/ui/shared/const/CustomIcons.dart';

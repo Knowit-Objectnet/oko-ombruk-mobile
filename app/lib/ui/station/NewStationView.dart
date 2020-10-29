@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ombruk/ui/app/OkoAppBar.dart';
+import 'package:ombruk/ui/app/widgets/OkoAppBar.dart';
 import 'package:ombruk/ui/shared/const/CustomColors.dart';
 import 'package:ombruk/ui/shared/const/CustomIcons.dart';
 import 'package:ombruk/ui/shared/widgets/BaseWidget.dart';
@@ -8,7 +8,7 @@ import 'package:ombruk/ui/shared/widgets/form/OkoIconTextField.dart';
 import 'package:ombruk/ui/shared/widgets/form/TimePicker.dart';
 import 'package:ombruk/ui/shared/widgets/text/Subtitle.dart';
 import 'package:ombruk/utils/DateUtils.dart';
-import 'package:ombruk/viewmodel/CreateCalendarEventModel.dart';
+
 import 'package:ombruk/viewmodel/NewStationViewModel.dart';
 
 class NewStationView extends StatelessWidget {

@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:ombruk/models/WeightReport.dart';
-import 'package:ombruk/ui/app/AppDrawer.dart';
-import 'package:ombruk/ui/app/OkoAppBar.dart';
-import 'package:ombruk/ui/shared/const/CustomColors.dart';
+import 'package:ombruk/ui/app/widgets/AppDrawer.dart';
+import 'package:ombruk/ui/app/widgets/OkoAppBar.dart';
 import 'package:ombruk/ui/shared/widgets/BaseWidget.dart';
 import 'package:ombruk/ui/shared/widgets/text/Subtitle.dart';
+import 'package:ombruk/ui/weightreport/dialog/WeightReportDialog.dart';
 import 'package:ombruk/ui/weightreport/widgets/ReportWithWeight.dart';
 import 'package:ombruk/ui/weightreport/widgets/ReportWithoutWeight.dart';
-import 'package:ombruk/ui/weightreport/widgets/WeightReportDialog.dart';
 import 'package:ombruk/viewmodel/BaseViewModel.dart';
 import 'package:ombruk/viewmodel/WeightReportViewModel.dart';
 import 'package:provider/provider.dart';

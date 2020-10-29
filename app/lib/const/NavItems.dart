@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ombruk/const/Routes.dart';
-import 'package:ombruk/ui/app/NavItem.dart';
+import 'package:ombruk/ui/shared/model/NavItem.dart';
 
 abstract class NavItems {
   static NavItem varsler = NavItem(

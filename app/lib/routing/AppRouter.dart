@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:ombruk/const/Routes.dart';
 import 'package:ombruk/routing/arguments/CalendarEventScreenArgs.dart';
 import 'package:ombruk/ui/app/TabView.dart';
-import 'package:ombruk/ui/calendar/CalendarView.dart';
-import 'package:ombruk/ui/calendar/widgets/roleSpecific/admin/CreateCalendarEventScreen.dart';
-import 'package:ombruk/ui/calendar/widgets/roleSpecific/admin/CreateOccurrenceScreen.dart';
+import 'package:ombruk/ui/calendar/view/CalendarView.dart';
+import 'package:ombruk/ui/calendar/view/CreateCalendarEventScreen.dart';
+import 'package:ombruk/ui/calendar/view/CreateOccurrenceScreen.dart';
 import 'package:ombruk/ui/message/MessageScreen.dart';
-import 'package:ombruk/ui/myPage/view/MyPageView.dart';
-import 'package:ombruk/ui/myPage/view/roleSpecific/admin/NewPartnerView.dart';
-import 'package:ombruk/ui/myPage/view/roleSpecific/admin/NewStationView.dart';
+import 'package:ombruk/ui/myPage/MyPageView.dart';
 import 'package:ombruk/ui/notifications/NotificationView.dart';
+import 'package:ombruk/ui/partner/NewPartnerView.dart';
 import 'package:ombruk/ui/pickup/AddExtraPickupView.dart';
+import 'package:ombruk/ui/station/NewStationView.dart';
 import 'package:ombruk/ui/weightreport/WeightReportView.dart';
 
 class AppRouter {

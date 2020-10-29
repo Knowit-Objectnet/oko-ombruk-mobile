@@ -1,6 +1,6 @@
 import 'package:ombruk/const/NavItems.dart';
 import 'package:ombruk/globals.dart';
-import 'package:ombruk/ui/app/AppView.dart';
+import 'package:ombruk/ui/shared/model/AppView.dart';
 
 abstract class TabItems {
   static final Map<KeycloakRoles, AppView> tabItems = {

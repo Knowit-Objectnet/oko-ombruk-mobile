@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:ombruk/models/Station.dart';
-import 'package:ombruk/ui/app/OkoAppBar.dart';
-import 'package:ombruk/ui/pickup/AddExtraPickupViewModel.dart';
+import 'package:ombruk/ui/app/widgets/OkoAppBar.dart';
 import 'package:ombruk/ui/shared/const/CustomColors.dart';
 import 'package:ombruk/ui/shared/const/CustomIcons.dart';
 import 'package:ombruk/ui/shared/widgets/BaseWidget.dart';
 import 'package:ombruk/ui/shared/widgets/DatePicker.dart';
-import 'package:ombruk/ui/shared/widgets/TextFormInput.dart';
 import 'package:ombruk/ui/shared/widgets/form/CustomPicker.dart';
 import 'package:ombruk/ui/shared/widgets/form/TimePicker.dart';
 import 'package:ombruk/ui/shared/widgets/text/Subtitle.dart';
 import 'package:ombruk/utils/DateUtils.dart';
+import 'package:ombruk/viewmodel/AddExtraPickupViewModel.dart';
 import 'package:ombruk/viewmodel/BaseViewModel.dart';
 import 'package:provider/provider.dart';
 
@@ -135,11 +134,21 @@ class AddExtraPickupView extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(vertical: 10),
                         child: Subtitle(text: 'Alternativt'),
                       ),
-                      TextFormInput(
-                        hint: 'Merknad (max 100 tegn)',
-                        controller: model.merknadController,
-                        maxLength: 100,
-                        validate: false,
+                      Container(
+                        padding: EdgeInsets.only(left: 4.0),
+                        decoration: BoxDecoration(
+                          color: CustomColors.osloWhite,
+                        ),
+                        child: TextFormField(
+                          controller: model.merknadController,
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            hintText: "Merknad (max 100 tegn)",
+                          ),
+                          textCapitalization: TextCapitalization.sentences,
+                          autofocus: false,
+                          maxLength: 100, // Can be null to disable maxLength
+                        ),
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(vertical: 16.0),

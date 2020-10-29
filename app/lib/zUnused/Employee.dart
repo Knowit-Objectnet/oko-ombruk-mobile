@@ -5,9 +5,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:ombruk/ui/calendar/CalendarView.dart';
+import 'package:ombruk/ui/calendar/view/CalendarView.dart';
 import 'package:ombruk/ui/notifications/NotificationView.dart';
-import 'package:ombruk/ui/pickup/AddExtraPickupScreen.dart';
+import 'package:ombruk/ui/pickup/AddExtraPickupView.dart';
 import 'package:ombruk/zUnused/ActionItem.dart';
 import 'package:ombruk/zUnused/AppView.dart';
 
@@ -50,6 +50,6 @@ AppView employeeView = AppView(defaultIndex: 1, key: key, widgets: [
       callback: (actionKey) {
         // Push screen
         Navigator.push(actionKey.currentContext,
-            MaterialPageRoute(builder: (context) => AddExtraPickupScreen()));
+            MaterialPageRoute(builder: (context) => AddExtraPickupView()));
       })
 ]);

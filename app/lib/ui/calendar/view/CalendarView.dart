@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ombruk/models/Station.dart';
-import 'package:ombruk/ui/app/AppDrawer.dart';
-import 'package:ombruk/ui/app/OkoAppBar.dart';
+import 'package:ombruk/ui/app/widgets/AppDrawer.dart';
+import 'package:ombruk/ui/app/widgets/OkoAppBar.dart';
 import 'package:ombruk/ui/calendar/widgets/HorizontalCalendar/HorizontalCalendar.dart';
 import 'package:ombruk/ui/calendar/widgets/VerticalCalendar/VerticalCalendar.dart';
 import 'package:ombruk/ui/shared/const/CustomColors.dart';
