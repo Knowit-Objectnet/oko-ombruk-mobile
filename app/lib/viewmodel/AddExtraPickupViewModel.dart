@@ -62,6 +62,16 @@ class AddExtraPickupViewModel extends BaseViewModel {
     notifyListeners();
   }
 
+  String validateDate(DateTime value) {
+    DateTime currentDate = DateTime.now();
+    DateTime compareDate =
+        DateTime(currentDate.year, currentDate.month, currentDate.day);
+    if (value.isBefore(compareDate)) {
+      return "Valgt dato kan ikke være før nåtid!";
+    }
+    return null;
+  }
+
   void onTimeChanged(TimeType type, TimeOfDay value) {
     if (type == TimeType.Start) {
       _startTime = value;
