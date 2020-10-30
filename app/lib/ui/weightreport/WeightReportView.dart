@@ -20,6 +20,7 @@ class WeightReportView extends StatelessWidget {
       builder: (context, WeightReportViewModel model, _) => Scaffold(
         appBar: OkoAppBar(
           title: "Vekt",
+          showBackButton: false,
         ),
         drawer: AppDrawer(),
         body: model.state == ViewState.Busy

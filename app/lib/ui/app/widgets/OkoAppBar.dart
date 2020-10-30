@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:ombruk/ui/shared/const/CustomColors.dart';
+import 'package:ombruk/ui/shared/widgets/ReturnButton.dart';
 
 class OkoAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final List<Widget> actions;
   final Color backgroundColor;
+  final bool showBackButton;
   OkoAppBar({
     @required this.title,
     this.actions,
     this.backgroundColor = CustomColors.osloWhite,
+    this.showBackButton = true,
   });
   @override
   Widget build(BuildContext context) {
@@ -21,6 +24,12 @@ class OkoAppBar extends StatelessWidget implements PreferredSizeWidget {
           fontSize: 25,
         ),
       ),
+      leading: showBackButton
+          ? Padding(
+              padding: const EdgeInsets.only(left: 8.0),
+              child: ReturnButton(),
+            )
+          : null,
       centerTitle: false,
       backgroundColor: backgroundColor,
       brightness: Brightness.light,

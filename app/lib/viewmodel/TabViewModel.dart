@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:ombruk/const/TabItems.dart';
 import 'package:ombruk/globals.dart';
 import 'package:ombruk/services/interfaces/IAuthenticationService.dart';
 import 'package:ombruk/services/interfaces/INavigatorService.dart';
+import 'package:ombruk/ui/shared/const/TabItems.dart';
 import 'package:ombruk/ui/shared/model/AppView.dart';
 import 'package:ombruk/viewmodel/BaseViewModel.dart';
 

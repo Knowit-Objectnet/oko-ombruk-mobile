@@ -19,7 +19,10 @@ class CalendarView extends StatelessWidget {
       model: CalendarViewModel(Provider.of(context), Provider.of(context)),
       onModelReady: (CalendarViewModel model) => model.start(),
       builder: (context, CalendarViewModel model, _) => Scaffold(
-        appBar: OkoAppBar(title: "Kalender"),
+        appBar: OkoAppBar(
+          title: "Kalender",
+          showBackButton: false,
+        ),
         drawer: AppDrawer(),
         body: model.state == ViewState.Busy
             ? CircularProgressIndicator()

@@ -23,7 +23,7 @@ class AppRouter {
             settings: settings, builder: (_) => CalendarView());
       case Routes.VarslerView:
         return MaterialPageRoute(
-            settings: settings, builder: (_) => AddExtraPickupView());
+            settings: settings, builder: (_) => NotificationView());
       case Routes.CreateOccurenceView:
         return MaterialPageRoute(
             settings: settings, builder: (_) => CreateOccurenceView());

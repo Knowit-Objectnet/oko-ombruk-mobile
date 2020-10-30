@@ -1,5 +1,5 @@
-import 'package:ombruk/const/NavItems.dart';
 import 'package:ombruk/globals.dart';
+import 'package:ombruk/ui/shared/const/NavItems.dart';
 import 'package:ombruk/ui/shared/model/AppView.dart';
 
 abstract class TabItems {

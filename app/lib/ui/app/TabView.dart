@@ -41,7 +41,7 @@ class TabView extends StatelessWidget {
           items: model.view.navItems
               .map(
                 (item) => BottomNavigationBarItem(
-                  icon: Icon(item.iconData),
+                  icon: item.icon,
                   label: item.label,
                 ),
               )
