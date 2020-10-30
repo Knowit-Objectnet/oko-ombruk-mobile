@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:ombruk/ui/shared/const/CustomColors.dart';
 import 'package:ombruk/ui/shared/const/CustomIcons.dart';
 
 /// A leftmost return button which pops the current context
@@ -15,9 +14,9 @@ class ReturnButton extends StatelessWidget {
       child: Row(
         children: <Widget>[
           CircleAvatar(
-            backgroundColor: CustomColors.osloBlue,
+            backgroundColor: Colors.transparent,
             child: IconButton(
-              icon: CustomIcons.image(CustomIcons.arrowLeft),
+              icon: CustomIcons.image(CustomIcons.arrowLeft, size: 24),
               onPressed: () => Navigator.pop(context, this.returnValue),
             ),
           ),

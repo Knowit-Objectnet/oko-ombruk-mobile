@@ -58,4 +58,7 @@ List<SingleChildWidget> dependantServices = [
   ProxyProvider<IApi, IWeightReportService>(
     update: (context, api, _) => WeightReportService(api),
   ),
+  ProxyProvider<IApi, IPickupService>(
+    update: (context, api, _) => PickupService(api),
+  ),
 ];

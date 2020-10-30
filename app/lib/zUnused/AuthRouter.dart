@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:ombruk/ui/app/SplashScreen.dart';
 import 'package:ombruk/zUnused/TabsScreenPartner.dart';
 import 'package:ombruk/zUnused/TabsScreenReg.dart';
 import 'package:ombruk/zUnused/TabsScreenStasjon.dart';
 import 'package:provider/provider.dart';
 
-import 'package:ombruk/ui/SplashScreen.dart';
 import 'package:ombruk/ui/login/LoginWebView.dart';
 
 import 'package:ombruk/globals.dart';

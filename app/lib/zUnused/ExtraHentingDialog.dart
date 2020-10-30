@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:ombruk/ui/ekstraHenting/DateField.dart';
-import 'package:ombruk/ui/ekstraHenting/TimeField.dart';
 import 'package:ombruk/ui/shared/const/CustomColors.dart';
+import 'package:ombruk/utils/DateUtils.dart';
+import 'package:ombruk/zUnused/DateField.dart';
 
 ///! This components is deprecated
 class ExtraHentingDialog extends StatefulWidget {
@@ -70,16 +70,12 @@ class _ExtraHentingDialogState extends State<ExtraHentingDialog> {
               Image.asset('assets/icons/klokke.png', height: 20, width: 20),
               // TODO: Replace with the TimePicker component
               GestureDetector(
-                child: TimeField(
-                  time: _selectedTime,
-                ),
+                child: Text(DateUtils.timeOfDayToString(_selectedTime)),
                 onTap: () => _selectTime(context),
               ),
               Text(" - "),
               GestureDetector(
-                child: TimeField(
-                  time: _selectedDur,
-                ),
+                child: Text(DateUtils.timeOfDayToString(_selectedDur)),
                 onTap: () => _selectDur(context),
               )
             ],

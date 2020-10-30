@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:ombruk/ui/app/OkoAppBar.dart';
+import 'package:ombruk/ui/app/widgets/OkoAppBar.dart';
 import 'package:ombruk/ui/shared/const/CustomColors.dart';
 import 'package:ombruk/ui/shared/const/CustomIcons.dart';
 import 'package:ombruk/ui/shared/widgets/BaseWidget.dart';
 import 'package:ombruk/ui/shared/widgets/ContactInfo.dart';
-import 'package:ombruk/ui/shared/widgets/SwitchButton.dart';
 import 'package:ombruk/ui/shared/widgets/button/OkoTextButton.dart';
+import 'package:ombruk/ui/shared/widgets/button/SwitchButton.dart';
 import 'package:ombruk/ui/shared/widgets/text/Subtitle.dart';
 import 'package:ombruk/viewmodel/MyPageViewModel.dart';
 import 'package:provider/provider.dart';

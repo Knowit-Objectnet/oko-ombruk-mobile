@@ -9,9 +9,8 @@ import 'package:ombruk/services/SnackbarService.dart';
 import 'package:ombruk/services/forms/Event/EventPostForm.dart';
 import 'package:ombruk/services/interfaces/ICalendarService.dart';
 import 'package:ombruk/services/interfaces/INavigatorService.dart';
+import 'package:ombruk/utils/DateUtils.dart';
 import 'package:ombruk/viewmodel/BaseViewModel.dart';
-
-enum TimeType { Start, End }
 
 class CreateCalendarEventModel extends BaseViewModel {
   final DialogService _dialogService;

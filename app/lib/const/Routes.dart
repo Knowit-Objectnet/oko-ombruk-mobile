@@ -9,4 +9,6 @@ class Routes {
   static const String MinSideView = "/min_side";
   static const String NewPartnerView = "/new_partner_view";
   static const String NewStationView = "/new_station_view";
+  static const String MessageView = "/message_view";
+  static const String AddExtraPickupView = "/add_extra_pickup_view";
 }

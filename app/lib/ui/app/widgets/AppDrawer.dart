@@ -9,7 +9,11 @@ class AppDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BaseWidget(
-      model: DrawerViewModel(Provider.of(context)),
+      model: DrawerViewModel(
+        Provider.of(context),
+        Provider.of(context),
+        Provider.of(context),
+      ),
       builder: (context, DrawerViewModel model, _) {
         return Drawer(
           child: Container(

@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:ombruk/ui/calendar/CalendarView.dart';
-import 'package:ombruk/ui/myPage/view/MyPageView.dart';
+import 'package:ombruk/ui/calendar/view/CalendarView.dart';
+import 'package:ombruk/ui/message/MessageScreen.dart';
+import 'package:ombruk/ui/myPage/MyPageView.dart';
 import 'package:ombruk/ui/notifications/NotificationView.dart';
 import 'package:ombruk/ui/shared/const/CustomColors.dart';
 import 'package:ombruk/ui/shared/const/CustomIcons.dart';
-import 'package:ombruk/ui/tabs/stasjonComponents/MessageScreen.dart';
 import 'package:ombruk/viewmodel/CalendarViewModel.dart';
 import 'package:ombruk/zUnused/BottomAppBarButton.dart';
 import 'package:ombruk/zUnused/DrawerButton.dart';
 import 'package:provider/provider.dart';
-
-import 'package:ombruk/ui/ui.helper.dart';
 
 class TabsScreenReg extends StatelessWidget {
   @override

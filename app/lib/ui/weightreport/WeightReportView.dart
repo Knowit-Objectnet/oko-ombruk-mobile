@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:ombruk/models/WeightReport.dart';
-import 'package:ombruk/ui/app/AppDrawer.dart';
-import 'package:ombruk/ui/app/OkoAppBar.dart';
-import 'package:ombruk/ui/shared/const/CustomColors.dart';
+import 'package:ombruk/ui/app/widgets/AppDrawer.dart';
+import 'package:ombruk/ui/app/widgets/OkoAppBar.dart';
 import 'package:ombruk/ui/shared/widgets/BaseWidget.dart';
 import 'package:ombruk/ui/shared/widgets/text/Subtitle.dart';
+import 'package:ombruk/ui/weightreport/dialog/WeightReportDialog.dart';
 import 'package:ombruk/ui/weightreport/widgets/ReportWithWeight.dart';
 import 'package:ombruk/ui/weightreport/widgets/ReportWithoutWeight.dart';
-import 'package:ombruk/ui/weightreport/widgets/WeightReportDialog.dart';
 import 'package:ombruk/viewmodel/BaseViewModel.dart';
 import 'package:ombruk/viewmodel/WeightReportViewModel.dart';
 import 'package:provider/provider.dart';
@@ -22,6 +20,7 @@ class WeightReportView extends StatelessWidget {
       builder: (context, WeightReportViewModel model, _) => Scaffold(
         appBar: OkoAppBar(
           title: "Vekt",
+          showBackButton: false,
         ),
         drawer: AppDrawer(),
         body: model.state == ViewState.Busy
@@ -51,21 +50,28 @@ class WeightReportView extends StatelessWidget {
                             ...model.nonReportedList.map((report) {
                               return ReportWithoutWeight(
                                 weightReport: report,
-                                onPressedCallback: () => _showNewWeightDialog(
-                                    context, model, report),
+                                onPressedCallback: () => model.onDialog(
+                                  WeightReportDialog(
+                                    onSubmit: (newWeight) =>
+                                        model.addWeight(report, newWeight),
+                                  ),
+                                ),
                               );
                             }).toList(),
                           Subtitle(text: 'Tidligere uttak'),
                           if (model.reportedList.isNotEmpty)
                             ...model.reportedList
-                                .map((report) => ReportWithWeight(
-                                      report: report,
-                                      onTap: () => _showWeightEditDialog(
-                                        context,
-                                        model,
-                                        report,
+                                .map(
+                                  (report) => ReportWithWeight(
+                                    report: report,
+                                    onTap: () => model.onDialog(
+                                      WeightReportDialog(
+                                        onSubmit: (newWeight) => model
+                                            .updateWeight(report, newWeight),
                                       ),
-                                    ))
+                                    ),
+                                  ),
+                                )
                                 .toList(),
                         ],
                       ),
@@ -75,31 +81,5 @@ class WeightReportView extends StatelessWidget {
               ),
       ),
     );
-  }
-
-  Future<void> _showWeightEditDialog(
-    BuildContext context,
-    WeightReportViewModel model,
-    WeightReport report,
-  ) async {
-    showDialog(
-        context: context,
-        builder: (_) {
-          return WeightReportDialog(
-              onSubmit: (newWeight) => model.updateWeight(report, newWeight));
-        });
-  }
-
-  Future<void> _showNewWeightDialog(
-    BuildContext context,
-    WeightReportViewModel model,
-    WeightReport report,
-  ) async {
-    showDialog(
-        context: context,
-        builder: (_) {
-          return WeightReportDialog(
-              onSubmit: (newWeight) => model.addWeight(report, newWeight));
-        });
   }
 }

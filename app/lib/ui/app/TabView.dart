@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ombruk/AppRouter.dart';
+import 'package:ombruk/routing/AppRouter.dart';
 import 'package:ombruk/ui/shared/const/CustomColors.dart';
 import 'package:ombruk/ui/shared/widgets/BaseWidget.dart';
 import 'package:ombruk/viewmodel/TabViewModel.dart';
@@ -41,7 +41,7 @@ class TabView extends StatelessWidget {
           items: model.view.navItems
               .map(
                 (item) => BottomNavigationBarItem(
-                  icon: Icon(item.iconData),
+                  icon: item.icon,
                   label: item.label,
                 ),
               )
