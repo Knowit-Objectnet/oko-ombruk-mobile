@@ -28,7 +28,8 @@ class CalendarViewModel extends BaseViewModel {
   List<Station> _stations = [];
   List<Station> get stations => _stations;
 
-  CalendarViewModel(this._calendarService, this._stationService) {
+  CalendarViewModel(this._calendarService, this._stationService)
+      : super(state: ViewState.Busy) {
     fetchEvents();
   }
 

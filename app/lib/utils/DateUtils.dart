@@ -13,6 +13,10 @@ abstract class DateUtils {
     "SUNDAY": 7,
   };
 
+  static final Map<int, String> jsonWeekdaysAsValues = Map.fromEntries(
+    jsonWeekdays.entries.map((e) => MapEntry(e.value, e.key)),
+  );
+
   static final Map<int, String> weekdaysShort = {
     1: 'Man',
     2: 'Tir',
@@ -76,4 +80,12 @@ abstract class DateUtils {
 
   static String timeOfDayToString(TimeOfDay time) =>
       "${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}";
+
+  static TimeOfDay getTime(DateTime date) =>
+      TimeOfDay(hour: date.hour, minute: date.minute);
+
+  static bool isSameDayAs(DateTime first, DateTime second) =>
+      first.year == second.year &&
+      first.month == second.month &&
+      first.day == second.day;
 }

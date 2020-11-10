@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_week_view/flutter_week_view.dart';
 
 import 'package:ombruk/models/CalendarEvent.dart';
-import 'package:ombruk/ui/calendar/widgets/HorizontalCalendar/EventInfoDialog.dart';
+import 'package:ombruk/ui/calendar/dialogs/EventInfoDialog.dart';
 
 import 'package:ombruk/ui/shared/const/CustomColors.dart';
 

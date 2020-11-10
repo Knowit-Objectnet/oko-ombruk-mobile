@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:ombruk/models/Station.dart';
 import 'package:ombruk/ui/app/widgets/AppDrawer.dart';
 import 'package:ombruk/ui/app/widgets/OkoAppBar.dart';
-import 'package:ombruk/ui/calendar/widgets/HorizontalCalendar/HorizontalCalendar.dart';
+import 'package:ombruk/ui/calendar/widgets/HorizontalCalendar/DayCalendar.dart';
 import 'package:ombruk/ui/calendar/widgets/VerticalCalendar/VerticalCalendar.dart';
 import 'package:ombruk/ui/shared/const/CustomColors.dart';
 import 'package:ombruk/ui/shared/widgets/BaseWidget.dart';
@@ -81,8 +81,11 @@ class CalendarView extends StatelessWidget {
                       displacement: 200,
                       onRefresh: () async => await model.fetchEvents(),
                       child: model.showHorizontalCalendar
-                          ? HorizontalCalendar(
-                              events: model.currentStationEvents)
+                          ? DayCalendar(
+                              key: GlobalKey(),
+                              events: model.currentStationEvents,
+                              station: model.selectedStation,
+                            )
                           : VerticalCalendar(
                               events: model.currentStationEvents),
                     ),

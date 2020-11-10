@@ -1,33 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:ombruk/models/Station.dart';
 import 'package:ombruk/ui/shared/const/CustomColors.dart';
+import 'package:ombruk/utils/DateUtils.dart';
 
 import 'DateButton.dart';
 
 class DayScroller extends StatefulWidget {
-  DayScroller({Key key, @required this.selectedDay, @required this.selectDay})
-      : super(key: key);
-
-  final DateTime selectedDay;
-  final Function(DateTime) selectDay;
-
+  final Station station;
+  final DateTime selectedDate;
+  final Function(DateTime) onDateChanged;
+  DayScroller({
+    @required this.selectedDate,
+    @required this.onDateChanged,
+    @required this.station,
+  });
   @override
   _DayScrollerState createState() => _DayScrollerState();
 }
 
 class _DayScrollerState extends State<DayScroller> {
-  final controller = PageController(initialPage: 0);
-  final DateTime now = DateTime.now();
-
-  int _weeknumberNow;
-  int _weeknumberInSwipe;
-
-  _DayScrollerState() {
-    // Weekday calculation from https://en.wikipedia.org/wiki/ISO_week_date#Calculation
-    int dayOfYear =
-        int.parse(DateFormat('D').format(now)); // day count from. 1. January
-    _weeknumberNow = ((dayOfYear - now.weekday + 10) / 7).floor();
-    _weeknumberInSwipe = _weeknumberNow;
+  int _currentWeekNumber;
+  @override
+  void initState() {
+    super.initState();
+    _currentWeekNumber = _calculateWeekNumber(0);
   }
 
   @override
@@ -36,24 +33,33 @@ class _DayScrollerState extends State<DayScroller> {
       padding: EdgeInsets.symmetric(vertical: 12.0),
       height: 80,
       child: Row(
-        children: <Widget>[
+        children: [
           Container(
             padding: EdgeInsets.all(8.0),
             color: CustomColors.osloLightBlue,
-            child: Text('Uke $_weeknumberInSwipe'),
+            child: Text('Uke $_currentWeekNumber'),
           ),
           Expanded(
             child: PageView.builder(
-              controller: controller,
               onPageChanged: (int index) {
                 setState(() {
-                  _weeknumberInSwipe = _weeknumberNow + index;
+                  _currentWeekNumber = _calculateWeekNumber(index);
                 });
               },
               scrollDirection: Axis.horizontal,
-              itemBuilder: (_, weekOffset) => Row(
+              itemBuilder: (_, offset) => Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: _weekdays(weekOffset),
+                children: widget.station.hours.entries.map(
+                  (e) {
+                    DateTime date = _calculateDate(offset, e.key);
+                    return DateButton(
+                      dateTime: date,
+                      onDateChanged: widget.onDateChanged,
+                      isSelected:
+                          DateUtils.isSameDayAs(date, widget.selectedDate),
+                    );
+                  },
+                ).toList(),
               ),
             ),
           ),
@@ -62,24 +68,15 @@ class _DayScrollerState extends State<DayScroller> {
     );
   }
 
-  // Builds a 5 day list of DateButtons
-  List<Widget> _weekdays(int weekIndex) {
-    int _weekdayOffset() {
-      // 0 = Monday, 1 = Tuesday...
-      return now.weekday - 1;
-    }
+  int _calculateWeekNumber(int index) {
+    // Weekday calculation from https://en.wikipedia.org/wiki/ISO_week_date#Calculation
+    DateTime newWeek = DateTime.now().add(Duration(days: 7 * index));
+    int dayOfYear = int.parse(DateFormat('D').format(newWeek));
+    return ((dayOfYear - newWeek.weekday + 10) / 7).floor();
+  }
 
-    List<Widget> weekdays = [];
-    for (int i = _weekdayOffset() * (-1); i < 5 - _weekdayOffset(); i++) {
-      DateTime date = now.add(Duration(days: weekIndex * 7 + i));
-      weekdays.add(DateButton(
-          dateTime: date,
-          selectDay: (DateTime dateTime) => widget.selectDay(dateTime),
-          // No good compare
-          isSelected: date.day == widget.selectedDay.day &&
-              date.month == widget.selectedDay.month &&
-              date.year == widget.selectedDay.year));
-    }
-    return weekdays;
+  DateTime _calculateDate(int offset, int dayOfWeek) {
+    DateTime now = DateTime.now();
+    return now.add(Duration(days: (7 * offset) + dayOfWeek - now.weekday));
   }
 }
