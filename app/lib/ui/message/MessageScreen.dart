@@ -4,7 +4,7 @@ import 'package:ombruk/models/Station.dart';
 import 'package:ombruk/ui/app/widgets/OkoAppBar.dart';
 import 'package:ombruk/ui/shared/const/CustomColors.dart';
 import 'package:ombruk/ui/shared/widgets/BaseWidget.dart';
-import 'package:ombruk/ui/shared/widgets/DatePicker.dart';
+import 'package:ombruk/ui/shared/widgets/DatePickerFormField.dart';
 import 'package:ombruk/ui/shared/widgets/form/CustomPicker.dart';
 import 'package:ombruk/ui/shared/widgets/form/OkoIconTextField.dart';
 import 'package:ombruk/ui/shared/widgets/form/TimePicker.dart';
@@ -95,8 +95,8 @@ class MessageView extends StatelessWidget {
                               ),
                               Text('-'),
                               Flexible(
-                                child: DatePicker(
-                                  dateTime: model.startDate,
+                                child: DatePickerFormField(
+                                  initialValue: model.startDate,
                                   dateChanged: (value) => model.onDateChanged(
                                       TimeType.Start, value),
                                 ),
@@ -126,8 +126,8 @@ class MessageView extends StatelessWidget {
                               ),
                               Text('-'),
                               Flexible(
-                                child: DatePicker(
-                                  dateTime: model.startDate,
+                                child: DatePickerFormField(
+                                  initialValue: model.startDate,
                                   dateChanged: (value) =>
                                       model.onDateChanged(TimeType.End, value),
                                 ),
