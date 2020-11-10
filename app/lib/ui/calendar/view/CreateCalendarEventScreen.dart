@@ -6,7 +6,7 @@ import 'package:ombruk/ui/calendar/widgets/WeekdayPicker.dart';
 import 'package:ombruk/ui/shared/const/CustomColors.dart';
 import 'package:ombruk/ui/shared/const/CustomIcons.dart';
 import 'package:ombruk/ui/shared/widgets/BaseWidget.dart';
-import 'package:ombruk/ui/shared/widgets/DatePicker.dart';
+import 'package:ombruk/ui/shared/widgets/DatePickerFormField.dart';
 import 'package:ombruk/ui/shared/widgets/form/CustomPicker.dart';
 import 'package:ombruk/ui/shared/widgets/form/TimePicker.dart';
 import 'package:ombruk/ui/shared/widgets/text/Subtitle.dart';
@@ -116,16 +116,23 @@ class CreateCalendarEvent extends StatelessWidget {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: <Widget>[
-                          DatePicker(
-                            dateTime: model.startDate,
-                            dateChanged: (val) =>
-                                model.onDateChanged(TimeType.Start, val),
+                          Flexible(
+                            child: DatePickerFormField(
+                              initialValue: model.startDate,
+                              dateChanged: (val) =>
+                                  model.onDateChanged(TimeType.Start, val),
+                            ),
                           ),
-                          Text("til"),
-                          DatePicker(
-                            dateTime: model.endDate,
-                            dateChanged: (val) =>
-                                model.onDateChanged(TimeType.End, val),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 5),
+                            child: Text("til"),
+                          ),
+                          Flexible(
+                            child: DatePickerFormField(
+                              initialValue: model.endDate,
+                              dateChanged: (val) =>
+                                  model.onDateChanged(TimeType.End, val),
+                            ),
                           ),
                         ],
                       ),

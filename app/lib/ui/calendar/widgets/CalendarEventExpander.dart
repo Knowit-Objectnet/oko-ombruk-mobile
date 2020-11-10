@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 import 'package:ombruk/models/CalendarEvent.dart';
 import 'package:ombruk/ui/shared/widgets/BaseWidget.dart';
-import 'package:ombruk/ui/shared/widgets/DatePicker.dart';
 
 import 'package:ombruk/ui/shared/const/CustomColors.dart';
 import 'package:ombruk/ui/shared/const/CustomIcons.dart';
+import 'package:ombruk/ui/shared/widgets/DatePickerFormField.dart';
 import 'package:ombruk/ui/shared/widgets/form/TimePicker.dart';
 import 'package:ombruk/utils/DateUtils.dart';
 import 'package:ombruk/viewmodel/CalendarEventExpandedModel.dart';
@@ -24,6 +24,7 @@ class CalendarEventExpander extends StatelessWidget {
         Provider.of(context),
         Provider.of(context),
         Provider.of(context),
+        Provider.of(context),
       ),
       builder: (context, CalendarEventExpandedModel model, _) => Container(
         color: CustomColors.osloWhite,
@@ -35,13 +36,18 @@ class CalendarEventExpander extends StatelessWidget {
               children: [
                 CustomIcons.image(CustomIcons.calendar, size: 25),
                 VerticalDivider(thickness: 50),
-                DatePicker(
-                  disabled: !model.isEditing,
-                  dateTime: model.date,
-                  dateChanged: model.onDateChanged,
+                Flexible(
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 40.0),
+                    child: DatePickerFormField(
+                      validator: model.validateDate,
+                      disabled: !model.isEditing,
+                      initialValue: model.date,
+                      dateChanged: model.onDateChanged,
+                    ),
+                  ),
                 ),
-                Spacer(),
-                if (!model.isEditing)
+                if (!model.isEditing && model.hasPrivileges)
                   RawMaterialButton(
                     child: CustomIcons.image(CustomIcons.editIcon),
                     fillColor: CustomColors.osloBlue,
@@ -187,9 +193,13 @@ class CalendarEventExpander extends StatelessWidget {
                         ),
                         Padding(
                           padding: const EdgeInsets.only(left: 10, bottom: 10),
-                          child: DatePicker(
-                            dateTime: model.cancelUntilDateTime,
-                            dateChanged: model.onCancelEndChanged,
+                          child: Expanded(
+                            child: DatePickerFormField(
+                              disabled: true,
+                              validator: model.validateDate,
+                              initialValue: model.cancelUntilDateTime,
+                              dateChanged: model.onCancelEndChanged,
+                            ),
                           ),
                         )
                       ],

@@ -4,7 +4,7 @@ import 'package:ombruk/ui/app/widgets/OkoAppBar.dart';
 import 'package:ombruk/ui/shared/const/CustomColors.dart';
 import 'package:ombruk/ui/shared/const/CustomIcons.dart';
 import 'package:ombruk/ui/shared/widgets/BaseWidget.dart';
-import 'package:ombruk/ui/shared/widgets/DatePicker.dart';
+import 'package:ombruk/ui/shared/widgets/DatePickerFormField.dart';
 import 'package:ombruk/ui/shared/widgets/form/CustomPicker.dart';
 import 'package:ombruk/ui/shared/widgets/form/TimePicker.dart';
 import 'package:ombruk/ui/shared/widgets/text/Subtitle.dart';
@@ -51,12 +51,16 @@ class AddExtraPickupView extends StatelessWidget {
                           children: [
                             Padding(
                               padding: EdgeInsets.only(right: 8.0),
-                              child: CustomIcons.image(CustomIcons.calendar),
+                              child: CustomIcons.image(
+                                CustomIcons.calendar,
+                                size: 40,
+                              ),
                             ),
                             Expanded(
-                              child: DatePicker(
-                                dateTime: model.selectedDate,
+                              child: DatePickerFormField(
+                                initialValue: model.selectedDate,
                                 dateChanged: model.onDateChanged,
+                                validator: model.validateDate,
                               ),
                             ),
                           ],
@@ -70,7 +74,10 @@ class AddExtraPickupView extends StatelessWidget {
                         children: <Widget>[
                           Padding(
                             padding: EdgeInsets.only(right: 8.0),
-                            child: CustomIcons.image(CustomIcons.clock),
+                            child: CustomIcons.image(
+                              CustomIcons.clock,
+                              size: 35,
+                            ),
                           ),
                           Expanded(
                             child: Row(
@@ -114,7 +121,10 @@ class AddExtraPickupView extends StatelessWidget {
                         children: [
                           Padding(
                             padding: EdgeInsets.only(right: 8.0),
-                            child: CustomIcons.image(CustomIcons.clock),
+                            child: CustomIcons.image(
+                              CustomIcons.clock,
+                              size: 35,
+                            ),
                           ),
                           Flexible(
                             child: CustomPicker<Station>(
