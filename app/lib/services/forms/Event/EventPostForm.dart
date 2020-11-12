@@ -55,7 +55,7 @@ class RecurrenceRule implements IForm {
   Map<String, dynamic> encode() => {
         if (days != null)
           'days': days.map((e) => describeEnum(e).toUpperCase()).toList(),
-        if (until != null) 'until': DateUtils.getDateString(until),
+        if (until != null) 'until': DateUtils.getDateString(until) + "Z",
         if (interval != null) 'interval': interval,
         if (count != null) 'count': count,
       };

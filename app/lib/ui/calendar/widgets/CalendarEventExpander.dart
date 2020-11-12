@@ -61,33 +61,43 @@ class CalendarEventExpander extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.only(top: 15, right: 40),
-              child: Row(
-                children: [
-                  CustomIcons.image(CustomIcons.clock, size: 25),
-                  VerticalDivider(thickness: 100),
-                  Flexible(
-                    child: TimePicker(
-                      disabled: !model.isEditing,
-                      iconBackgroundColor: CustomColors.osloWhite,
-                      selectedTime: model.startTime,
-                      timeChanged: (time) =>
-                          model.onTimeChanged(TimeType.Start, time),
+              child: IntrinsicHeight(
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(right: 15.0),
+                      child: CustomIcons.image(CustomIcons.clock, size: 25),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: Text("til"),
-                  ),
-                  Flexible(
-                    child: TimePicker(
-                      iconBackgroundColor: CustomColors.osloWhite,
-                      disabled: !model.isEditing,
-                      selectedTime: model.endTime,
-                      timeChanged: (time) =>
-                          model.onTimeChanged(TimeType.End, time),
+                    Flexible(
+                      child: TimePicker(
+                        minTime: model.minTime,
+                        maxTime: model.maxTime,
+                        disabled: !model.isEditing,
+                        iconBackgroundColor: CustomColors.osloWhite,
+                        selectedTime: model.startTime,
+                        validator: model.validateTime,
+                        timeChanged: (time) =>
+                            model.onTimeChanged(TimeType.Start, time),
+                      ),
                     ),
-                  ),
-                ],
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Text("til"),
+                    ),
+                    Flexible(
+                      child: TimePicker(
+                        minTime: model.minTime,
+                        maxTime: model.maxTime,
+                        iconBackgroundColor: CustomColors.osloWhite,
+                        disabled: !model.isEditing,
+                        selectedTime: model.endTime,
+                        validator: model.validateTime,
+                        timeChanged: (time) =>
+                            model.onTimeChanged(TimeType.End, time),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
             Padding(
@@ -184,26 +194,48 @@ class CalendarEventExpander extends StatelessWidget {
                   SizedBox(height: 10),
                   if (model.cancellationType == CancellationType.Until)
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[
+                      children: [
                         Padding(
                           padding: const EdgeInsets.only(right: 10),
                           child: Text('Sluttdato:',
                               style: TextStyle(fontSize: 16.0)),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 10, bottom: 10),
-                          child: Expanded(
+                        Flexible(
+                          child: Padding(
+                            padding:
+                                const EdgeInsets.only(left: 10.0, bottom: 10),
                             child: DatePickerFormField(
-                              disabled: true,
-                              validator: model.validateDate,
+                              validator: model.validateUntilDate,
                               initialValue: model.cancelUntilDateTime,
                               dateChanged: model.onCancelEndChanged,
                             ),
                           ),
-                        )
+                        ),
                       ],
                     ),
+                  // Flexible(
+                  //   child: Row(
+                  //     mainAxisAlignment: MainAxisAlignment.start,
+                  //     children: <Widget>[
+                  //       Padding(
+                  //         padding: const EdgeInsets.only(right: 10),
+                  //         child: Text('Sluttdato:',
+                  //             style: TextStyle(fontSize: 16.0)),
+                  //       ),
+                  //       Padding(
+                  //         padding:
+                  //             const EdgeInsets.only(left: 10, bottom: 10),
+                  //         child: Flexible(child: Text("yo")),
+                  //         // child: DatePickerFormField(
+                  //         //   disabled: true,
+                  //         //   validator: model.validateDate,
+                  //         //   initialValue: model.cancelUntilDateTime,
+                  //         //   dateChanged: model.onCancelEndChanged,
+                  //         // ),
+                  //       )
+                  //     ],
+                  //   ),
+                  // ),
                   FlatButton(
                       onPressed: model.deleteEvents,
                       padding:

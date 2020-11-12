@@ -3,7 +3,7 @@ import 'package:ombruk/models/Station.dart';
 import 'package:ombruk/viewmodel/BaseViewModel.dart';
 
 class DayCalendarViewModel extends BaseViewModel {
-  DateTime _selectedDate = DateTime.now().subtract(Duration(days: 1));
+  DateTime _selectedDate = DateTime.now();
   DateTime get selectedDate => _selectedDate;
   final Station _station;
 

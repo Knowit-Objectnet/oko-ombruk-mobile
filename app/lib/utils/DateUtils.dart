@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 enum TimeType { Start, End }
 
+enum Weekdays { monday, tuesday, wednesday, thursday, friday }
+
 abstract class DateUtils {
   static final Map<String, int> jsonWeekdays = {
     "MONDAY": 1,
@@ -66,6 +68,28 @@ abstract class DateUtils {
     11: 'NOV',
     12: 'DES',
   };
+
+  static Weekdays toWeekday(int i) {
+    switch (i) {
+      case 1:
+        return Weekdays.monday;
+        break;
+      case 2:
+        return Weekdays.tuesday;
+        break;
+      case 3:
+        return Weekdays.wednesday;
+        break;
+      case 4:
+        return Weekdays.thursday;
+        break;
+      case 5:
+        return Weekdays.friday;
+        break;
+      default:
+        throw Exception("Not a weekday!");
+    }
+  }
 
   static String getDMYString(DateTime dateTime) =>
       " ${dateTime.day.toString()}. ${months[dateTime.month]} ${dateTime.year.toString()}";

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:ombruk/globals.dart';
 import 'package:ombruk/models/CalendarEvent.dart';
 import 'package:ombruk/models/CustomResponse.dart';
 import 'package:ombruk/models/Station.dart';
@@ -11,6 +10,7 @@ import 'package:ombruk/services/forms/Event/EventUpdateForm.dart';
 import 'package:ombruk/services/forms/station/StationGetForm.dart';
 import 'package:ombruk/services/interfaces/ICalendarService.dart';
 import 'package:ombruk/services/interfaces/IStationService.dart';
+import 'package:ombruk/utils/DateUtils.dart';
 import 'package:ombruk/viewmodel/BaseViewModel.dart';
 
 class CalendarViewModel extends BaseViewModel {

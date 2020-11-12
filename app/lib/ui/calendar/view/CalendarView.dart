@@ -25,7 +25,7 @@ class CalendarView extends StatelessWidget {
         ),
         drawer: AppDrawer(),
         body: model.state == ViewState.Busy
-            ? CircularProgressIndicator()
+            ? Center(child: CircularProgressIndicator())
             : Column(
                 children: [
                   Row(

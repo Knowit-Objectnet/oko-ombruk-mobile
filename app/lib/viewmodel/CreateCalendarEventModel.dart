@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:ombruk/globals.dart';
+import 'package:ombruk/const/UttaksType.dart';
 import 'package:ombruk/models/CustomResponse.dart';
 import 'package:ombruk/models/Partner.dart';
 import 'package:ombruk/models/Station.dart';
@@ -12,6 +12,8 @@ import 'package:ombruk/services/interfaces/INavigatorService.dart';
 import 'package:ombruk/utils/DateUtils.dart';
 import 'package:ombruk/viewmodel/BaseViewModel.dart';
 
+import 'package:ombruk/utils/extensions/TimeOfDayExtensions.dart';
+
 class CreateCalendarEventModel extends BaseViewModel {
   final DialogService _dialogService;
   final INavigatorService _navigatorService;
@@ -20,11 +22,11 @@ class CreateCalendarEventModel extends BaseViewModel {
   final Partner _partner;
   final Station _station;
 
-  final Map<String, int> _intervals = {
-    'Ukentlig': 1,
-    'Annenhver uke': 2,
-  };
-  Map<String, int> get intervals => _intervals;
+  final Set<String> _intervals = UttaksType.values;
+  Set get intervals => _intervals;
+
+  String _chosenInterval;
+  String get chosenInterval => _chosenInterval;
 
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   GlobalKey<FormState> get formKey => _formKey;
@@ -32,11 +34,14 @@ class CreateCalendarEventModel extends BaseViewModel {
   TextEditingController _merknadController = TextEditingController();
   TextEditingController get merknadController => _merknadController;
 
-  List<Weekdays> _selectedWeekDays = List();
-  List<Weekdays> get selectedWeekdays => _selectedWeekDays;
+  Set<int> _selectedWeekdays = Set();
+  Set<int> get selectedWeekdays => _selectedWeekdays;
 
   TimeOfDay _startTime = TimeOfDay(hour: 8, minute: 0);
   TimeOfDay get startTime => _startTime;
+
+  int get minTime => _station.hours[_startDate.weekday].opensAt.hour;
+  int get maxTime => _station.hours[_startDate.weekday].closesAt.hour;
 
   TimeOfDay _endTime = TimeOfDay(hour: 9, minute: 0);
   TimeOfDay get endTime => _endTime;
@@ -56,6 +61,23 @@ class CreateCalendarEventModel extends BaseViewModel {
     notifyListeners();
   }
 
+  String validateTime(TimeOfDay value) {
+    if (_startTime >= _endTime) {
+      return "Start må være før slutt!";
+    }
+    if (value < _station.hours[_startDate.weekday].opensAt) {
+      return "Kan ikke være før stasjonens åpningstid!";
+    }
+    if (value > _station.hours[_endDate.weekday].closesAt) {
+      return "Kan ikke være etter stasjonens stengetid!";
+    }
+    return null;
+  }
+
+  String validateDate(DateTime time) {
+    return null;
+  }
+
   void onTimeChanged(TimeType type, TimeOfDay value) {
     if (type == TimeType.Start) {
       _startTime = value;
@@ -65,22 +87,19 @@ class CreateCalendarEventModel extends BaseViewModel {
     notifyListeners();
   }
 
-  void onWeekdayChanged(Weekdays value) {
-    if (_selectedWeekDays.contains(value)) {
-      _selectedWeekDays.remove(value);
+  void onWeekdayChanged(int value) {
+    if (_selectedWeekdays.contains(value)) {
+      _selectedWeekdays.remove(value);
     } else {
-      _selectedWeekDays.add(value);
+      _selectedWeekdays.add(value);
     }
     notifyListeners();
   }
 
   CreateCalendarEventModel(this._station, this._partner, this._calendarService,
       this._navigatorService, this._dialogService, this._snackbarService) {
-    _chosenInterval = _intervals.entries.first.key;
+    _chosenInterval = _intervals.first;
   }
-
-  String _chosenInterval;
-  String get chosenInterval => _chosenInterval;
 
   void onIntervalChanged(String value) {
     _chosenInterval = value;
@@ -89,22 +108,22 @@ class CreateCalendarEventModel extends BaseViewModel {
 
   void onSubmit() async {
     _dialogService.showLoading();
-    DateTime startDateTime = DateTime(startDate.year, startDate.month,
-        startDate.day, startTime.hour, startTime.minute);
-    DateTime endDateTime = DateTime(
-        endDate.year, endDate.month, endDate.day, endTime.hour, endTime.minute);
+    DateTime startDateTime = DateUtils.fromTimeOfDay(startDate, startTime);
+    DateTime endDateTime = DateUtils.fromTimeOfDay(startDate, endTime);
 
     RecurrenceRule recurrenceRule;
-    if (startDate != endDate) {
+    if (_chosenInterval != UttaksType.ENGANGSTILFELLE) {
       recurrenceRule = RecurrenceRule(
-        days: _selectedWeekDays,
-        until: endDateTime,
-        interval: _intervals[_chosenInterval],
+        days: _selectedWeekdays.map((i) => DateUtils.toWeekday(i)).toList(),
+        until: DateUtils.fromTimeOfDay(endDate, endTime),
+        interval: UttaksType.getInterval(_chosenInterval),
       );
+    } else {
+      endDateTime = DateUtils.fromTimeOfDay(startDate, endTime);
     }
-    print(endTime);
     print(startDateTime);
     print(endDateTime);
+    print(endTime);
     EventPostForm form = EventPostForm(
       startDateTime,
       endDateTime,
@@ -112,10 +131,12 @@ class CreateCalendarEventModel extends BaseViewModel {
       _partner.id,
       recurrenceRule,
     );
+    print(form.encode());
     CustomResponse response = await _calendarService.createCalendarEvent(form);
     _dialogService.hideLoading();
     if (!response.success) {
       print("error: ${response.message}");
+      print(response.statusCode);
       _snackbarService.showSimpleSnackbar("Kunne ikke opprette hendelse");
     } else {
       _navigatorService.popStack();

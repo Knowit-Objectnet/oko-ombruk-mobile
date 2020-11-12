@@ -1,7 +1,7 @@
 import 'package:meta/meta.dart';
 import 'package:flutter/material.dart';
 import 'package:ombruk/ui/shared/const/CustomColors.dart';
-import 'package:ombruk/ui/shared/widgets/form/CustomPicker.dart';
+import 'package:ombruk/ui/shared/widgets/form/CustomPickerFormField.dart';
 import 'package:ombruk/utils/DateUtils.dart';
 
 class TimePicker extends StatelessWidget {
@@ -12,6 +12,8 @@ class TimePicker extends StatelessWidget {
   final bool disabled;
   final Color iconBackgroundColor;
   final String Function(TimeOfDay) validator;
+  final bool isExpanded;
+  final EdgeInsets itemPadding;
 
   TimePicker({
     @required this.selectedTime,
@@ -21,6 +23,8 @@ class TimePicker extends StatelessWidget {
     this.iconBackgroundColor = CustomColors.osloLightBeige,
     this.validator,
     this.disabled = false,
+    this.isExpanded = true,
+    this.itemPadding = const EdgeInsets.all(0),
   })  : assert(selectedTime != null),
         assert(timeChanged != null),
         assert(selectedTime.hour >= minTime),
@@ -28,7 +32,8 @@ class TimePicker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CustomPicker<TimeOfDay>(
+    return CustomPickerFormField<TimeOfDay>(
+      isExpanded: isExpanded,
       disabled: disabled,
       disabledWidget: Text(
         DateUtils.timeOfDayToString(selectedTime),
@@ -41,11 +46,12 @@ class TimePicker extends StatelessWidget {
       items: _timeList(),
       itemBuilder: (context, item) => DropdownMenuItem(
         value: item,
-        child: Text(
-          item.hour.toString().padLeft(2, '0') +
-              ':' +
-              item.minute.toString().padLeft(2, '0'),
-          style: TextStyle(fontSize: 18.0),
+        child: Padding(
+          padding: itemPadding,
+          child: Text(
+            DateUtils.timeOfDayToString(item),
+            style: TextStyle(fontSize: 16.0),
+          ),
         ),
       ),
     );

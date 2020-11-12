@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:ombruk/globals.dart';
 import 'package:ombruk/models/CalendarEvent.dart';
 import 'package:ombruk/models/CustomResponse.dart';
+import 'package:ombruk/models/OpeningHours.dart';
 import 'package:ombruk/services/DialogService.dart';
 import 'package:ombruk/services/SnackbarService.dart';
 import 'package:ombruk/services/forms/Event/EventDeleteForm.dart';
@@ -68,6 +69,9 @@ class CalendarEventExpandedModel extends BaseViewModel {
   bool _editing = false;
   bool get isEditing => _editing;
 
+  int get minTime => _event.station.hours[_date.weekday]?.opensAt?.hour ?? 8;
+  int get maxTime => _event.station.hours[_date.weekday]?.closesAt?.hour ?? 16;
+
   bool _canEdit = false;
   bool get hasPrivileges => _canEdit;
 
@@ -85,6 +89,38 @@ class CalendarEventExpandedModel extends BaseViewModel {
         DateTime(currentTime.year, currentTime.month, currentTime.day);
     if (value.isBefore(compare)) {
       return "Kan ikke være før nåtid!";
+    }
+    if (!_event.station.hours.containsKey(value.weekday)) {
+      return "Stasjonen er stengt denne dagen!";
+    }
+    return null;
+  }
+
+  String validateTime(TimeOfDay value) {
+    if (_startTime.hour > _endTime.hour ||
+        _startTime.hour == endTime.hour &&
+            _startTime.minute >= endTime.minute) {
+      return "Starttidspunkt må være før sluttidspunkt!";
+    }
+    OpeningHours openingHours = event.station.hours[_date.weekday];
+    if (value.hour < openingHours.opensAt.hour ||
+        value.hour == openingHours.opensAt.hour &&
+            value.minute < openingHours.opensAt.minute) {
+      return "Må være etter ${DateUtils.timeOfDayToString(openingHours.opensAt)}";
+    }
+    if (value.hour > openingHours.closesAt.hour ||
+        value.hour == openingHours.closesAt.hour &&
+            value.minute >= openingHours.closesAt.minute) {
+      return "Må være før ${DateUtils.timeOfDayToString(openingHours.closesAt)}";
+    }
+    return null;
+  }
+
+  String validateUntilDate(DateTime value) {
+    DateTime now = DateTime.now();
+    DateTime today = DateTime(now.year, now.month, now.day);
+    if (value.isBefore(today)) {
+      return "Kan ikke slette hendelser som allerede har skjedd!";
     }
     return null;
   }
@@ -130,8 +166,10 @@ class CalendarEventExpandedModel extends BaseViewModel {
   }
 
   void deleteEvents() async {
+    if (validateUntilDate(_cancelUntilDateTime) != null) return;
     EventDeleteForm form;
-    if (cancellationType == CancellationType.Once) {
+    if (cancellationType == CancellationType.Once ||
+        _event.recurrenceRule.id == null) {
       form = EventDeleteForm(eventId: _event.id);
     } else if (cancellationType == CancellationType.Until) {
       form = EventDeleteForm(
@@ -143,6 +181,7 @@ class CalendarEventExpandedModel extends BaseViewModel {
     CustomResponse response = await _calendarService.deleteCalendarEvent(form);
     if (!response.success) {
       _snackbarService.showSimpleSnackbar("Kunne ikke slette hendelse!");
+      print(response.message);
     } else {
       _snackbarService.showSimpleSnackbar("Hendelse slettet!");
     }

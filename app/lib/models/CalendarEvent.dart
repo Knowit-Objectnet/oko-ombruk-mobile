@@ -1,10 +1,11 @@
+import 'package:ombruk/models/Station.dart';
 import 'package:ombruk/utils/DateUtils.dart';
 
 class CalendarEvent {
   final int id;
   final DateTime startDateTime;
   final DateTime endDateTime;
-  final _Station station;
+  final Station station;
   final _Partner partner;
   final _RecurrenceRule recurrenceRule;
 
@@ -36,27 +37,27 @@ class CalendarEvent {
       json['id'],
       startDate,
       endDate,
-      _Station.fromJson(json['station']),
+      Station.fromJson(json["station"]),
       _Partner.fromJson(json['partner']),
       recurrenceRule,
     );
   }
 
-  Map<String, dynamic> toJson() => {
-        'id': id,
-        // substring removes milliseconds
-        'startDateTime': DateUtils.getDateString(startDateTime),
-        'endDateTime': DateUtils.getDateString(endDateTime),
-        'station': station.toJson(),
-        'partner': partner.toJson(),
-        'recurrenceRule':
-            recurrenceRule != null ? recurrenceRule.toJson() : null
-      };
+  // Map<String, dynamic> toJson() => {
+  //       'id': id,
+  //       // substring removes milliseconds
+  //       'startDateTime': DateUtils.getDateString(startDateTime),
+  //       'endDateTime': DateUtils.getDateString(endDateTime),
+  //       'station': station.toJson(),
+  //       'partner': partner.toJson(),
+  //       'recurrenceRule':
+  //           recurrenceRule != null ? recurrenceRule.toJson() : null
+  //     };
 
-  @override
-  String toString() {
-    return toJson().toString();
-  }
+  // @override
+  // String toString() {
+  //   return toJson().toString();
+  // }
 }
 
 class _Station {
