@@ -108,6 +108,9 @@ abstract class DateUtils {
   static TimeOfDay getTime(DateTime date) =>
       TimeOfDay(hour: date.hour, minute: date.minute);
 
+  static String getTimeString(DateTime date) =>
+      timeOfDayToString(getTime(date));
+
   static bool isSameDayAs(DateTime first, DateTime second) =>
       first.year == second.year &&
       first.month == second.month &&

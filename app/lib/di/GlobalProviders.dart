@@ -5,6 +5,7 @@ import 'package:ombruk/services/DialogService.dart';
 import 'package:ombruk/services/NavigatorService.dart';
 import 'package:ombruk/services/PartnerService.dart';
 import 'package:ombruk/services/PickupService.dart';
+import 'package:ombruk/services/RequestService.dart';
 import 'package:ombruk/services/SecureStorageService.dart';
 import 'package:ombruk/services/SnackbarService.dart';
 import 'package:ombruk/services/StationService.dart';
@@ -15,6 +16,7 @@ import 'package:ombruk/services/interfaces/ICalendarService.dart';
 import 'package:ombruk/services/interfaces/INavigatorService.dart';
 import 'package:ombruk/services/interfaces/IPartnerService.dart';
 import 'package:ombruk/services/interfaces/IPickupService.dart';
+import 'package:ombruk/services/interfaces/IRequestService.dart';
 import 'package:ombruk/services/interfaces/ISecureStorageService.dart';
 import 'package:ombruk/services/interfaces/IStationService.dart';
 import 'package:ombruk/services/interfaces/IWeightReportService.dart';
@@ -60,5 +62,8 @@ List<SingleChildWidget> dependantServices = [
   ),
   ProxyProvider<IApi, IPickupService>(
     update: (context, api, _) => PickupService(api),
+  ),
+  ProxyProvider<IApi, IRequestService>(
+    update: (context, api, _) => RequestService(api),
   ),
 ];
