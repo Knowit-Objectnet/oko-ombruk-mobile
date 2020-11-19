@@ -19,5 +19,3 @@ KeycloakRoles getRole(String role) {
   }
   return null;
 }
-
-enum Weekdays { monday, tuesday, wednesday, thursday, friday }

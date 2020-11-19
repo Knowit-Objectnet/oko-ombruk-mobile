@@ -3,10 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:ombruk/models/CalendarEvent.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:ombruk/ui/calendar/widgets/CalendarEventExpander.dart';
+import 'package:ombruk/ui/calendar/widgets/NoEvents.dart';
 
 import 'package:ombruk/ui/shared/const/CustomColors.dart';
 import 'package:ombruk/ui/shared/const/CustomIcons.dart';
 import 'package:ombruk/utils/DateUtils.dart';
+
+class Vertical extends StatelessWidget {
+  final List<CalendarEvent> events;
+  Vertical({@required this.events});
+  @override
+  Widget build(BuildContext context) {}
+}
 
 class VerticalCalendar extends StatefulWidget {
   VerticalCalendar({Key key, @required this.events}) : super(key: key);
@@ -26,27 +34,7 @@ class _VerticalCalendarState extends State<VerticalCalendar> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.events.isEmpty) {
-      return Container(
-        padding: EdgeInsets.symmetric(horizontal: 16.0),
-        child: Column(
-          children: <Widget>[
-            Spacer(),
-            CustomIcons.image(CustomIcons.calendar, size: 50.0),
-            Text(
-              'Ingen avtaler',
-              style: TextStyle(fontSize: 28.0),
-            ),
-            Text(
-              'Det er ingen avtaler opprettet for den valgte stasjonen. Prøv å opddatere siden.',
-              textAlign: TextAlign.center,
-            ),
-            Spacer(),
-          ],
-        ),
-      );
-    }
-
+    if (widget.events.isEmpty) return NoEvents();
     // Groups the list on dates, with pretty text dividers
     return GroupedListView<CalendarEvent, DateTime>(
       elements: widget.events,
@@ -118,14 +106,19 @@ class _VerticalCalendarState extends State<VerticalCalendar> {
 
   Widget _timeText(DateTime start, DateTime end) {
     return Text(
-        start.hour.toString().padLeft(2, '0') +
-            ':' +
-            start.minute.toString().padLeft(2, '0') +
-            '-' +
-            end.hour.toString().padLeft(2, '0') +
-            ':' +
-            end.minute.toString().padLeft(2, '0'),
-        style: TextStyle(fontSize: 12.0, color: CustomColors.osloBlack));
+      "${DateUtils.timeOfDayToString(DateUtils.getTime(start))}",
+    );
+    // return Text(DateUtils.timeOfDayToString(DateUtils.getTime(start)) +
+    //     DateUtils.timeOfDayToString(DateUtils.getTime(end)));
+    // return Text(
+    //     start.hour.toString().padLeft(2, '0') +
+    //         ':' +
+    //         start.minute.toString().padLeft(2, '0') +
+    //         '-' +
+    //         end.hour.toString().padLeft(2, '0') +
+    //         ':' +
+    //         end.minute.toString().padLeft(2, '0'),
+    //     style: TextStyle(fontSize: 12.0, color: CustomColors.osloBlack));
   }
 
   Widget _dateText(DateTime dateTime) {

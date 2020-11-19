@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ombruk/const/UttaksType.dart';
 import 'package:ombruk/models/Partner.dart';
 import 'package:ombruk/models/Station.dart';
 import 'package:ombruk/ui/app/widgets/OkoAppBar.dart';
@@ -7,7 +8,7 @@ import 'package:ombruk/ui/shared/const/CustomColors.dart';
 import 'package:ombruk/ui/shared/const/CustomIcons.dart';
 import 'package:ombruk/ui/shared/widgets/BaseWidget.dart';
 import 'package:ombruk/ui/shared/widgets/DatePickerFormField.dart';
-import 'package:ombruk/ui/shared/widgets/form/CustomPicker.dart';
+import 'package:ombruk/ui/shared/widgets/form/CustomPickerFormField.dart';
 import 'package:ombruk/ui/shared/widgets/form/TimePicker.dart';
 import 'package:ombruk/ui/shared/widgets/text/Subtitle.dart';
 import 'package:ombruk/utils/DateUtils.dart';
@@ -49,56 +50,85 @@ class CreateCalendarEvent extends StatelessWidget {
                 padding: EdgeInsets.only(top: 16),
                 child: Subtitle(text: station.name),
               ),
-              CustomPicker<String>(
-                selectedValue: model.chosenInterval,
-                valueChanged: model.onIntervalChanged,
-                items: model.intervals.keys.toList(),
-                itemBuilder: (context, item) =>
-                    DropdownMenuItem(value: item, child: Text(item)),
-              ),
               Padding(
                 padding: EdgeInsets.only(top: 48.0, bottom: 16.0),
                 child: Text(
-                  "Velg ukedag(er):",
+                  "Hvor ofte skal det hentes?",
                   style: TextStyle(fontSize: 16.0),
                 ),
               ),
-              WeekdayPicker(
-                selectedWeekdays: model.selectedWeekdays,
-                weekdaysChanged: model.onWeekdayChanged,
-              ),
               Padding(
-                padding: EdgeInsets.only(top: 48.0, bottom: 16.0),
+                padding: const EdgeInsets.only(bottom: 48.0),
+                child: CustomPickerFormField<String>(
+                  selectedValue: model.chosenInterval,
+                  valueChanged: model.onIntervalChanged,
+                  items: model.intervals.toList(),
+                  itemBuilder: (context, item) =>
+                      DropdownMenuItem(value: item, child: Text(item)),
+                ),
+              ),
+              if (model.chosenInterval != UttaksType.ENGANGSTILFELLE)
+                Padding(
+                  padding: EdgeInsets.only(bottom: 48.0),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(bottom: 16.0),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            "Velg ukedag(er):",
+                            style: TextStyle(fontSize: 16.0),
+                          ),
+                        ),
+                      ),
+                      WeekdayPicker(
+                        availableWeekdays: station.hours.keys.toSet(),
+                        selectedWeekdays: model.selectedWeekdays,
+                        weekdaysChanged: model.onWeekdayChanged,
+                      ),
+                    ],
+                  ),
+                ),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 16.0),
                 child: Text(
                   "Velg tidspunkt for uttak:",
                   style: TextStyle(fontSize: 16.0),
                 ),
               ),
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(right: 10),
-                    child: CustomIcons.image(CustomIcons.clock, size: 35),
-                  ),
-                  Flexible(
-                    child: TimePicker(
-                      selectedTime: model.startTime,
-                      timeChanged: (t) =>
-                          model.onTimeChanged(TimeType.Start, t),
+              IntrinsicHeight(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    CustomIcons.image(CustomIcons.clock, size: 35),
+                    Flexible(
+                      child: TimePicker(
+                        isExpanded: false,
+                        minTime: model.minTime,
+                        maxTime: model.maxTime,
+                        itemPadding: EdgeInsets.only(left: 5, right: 55),
+                        selectedTime: model.startTime,
+                        timeChanged: (t) =>
+                            model.onTimeChanged(TimeType.Start, t),
+                        validator: model.validateTime,
+                      ),
                     ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10),
-                    child: Text("til"),
-                  ),
-                  Flexible(
-                    child: TimePicker(
-                      selectedTime: model.startTime,
-                      timeChanged: (t) => model.onTimeChanged(TimeType.End, t),
+                    Text("til"),
+                    Flexible(
+                      child: TimePicker(
+                        isExpanded: false,
+                        minTime: model.minTime,
+                        maxTime: model.maxTime,
+                        itemPadding: EdgeInsets.only(left: 5, right: 50),
+                        selectedTime: model.endTime,
+                        timeChanged: (t) =>
+                            model.onTimeChanged(TimeType.End, t),
+                        validator: model.validateTime,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
               Padding(
                 padding: EdgeInsets.only(top: 48.0, bottom: 16.0),
@@ -107,38 +137,42 @@ class CreateCalendarEvent extends StatelessWidget {
                   style: TextStyle(fontSize: 16.0),
                 ),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  CustomIcons.image(CustomIcons.calendar, size: 35),
-                  Expanded(
-                    child: Center(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: <Widget>[
-                          Flexible(
-                            child: DatePickerFormField(
-                              initialValue: model.startDate,
-                              dateChanged: (val) =>
-                                  model.onDateChanged(TimeType.Start, val),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 5),
-                            child: Text("til"),
-                          ),
-                          Flexible(
-                            child: DatePickerFormField(
-                              initialValue: model.endDate,
-                              dateChanged: (val) =>
-                                  model.onDateChanged(TimeType.End, val),
-                            ),
+              IntrinsicHeight(
+                child: Row(
+                  mainAxisAlignment:
+                      model.chosenInterval == UttaksType.ENGANGSTILFELLE
+                          ? MainAxisAlignment.start
+                          : MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.only(
+                        right:
+                            model.chosenInterval == UttaksType.ENGANGSTILFELLE
+                                ? 15
+                                : 0,
+                      ),
+                      child: CustomIcons.image(CustomIcons.calendar, size: 35),
+                    ),
+                    DatePickerFormField(
+                      initialValue: model.startDate,
+                      dateChanged: (val) =>
+                          model.onDateChanged(TimeType.Start, val),
+                      validator: model.validateDate,
+                    ),
+                    if (model.chosenInterval != UttaksType.ENGANGSTILFELLE)
+                      Row(
+                        children: [
+                          Text("til"),
+                          DatePickerFormField(
+                            initialValue: model.endDate,
+                            dateChanged: (val) =>
+                                model.onDateChanged(TimeType.End, val),
+                            validator: model.validateDate,
                           ),
                         ],
                       ),
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
               Padding(
                 padding: EdgeInsets.only(top: 48.0, bottom: 16.0),

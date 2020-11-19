@@ -1,61 +1,48 @@
 import 'package:flutter/material.dart';
-import 'package:ombruk/globals.dart' as globals;
 import 'package:ombruk/ui/shared/const/CustomColors.dart';
 import 'package:ombruk/utils/DateUtils.dart';
 
-class DateButton extends StatefulWidget {
-  DateButton(
-      {Key key,
-      @required this.dateTime,
-      @required this.selectDay,
-      @required this.isSelected})
-      : super(key: key);
-
+class DateButton extends StatelessWidget {
   final DateTime dateTime;
-  final Function(DateTime) selectDay;
+  final Function(DateTime) onDateChanged;
   final bool isSelected;
+  final bool disabled;
 
-  @override
-  _DateButtonState createState() => _DateButtonState();
-}
-
-class _DateButtonState extends State<DateButton> {
-  Color _backgroundColor;
-  Color _textColor;
-
+  DateButton({
+    @required this.dateTime,
+    @required this.onDateChanged,
+    this.isSelected = false,
+    this.disabled = false,
+  });
   @override
   Widget build(BuildContext context) {
-    _backgroundColor =
-        widget.isSelected ? CustomColors.osloDarkBlue : CustomColors.osloWhite;
-    _textColor =
-        widget.isSelected ? CustomColors.osloWhite : CustomColors.osloBlack;
-
-    String weekday = DateUtils.weekdaysShort[widget.dateTime.weekday];
-    return Expanded(
-        // TODO: The GestureDetector doesn't fill the entire parent, only the child, so the onTap may be working so so
-        child: GestureDetector(
-            onTap: () => _datePressed(), child: _numberWidget(weekday)));
-  }
-
-  Widget _numberWidget(String weekday) {
-    return Column(
-      children: <Widget>[
-        Text(
-          '$weekday',
-          style: TextStyle(fontSize: 12.0, color: CustomColors.osloBlack),
-        ),
-        CircleAvatar(
-            backgroundColor: _backgroundColor,
+    return GestureDetector(
+      onTap: () => disabled ? null : onDateChanged(dateTime),
+      child: Column(
+        children: [
+          Text(
+            DateUtils.weekdaysShort[dateTime.weekday],
+            style: TextStyle(fontSize: 12.0, color: CustomColors.osloBlack),
+          ),
+          CircleAvatar(
+            backgroundColor: isSelected
+                ? CustomColors.osloDarkBlue
+                : disabled
+                    ? Colors.grey[200]
+                    : CustomColors.osloWhite,
             radius: 16.0,
             child: Text(
-              '${widget.dateTime.day}',
-              style: TextStyle(fontSize: 16.0, color: _textColor),
-            ))
-      ],
+              '${dateTime.day}',
+              style: TextStyle(
+                fontSize: 16.0,
+                color: isSelected
+                    ? CustomColors.osloWhite
+                    : CustomColors.osloBlack,
+              ),
+            ),
+          ),
+        ],
+      ),
     );
-  }
-
-  void _datePressed() {
-    widget.selectDay(widget.dateTime);
   }
 }

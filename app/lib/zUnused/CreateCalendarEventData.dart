@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 
-import 'package:ombruk/globals.dart' as globals;
 import 'package:ombruk/models/Partner.dart';
 import 'package:ombruk/models/Station.dart';
+import 'package:ombruk/utils/DateUtils.dart';
 
 class CreateCalendarEventData {
   DateTime startDateTime;
@@ -11,7 +11,7 @@ class CreateCalendarEventData {
   DateTime untilDateTime;
   final Station station;
   final Partner partner;
-  final List<globals.Weekdays> weekdays;
+  final List<Weekdays> weekdays;
   final int interval;
 
   CreateCalendarEventData.fromData(

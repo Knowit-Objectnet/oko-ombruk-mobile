@@ -5,7 +5,7 @@ import 'package:ombruk/ui/shared/const/CustomColors.dart';
 import 'package:ombruk/ui/shared/const/CustomIcons.dart';
 import 'package:ombruk/ui/shared/widgets/BaseWidget.dart';
 import 'package:ombruk/ui/shared/widgets/DatePickerFormField.dart';
-import 'package:ombruk/ui/shared/widgets/form/CustomPicker.dart';
+import 'package:ombruk/ui/shared/widgets/form/CustomPickerFormField.dart';
 import 'package:ombruk/ui/shared/widgets/form/TimePicker.dart';
 import 'package:ombruk/ui/shared/widgets/text/Subtitle.dart';
 import 'package:ombruk/utils/DateUtils.dart';
@@ -127,7 +127,7 @@ class AddExtraPickupView extends StatelessWidget {
                             ),
                           ),
                           Flexible(
-                            child: CustomPicker<Station>(
+                            child: CustomPickerFormField<Station>(
                               selectedValue: model.selectedStation,
                               valueChanged: model.onStationChanged,
                               validator: model.validateStation,

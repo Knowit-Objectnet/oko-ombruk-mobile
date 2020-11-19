@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:ombruk/globals.dart';
 import 'package:ombruk/models/CalendarEvent.dart';
 import 'package:ombruk/models/CustomResponse.dart';
 import 'package:ombruk/models/Station.dart';
@@ -11,6 +10,7 @@ import 'package:ombruk/services/forms/Event/EventUpdateForm.dart';
 import 'package:ombruk/services/forms/station/StationGetForm.dart';
 import 'package:ombruk/services/interfaces/ICalendarService.dart';
 import 'package:ombruk/services/interfaces/IStationService.dart';
+import 'package:ombruk/utils/DateUtils.dart';
 import 'package:ombruk/viewmodel/BaseViewModel.dart';
 
 class CalendarViewModel extends BaseViewModel {
@@ -28,9 +28,13 @@ class CalendarViewModel extends BaseViewModel {
   List<Station> _stations = [];
   List<Station> get stations => _stations;
 
-  CalendarViewModel(this._calendarService, this._stationService) {
+  CalendarViewModel(this._calendarService, this._stationService)
+      : super(state: ViewState.Busy) {
     fetchEvents();
   }
+
+  DateTime _selectedDateTime = DateTime.now();
+  DateTime get selectedDate => _selectedDateTime;
 
   Future<void> start() async {
     await fetchEvents();
@@ -41,6 +45,8 @@ class CalendarViewModel extends BaseViewModel {
     _selectedStation = _stations.first;
     setState(ViewState.Idle);
   }
+
+  void onDateChanged(DateTime date) => _selectedDateTime = date;
 
   List<CalendarEvent> get calendarEvents => _calendarEvents;
   bool get isLoading => _isLoading;

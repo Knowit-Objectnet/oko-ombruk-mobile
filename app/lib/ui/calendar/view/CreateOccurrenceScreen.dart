@@ -5,7 +5,7 @@ import 'package:ombruk/ui/app/widgets/OkoAppBar.dart';
 import 'package:ombruk/ui/shared/const/CustomColors.dart';
 import 'package:ombruk/ui/shared/const/CustomIcons.dart';
 import 'package:ombruk/ui/shared/widgets/BaseWidget.dart';
-import 'package:ombruk/ui/shared/widgets/form/CustomPicker.dart';
+import 'package:ombruk/ui/shared/widgets/form/CustomPickerFormField.dart';
 import 'package:ombruk/ui/shared/widgets/text/Subtitle.dart';
 import 'package:ombruk/viewmodel/BaseViewModel.dart';
 import 'package:ombruk/viewmodel/CreateOccurenceViewModel.dart';
@@ -41,7 +41,21 @@ class CreateOccurenceView extends StatelessWidget {
                         padding: EdgeInsets.only(top: 24.0, bottom: 4.0),
                         child: Subtitle(text: 'Samarbeidspartner'),
                       ),
-                      CustomPicker<Partner>(
+                      // DropdownButton(
+                      //   items: model.partners
+                      //       .map((partner) => DropdownMenuItem(
+                      //             value: partner,
+                      //             child: Center(
+                      //               child: Text(
+                      //                 partner.name,
+                      //                 textAlign: TextAlign.center,
+                      //               ),
+                      //             ),
+                      //           ))
+                      //       .toList(),
+                      //   onChanged: model.onPartnerChanged,
+                      // ),
+                      CustomPickerFormField<Partner>(
                         hintText: "Velg partner",
                         selectedValue: model.selectedPartner,
                         valueChanged: model.onPartnerChanged,
@@ -50,9 +64,11 @@ class CreateOccurenceView extends StatelessWidget {
                         itemBuilder: (context, partner) => DropdownMenuItem(
                           value: partner,
                           child: Center(
-                            child: Text(
-                              partner.name,
-                              textAlign: TextAlign.center,
+                            child: Container(
+                              child: Text(
+                                partner.name,
+                                textAlign: TextAlign.center,
+                              ),
                             ),
                           ),
                         ),
@@ -61,7 +77,7 @@ class CreateOccurenceView extends StatelessWidget {
                         padding: EdgeInsets.only(top: 24.0, bottom: 4.0),
                         child: Subtitle(text: 'Stasjon(er)'),
                       ),
-                      CustomPicker<Station>(
+                      CustomPickerFormField<Station>(
                         hintText: "Velg Stasjon",
                         selectedValue: model.selectedStation,
                         valueChanged: model.onStationChanged,

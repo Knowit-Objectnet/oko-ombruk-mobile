@@ -39,31 +39,29 @@ class DatePickerFormField extends FormField<DateTime> {
                     onTap: () => disabled ? null : _selectDate(context),
                     child: Row(
                       children: [
-                        Expanded(
-                          child: Container(
-                            padding: EdgeInsets.symmetric(vertical: 10),
-                            decoration: BoxDecoration(
-                                color: backgroundColor,
-                                border: state.hasError ||
-                                        (borderColor != null && !disabled)
-                                    ? Border.all(
-                                        width: 2.0,
-                                        color: state.hasError
-                                            ? CustomColors.osloRed
-                                            : borderColor,
-                                      )
-                                    : null),
-                            child: Text(
-                              state.value == null
-                                  ? ""
-                                  : DateUtils.months[state.value.month]
-                                          .substring(0, 3) +
-                                      ' ' +
-                                      state.value.day.toString() +
-                                      ', ' +
-                                      state.value.year.toString(),
-                              style: TextStyle(fontSize: 18.0),
-                            ),
+                        Container(
+                          padding: EdgeInsets.symmetric(vertical: 10),
+                          decoration: BoxDecoration(
+                              color: backgroundColor,
+                              border: state.hasError ||
+                                      (borderColor != null && !disabled)
+                                  ? Border.all(
+                                      width: 2.0,
+                                      color: state.hasError
+                                          ? CustomColors.osloRed
+                                          : borderColor,
+                                    )
+                                  : null),
+                          child: Text(
+                            state.value == null
+                                ? ""
+                                : DateUtils.months[state.value.month]
+                                        .substring(0, 3) +
+                                    ' ' +
+                                    state.value.day.toString() +
+                                    ', ' +
+                                    state.value.year.toString(),
+                            style: TextStyle(fontSize: 16.0),
                           ),
                         ),
                         if (!disabled)

@@ -34,8 +34,7 @@ class EventDeleteForm implements IForm {
   bool validate() {
     if (startDateTime != null &&
         endDateTime != null &&
-        startDateTime.millisecondsSinceEpoch <=
-            endDateTime.millisecondsSinceEpoch) {
+        startDateTime.isAfter(endDateTime)) {
       return false;
     }
     return true;

@@ -1,4 +1,4 @@
-import 'package:ombruk/globals.dart';
+import 'package:ombruk/utils/DateUtils.dart';
 
 class RecurrenceRule {
   final List<Weekdays> days;
@@ -12,7 +12,3 @@ class RecurrenceRule {
     this.count,
   });
 }
-
-// Map<String, dynamic> _toJson() => {
-//   'days':
-// }

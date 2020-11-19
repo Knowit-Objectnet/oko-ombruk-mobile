@@ -5,7 +5,7 @@ import 'package:ombruk/ui/app/widgets/OkoAppBar.dart';
 import 'package:ombruk/ui/shared/const/CustomColors.dart';
 import 'package:ombruk/ui/shared/widgets/BaseWidget.dart';
 import 'package:ombruk/ui/shared/widgets/DatePickerFormField.dart';
-import 'package:ombruk/ui/shared/widgets/form/CustomPicker.dart';
+import 'package:ombruk/ui/shared/widgets/form/CustomPickerFormField.dart';
 import 'package:ombruk/ui/shared/widgets/form/OkoIconTextField.dart';
 import 'package:ombruk/ui/shared/widgets/form/TimePicker.dart';
 import 'package:ombruk/ui/shared/widgets/text/Subtitle.dart';
@@ -52,7 +52,7 @@ class MessageView extends StatelessWidget {
                   Subtitle(text: 'Mottaker(e):'),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10),
-                    child: CustomPicker<Partner>(
+                    child: CustomPickerFormField<Partner>(
                       hintText: "Samarbeidspartner",
                       selectedValue: model.selectedPartner,
                       valueChanged: model.onPartnerChanged,
@@ -63,7 +63,7 @@ class MessageView extends StatelessWidget {
                       ),
                     ),
                   ),
-                  CustomPicker<Station>(
+                  CustomPickerFormField<Station>(
                     hintText: "Stasjoner",
                     selectedValue: model.selectedStation,
                     valueChanged: model.onStationChanged,

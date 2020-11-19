@@ -1,62 +1,57 @@
 import 'package:meta/meta.dart';
 import 'package:flutter/material.dart';
 
-import 'package:ombruk/globals.dart' as globals;
 import 'package:ombruk/ui/shared/const/CustomColors.dart';
+import 'package:ombruk/utils/DateUtils.dart';
 
 class WeekdayPicker extends StatelessWidget {
-  final List<globals.Weekdays> selectedWeekdays;
-  final Function(globals.Weekdays) weekdaysChanged;
+  final Set<int> selectedWeekdays;
+  final Set<int> availableWeekdays;
+  final Function(int) weekdaysChanged;
 
-  WeekdayPicker(
-      {@required this.selectedWeekdays, @required this.weekdaysChanged});
-
+  WeekdayPicker({
+    @required this.selectedWeekdays,
+    @required this.availableWeekdays,
+    @required this.weekdaysChanged,
+  });
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: globals.Weekdays.values
+      children: DateUtils.weekdaysShort.entries
           .map(
             (e) => Container(
               decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(width: 2.0, color: CustomColors.osloBlue)),
+                shape: BoxShape.circle,
+                border: Border.all(
+                  width: 2.0,
+                  color: availableWeekdays.contains(e.key)
+                      ? CustomColors.osloBlue
+                      : Colors.grey[300],
+                ),
+              ),
               child: GestureDetector(
                 child: CircleAvatar(
                   child: Text(
-                    _stringFromEnum(e),
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                    e.value[0],
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                  backgroundColor: selectedWeekdays.contains(e)
-                      ? CustomColors.osloBlue
-                      : CustomColors.osloWhite,
+                  backgroundColor: !availableWeekdays.contains(e.key)
+                      ? Colors.grey[300]
+                      : selectedWeekdays.contains(e.key)
+                          ? CustomColors.osloBlue
+                          : CustomColors.osloWhite,
                   foregroundColor: CustomColors.osloBlack,
                 ),
-                onTap: () => weekdaysChanged(e),
-                // shape: CircleBorder(),
-                // padding: EdgeInsets.all(15.0),
-                // child: Text(_stringFromEnum(e)),
+                onTap: () => availableWeekdays.contains(e.key)
+                    ? weekdaysChanged(e.key)
+                    : null,
               ),
             ),
           )
           .toList(),
     );
-  }
-
-  String _stringFromEnum(globals.Weekdays weekday) {
-    switch (weekday) {
-      case globals.Weekdays.monday:
-        return 'M';
-      case globals.Weekdays.tuesday:
-        return 'Ti';
-      case globals.Weekdays.wednesday:
-        return 'O';
-      case globals.Weekdays.thursday:
-        return 'To';
-      case globals.Weekdays.friday:
-        return 'F';
-      default:
-        return '';
-    }
   }
 }
