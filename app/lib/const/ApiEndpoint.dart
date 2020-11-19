@@ -4,6 +4,7 @@ abstract class ApiEndpoint {
   static const String partners = "partners";
   static const String weightReports = "reports";
   static const String requests = "requests";
+  static const String pickups = "pickups";
 
   static const String keycloakBaseUrl =
       'https://keycloak.staging.oko.knowit.no:8443/auth/realms/staging';

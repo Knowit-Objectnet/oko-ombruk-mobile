@@ -27,19 +27,17 @@ class CalendarEventExpandedModel extends BaseViewModel {
     this._dialogService,
     this._authenticationService,
   ) {
-    KeycloakRoles role = getRole(_authenticationService.userModel.roles
-        .firstWhere((role) => getRole(role) != null, orElse: () => null));
-    if (role == null) {
-      _canEdit = false;
-    }
-    if (role == KeycloakRoles.reg_employee) {
-      _canEdit = true;
-    }
-    if (role == KeycloakRoles.partner &&
-        _authenticationService.userModel.groupID == event.partner.id) {
-      _canEdit = true;
-    }
-
+    _authenticationService.getUserInfo().then((user) {
+      if (user?.role == KeycloakRoles.reg_employee) {
+        _canEdit = true;
+        notifyListeners();
+      }
+      if (user?.role == KeycloakRoles.partner &&
+          user?.groupId == event.partner.id) {
+        _canEdit = true;
+        notifyListeners();
+      }
+    });
     init();
   }
 

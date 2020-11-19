@@ -1,12 +1,13 @@
 import 'dart:convert';
 import 'package:meta/meta.dart';
 import 'package:ombruk/const/ApiEndpoint.dart';
+import 'package:ombruk/globals.dart';
+import 'package:ombruk/models/UserInfo.dart';
 import 'package:ombruk/models/UserModel.dart';
 import 'package:ombruk/services/SecureStorageService.dart';
 import 'package:ombruk/services/interfaces/IAuthenticationService.dart';
 import 'package:ombruk/services/interfaces/ISecureStorageService.dart';
-import 'package:openid_client/openid_client.dart';
-import 'package:openid_client/openid_client_io.dart';
+import 'package:openid_client/openid_client.dart' as OID;
 import 'package:http/http.dart';
 
 import 'package:ombruk/models/CustomResponse.dart';
@@ -17,6 +18,8 @@ class AuthenticationService implements IAuthenticationService {
   AuthenticationService.test(this._localStorageService);
 
   UserModel _userModel;
+
+  UserInfo _userInfo;
 
   Future<UserModel> loadFromStorage() async {
     final String accessToken =
@@ -40,6 +43,12 @@ class AuthenticationService implements IAuthenticationService {
       groupID = int.parse(groupIDString);
     }
     _userModel = UserModel(accessToken, refreshToken, clientId, roles, groupID);
+
+    if (roles != null) {
+      KeycloakRoles role = getRole(
+          roles.firstWhere((role) => getRole(role) != null, orElse: null));
+      _userInfo = UserInfo(role, groupID);
+    }
     return _userModel;
   }
 
@@ -85,7 +94,7 @@ class AuthenticationService implements IAuthenticationService {
   }
 
   Future<UserModel> saveCredentials({
-    @required Credential credential,
+    @required OID.Credential credential,
     List<String> roles,
     int groupID,
   }) async {
@@ -103,6 +112,10 @@ class AuthenticationService implements IAuthenticationService {
         key: 'groupID', value: groupID?.toString());
 
     _userModel = UserModel(accessToken, refreshToken, clientId, roles, groupID);
+
+    KeycloakRoles role = getRole(
+        roles.firstWhere((role) => getRole(role) != null, orElse: null));
+    _userInfo = UserInfo(role, groupID);
     return _userModel;
   }
 
@@ -172,6 +185,7 @@ class AuthenticationService implements IAuthenticationService {
         },
       );
       _userModel = null;
+      _userInfo = null;
       return CustomResponse(
         success: response.statusCode == 204,
         statusCode: response.statusCode,
@@ -189,4 +203,12 @@ class AuthenticationService implements IAuthenticationService {
 
   @override
   UserModel get userModel => _userModel;
+
+  @override
+  Future<UserInfo> getUserInfo() async {
+    if (_userInfo == null) {
+      await loadFromStorage();
+    }
+    return _userInfo;
+  }
 }
