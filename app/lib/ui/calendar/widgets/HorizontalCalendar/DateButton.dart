@@ -6,16 +6,18 @@ class DateButton extends StatelessWidget {
   final DateTime dateTime;
   final Function(DateTime) onDateChanged;
   final bool isSelected;
+  final bool disabled;
 
   DateButton({
     @required this.dateTime,
     @required this.onDateChanged,
     this.isSelected = false,
+    this.disabled = false,
   });
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => onDateChanged(dateTime),
+      onTap: () => disabled ? null : onDateChanged(dateTime),
       child: Column(
         children: [
           Text(
@@ -23,8 +25,11 @@ class DateButton extends StatelessWidget {
             style: TextStyle(fontSize: 12.0, color: CustomColors.osloBlack),
           ),
           CircleAvatar(
-            backgroundColor:
-                isSelected ? CustomColors.osloDarkBlue : CustomColors.osloWhite,
+            backgroundColor: isSelected
+                ? CustomColors.osloDarkBlue
+                : disabled
+                    ? Colors.grey[200]
+                    : CustomColors.osloWhite,
             radius: 16.0,
             child: Text(
               '${dateTime.day}',

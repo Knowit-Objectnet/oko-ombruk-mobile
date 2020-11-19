@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:ombruk/models/CalendarEvent.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:ombruk/ui/calendar/widgets/CalendarEventExpander.dart';
-import 'package:ombruk/ui/calendar/widgets/HorizontalCalendar/NoEvents.dart';
+import 'package:ombruk/ui/calendar/widgets/NoEvents.dart';
 
 import 'package:ombruk/ui/shared/const/CustomColors.dart';
 import 'package:ombruk/ui/shared/const/CustomIcons.dart';

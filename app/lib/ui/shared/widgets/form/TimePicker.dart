@@ -26,9 +26,9 @@ class TimePicker extends StatelessWidget {
     this.isExpanded = true,
     this.itemPadding = const EdgeInsets.all(0),
   })  : assert(selectedTime != null),
-        assert(timeChanged != null),
-        assert(selectedTime.hour >= minTime),
-        assert(selectedTime.hour <= maxTime);
+        assert(timeChanged != null);
+  //assert(selectedTime.hour >= minTime),
+  //assert(selectedTime.hour <= maxTime);
 
   @override
   Widget build(BuildContext context) {

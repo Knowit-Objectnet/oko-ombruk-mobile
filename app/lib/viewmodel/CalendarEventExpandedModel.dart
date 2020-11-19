@@ -41,6 +41,12 @@ class CalendarEventExpandedModel extends BaseViewModel {
     init();
   }
 
+  GlobalKey<FormState> _updateFormKey = GlobalKey<FormState>();
+  GlobalKey<FormState> get updateFormKey => _updateFormKey;
+
+  GlobalKey<FormState> _deleteFormKey = GlobalKey<FormState>();
+  GlobalKey<FormState> get deleteFormKey => _deleteFormKey;
+
   void init() {
     _date = _event.startDateTime;
     _startTime = TimeOfDay(
@@ -101,6 +107,7 @@ class CalendarEventExpandedModel extends BaseViewModel {
       return "Starttidspunkt må være før sluttidspunkt!";
     }
     OpeningHours openingHours = event.station.hours[_date.weekday];
+    if (openingHours == null) return null;
     if (value.hour < openingHours.opensAt.hour ||
         value.hour == openingHours.opensAt.hour &&
             value.minute < openingHours.opensAt.minute) {
@@ -186,6 +193,7 @@ class CalendarEventExpandedModel extends BaseViewModel {
   }
 
   void updateCalendarEvent() async {
+    if (!_updateFormKey.currentState.validate()) return;
     DateTime startDateTime = DateUtils.fromTimeOfDay(date, _startTime);
     DateTime endDateTime = DateUtils.fromTimeOfDay(date, _endTime);
     _dialogService.showLoading();
