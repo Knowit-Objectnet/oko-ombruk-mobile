@@ -3,11 +3,16 @@ import 'package:ombruk/models/Station.dart';
 import 'package:ombruk/viewmodel/BaseViewModel.dart';
 
 class DayCalendarViewModel extends BaseViewModel {
-  DateTime _selectedDate = DateTime.now();
+  DateTime _selectedDate;
   DateTime get selectedDate => _selectedDate;
   final Station _station;
+  final Function(DateTime) _onDateChanged;
 
-  DayCalendarViewModel(this._station);
+  DayCalendarViewModel(
+    this._station,
+    this._selectedDate,
+    this._onDateChanged,
+  );
 
   TimeOfDay get opensAt =>
       _station.hours[_selectedDate.weekday]?.opensAt ??
@@ -20,6 +25,7 @@ class DayCalendarViewModel extends BaseViewModel {
 
   void onDayChanged(DateTime date) {
     _selectedDate = date;
+    _onDateChanged(date);
     notifyListeners();
   }
 }

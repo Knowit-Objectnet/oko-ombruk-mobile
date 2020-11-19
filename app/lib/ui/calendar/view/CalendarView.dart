@@ -82,7 +82,9 @@ class CalendarView extends StatelessWidget {
                       onRefresh: () async => await model.fetchEvents(),
                       child: model.showHorizontalCalendar
                           ? DayCalendar(
-                              key: GlobalKey(),
+                              key: ObjectKey(model.selectedStation),
+                              initialDate: model.selectedDate,
+                              onDateChanged: model.onDateChanged,
                               events: model.currentStationEvents,
                               station: model.selectedStation,
                             )

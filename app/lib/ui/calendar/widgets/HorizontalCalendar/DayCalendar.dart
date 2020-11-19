@@ -5,7 +5,6 @@ import 'package:ombruk/models/Station.dart';
 import 'package:ombruk/ui/calendar/dialogs/EventInfoDialog.dart';
 import 'package:ombruk/ui/calendar/widgets/DayCalendarViewModel.dart';
 import 'package:ombruk/ui/calendar/widgets/HorizontalCalendar/DayScroller.dart';
-import 'package:ombruk/ui/calendar/widgets/HorizontalCalendar/NoEvents.dart';
 import 'package:ombruk/ui/shared/const/CustomColors.dart';
 import 'package:ombruk/ui/shared/const/CustomIcons.dart';
 import 'package:ombruk/ui/shared/widgets/BaseWidget.dart';
@@ -15,15 +14,19 @@ class DayCalendar extends StatelessWidget {
   final List<CalendarEvent> events;
   final Station station;
   final Key key;
+  final DateTime initialDate;
+  final Function(DateTime) onDateChanged;
   DayCalendar({
     this.key,
     @required this.events,
     @required this.station,
+    @required this.initialDate,
+    @required this.onDateChanged,
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return BaseWidget(
-      model: DayCalendarViewModel(station),
+      model: DayCalendarViewModel(station, initialDate, onDateChanged),
       builder: (context, DayCalendarViewModel model, _) => Column(
         children: [
           DayScroller(

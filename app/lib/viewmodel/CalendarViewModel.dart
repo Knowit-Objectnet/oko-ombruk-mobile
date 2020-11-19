@@ -33,6 +33,9 @@ class CalendarViewModel extends BaseViewModel {
     fetchEvents();
   }
 
+  DateTime _selectedDateTime = DateTime.now();
+  DateTime get selectedDate => _selectedDateTime;
+
   Future<void> start() async {
     await fetchEvents();
     CustomResponse response =
@@ -42,6 +45,8 @@ class CalendarViewModel extends BaseViewModel {
     _selectedStation = _stations.first;
     setState(ViewState.Idle);
   }
+
+  void onDateChanged(DateTime date) => _selectedDateTime = date;
 
   List<CalendarEvent> get calendarEvents => _calendarEvents;
   bool get isLoading => _isLoading;
