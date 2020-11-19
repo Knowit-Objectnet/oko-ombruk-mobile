@@ -19,6 +19,7 @@ class LoginWebViewModel extends BaseViewModel with WidgetsBindingObserver {
   ) {
     WidgetsBinding.instance.addObserver(this);
   }
+  bool _hasAuthenticated = false;
   final Uri uri = Uri.parse('${ApiEndpoint.keycloakBaseUrl}');
   final String clientId = 'flutter-app';
   final List<String> scopes = ['openid', 'profile', 'offline_access'];
@@ -44,6 +45,8 @@ class LoginWebViewModel extends BaseViewModel with WidgetsBindingObserver {
 
       print("hello");
       final Credential credential = await authenticator.authorize();
+      _hasAuthenticated = true;
+      setState(ViewState.Busy);
       final TokenResponse tokenResponse = await credential.getTokenResponse();
 
       closeWebView();
@@ -55,6 +58,7 @@ class LoginWebViewModel extends BaseViewModel with WidgetsBindingObserver {
 
       _navigatorService.navigateTo(Routes.TabView,
           arguments: globals.KeycloakRoles.reg_employee);
+      _hasAuthenticated = false;
     } catch (e) {
       print(e);
     }
@@ -62,7 +66,7 @@ class LoginWebViewModel extends BaseViewModel with WidgetsBindingObserver {
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) {
+    if (state == AppLifecycleState.resumed && !_hasAuthenticated) {
       setState(ViewState.Idle);
     } else {
       setState(ViewState.Busy);

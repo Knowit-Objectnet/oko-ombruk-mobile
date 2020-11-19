@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:ombruk/const/Routes.dart';
 import 'package:ombruk/services/interfaces/INavigatorService.dart';
@@ -12,7 +15,18 @@ class NavigatorService implements INavigatorService {
   @override
   void goBack() {
     print(_navigatorKey);
+    if (!_navigatorKey.currentState.canPop()) {
+      print("Tried popping root!");
+      if (Platform.isAndroid) {
+        SystemNavigator.pop();
+      }
+      return;
+    }
     _navigatorKey.currentState.pop();
+    _navigatorKey.currentState.popUntil((route) {
+      print(route.settings.name);
+      return true;
+    });
   }
 
   @override
@@ -20,7 +34,8 @@ class NavigatorService implements INavigatorService {
     if (_navigatorKey != null) {
       _navigatorKey.currentState.pushNamed(routeName, arguments: arguments);
     } else {
-      _initialKey.currentState.pushReplacementNamed(Routes.TabView);
+      _initialKey.currentState
+          .pushReplacementNamed(routeName, arguments: arguments);
     }
   }
 

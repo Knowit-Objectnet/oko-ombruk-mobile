@@ -5,6 +5,7 @@ import 'package:ombruk/ui/app/TabView.dart';
 import 'package:ombruk/ui/calendar/view/CalendarView.dart';
 import 'package:ombruk/ui/calendar/view/CreateCalendarEventScreen.dart';
 import 'package:ombruk/ui/calendar/view/CreateOccurrenceScreen.dart';
+import 'package:ombruk/ui/login/LoginWebView.dart';
 import 'package:ombruk/ui/message/MessageScreen.dart';
 import 'package:ombruk/ui/myPage/MyPageView.dart';
 import 'package:ombruk/ui/notifications/NotificationView.dart';
@@ -38,6 +39,12 @@ class AppRouter {
         return MaterialPageRoute(
           settings: settings,
           builder: (_) => MyPageView(),
+        );
+
+      case Routes.LoginView:
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => LoginWebView(),
         );
 
       case Routes.AddExtraPickupView:

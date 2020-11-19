@@ -17,6 +17,11 @@ class TabViewModel extends BaseViewModel {
     _scaffoldKey = _navigatorService.scaffoldKey;
   }
 
+  Future<bool> willPop() async {
+    _navigatorService.goBack();
+    return false;
+  }
+
   void init() async {
     setState(ViewState.Busy);
     if (_authenticationService.userModel == null) {

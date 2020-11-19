@@ -16,8 +16,9 @@ class AppViewModel extends BaseViewModel {
 
   AppViewModel(this._authenticationService) {
     setState(ViewState.Busy);
-    _authenticationService.loadFromStorage().then((userModel) {
-      setState(ViewState.Idle);
-    });
+    Future.delayed(Duration(seconds: 1)).then(
+        (value) => _authenticationService.loadFromStorage().then((userModel) {
+              setState(ViewState.Idle);
+            }));
   }
 }
