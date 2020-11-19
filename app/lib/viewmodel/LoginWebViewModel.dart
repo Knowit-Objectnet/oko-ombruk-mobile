@@ -1,3 +1,4 @@
+import 'package:flutter/widgets.dart';
 import 'package:ombruk/const/ApiEndpoint.dart';
 import 'package:ombruk/const/Routes.dart';
 import 'package:ombruk/services/interfaces/IAuthenticationService.dart';
@@ -9,19 +10,19 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:jose/jose.dart';
 import 'package:ombruk/globals.dart' as globals;
 
-class LoginWebViewModel extends BaseViewModel {
+class LoginWebViewModel extends BaseViewModel with WidgetsBindingObserver {
   IAuthenticationService _authenticationService;
   INavigatorService _navigatorService;
   LoginWebViewModel(
     this._authenticationService,
     this._navigatorService,
-  ) : super();
+  ) {
+    WidgetsBinding.instance.addObserver(this);
+  }
   final Uri uri = Uri.parse('${ApiEndpoint.keycloakBaseUrl}');
   final String clientId = 'flutter-app';
   final List<String> scopes = ['openid', 'profile', 'offline_access'];
   void login() async {
-    setState(ViewState.Busy);
-
     try {
       final Issuer issuer = await Issuer.discover(uri);
       final Client client = new Client(issuer, clientId);
@@ -41,6 +42,7 @@ class LoginWebViewModel extends BaseViewModel {
         urlLancher: urlLauncher,
       );
 
+      print("hello");
       final Credential credential = await authenticator.authorize();
       final TokenResponse tokenResponse = await credential.getTokenResponse();
 
@@ -53,30 +55,18 @@ class LoginWebViewModel extends BaseViewModel {
 
       _navigatorService.navigateTo(Routes.TabView,
           arguments: globals.KeycloakRoles.reg_employee);
-      // roles.forEach((element) {
-      //   if (globals.getRole(element) != null) {
-      //     print(globals.getRole(element));
-      //   }
-      // });
-
-      setState(ViewState.Idle);
     } catch (e) {
       print(e);
     }
+  }
 
-    //   return _UserCredentials.withCredentials(
-    //       credential: credential, roles: roles, groupID: groupID);
-    // } on SocketException catch (_) {
-    //   return _UserCredentials.withException(
-    //       exception: Exception('Fikk ikke kontakt med serveren'));
-    // } on NoSuchMethodError catch (_) {
-    //   return _UserCredentials.withException(
-    //       exception: Exception('Fikk ikke kontakt med serveren'));
-    // } catch (e) {
-    //   print('Exception in openKeyCloaklogin:');
-    //   print(e);
-    //   return _UserCredentials.withException(
-    //       exception: Exception('Noe gikk galt'));
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      setState(ViewState.Idle);
+    } else {
+      setState(ViewState.Busy);
+    }
   }
 
   dynamic _getJsonContent(String accessToken) {
@@ -101,19 +91,10 @@ class LoginWebViewModel extends BaseViewModel {
     }
     return jsonContent['GroupID'];
   }
+
+  @override
+  void dispose() {
+    super.dispose();
+    WidgetsBinding.instance.removeObserver(this);
+  }
 }
-
-// class _UserCredentials {
-//   Credential credential;
-//   List<String> roles;
-//   int groupID;
-//   Exception exception;
-
-//   _UserCredentials.withCredentials({
-//     @required this.credential,
-//     @required this.roles,
-//     @required this.groupID,
-//   });
-
-//   _UserCredentials.withException({@required this.exception});
-// }
