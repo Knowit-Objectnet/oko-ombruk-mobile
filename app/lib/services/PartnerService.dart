@@ -7,22 +7,38 @@ import 'package:ombruk/models/Partner.dart';
 import 'package:ombruk/services/forms/Partner/PartnerGetForm.dart';
 import 'package:ombruk/services/forms/Partner/PartnerPatchForm.dart';
 import 'package:ombruk/services/forms/Partner/PartnerPostForm.dart';
+import 'package:ombruk/services/interfaces/CacheService.dart';
 import 'package:ombruk/services/interfaces/IApi.dart';
 import 'package:ombruk/services/interfaces/IPartnerService.dart';
+import 'package:ombruk/services/mixins/UseCache.dart';
 
-class PartnerService implements IPartnerService {
-  final IApi _api;
-  PartnerService(this._api);
+class PartnerService with UseCache implements IPartnerService {
+  IApi _api;
+  CacheService _cacheService;
+  PartnerService(this._api, this._cacheService);
+
+  void updateDependencies(IApi api, CacheService cacheService) {
+    this._api = api;
+    this._cacheService = cacheService;
+  }
 
   Future<CustomResponse<List<Partner>>> fetchPartners(
     PartnerGetForm form,
   ) async {
-    CustomResponse response = await _api.getRequest(ApiEndpoint.partners, form);
+    CustomResponse response = await _cacheService.getRequest(
+      form,
+      ApiEndpoint.partners,
+      newDataCallback: (res) => cacheChanged(res, _parseResult),
+    );
+    // CustomResponse response = await _api.getRequest(ApiEndpoint.partners, form);
 
     if (!response.success) {
       return response;
     }
+    return _parseResult(response);
+  }
 
+  CustomResponse<List<Partner>> _parseResult(CustomResponse response) {
     try {
       List<Partner> partners = List<dynamic>.from(jsonDecode(response.data))
           .map((partner) => Partner.fromJson(partner))

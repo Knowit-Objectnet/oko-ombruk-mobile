@@ -7,22 +7,32 @@ import 'package:ombruk/models/Station.dart';
 import 'package:ombruk/services/forms/station/StationGetForm.dart';
 import 'package:ombruk/services/forms/station/StationPatchForm.dart';
 import 'package:ombruk/services/forms/station/StationPostForm.dart';
+import 'package:ombruk/services/interfaces/CacheService.dart';
 import 'package:ombruk/services/interfaces/IApi.dart';
 import 'package:ombruk/services/interfaces/IStationService.dart';
+import 'package:ombruk/services/mixins/UseCache.dart';
 
-class StationService implements IStationService {
-  final IApi _api;
-  StationService(this._api);
+class StationService with UseCache implements IStationService {
+  IApi _api;
+  CacheService _cacheService;
+  StationService(this._api, this._cacheService);
 
   Future<CustomResponse<List<Station>>> fetchStations(
     StationGetForm form,
   ) async {
-    CustomResponse response = await _api.getRequest(ApiEndpoint.stations, form);
+    CustomResponse response = await _cacheService.getRequest(
+      form,
+      ApiEndpoint.stations,
+      newDataCallback: (res) => cacheChanged(res, _parseResponse),
+    );
 
     if (response.statusCode != 200) {
       return response;
     }
+    return _parseResponse(response);
+  }
 
+  CustomResponse<List<Station>> _parseResponse(CustomResponse response) {
     try {
       List<Station> stations = List<dynamic>.from(jsonDecode(response.data))
           .map((json) => Station.fromJson(json))
@@ -94,5 +104,11 @@ class StationService implements IStationService {
     assert(id != null);
 
     throw UnimplementedError();
+  }
+
+  @override
+  void updateDependencies(IApi api, CacheService cacheService) {
+    this._api = api;
+    this._cacheService = cacheService;
   }
 }

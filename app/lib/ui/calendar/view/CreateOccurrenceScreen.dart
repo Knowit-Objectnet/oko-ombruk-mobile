@@ -86,12 +86,6 @@ class CreateOccurenceView extends StatelessWidget {
                         itemBuilder: (context, station) => DropdownMenuItem(
                           value: station,
                           child: Container(
-                            // decoration: BoxDecoration(
-                            //   border: Border.all(
-                            //     color: CustomColors.osloBlue,
-                            //     width: 2.0,
-                            //   ),
-                            // ),
                             child: Center(
                               child: Text(
                                 station.name,

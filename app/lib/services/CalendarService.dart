@@ -7,23 +7,38 @@ import 'package:ombruk/services/forms/Event/EventDeleteForm.dart';
 import 'package:ombruk/services/forms/Event/EventGetForm.dart';
 import 'package:ombruk/services/forms/Event/EventPostForm.dart';
 import 'package:ombruk/services/forms/Event/EventUpdateForm.dart';
+import 'package:ombruk/services/interfaces/CacheService.dart';
 import 'package:ombruk/services/interfaces/IApi.dart';
 import 'package:ombruk/services/interfaces/ICalendarService.dart';
 
 class CalendarService extends ICalendarService {
-  final IApi _api;
-  CalendarService(this._api);
+  IApi _api;
+  CacheService _cacheService;
+  CalendarService(this._api, this._cacheService) {
+    print("init");
+  }
 
   Future<CustomResponse<List<CalendarEvent>>> fetchEvents(
-    EventGetForm form,
-  ) async {
-    final CustomResponse response =
-        await _api.getRequest(ApiEndpoint.events, form);
+      EventGetForm form) async {
+    final CustomResponse response = await _cacheService.getRequest(
+      form,
+      ApiEndpoint.events,
+      newDataCallback: (res) => cacheChanged(res, _parseResult),
+    );
 
     if (!response.success) {
       return response;
     }
 
+    return _parseResult(response);
+  }
+
+  void updateDependencies(IApi api, CacheService _cacheService) {
+    this._api = api;
+    this._cacheService = _cacheService;
+  }
+
+  CustomResponse<List<CalendarEvent>> _parseResult(CustomResponse response) {
     try {
       List<CalendarEvent> events = List<dynamic>.from(jsonDecode(response.data))
           .map((event) => CalendarEvent.fromJson(event))
@@ -42,27 +57,7 @@ class CalendarService extends ICalendarService {
     }
   }
 
-  /// Returns a CustomResponse with null data
   Future<CustomResponse> createCalendarEvent(EventPostForm form) async =>
-      // final String startString = DateUtils.getDateString(eventData.startDateTime);
-      // final String endString = DateUtils.getDateString(eventData.endDateTime);
-      // final String untilString = DateUtils.getDateString(eventData.untilDateTime);
-
-      // final List<String> weekdaysString =
-      //     eventData.weekdays.map((e) => describeEnum(e).toUpperCase()).toList();
-
-      // String body = jsonEncode({
-      //   'startDateTime': startString,
-      //   'endDateTime': endString,
-      //   'stationId': eventData.station.id,
-      //   'partnerId': eventData.partner.id,
-      //   'recurrenceRule': {
-      //     'until': untilString,
-      //     'days': weekdaysString,
-      //     'interval': eventData.interval,
-      //   },
-      // });
-
       await _api.postRequest(ApiEndpoint.events, form);
 
   /// Returns a CustomResponse with null data

@@ -30,7 +30,19 @@ class CalendarViewModel extends BaseViewModel {
 
   CalendarViewModel(this._calendarService, this._stationService)
       : super(state: ViewState.Busy) {
+    _calendarService.addOnChangedCallback(_onEventsChanged);
+    _stationService.addOnChangedCallback(_onStationsChanged);
     fetchEvents();
+  }
+
+  void _onEventsChanged(CustomResponse<List<CalendarEvent>> events) {
+    _calendarEvents = events.data;
+    notifyListeners();
+  }
+
+  void _onStationsChanged(CustomResponse<List<Station>> stations) {
+    _stations = stations.data;
+    notifyListeners();
   }
 
   DateTime _selectedDateTime = DateTime.now();
@@ -172,5 +184,11 @@ class CalendarViewModel extends BaseViewModel {
       print(response);
       return false;
     }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _calendarService.removeOnChangedCallback(_onEventsChanged);
   }
 }

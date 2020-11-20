@@ -10,6 +10,7 @@ import 'package:ombruk/services/SecureStorageService.dart';
 import 'package:ombruk/services/SnackbarService.dart';
 import 'package:ombruk/services/StationService.dart';
 import 'package:ombruk/services/WeightReportService.dart';
+import 'package:ombruk/services/interfaces/CacheService.dart';
 import 'package:ombruk/services/interfaces/IApi.dart';
 import 'package:ombruk/services/interfaces/IAuthenticationService.dart';
 import 'package:ombruk/services/interfaces/ICalendarService.dart';
@@ -45,17 +46,35 @@ List<SingleChildWidget> dependantServices = [
   ProxyProvider2<ISecureStorageService, IAuthenticationService, IApi>(
     update: (context, secureStorage, auth, api) => Api(secureStorage, auth),
   ),
-  ProxyProvider<IApi, ICalendarService>(
-    update: (context, api, _) => CalendarService(api),
+  ProxyProvider<IApi, CacheService>(
+    create: (context) => CacheService(Provider.of(context, listen: false)),
+    update: (context, api, service) => service..updateDependencies(api),
   ),
-  ProxyProvider<IApi, IPartnerService>(
-    update: (context, api, _) => PartnerService(api),
+  ProxyProvider2<IApi, CacheService, ICalendarService>(
+    create: (context) => CalendarService(
+      Provider.of(context, listen: false),
+      Provider.of(context, listen: false),
+    ),
+    update: (context, api, cache, prev) => prev..updateDependencies(api, cache),
+  ),
+  ProxyProvider2<IApi, CacheService, IPartnerService>(
+    create: (context) => PartnerService(
+      Provider.of(context, listen: false),
+      Provider.of(context, listen: false),
+    ),
+    update: (context, api, cache, previous) =>
+        previous..updateDependencies(api, cache),
   ),
   ProxyProvider<IApi, IPickupService>(
     update: (context, api, _) => PickupService(api),
   ),
-  ProxyProvider<IApi, IStationService>(
-    update: (context, api, _) => StationService(api),
+  ProxyProvider2<IApi, CacheService, IStationService>(
+    create: (context) => StationService(
+      Provider.of(context, listen: false),
+      Provider.of(context, listen: false),
+    ),
+    update: (context, api, cache, previous) =>
+        previous..updateDependencies(api, cache),
   ),
   ProxyProvider<IApi, IWeightReportService>(
     update: (context, api, _) => WeightReportService(api),
