@@ -10,9 +10,8 @@ import 'package:ombruk/services/forms/Partner/PartnerPostForm.dart';
 import 'package:ombruk/services/interfaces/CacheService.dart';
 import 'package:ombruk/services/interfaces/IApi.dart';
 import 'package:ombruk/services/interfaces/IPartnerService.dart';
-import 'package:ombruk/services/mixins/UseCache.dart';
 
-class PartnerService with UseCache implements IPartnerService {
+class PartnerService implements IPartnerService {
   IApi _api;
   CacheService _cacheService;
   PartnerService(this._api, this._cacheService);
@@ -23,12 +22,14 @@ class PartnerService with UseCache implements IPartnerService {
   }
 
   Future<CustomResponse<List<Partner>>> fetchPartners(
-    PartnerGetForm form,
-  ) async {
+    PartnerGetForm form, {
+    Function(CustomResponse<List<Partner>>) newDataCallback,
+  }) async {
     CustomResponse response = await _cacheService.getRequest(
       form,
       ApiEndpoint.partners,
-      newDataCallback: (res) => cacheChanged(res, _parseResult),
+      newDataCallback: newDataCallback,
+      parser: _parseResult,
     );
     // CustomResponse response = await _api.getRequest(ApiEndpoint.partners, form);
 
@@ -60,7 +61,7 @@ class PartnerService with UseCache implements IPartnerService {
 
   Future<CustomResponse<Partner>> addPartner(PartnerPostForm form) async {
     CustomResponse response =
-        await _api.postRequest(ApiEndpoint.partners, form);
+        await _cacheService.postRequest(ApiEndpoint.partners, form);
 
     if (response.statusCode == 200) {
       try {
@@ -86,7 +87,7 @@ class PartnerService with UseCache implements IPartnerService {
   Future<CustomResponse<Partner>> updatePartner(PartnerPatchForm form) async {
     //This used to be a post request. Why?
     CustomResponse response =
-        await _api.patchRequest(ApiEndpoint.partners, form);
+        await _cacheService.patchRequest(ApiEndpoint.partners, form);
 
     if (response.statusCode == 200) {
       try {

@@ -8,7 +8,10 @@ import 'package:ombruk/services/interfaces/CacheService.dart';
 import 'package:ombruk/services/interfaces/IApi.dart';
 
 abstract class IPartnerService {
-  Future<CustomResponse<List<Partner>>> fetchPartners(PartnerGetForm form);
+  Future<CustomResponse<List<Partner>>> fetchPartners(
+    PartnerGetForm form, {
+    Function(CustomResponse<List<Partner>>) newDataCallback,
+  });
 
   Future<CustomResponse<Partner>> addPartner(PartnerPostForm form);
 

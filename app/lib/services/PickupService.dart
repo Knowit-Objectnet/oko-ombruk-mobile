@@ -25,7 +25,8 @@ class PickupService implements IPickupService {
 
   @override
   Future<CustomResponse<List<Pickup>>> fetchPickups(PickupGetForm form) async {
-    CustomResponse response = await _api.getRequest(ApiEndpoint.pickups, form);
+    CustomResponse response =
+        await _api.getRequest(path: ApiEndpoint.pickups, form: form);
     if (!response.success) return response;
 
     try {

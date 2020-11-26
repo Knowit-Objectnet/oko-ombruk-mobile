@@ -10,20 +10,21 @@ import 'package:ombruk/services/forms/station/StationPostForm.dart';
 import 'package:ombruk/services/interfaces/CacheService.dart';
 import 'package:ombruk/services/interfaces/IApi.dart';
 import 'package:ombruk/services/interfaces/IStationService.dart';
-import 'package:ombruk/services/mixins/UseCache.dart';
 
-class StationService with UseCache implements IStationService {
+class StationService implements IStationService {
   IApi _api;
   CacheService _cacheService;
   StationService(this._api, this._cacheService);
 
   Future<CustomResponse<List<Station>>> fetchStations(
-    StationGetForm form,
-  ) async {
+    StationGetForm form, {
+    Function(CustomResponse<List<Station>>) newDataCallback,
+  }) async {
     CustomResponse response = await _cacheService.getRequest(
       form,
       ApiEndpoint.stations,
-      newDataCallback: (res) => cacheChanged(res, _parseResponse),
+      newDataCallback: newDataCallback,
+      parser: _parseResponse,
     );
 
     if (response.statusCode != 200) {
@@ -54,7 +55,7 @@ class StationService with UseCache implements IStationService {
 
   Future<CustomResponse<Station>> addStation(StationPostForm form) async {
     CustomResponse response =
-        await _api.postRequest(ApiEndpoint.stations, form);
+        await _cacheService.postRequest(ApiEndpoint.stations, form);
 
     if (response.statusCode == 200) {
       try {
@@ -78,7 +79,7 @@ class StationService with UseCache implements IStationService {
 
   Future<CustomResponse<Station>> updateStation(StationPatchForm form) async {
     CustomResponse response =
-        await _api.patchRequest(ApiEndpoint.stations, form);
+        await _cacheService.patchRequest(ApiEndpoint.stations, form);
 
     if (response.statusCode == 200) {
       try {
@@ -110,5 +111,10 @@ class StationService with UseCache implements IStationService {
   void updateDependencies(IApi api, CacheService cacheService) {
     this._api = api;
     this._cacheService = cacheService;
+  }
+
+  @override
+  void removeCallback(Function function) {
+    _cacheService.removeCallback(function, ApiEndpoint.stations);
   }
 }

@@ -21,7 +21,8 @@ class RequestService implements IRequestService {
   Future<CustomResponse<List<Request>>> fetchRequests(
     RequestGetForm form,
   ) async {
-    CustomResponse response = await _api.getRequest(ApiEndpoint.requests, form);
+    CustomResponse response =
+        await _api.getRequest(path: ApiEndpoint.requests, form: form);
     if (!response.success) return response;
 
     try {

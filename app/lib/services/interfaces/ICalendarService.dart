@@ -6,10 +6,12 @@ import 'package:ombruk/services/forms/Event/EventPostForm.dart';
 import 'package:ombruk/services/forms/Event/EventUpdateForm.dart';
 import 'package:ombruk/services/interfaces/CacheService.dart';
 import 'package:ombruk/services/interfaces/IApi.dart';
-import 'package:ombruk/services/mixins/UseCache.dart';
 
-abstract class ICalendarService with UseCache {
-  Future<CustomResponse<List<CalendarEvent>>> fetchEvents(EventGetForm form);
+abstract class ICalendarService {
+  Future<CustomResponse<List<CalendarEvent>>> fetchEvents(
+    EventGetForm form, {
+    Function(CustomResponse<List<CalendarEvent>>) newDataCallback,
+  });
 
   Future<CustomResponse> createCalendarEvent(EventPostForm form);
 
@@ -17,4 +19,6 @@ abstract class ICalendarService with UseCache {
 
   Future<CustomResponse<CalendarEvent>> updateEvent(EventUpdateForm form);
   void updateDependencies(IApi api, CacheService _cacheService);
+
+  void removeCallback(Function function);
 }

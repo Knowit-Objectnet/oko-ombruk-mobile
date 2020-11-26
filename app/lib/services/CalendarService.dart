@@ -11,7 +11,7 @@ import 'package:ombruk/services/interfaces/CacheService.dart';
 import 'package:ombruk/services/interfaces/IApi.dart';
 import 'package:ombruk/services/interfaces/ICalendarService.dart';
 
-class CalendarService extends ICalendarService {
+class CalendarService implements ICalendarService {
   IApi _api;
   CacheService _cacheService;
   CalendarService(this._api, this._cacheService) {
@@ -19,12 +19,12 @@ class CalendarService extends ICalendarService {
   }
 
   Future<CustomResponse<List<CalendarEvent>>> fetchEvents(
-      EventGetForm form) async {
+    EventGetForm form, {
+    Function(CustomResponse<List<CalendarEvent>>) newDataCallback,
+  }) async {
     final CustomResponse response = await _cacheService.getRequest(
-      form,
-      ApiEndpoint.events,
-      newDataCallback: (res) => cacheChanged(res, _parseResult),
-    );
+        form, ApiEndpoint.events,
+        newDataCallback: newDataCallback, parser: _parseResult);
 
     if (!response.success) {
       return response;
@@ -58,11 +58,11 @@ class CalendarService extends ICalendarService {
   }
 
   Future<CustomResponse> createCalendarEvent(EventPostForm form) async =>
-      await _api.postRequest(ApiEndpoint.events, form);
+      await _cacheService.postRequest(ApiEndpoint.events, form);
 
   /// Returns a CustomResponse with null data
   Future<CustomResponse> deleteCalendarEvent(EventDeleteForm form) async =>
-      _api.deleteRequest(ApiEndpoint.events, form);
+      await _cacheService.deleteRequest(ApiEndpoint.events, form);
 
   /// Returns a CustomResponse with null data
   Future<CustomResponse<CalendarEvent>> updateEvent(
@@ -71,6 +71,7 @@ class CalendarService extends ICalendarService {
     if (!response.success) {
       return response;
     }
+    print(List<dynamic>.from(jsonDecode(response.data)));
     try {
       CalendarEvent event = CalendarEvent.fromJson(jsonDecode(response.data));
       return CustomResponse(
@@ -82,5 +83,10 @@ class CalendarService extends ICalendarService {
           data: null,
           message: e.toString());
     }
+  }
+
+  @override
+  void removeCallback(Function function) {
+    _cacheService.removeCallback(function, ApiEndpoint.events);
   }
 }

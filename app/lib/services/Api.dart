@@ -29,10 +29,13 @@ class Api implements IApi {
     }
   }
 
-  Future<CustomResponse<String>> getRequest(String path, IForm form) async {
-    Uri uri = Uri.https(ApiEndpoint.baseUrlStripped,
-        '${ApiEndpoint.requiredPath}/$path', form.encode());
-    final Response response = await get(uri, headers: _headers);
+  Future<CustomResponse<String>> getRequest(
+      {String path, IForm form, Uri uri}) async {
+    assert(uri != null || (path != null && form != null));
+    Uri _uri = uri ??
+        Uri.https(ApiEndpoint.baseUrlStripped,
+            '${ApiEndpoint.requiredPath}/$path', form.encode());
+    final Response response = await get(_uri, headers: _headers);
 
     // This should probably be done differently, but I'm improving this incrementally.
     return CustomResponse(

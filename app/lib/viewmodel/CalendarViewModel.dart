@@ -30,12 +30,11 @@ class CalendarViewModel extends BaseViewModel {
 
   CalendarViewModel(this._calendarService, this._stationService)
       : super(state: ViewState.Busy) {
-    _calendarService.addOnChangedCallback(_onEventsChanged);
-    _stationService.addOnChangedCallback(_onStationsChanged);
-    fetchEvents();
+    // _stationService.addOnChangedCallback(_onStationsChanged);
   }
 
   void _onEventsChanged(CustomResponse<List<CalendarEvent>> events) {
+    print("Called _onEventsChanged");
     _calendarEvents = events.data;
     notifyListeners();
   }
@@ -50,8 +49,10 @@ class CalendarViewModel extends BaseViewModel {
 
   Future<void> start() async {
     await fetchEvents();
-    CustomResponse response =
-        await _stationService.fetchStations(StationGetForm());
+    CustomResponse response = await _stationService.fetchStations(
+      StationGetForm(),
+      newDataCallback: _onStationsChanged,
+    );
     if (!response.success) throw Exception("Failed to get stations");
     _stations = response.data;
     _selectedStation = _stations.first;
@@ -73,8 +74,8 @@ class CalendarViewModel extends BaseViewModel {
     notifyListeners();
     EventGetForm form =
         EventGetForm(stationId: stationID, partnerId: partnerID);
-    final CustomResponse<List<CalendarEvent>> response =
-        await _calendarService.fetchEvents(form);
+    final CustomResponse<List<CalendarEvent>> response = await _calendarService
+        .fetchEvents(form, newDataCallback: _onEventsChanged);
 
     _isLoading = false;
     if (response.success) {
@@ -189,6 +190,7 @@ class CalendarViewModel extends BaseViewModel {
   @override
   void dispose() {
     super.dispose();
-    _calendarService.removeOnChangedCallback(_onEventsChanged);
+    _calendarService.removeCallback(_onEventsChanged);
+    _stationService.removeCallback(_onStationsChanged);
   }
 }

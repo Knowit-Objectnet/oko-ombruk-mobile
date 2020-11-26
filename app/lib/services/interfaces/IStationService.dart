@@ -6,10 +6,12 @@ import 'package:ombruk/services/forms/station/StationPatchForm.dart';
 import 'package:ombruk/services/forms/station/StationPostForm.dart';
 import 'package:ombruk/services/interfaces/CacheService.dart';
 import 'package:ombruk/services/interfaces/IApi.dart';
-import 'package:ombruk/services/mixins/UseCache.dart';
 
-abstract class IStationService with UseCache {
-  Future<CustomResponse<List<Station>>> fetchStations(StationGetForm form);
+abstract class IStationService {
+  Future<CustomResponse<List<Station>>> fetchStations(
+    StationGetForm form, {
+    Function(CustomResponse<List<Station>>) newDataCallback,
+  });
 
   Future<CustomResponse<Station>> addStation(StationPostForm form);
 
@@ -18,4 +20,6 @@ abstract class IStationService with UseCache {
   Future<CustomResponse> deleteStation({@required int id});
 
   void updateDependencies(IApi api, CacheService cacheService);
+
+  void removeCallback(Function function);
 }
