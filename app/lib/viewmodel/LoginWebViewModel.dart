@@ -16,9 +16,13 @@ class LoginWebViewModel extends BaseViewModel with WidgetsBindingObserver {
   LoginWebViewModel(
     this._authenticationService,
     this._navigatorService,
-  ) {
+  );
+
+  @override
+  Future<void> init() {
     WidgetsBinding.instance.addObserver(this);
   }
+
   bool _hasAuthenticated = false;
   final Uri uri = Uri.parse('${ApiEndpoint.keycloakBaseUrl}');
   final String clientId = 'flutter-app';

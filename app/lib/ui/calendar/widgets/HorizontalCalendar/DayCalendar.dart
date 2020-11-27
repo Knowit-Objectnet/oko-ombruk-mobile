@@ -3,12 +3,12 @@ import 'package:flutter_week_view/flutter_week_view.dart';
 import 'package:ombruk/models/CalendarEvent.dart';
 import 'package:ombruk/models/Station.dart';
 import 'package:ombruk/ui/calendar/dialogs/EventInfoDialog.dart';
-import 'package:ombruk/ui/calendar/widgets/DayCalendarViewModel.dart';
 import 'package:ombruk/ui/calendar/widgets/HorizontalCalendar/DayScroller.dart';
 import 'package:ombruk/ui/shared/const/CustomColors.dart';
 import 'package:ombruk/ui/shared/const/CustomIcons.dart';
 import 'package:ombruk/ui/shared/widgets/BaseWidget.dart';
 import 'package:ombruk/utils/DateUtils.dart';
+import 'package:ombruk/viewmodel/DayCalendarViewModel.dart';
 
 class DayCalendar extends StatelessWidget {
   final List<CalendarEvent> events;

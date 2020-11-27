@@ -17,7 +17,7 @@ class CalendarView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BaseWidget(
       model: CalendarViewModel(Provider.of(context), Provider.of(context)),
-      onModelReady: (CalendarViewModel model) => model.start(),
+      onModelReady: (CalendarViewModel model) => model.init(),
       builder: (context, CalendarViewModel model, _) => Scaffold(
         appBar: OkoAppBar(
           title: "Kalender",

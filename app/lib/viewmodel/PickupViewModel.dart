@@ -8,6 +8,9 @@ class PickupViewModel extends BaseViewModel {
   final IPickupService _pickupService;
   PickupViewModel(this._pickupService);
 
+  @override
+  Future<void> init() {}
+
   Future<bool> addPickup({
     @required DateTime startDateTime,
     @required DateTime endDateTime,

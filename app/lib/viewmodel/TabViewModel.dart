@@ -13,7 +13,10 @@ class TabViewModel extends BaseViewModel {
   GlobalKey<ScaffoldState> get scaffoldKey => _scaffoldKey;
   int _index;
   KeycloakRoles _role;
-  TabViewModel(this._navigatorService, this._authenticationService) {
+  TabViewModel(
+    this._navigatorService,
+    this._authenticationService,
+  ) : super(state: ViewState.Busy) {
     _scaffoldKey = _navigatorService.scaffoldKey;
   }
 
@@ -22,13 +25,9 @@ class TabViewModel extends BaseViewModel {
     return false;
   }
 
-  void init() async {
-    setState(ViewState.Busy);
-    if (_authenticationService.userModel == null) {
-      await _authenticationService.loadFromStorage();
-    }
-    this._role = getRole(_authenticationService.userModel.roles
-        .firstWhere((role) => getRole(role) != null, orElse: () => null));
+  Future<void> init() async {
+    _role =
+        await _authenticationService.getUserInfo().then((value) => value.role);
     _index = tabItems[_role].defaultIndex;
     _navigatorService
         .onTabChanged(tabItems[_role].navItems[_index].navigatorKey);

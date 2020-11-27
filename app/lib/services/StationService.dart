@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 
 import 'package:ombruk/const/ApiEndpoint.dart';
@@ -7,24 +6,23 @@ import 'package:ombruk/models/Station.dart';
 import 'package:ombruk/services/forms/station/StationGetForm.dart';
 import 'package:ombruk/services/forms/station/StationPatchForm.dart';
 import 'package:ombruk/services/forms/station/StationPostForm.dart';
-import 'package:ombruk/services/interfaces/CacheService.dart';
-import 'package:ombruk/services/interfaces/IApi.dart';
+import 'package:ombruk/services/interfaces/ICacheService.dart';
 import 'package:ombruk/services/interfaces/IStationService.dart';
+import 'package:ombruk/services/mixins/ParseResponse.dart';
 
-class StationService implements IStationService {
-  IApi _api;
-  CacheService _cacheService;
-  StationService(this._api, this._cacheService);
+class StationService with ParseResponse implements IStationService {
+  ICacheService _cacheService;
+  StationService(this._cacheService);
 
   Future<CustomResponse<List<Station>>> fetchStations(
     StationGetForm form, {
     Function(CustomResponse<List<Station>>) newDataCallback,
   }) async {
     CustomResponse response = await _cacheService.getRequest(
-      form,
-      ApiEndpoint.stations,
-      newDataCallback: newDataCallback,
+      path: ApiEndpoint.stations,
+      form: form,
       parser: _parseResponse,
+      newDataCallback: newDataCallback,
     );
 
     if (response.statusCode != 200) {
@@ -34,71 +32,31 @@ class StationService implements IStationService {
   }
 
   CustomResponse<List<Station>> _parseResponse(CustomResponse response) {
-    try {
-      List<Station> stations = List<dynamic>.from(jsonDecode(response.data))
-          .map((json) => Station.fromJson(json))
-          .toList();
-      return CustomResponse(
-        success: true,
-        statusCode: response.statusCode,
-        data: stations,
-      );
-    } catch (e) {
-      return CustomResponse(
-        success: false,
-        statusCode: response.statusCode,
-        data: null,
-        message: e.toString(),
-      );
-    }
+    return parseList<Station>(response, (station) => Station.fromJson(station));
   }
 
   Future<CustomResponse<Station>> addStation(StationPostForm form) async {
     CustomResponse response =
         await _cacheService.postRequest(ApiEndpoint.stations, form);
-
-    if (response.statusCode == 200) {
-      try {
-        return CustomResponse<Station>(
-          success: true,
-          statusCode: response.statusCode,
-          data: Station.fromJson(jsonDecode(response.data)),
-        );
-      } catch (error) {
-        return CustomResponse(
-          success: false,
-          statusCode: response.statusCode,
-          data: null,
-          message: 'Cannot parse body',
-        );
-      }
+    if (!response.success) {
+      return response;
     }
-
-    return response;
+    return parseObject<Station>(
+      response,
+      (station) => Station.fromJson(station),
+    );
   }
 
   Future<CustomResponse<Station>> updateStation(StationPatchForm form) async {
     CustomResponse response =
         await _cacheService.patchRequest(ApiEndpoint.stations, form);
-
-    if (response.statusCode == 200) {
-      try {
-        return CustomResponse<Station>(
-          success: true,
-          statusCode: response.statusCode,
-          data: Station.fromJson(jsonDecode(response.data)),
-        );
-      } catch (e) {
-        return CustomResponse<Station>(
-          success: false,
-          statusCode: response.statusCode,
-          data: null,
-          message: e.toString(),
-        );
-      }
+    if (!response.success) {
+      return response;
     }
-
-    return response;
+    return parseObject<Station>(
+      response,
+      (station) => Station.fromJson(station),
+    );
   }
 
   Future<CustomResponse> deleteStation({@required int id}) async {
@@ -108,8 +66,7 @@ class StationService implements IStationService {
   }
 
   @override
-  void updateDependencies(IApi api, CacheService cacheService) {
-    this._api = api;
+  void updateDependencies(ICacheService cacheService) {
     this._cacheService = cacheService;
   }
 

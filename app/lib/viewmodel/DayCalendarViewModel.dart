@@ -14,6 +14,9 @@ class DayCalendarViewModel extends BaseViewModel {
     this._onDateChanged,
   );
 
+  @override
+  Future<void> init() {}
+
   TimeOfDay get opensAt =>
       _station.hours[_selectedDate.weekday]?.opensAt ??
       TimeOfDay(hour: 7, minute: 0);

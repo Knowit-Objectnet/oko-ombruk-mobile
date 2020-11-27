@@ -1,6 +1,7 @@
 import 'package:ombruk/const/Routes.dart';
 import 'package:ombruk/globals.dart';
 import 'package:ombruk/models/CustomResponse.dart';
+import 'package:ombruk/models/UserInfo.dart';
 import 'package:ombruk/services/DialogService.dart';
 import 'package:ombruk/services/SnackbarService.dart';
 import 'package:ombruk/services/interfaces/IAuthenticationService.dart';
@@ -13,21 +14,19 @@ class MyPageViewModel extends BaseViewModel {
   final DialogService _dialogService;
   final INavigatorService _navigatorService;
   MyPageViewModel(this._authenticationService, this._navigatorService,
-      this._snackbarService, this._dialogService) {
-    _authenticationService
-        .loadFromStorage()
-        .then((value) =>
-            getRole(value.roles.firstWhere((role) => getRole(role) != null)))
-        .then((value) {
-      _role = value;
-      notifyListeners();
-    });
-  }
+      this._snackbarService, this._dialogService);
   KeycloakRoles _role;
   KeycloakRoles get role => _role;
 
   bool _showContactInfo = false; // TODO: Get this from data
   bool get showContactInfo => _showContactInfo;
+
+  @override
+  Future<void> init() async {
+    UserInfo _userInfo = await _authenticationService.getUserInfo();
+    _role = _userInfo.role;
+    notifyListeners();
+  }
 
   void onShowContactInfoChanged() {
     _showContactInfo = !_showContactInfo;

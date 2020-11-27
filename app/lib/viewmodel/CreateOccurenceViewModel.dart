@@ -35,12 +35,12 @@ class CreateOccurenceViewModel extends BaseViewModel {
     this._partnerService,
     this._snackbarService,
     this._navigatorService,
-  ) : super(state: ViewState.Busy) {
-    print(state);
-    _fetchStations()
-        .then((value) => _fetchPartners())
-        .then((value) => setState(ViewState.Idle))
-        .then((value) => print("hello $state"));
+  ) : super(state: ViewState.Busy);
+
+  @override
+  Future<void> init() async {
+    await _fetchPartners();
+    setState(ViewState.Idle);
   }
 
   Future<void> _fetchStations() async {

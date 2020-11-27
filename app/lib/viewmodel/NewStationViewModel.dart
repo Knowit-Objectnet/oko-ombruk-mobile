@@ -20,6 +20,11 @@ class NewStationViewModel extends BaseViewModel {
     setState(ViewState.Idle);
   }
 
+  @override
+  Future<void> init() {
+    // TODO: implement init
+  }
+
   TimeOfDay dayOpensAt(int day) => _stationHours[day].opensAt;
 
   TimeOfDay dayClosesAt(int day) => _stationHours[day].closesAt;

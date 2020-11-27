@@ -33,14 +33,18 @@ class AddExtraPickupViewModel extends BaseViewModel {
     this._pickupService,
     this._snackbarService,
     this._dialogService,
-  ) : super(state: ViewState.Busy) {
-    _stationService.fetchStations(StationGetForm()).then((value) {
-      if (!value.success) {
-        _snackbarService.showSimpleSnackbar("Klarte ikke hente stasjoner");
-      } else {
-        _stations = value.data;
-      }
-    }).whenComplete(() => setState(ViewState.Idle));
+  ) : super(state: ViewState.Busy);
+
+  @override
+  Future<void> init() async {
+    CustomResponse<List<Station>> response =
+        await _stationService.fetchStations(StationGetForm());
+    if (!response.success) {
+      _snackbarService.showSimpleSnackbar("Klarte ikke hente stasjoner");
+    } else {
+      _stations = response.data;
+    }
+    setState(ViewState.Idle);
   }
 
   final TextEditingController _merknadController = TextEditingController();

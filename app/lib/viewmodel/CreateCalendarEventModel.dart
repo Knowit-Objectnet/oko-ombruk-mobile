@@ -52,6 +52,11 @@ class CreateCalendarEventModel extends BaseViewModel {
   DateTime _endDate = DateTime.now();
   DateTime get endDate => _endDate;
 
+  @override
+  Future<void> init() {
+    // TODO: implement init
+  }
+
   void onDateChanged(TimeType type, DateTime value) {
     if (type == TimeType.Start) {
       _startDate = value;

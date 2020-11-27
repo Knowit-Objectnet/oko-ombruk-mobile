@@ -1,6 +1,7 @@
 import 'package:ombruk/models/CustomResponse.dart';
 import 'package:ombruk/models/UserInfo.dart';
 import 'package:ombruk/models/UserModel.dart';
+import 'package:ombruk/services/interfaces/ISecureStorageService.dart';
 import 'package:openid_client/openid_client.dart' as OID;
 
 abstract class IAuthenticationService {
@@ -27,4 +28,6 @@ abstract class IAuthenticationService {
   });
 
   Future<CustomResponse<UserModel>> requestRefreshToken();
+
+  void updateDependencies(ISecureStorageService secureStorageService);
 }

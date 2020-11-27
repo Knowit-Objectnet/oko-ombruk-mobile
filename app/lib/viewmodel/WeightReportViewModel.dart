@@ -30,29 +30,45 @@ class WeightReportViewModel extends BaseViewModel {
   List<WeightReport> get nonReportedList => _nonReportedList;
   List<WeightReport> get reportedList => _reportedList;
 
+  @override
+  Future<void> init() {}
+
   Future<bool> fetchWeightReports() async {
     int groupId = _authenticationService.userModel.groupID;
     ReportGetForm form = ReportGetForm(partnerId: groupId);
 
     final CustomResponse<List<WeightReport>> weightResponse =
-        await _weightReportService.fetchWeightReports(form);
+        await _weightReportService.fetchWeightReports(
+      form,
+      newDataCallback: _onReportsChanged,
+    );
 
     if (weightResponse.success) {
-      weightResponse.data.map((report) {
-        if (report.weight == null) {
-          _nonReportedList.add(report);
-        } else {
-          _reportedList.add(report);
-        }
-      }).toList();
-
+      _addReports(weightResponse.data);
       notifyListeners();
       return true;
     } else {
-      print("hi1 $weightResponse");
       _snackbarService.showSimpleSnackbar("Kunne ikke hente vektrapporter.");
       return false;
     }
+  }
+
+  void _addReports(List<WeightReport> reports) {
+    _nonReportedList = List();
+    _reportedList = List();
+    reports.forEach((report) {
+      if (report.weight == null) {
+        _nonReportedList.add(report);
+      } else {
+        _reportedList.add(report);
+      }
+    });
+  }
+
+  void _onReportsChanged(CustomResponse<List<WeightReport>> response) {
+    print("_onReportsChanged called!");
+    _addReports(response.data);
+    notifyListeners();
   }
 
   Future<void> addWeight(WeightReport weightReport, int newWeight) async {
@@ -98,5 +114,11 @@ class WeightReportViewModel extends BaseViewModel {
 
   void onDialog(dynamic dialog) {
     _dialogService.showCustomDialog(dialog);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _weightReportService.removeCallback(_onReportsChanged);
   }
 }

@@ -22,6 +22,7 @@ class MyPageView extends StatelessWidget {
         Provider.of(context),
         Provider.of(context),
       ),
+      onModelReady: (MyPageViewModel model) => model.init(),
       builder: (context, MyPageViewModel model, _) => Scaffold(
         backgroundColor: CustomColors.osloWhite,
         appBar: OkoAppBar(

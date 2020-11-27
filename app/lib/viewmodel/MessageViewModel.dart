@@ -29,16 +29,18 @@ class MessageViewModel extends BaseViewModel {
     this._stationService,
     this._partnerService,
     this._snackbarService,
-  ) : super(state: ViewState.Busy) {
-    _fetchStations()
-        .then((value) => _fetchPartners())
-        .then((value) => setState(ViewState.Idle));
+  ) : super(state: ViewState.Busy);
+
+  @override
+  Future<void> init() async {
+    await _fetchPartners();
+    setState(ViewState.Idle);
   }
 
-  Station _selectedStation = null;
+  Station _selectedStation;
   Station get selectedStation => _selectedStation;
 
-  Partner _selectedPartner = null;
+  Partner _selectedPartner;
   Partner get selectedPartner => _selectedPartner;
 
   TimeOfDay _startTime = TimeOfDay(hour: 8, minute: 0);

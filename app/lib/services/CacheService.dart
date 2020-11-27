@@ -2,43 +2,28 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:ombruk/const/ApiEndpoint.dart';
-import 'package:ombruk/models/CalendarEvent.dart';
+import 'package:ombruk/models/CacheObject.dart';
 import 'package:ombruk/models/CustomResponse.dart';
 import 'package:ombruk/services/forms/IForm.dart';
-import 'package:ombruk/services/interfaces/CacheObject.dart';
 import 'package:ombruk/services/interfaces/IApi.dart';
 import 'package:ombruk/services/interfaces/ICacheService.dart';
 import 'package:ombruk/services/mixins/UseCache.dart';
 
 class CacheService<T> with UseCache implements ICacheService {
-  // {"events": "http://...": Object()}
-  /**
-   * store: {
-   *  Event: {
-   *    1: 
-   *  }
-   * }
-   * 
-   * urls: {
-   *  "https://": {
-   *    1,
-   *    2,
-   *  }
-   * }
-   *
-   */
   Map<String, Map<String, CacheObject>> _urlCache = Map();
 
   IApi _api;
   CacheService(this._api);
 
+  @override
   void updateDependencies(IApi api) {
     _api = api;
   }
 
-  Future<CustomResponse<String>> getRequest(
-    IForm form,
-    String path, {
+  @override
+  Future<CustomResponse<String>> getRequest({
+    @required IForm form,
+    @required String path,
     @required Function(CustomResponse) parser,
     dynamic newDataCallback,
   }) async {
@@ -98,7 +83,14 @@ class CacheService<T> with UseCache implements ICacheService {
     }
   }
 
+  @override
+  Future<void> invalidateEndpoint(String endpoint) async =>
+      await _invalidateAndFetch(endpoint);
+
   Future<void> _invalidateAndFetch(String path) async {
+    if (_urlCache[path] == null) {
+      return;
+    }
     print("Invalidating the following caches:");
     _urlCache[path].keys.forEach((element) {
       print(element);
@@ -120,6 +112,7 @@ class CacheService<T> with UseCache implements ICacheService {
     return response;
   }
 
+  @override
   void removeCallback(Function function, String path) {
     if (_urlCache.containsKey(path)) {
       _urlCache[path].values.forEach((cacheObject) {
@@ -131,52 +124,15 @@ class CacheService<T> with UseCache implements ICacheService {
     }
   }
 
+  @override
   Future<CustomResponse> patchRequest(String path, IForm form) =>
       _genericRequest(_api.patchRequest, form, path);
 
+  @override
   Future<CustomResponse> deleteRequest(String path, IForm form) =>
       _genericRequest(_api.deleteRequest, form, path);
 
+  @override
   Future<CustomResponse> postRequest(String path, IForm form) =>
       _genericRequest(_api.postRequest, form, path);
-
-  // Future<CustomResponse> _getRequest(
-  //   IForm form,
-  //   String path, {
-  //   Function(CustomResponse) newDataCallback,
-  // }) async {
-  //   String url = Uri.https(ApiEndpoint.baseUrlStripped,
-  //           '${ApiEndpoint.requiredPath}/$path', form.encode())
-  //       .toString();
-
-  //   print(_cache.keys);
-  //   if (_cache.containsKey(url)) {
-  //     print("cache contains key");
-  //     if (newDataCallback != null) _fetchNewData(form, path, newDataCallback);
-  //     return CustomResponse(success: true, statusCode: 200, data: _cache[url]);
-  //   } else {
-  //     print("cache does not contain key");
-  //     CustomResponse response = await _api.getRequest(path: path, form: form);
-  //     if (response.success) {
-  //       _cache[url] = response.data;
-  //     }
-  //     return response;
-  //   }
-  // }
-
-  // void _fetchNewData(
-  //     IForm form, String path, Function(CustomResponse) newDataCallback) async {
-  //   CustomResponse response = await _api.getRequest(path: path, form: form);
-  //   if (response.success) {
-  //     String url = Uri.https(ApiEndpoint.baseUrlStripped,
-  //             '${ApiEndpoint.requiredPath}/$path', form.encode())
-  //         .toString();
-  //     print("equals: ${response.data == _cache[url]}");
-  //     if (response.data != _cache[url]) {
-  //       _cache[url] = response.data;
-  //       print("should update");
-  //       newDataCallback(response);
-  //     }
-  //   }
-  // }
 }

@@ -3,7 +3,6 @@ import 'package:ombruk/globals.dart';
 import 'package:ombruk/models/Pickup.dart';
 import 'package:ombruk/ui/app/widgets/AppDrawer.dart';
 import 'package:ombruk/ui/app/widgets/OkoAppBar.dart';
-import 'package:ombruk/ui/notifications/NotificationViewModel.dart';
 import 'package:ombruk/ui/notifications/widget/admin/AdminPickupContainer.dart';
 import 'package:ombruk/ui/notifications/widget/partner/PartnerContainer.dart';
 import 'package:ombruk/ui/notifications/widget/partner/PartnerPickupContainer.dart';
@@ -13,6 +12,7 @@ import 'package:ombruk/ui/shared/const/CustomIcons.dart';
 import 'package:ombruk/ui/shared/widgets/BaseWidget.dart';
 import 'package:ombruk/ui/shared/widgets/text/Subtitle.dart';
 import 'package:ombruk/viewmodel/BaseViewModel.dart';
+import 'package:ombruk/viewmodel/NotificationViewModel.dart';
 import 'package:provider/provider.dart';
 
 class NotificationView extends StatelessWidget {
@@ -25,6 +25,7 @@ class NotificationView extends StatelessWidget {
         Provider.of(context),
         Provider.of(context),
       ),
+      onModelReady: (NotificationViewModel model) => model.init(),
       builder: (context, NotificationViewModel model, child) => Scaffold(
           appBar: OkoAppBar(
             title: "Varsler",

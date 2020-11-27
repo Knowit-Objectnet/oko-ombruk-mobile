@@ -7,6 +7,11 @@ class NewPartnerViewModel extends BaseViewModel {
   TextEditingController _partnerNameController = TextEditingController();
   TextEditingController get partnerNameController => _partnerNameController;
 
+  @override
+  Future<void> init() {
+    // TODO: implement init
+  }
+
   void submitForm() async {}
 
   String validatePartnerName(String value) {}

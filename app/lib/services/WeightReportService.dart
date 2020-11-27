@@ -1,66 +1,57 @@
-import 'dart:convert';
-
 import 'package:ombruk/const/ApiEndpoint.dart';
 import 'package:ombruk/models/CustomResponse.dart';
 import 'package:ombruk/models/WeightReport.dart';
 import 'package:ombruk/services/forms/report/ReportGetForm.dart';
 import 'package:ombruk/services/forms/report/ReportPatchForm.dart';
-import 'package:ombruk/services/interfaces/IApi.dart';
+import 'package:ombruk/services/interfaces/ICacheService.dart';
 import 'package:ombruk/services/interfaces/IWeightReportService.dart';
+import 'package:ombruk/services/mixins/ParseResponse.dart';
 
-class WeightReportService implements IWeightReportService {
-  final IApi _api;
-  WeightReportService(this._api);
+class WeightReportService with ParseResponse implements IWeightReportService {
+  ICacheService _cacheService;
+  WeightReportService(this._cacheService);
 
   /// Returns CustomResponse with a list of WeightReports on success
+  @override
   Future<CustomResponse<List<WeightReport>>> fetchWeightReports(
-    ReportGetForm form,
-  ) async {
-    CustomResponse response =
-        await _api.getRequest(path: ApiEndpoint.weightReports, form: form);
+    ReportGetForm form, {
+    Function(CustomResponse<List<WeightReport>>) newDataCallback,
+  }) async {
+    CustomResponse response = await _cacheService.getRequest(
+      path: ApiEndpoint.weightReports,
+      form: form,
+      parser: _parseResponse,
+      newDataCallback: newDataCallback,
+    );
 
-    if (!response.success) {
-      return response;
-    }
+    return response.success ? _parseResponse(response) : response;
+  }
 
-    try {
-      List<WeightReport> reports = List<dynamic>.from(jsonDecode(response.data))
-          .map((json) => WeightReport.fromJson(json))
-          .toList();
-      return CustomResponse(
-          success: true, statusCode: response.statusCode, data: reports);
-    } catch (error) {
-      return CustomResponse(
-        success: false,
-        statusCode: response.statusCode,
-        data: null,
-        message: "Failed to parse stations",
-      );
-    }
+  CustomResponse<List<WeightReport>> _parseResponse(CustomResponse response) {
+    return parseList<WeightReport>(
+      response,
+      (report) => WeightReport.fromJson(report),
+    );
   }
 
   /// Returns a CustomResponse with a WeightReport if it was sucecssfully added
   Future<CustomResponse<WeightReport>> patchWeight(ReportPatchForm form) async {
     CustomResponse response =
-        await _api.patchRequest(ApiEndpoint.weightReports, form);
+        await _cacheService.patchRequest(ApiEndpoint.weightReports, form);
 
-    if (!response.success) {
-      return response;
-    }
+    return response.success
+        ? parseObject<WeightReport>(
+            response, (report) => WeightReport.fromJson(report))
+        : response;
+  }
 
-    try {
-      return CustomResponse(
-        success: true,
-        statusCode: response.statusCode,
-        data: WeightReport.fromJson(jsonDecode(response.data)),
-      );
-    } catch (error) {
-      return CustomResponse(
-        success: false,
-        statusCode: response.statusCode,
-        data: null,
-        message: error.toString(),
-      );
-    }
+  @override
+  void updateDependencies(ICacheService cacheService) {
+    _cacheService = cacheService;
+  }
+
+  @override
+  void removeCallback(Function function) {
+    _cacheService.removeCallback(function, ApiEndpoint.weightReports);
   }
 }

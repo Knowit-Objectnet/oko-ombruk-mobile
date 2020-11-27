@@ -47,7 +47,8 @@ class CalendarEventExpandedModel extends BaseViewModel {
   GlobalKey<FormState> _deleteFormKey = GlobalKey<FormState>();
   GlobalKey<FormState> get deleteFormKey => _deleteFormKey;
 
-  void init() {
+  @override
+  Future<void> init() {
     _date = _event.startDateTime;
     _startTime = TimeOfDay(
       hour: _event.startDateTime.hour,

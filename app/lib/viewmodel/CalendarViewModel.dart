@@ -29,9 +29,7 @@ class CalendarViewModel extends BaseViewModel {
   List<Station> get stations => _stations;
 
   CalendarViewModel(this._calendarService, this._stationService)
-      : super(state: ViewState.Busy) {
-    // _stationService.addOnChangedCallback(_onStationsChanged);
-  }
+      : super(state: ViewState.Busy);
 
   void _onEventsChanged(CustomResponse<List<CalendarEvent>> events) {
     print("Called _onEventsChanged");
@@ -47,7 +45,7 @@ class CalendarViewModel extends BaseViewModel {
   DateTime _selectedDateTime = DateTime.now();
   DateTime get selectedDate => _selectedDateTime;
 
-  Future<void> start() async {
+  Future<void> init() async {
     await fetchEvents();
     CustomResponse response = await _stationService.fetchStations(
       StationGetForm(),

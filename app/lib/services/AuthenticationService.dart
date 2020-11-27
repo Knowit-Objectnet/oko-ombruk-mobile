@@ -4,7 +4,6 @@ import 'package:ombruk/const/ApiEndpoint.dart';
 import 'package:ombruk/globals.dart';
 import 'package:ombruk/models/UserInfo.dart';
 import 'package:ombruk/models/UserModel.dart';
-import 'package:ombruk/services/SecureStorageService.dart';
 import 'package:ombruk/services/interfaces/IAuthenticationService.dart';
 import 'package:ombruk/services/interfaces/ISecureStorageService.dart';
 import 'package:openid_client/openid_client.dart' as OID;
@@ -13,9 +12,8 @@ import 'package:http/http.dart';
 import 'package:ombruk/models/CustomResponse.dart';
 
 class AuthenticationService implements IAuthenticationService {
-  ISecureStorageService _localStorageService = SecureStorageService();
-  AuthenticationService();
-  AuthenticationService.test(this._localStorageService);
+  ISecureStorageService _localStorageService;
+  AuthenticationService(this._localStorageService);
 
   UserModel _userModel;
 
@@ -210,5 +208,10 @@ class AuthenticationService implements IAuthenticationService {
       await loadFromStorage();
     }
     return _userInfo;
+  }
+
+  @override
+  void updateDependencies(ISecureStorageService secureStorageService) {
+    _localStorageService = secureStorageService;
   }
 }

@@ -4,10 +4,12 @@ import 'package:ombruk/services/forms/pickup/PickupDeleteForm.dart';
 import 'package:ombruk/services/forms/pickup/PickupGetForm.dart';
 import 'package:ombruk/services/forms/pickup/PickupPostForm.dart';
 import 'package:ombruk/services/forms/pickup/PickupUpdateForm.dart';
+import 'package:ombruk/services/interfaces/ICacheService.dart';
 
 abstract class IPickupService {
   Future<CustomResponse> addPickup(PickupPostForm form);
   Future<CustomResponse<List<Pickup>>> fetchPickups(PickupGetForm form);
   Future<CustomResponse> deletePickup(PickupDeleteForm form);
   Future<CustomResponse> updatePickup(PickupUpdateForm form);
+  void updateDependencies(ICacheService cacheService);
 }

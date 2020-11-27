@@ -4,8 +4,7 @@ import 'package:ombruk/models/Partner.dart';
 import 'package:ombruk/services/forms/Partner/PartnerGetForm.dart';
 import 'package:ombruk/services/forms/Partner/PartnerPatchForm.dart';
 import 'package:ombruk/services/forms/Partner/PartnerPostForm.dart';
-import 'package:ombruk/services/interfaces/CacheService.dart';
-import 'package:ombruk/services/interfaces/IApi.dart';
+import 'package:ombruk/services/interfaces/ICacheService.dart';
 
 abstract class IPartnerService {
   Future<CustomResponse<List<Partner>>> fetchPartners(
@@ -18,5 +17,5 @@ abstract class IPartnerService {
   Future<CustomResponse<Partner>> updatePartner(PartnerPatchForm form);
 
   Future<CustomResponse> deletePartner({@required int id});
-  void updateDependencies(IApi api, CacheService cacheService);
+  void updateDependencies(ICacheService cacheService);
 }

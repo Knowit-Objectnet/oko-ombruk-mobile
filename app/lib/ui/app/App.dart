@@ -18,6 +18,7 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return BaseWidget(
       model: AppViewModel(Provider.of(context)),
+      onModelReady: (AppViewModel model) => model.init(),
       builder: (context, AppViewModel model, child) {
         if (model.state == ViewState.Busy) {
           return SplashScreen();

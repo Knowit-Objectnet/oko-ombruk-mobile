@@ -4,21 +4,17 @@ import 'package:ombruk/viewmodel/BaseViewModel.dart';
 
 class AppViewModel extends BaseViewModel {
   final IAuthenticationService _authenticationService;
-  KeycloakRoles get role {
-    if (_authenticationService.userModel == null ||
-        _authenticationService.userModel.roles == null) {
-      return null;
-    } else {
-      return getRole(_authenticationService.userModel.roles
-          .firstWhere((role) => role != null, orElse: () => null));
-    }
-  }
+  KeycloakRoles _role;
+  KeycloakRoles get role => _role;
 
-  AppViewModel(this._authenticationService) {
-    setState(ViewState.Busy);
-    Future.delayed(Duration(seconds: 1)).then(
-        (value) => _authenticationService.loadFromStorage().then((userModel) {
-              setState(ViewState.Idle);
-            }));
+  AppViewModel(this._authenticationService) : super(state: ViewState.Busy);
+
+  @override
+  Future<void> init() async {
+    await Future.delayed(Duration(seconds: 1));
+    await _authenticationService.getUserInfo().then((value) {
+      _role = value?.role;
+    });
+    setState(ViewState.Idle);
   }
 }

@@ -12,8 +12,12 @@ class StationViewModel extends BaseViewModel {
 
   List<Station> _stations = [];
 
-  StationViewModel(this._stationService) {
+  StationViewModel(this._stationService);
+
+  @override
+  Future<void> init() {
     fetchStations();
+    setState(ViewState.Idle);
   }
 
   List<Station> get stations => _stations;

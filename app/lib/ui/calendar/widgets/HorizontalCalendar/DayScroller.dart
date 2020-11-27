@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:ombruk/models/Station.dart';
-import 'package:ombruk/ui/calendar/widgets/HorizontalCalendar/DayScrollerViewModel.dart';
 import 'package:ombruk/ui/shared/const/CustomColors.dart';
 import 'package:ombruk/ui/shared/widgets/BaseWidget.dart';
 import 'package:ombruk/utils/DateUtils.dart';
+import 'package:ombruk/viewmodel/DayScrollerViewModel.dart';
 
 import 'DateButton.dart';
 

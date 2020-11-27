@@ -8,6 +8,9 @@ class DayScrollerViewModel extends BaseViewModel {
     _currentWeekNumber = calculateWeekNumber(0);
   }
 
+  @override
+  Future<void> init() {}
+
   int calculateWeekNumber(int index) {
     // Weekday calculation from https://en.wikipedia.org/wiki/ISO_week_date#Calculation
     DateTime newWeek = DateTime.now().add(Duration(days: 7 * index));

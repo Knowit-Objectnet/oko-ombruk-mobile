@@ -13,73 +13,78 @@ class DrawerViewModel extends BaseViewModel {
   final INavigatorService _navigatorService;
   final IAuthenticationService _authenticationService;
   final DialogService _dialogService;
-  List<DrawerItem> drawerItems;
+  List<DrawerItem> get drawerItems => [
+        DrawerItem(
+          icon: CustomIcons.partners,
+          title: 'Sam. partnere',
+          onTap: () => null,
+          isSelected: false,
+        ),
+        DrawerItem(
+          icon: CustomIcons.map,
+          title: 'Stasjonene',
+          onTap: () => null,
+          isSelected: false,
+        ),
+        if (_role == KeycloakRoles.reuse_station)
+          DrawerItem(
+            icon: CustomIcons.add,
+            title: "Utlys ekstrauttak",
+            onTap: () =>
+                _navigatorService.navigateAndReplace(Routes.AddExtraPickupView),
+            isSelected: false,
+          ),
+        if (_role == KeycloakRoles.partner)
+          DrawerItem(
+            icon: CustomIcons.add,
+            title: "Søk ekstrauttak",
+            onTap: () {
+              _navigatorService.goBack();
+              _dialogService.openDialog(DialogType.PickupDialogPartners);
+            },
+            isSelected: false,
+          ),
+        if (_role == KeycloakRoles.reg_employee)
+          DrawerItem(
+            icon: CustomIcons.add,
+            title: 'Opprett hendelse',
+            onTap: () => _navigatorService
+                .navigateAndReplace(Routes.CreateOccurenceView),
+            isSelected: false,
+          ),
+        if (_role == KeycloakRoles.reuse_station)
+          DrawerItem(
+            icon: CustomIcons.weight,
+            title: "Vektuttak",
+            onTap: () =>
+                _navigatorService.navigateAndReplace(Routes.WeightReportView),
+            isSelected: false,
+          ),
+        DrawerItem(
+          icon: CustomIcons.addDiscrepancy,
+          title: 'Send beskjed',
+          onTap: () => _navigatorService.navigateAndReplace(Routes.MessageView),
+          isSelected: false,
+        ),
+        DrawerItem(
+            icon: CustomIcons.myPage,
+            title: 'Min side',
+            onTap: () =>
+                _navigatorService.navigateAndReplace(Routes.MinSideView),
+            isSelected: false //_selectedIndex == 4,
+            ),
+      ];
+
+  @override
+  Future<void> init() async {
+    _role =
+        await _authenticationService.getUserInfo().then((value) => value.role);
+    setState(ViewState.Idle);
+  }
+
   DrawerViewModel(
     this._navigatorService,
     this._authenticationService,
     this._dialogService,
-  ) {
-    this._role = getRole(_authenticationService.userModel.roles
-        .firstWhere((role) => getRole(role) != null, orElse: () => null));
-    drawerItems = [
-      DrawerItem(
-        icon: CustomIcons.partners,
-        title: 'Sam. partnere',
-        onTap: () => null,
-        isSelected: false,
-      ),
-      DrawerItem(
-        icon: CustomIcons.map,
-        title: 'Stasjonene',
-        onTap: () => null,
-        isSelected: false,
-      ),
-      if (_role == KeycloakRoles.reuse_station)
-        DrawerItem(
-          icon: CustomIcons.add,
-          title: "Utlys ekstrauttak",
-          onTap: () =>
-              _navigatorService.navigateAndReplace(Routes.AddExtraPickupView),
-          isSelected: false,
-        ),
-      if (_role == KeycloakRoles.partner)
-        DrawerItem(
-          icon: CustomIcons.add,
-          title: "Søk ekstrauttak",
-          onTap: () {
-            _navigatorService.goBack();
-            _dialogService.openDialog(DialogType.PickupDialogPartners);
-          },
-          isSelected: false,
-        ),
-      if (_role == KeycloakRoles.reg_employee)
-        DrawerItem(
-          icon: CustomIcons.add,
-          title: 'Opprett hendelse',
-          onTap: () =>
-              _navigatorService.navigateAndReplace(Routes.CreateOccurenceView),
-          isSelected: false,
-        ),
-      if (_role == KeycloakRoles.reuse_station)
-        DrawerItem(
-          icon: CustomIcons.weight,
-          title: "Vektuttak",
-          onTap: () =>
-              _navigatorService.navigateAndReplace(Routes.WeightReportView),
-          isSelected: false,
-        ),
-      DrawerItem(
-        icon: CustomIcons.addDiscrepancy,
-        title: 'Send beskjed',
-        onTap: () => _navigatorService.navigateAndReplace(Routes.MessageView),
-        isSelected: false,
-      ),
-      DrawerItem(
-          icon: CustomIcons.myPage,
-          title: 'Min side',
-          onTap: () => _navigatorService.navigateAndReplace(Routes.MinSideView),
-          isSelected: false //_selectedIndex == 4,
-          ),
-    ];
-  }
+  ) : super(state: ViewState.Busy);
 }

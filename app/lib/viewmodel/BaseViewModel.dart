@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 enum ViewState { Idle, Busy }
 
-class BaseViewModel extends ChangeNotifier {
+abstract class BaseViewModel extends ChangeNotifier {
   ViewState state;
   BaseViewModel({this.state = ViewState.Idle});
 
@@ -10,4 +10,6 @@ class BaseViewModel extends ChangeNotifier {
     this.state = state;
     notifyListeners();
   }
+
+  Future<void> init();
 }

@@ -16,6 +16,12 @@ class PartnerViewModel extends BaseViewModel {
     fetchPartners();
   }
 
+  @override
+  Future<void> init() async {
+    fetchPartners();
+    setState(ViewState.Idle);
+  }
+
   List<Partner> get partners => _partners;
 
   Future<bool> fetchPartners({int id}) async {

@@ -28,6 +28,7 @@ class CalendarEventExpander extends StatelessWidget {
         Provider.of(context),
         Provider.of(context),
       ),
+      onModelReady: (CalendarEventExpandedModel model) => model.init(),
       builder: (context, CalendarEventExpandedModel model, _) => Container(
         color: CustomColors.osloWhite,
         padding: const EdgeInsets.symmetric(vertical: 25, horizontal: 10),

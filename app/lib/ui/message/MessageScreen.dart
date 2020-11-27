@@ -27,6 +27,7 @@ class MessageView extends StatelessWidget {
           Provider.of(context),
           Provider.of(context),
         ),
+        onModelReady: (MessageViewModel model) => model.init(),
         builder: (context, MessageViewModel model, _) => GestureDetector(
           /// .unfocus() fixes a problem where the TextFormField isn't unfocused
           /// when the user taps outside the TextFormField.

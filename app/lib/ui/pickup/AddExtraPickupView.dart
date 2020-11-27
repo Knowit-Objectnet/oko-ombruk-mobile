@@ -23,6 +23,7 @@ class AddExtraPickupView extends StatelessWidget {
         Provider.of(context),
         Provider.of(context),
       ),
+      onModelReady: (AddExtraPickupViewModel model) => model.init(),
       builder: (context, AddExtraPickupViewModel model, _) => Scaffold(
         appBar: OkoAppBar(
           title: "Utlys ekstrauttak",

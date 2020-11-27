@@ -21,6 +21,7 @@ class CreateOccurenceView extends StatelessWidget {
         Provider.of(context),
         Provider.of(context),
       ),
+      onModelReady: (CreateOccurenceViewModel model) => model.init(),
       builder: (context, CreateOccurenceViewModel model, _) {
         return Scaffold(
           appBar: OkoAppBar(

@@ -31,13 +31,14 @@ class NotificationViewModel extends BaseViewModel {
     this._pickupService,
     this._snackbarService,
     this._requestService,
-  ) : super(state: ViewState.Busy) {
-    _authenticationService
-        .getUserInfo()
-        .then((info) => _userInfo = info)
-        .then((value) => getPickups())
-        .whenComplete(() => setState(ViewState.Idle));
-  }
+  ) : super(state: ViewState.Busy);
+
+  @override
+  Future<void> init() => _authenticationService
+      .getUserInfo()
+      .then((info) => _userInfo = info)
+      .then((value) => getPickups())
+      .whenComplete(() => setState(ViewState.Idle));
 
   Future<CustomResponse<List<Request>>> _getRequests(
       {bool notify = false}) async {
